@@ -4,6 +4,7 @@
   color: $color-primary-darkest;
   font-size: 2em;
   height: 1em;
+  transition: color .3s;
 }
 
 .button {
@@ -18,12 +19,21 @@
   justify-content: space-between;
   padding: 0 2.5em;
   position: relative;
+  transition: color .3s;
 
   &:disabled {
     cursor: default;
 
     .icon {
       color: currentColor;
+    }
+  }
+
+  &:hover {
+    color: $color-primary-lighter;
+
+    .icon {
+      color: $color-primary-lighter;
     }
   }
 }
