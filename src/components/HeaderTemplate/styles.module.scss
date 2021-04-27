@@ -12,7 +12,7 @@
   min-width: 45%;
 
   &LeftSide {
-    padding: 16px 21px;
+    padding: 1rem 1.313rem;
   }
 
   &RightSide {
@@ -22,7 +22,7 @@
 
 .hr {
   background-color: $color-primary-darkest;
-  height: calc(100% - 16px);
+  height: calc(100% - 1rem);
   opacity: .08;
   width: 2px;
 }

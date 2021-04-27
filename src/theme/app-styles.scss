@@ -1,6 +1,6 @@
 @import './variables.scss';
 
-$app-top-padding: 16px;
+$app-top-padding: 1rem;
 
 *,
 *::after,
@@ -67,7 +67,7 @@ svg {
 
 .td {
   &-checkbox {
-    width: 36px;
+    width: 2.25rem;
   }
 
   &-id {
