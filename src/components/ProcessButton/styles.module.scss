@@ -19,7 +19,6 @@
   justify-content: space-between;
   padding: 0 2.5em;
   position: relative;
-  transition: color .3s;
 
   &:disabled {
     cursor: default;
@@ -30,8 +29,6 @@
   }
 
   &:hover {
-    color: $color-primary-lighter;
-
     .icon {
       color: $color-primary-lighter;
     }
