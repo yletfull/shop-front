@@ -3,13 +3,17 @@
 .wrapper {
   background-color: $color-gray-lighter;
   border-radius: .375rem;
+  display: flex;
+  flex-direction: column;
+  height: calc(60vh);
+  justify-content: space-between;
 }
 
 .contentWrapper {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 26.5rem;
+  height: 60vh;
   justify-content: center;
 }
 

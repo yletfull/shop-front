@@ -35,7 +35,7 @@ const Upload = function UploadScreen() {
 
 
   const [stage] = useState(
-    stages.filseIsNotLoaded
+    stages.selectFile
   );
 
   const [list, setList] = useState(selectorMocksOptions[1].value);
