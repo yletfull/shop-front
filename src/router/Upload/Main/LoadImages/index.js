@@ -4,7 +4,7 @@ import cx from 'classnames';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
 import VkIcon from '@/icons/Vk.svg';
-import TestImage from '@/icons/TestImage.jpg';
+import TestImage from '@/images/TestImage.jpg';
 import PicturesLoadIcon from '@/icons/PicturesLoad.svg';
 import ProcessButton from '@/components/ProcessButton';
 import Input from '@/components/Input';
