@@ -28,10 +28,7 @@ const ProcessButton = function ProcessButton(props) {
       className={styles.button}
     >
       <span className={styles.icon}>
-        <img
-          src={icon}
-          alt="Иконка"
-        />
+        {icon || 'Иконка'}
       </span>
       <span className={cx(styles.label, className)}>
         {Array.isArray(text)
