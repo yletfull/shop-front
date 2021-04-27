@@ -1,0 +1,38 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background-color: $color-gray-lighter;
+  border-radius: .375rem;
+}
+
+.contentWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 26.5rem;
+  justify-content: center;
+}
+
+
+.title {
+  color: $color-gray-darker;
+  font-size: .75rem;
+  font-weight: normal;
+  margin-top: 2.5rem;
+}
+
+.select {
+  width: 13rem;
+}
+
+.selectFile {
+  &Title {
+    font-size: .75rem;
+    margin-left: .5rem;
+  }
+
+  &Button {
+    margin-left: 1.25rem;
+    width: 6.75rem;
+  }
+}

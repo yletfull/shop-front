@@ -1,0 +1,40 @@
+@import '@/theme/include.scss';
+
+.button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  box-sizing: border-box;
+  display: inline-flex;
+  font: 12px Arial, Helvetica, sans-serif;
+  height: 32px;
+  justify-content: center;
+  min-width: 64px;
+  padding: 0 10px;
+  text-transform: lowercase;
+  transition: color .2s, background-color .2s, border-color .2s;
+  vertical-align: middle;
+}
+
+.button_default {
+  background-color: $color-primary-darker;
+  border-color: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-primary-lighter;
+    border-color: $color-primary-lighter;
+  }
+}
+
+.button_control {
+  background-color: transparent;
+  border: none;
+  color: $color-primary;
+  min-width: 0;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+  }
+}

@@ -1,0 +1,42 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background-color: $color-gray-lighter;
+  border-radius: .375rem;
+}
+
+.contentWrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 26.5rem;
+  justify-content: center;
+}
+
+.icon {
+  margin-top: 5.875rem;
+}
+
+.title {
+  color: $color-gray-darker;
+  font-size: .75rem;
+  font-weight: normal;
+  margin-bottom: 6.35rem;
+  margin-top: 1.35rem;
+  text-align: center;
+}
+
+.selectFile {
+  margin-bottom: 12.125rem;
+  margin-top: 8.75rem;
+
+  &Title {
+    font-size: .75rem;
+    margin-left: .5rem;
+  }
+
+  &Button {
+    margin-left: 1.25rem;
+    width: 6.75rem;
+  }
+}

@@ -1,0 +1,18 @@
+@import '@/theme/include.scss';
+
+.input {
+  border: none;
+  border-radius: .375rem;
+  color: $color-black;
+  height: 2rem;
+  outline: none;
+  padding: 0 .5rem;
+
+  &::placeholder {
+    color: $color-gray-darken;
+  }
+}
+
+.fullwidth {
+  width: 100%;
+}

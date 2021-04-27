@@ -1,0 +1,16 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  align-items: center;
+  display: flex;
+  margin: 0 auto 1.85rem;
+  max-width: 100%;
+  width: 100%;
+  z-index: 10;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0;
+}

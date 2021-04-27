@@ -1,0 +1,29 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  align-items: center;
+  background-color: $color-primary-ultra-light;
+  border-radius: .375rem;
+  display: flex;
+  flex-direction: row;
+  font-size: .75rem;
+  justify-content: center;
+  min-height: 7rem;
+  min-width: 45%;
+
+  &LeftSide {
+    padding: 16px 21px;
+  }
+
+  &RightSide {
+    padding: 1rem 4rem 1rem 2.281rem;
+  }
+}
+
+.hr {
+  background-color: $color-primary-darkest;
+  height: calc(100% - 16px);
+  opacity: .08;
+  width: 2px;
+}
+

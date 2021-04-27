@@ -1,0 +1,15 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  align-items: center;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  left: 0;
+  overflow: auto;
+  padding: $app-top-padding 16.25px 16.25px;
+  position: fixed;
+  top: 0;
+}
+

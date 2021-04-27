@@ -1,0 +1,14 @@
+@mixin button-reset {
+  align-items: center;
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: inherit;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 1em;
+  justify-content: center;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+}

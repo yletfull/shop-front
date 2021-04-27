@@ -1,0 +1,30 @@
+@import '@/theme/include.scss';
+
+.select {
+  border: none;
+  border-radius: .375rem;
+  color: $color-black;
+  height: 2rem;
+  outline: none;
+  padding: 0 .25rem;
+
+  &:disabled {
+    background-color: $color-gray-lighter;
+  }
+
+  & > * {
+    height: 100px;
+  }
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.default {
+  color: $color-gray-darken;
+
+  & > * {
+    color: $color-black;
+  }
+}
