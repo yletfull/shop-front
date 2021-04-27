@@ -1,42 +1,136 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  background-color: $color-gray-lighter;
-  border-radius: .375rem;
-}
-
 .contentWrapper {
   align-items: center;
   display: flex;
   flex-direction: column;
-  height: 26.5rem;
   justify-content: center;
 }
 
-.icon {
-  margin-top: 5.875rem;
+.loadButtonsWrapper {
+  display: inline-flex;
+  margin: 1.85rem 2.85rem 1rem;
 }
 
-.title {
-  color: $color-gray-darker;
-  font-size: .75rem;
-  font-weight: normal;
-  margin-bottom: 6.35rem;
-  margin-top: 1.35rem;
-  text-align: center;
-}
+.row {
+  align-items: center;
+  display: flex;
+  font-size: .825em;
+  padding: 0;
+  width: 100%;
 
-.selectFile {
-  margin-bottom: 12.125rem;
-  margin-top: 8.75rem;
-
-  &Title {
-    font-size: .75rem;
-    margin-left: .5rem;
+  &Filter {
+    margin-bottom: .25rem;
   }
 
-  &Button {
-    margin-left: 1.25rem;
-    width: 6.75rem;
+  &Content {
+    border-bottom: 1px $color-gray-lighter dotted;
+  }
+}
+
+.col {
+  align-items: center;
+  border: 1px $color-gray-darker solid;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-height: 2.5rem;
+  min-width: 0;
+  padding: 0 .25em;
+
+  &:not(.colFilter) {
+    padding: 0 .75em;
+  }
+
+  &Num {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 5.65rem;
+  }
+
+  &Title {
+    flex-grow: 1;
+    width: 28.438rem;
+  }
+
+  &AdFormat {
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 8.15rem;
+  }
+
+  &Banner {
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    width: 5%;
+
+    &IconsWrapper {
+      align-items: center;
+      display: inline-flex;
+      justify-content: space-between;
+      width: 8.125rem;
+    }
+  }
+
+  &Submit {
+    flex-grow: 0;
+    flex-shrink: 0;
+    position: relative;
+    width: 5.5rem;
+  }
+
+  & :global(.u-select__select) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    // stylelint-disable-next-line
+    min-width: 0 !important;
+  }
+
+  & :global(.u-select .u-dropdown_fullwidth) {
+    min-width: 100%;
+    width: auto;
+  }
+}
+
+.filterSubmit {
+  width: 100%;
+}
+
+.row:not(.rowFilter) .col {
+  padding-bottom: .5em;
+  padding-top: .5em;
+
+  &Header {
+    background-color: $color-gray-lighter;
+  }
+
+  &:first-child {
+    border-radius: .25em 0 0 .25em;
+    margin-left: .25em;
+    margin-right: -.25em;
+  }
+
+  &:last-child {
+    border-radius: 0 .25em .25em 0;
+    margin-left: -.25em;
+    margin-right: .25em;
+    padding-right: 0;
+  }
+}
+
+.table {
+  width: 100%;
+
+  &TimesIcon {
+    font-size: 10px;
+  }
+
+  &FileIcon {
+    height: auto;
+    width: 2.313rem;
   }
 }
