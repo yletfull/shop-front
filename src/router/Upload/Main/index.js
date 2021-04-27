@@ -17,7 +17,7 @@ const Upload = function UploadScreen() {
     finalUpload: 'finalUpload',
   };
 
-  const [stage] = useState(stages.loadImage);
+  const [stage] = useState(stages.accountSelect);
 
   const renderStagesSwitch = () => {
     switch (stage) {

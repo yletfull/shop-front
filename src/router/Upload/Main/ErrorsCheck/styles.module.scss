@@ -14,18 +14,19 @@
 }
 
 .icon {
-  margin-top: 5.875rem;
+  color: $color-gray-icon;
+  font-size: 7.5rem;
 }
 
 .titleWrapper {
   align-items: center;
+  color: $color-gray-darker;
   display: flex;
   flex-direction: column;
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: normal;
   justify-content: center;
-  margin-bottom: 5.25rem;
-  margin-top: 1.85rem;
+  margin-top: 2.5rem;
   text-align: center;
   width: 45%;
 }
@@ -33,4 +34,3 @@
 .select {
   width: 13rem;
 }
-

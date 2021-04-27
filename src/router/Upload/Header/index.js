@@ -5,8 +5,8 @@ import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
-import IconDownload from '@/icons/Download.svg';
-import IconUpload from '@/icons/Upload.svg';
+import IconDownload from '@/icons/Download';
+import IconUpload from '@/icons/Upload';
 import styles from './styles.module.scss';
 
 const headerTemplates = [
@@ -114,7 +114,7 @@ const Header = function HeaderScreen() {
       <div className={styles.headerTemplatesWrapper}>
         <HeaderTemplate className={styles.headerTemplate}>
           <ProcessButton
-            icon={IconDownload}
+            icon={<IconDownload />}
             text={['Скачать', 'файл']}
           />
           <div>
@@ -135,7 +135,7 @@ const Header = function HeaderScreen() {
         </HeaderTemplate>
         <HeaderTemplate className={styles.headerTemplate}>
           <ProcessButton
-            icon={IconUpload}
+            icon={<IconUpload />}
             text={['Загрузить', 'файл']}
           />
           <div>

@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
 
-import FingerIcon from '@/icons/Finger.svg';
-import VentIcon from '@/icons/Vent.svg';
+import FingerIcon from '@/icons/Finger';
+import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
@@ -35,7 +35,7 @@ const Upload = function UploadScreen() {
 
 
   const [stage] = useState(
-    stages.selectFile
+    stages.filseIsNotLoaded
   );
 
   const [list, setList] = useState(selectorMocksOptions[1].value);
@@ -58,11 +58,7 @@ const Upload = function UploadScreen() {
         {stage === stages.filseIsNotLoaded
         && (
           <React.Fragment>
-            <img
-              src={FingerIcon}
-              className={styles.icon}
-              alt="finger"
-            />
+            <FingerIcon className={styles.icon} />
             <p className={styles.title}>
               Для начала работы выберите аккаунт и клиента
             </p>
@@ -94,11 +90,7 @@ const Upload = function UploadScreen() {
         {stage === stages.fileIsLoading
         && (
           <React.Fragment>
-            <img
-              src={VentIcon}
-              className={styles.icon}
-              alt="vent"
-            />
+            <VentIcon className={styles.icon} />
             <p className={styles.title}>
               Файл загружается..
             </p>

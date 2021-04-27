@@ -1,8 +1,7 @@
 
 import React from 'react';
-// import cx from 'classnames';
 
-import WarningIcon from '@/icons/Warning.svg';
+import WarningIcon from '@/icons/Warning';
 import NavigationBar from '@/components/NavigationBar';
 import styles from './styles.module.scss';
 
@@ -19,11 +18,7 @@ const Upload = function UploadScreen() {
         params={navigationBarParams}
       />
       <div className={styles.contentWrapper}>
-        <img
-          src={WarningIcon}
-          className={styles.icon}
-          alt="warn"
-        />
+        <WarningIcon className={styles.icon} />
         <div className={styles.titleWrapper}>
           <p>
             Файл содержит ошибки.

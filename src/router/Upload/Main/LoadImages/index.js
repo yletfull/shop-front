@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
-import VkIcon from '@/icons/Vk.svg';
+import VkIcon from '@/icons/Vk';
 import TestImage from '@/images/TestImage.jpg';
-import PicturesLoadIcon from '@/icons/PicturesLoad.svg';
+import PicturesLoadIcon from '@/icons/PicturesLoad';
 import ProcessButton from '@/components/ProcessButton';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
@@ -84,12 +84,12 @@ const Upload = function UploadScreen() {
         />
         <div className={styles.loadButtonsWrapper}>
           <ProcessButton
-            icon={PicturesLoadIcon}
+            icon={<PicturesLoadIcon />}
             text={['Подгрузить', 'изображения']}
             className={styles.loadButton}
           />
           <ProcessButton
-            icon={VkIcon}
+            icon={<VkIcon />}
             text={['Выгрузить РК', 'во Вконтакт']}
             className={styles.loadButton}
           />
