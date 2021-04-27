@@ -7,6 +7,7 @@ const AngleDown = function IconAngleDown(props) {
       {...props}
       height={24}
       width={48}
+      style={{ marginLeft: '10px' }}
     >
       <g>
         <path
