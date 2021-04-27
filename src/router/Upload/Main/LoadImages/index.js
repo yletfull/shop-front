@@ -195,7 +195,7 @@ const Upload = function UploadScreen() {
                   className={cx('red', styles.tableTimesIcon)}
                 />
               </span>
-              <span />
+              <span className={styles.loadIconEmptySpace} />
             </span>
           </span>
           <span className={cx(styles.col, styles.colHeader, styles.colSubmit)}>
@@ -227,14 +227,12 @@ const Upload = function UploadScreen() {
                   alt="upload"
                 />
               </span>
-              <span>
-                <TimesIcon
-                  className={cx('red', styles.tableTimesIcon)}
-                />
-              </span>
-              <span>
+              <Button appearance="control">
+                <TimesIcon className={cx('red', styles.tableTimesIcon)} />
+              </Button>
+              <Button appearance="control">
                 <UploadIcon />
-              </span>
+              </Button>
             </span>
           </span>
           <span className={cx(styles.col, styles.colSubmit)}>
