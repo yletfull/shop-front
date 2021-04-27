@@ -9,7 +9,11 @@
 
 .loadButtonsWrapper {
   display: inline-flex;
-  margin: 1.85rem 2.85rem 1rem;
+  margin: .85rem 0 1rem 1rem;
+}
+
+.loadButton {
+  padding: 0;
 }
 
 .row {

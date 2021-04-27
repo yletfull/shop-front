@@ -86,10 +86,12 @@ const Upload = function UploadScreen() {
           <ProcessButton
             icon={PicturesLoadIcon}
             text={['Подгрузить', 'изображения']}
+            className={styles.loadButton}
           />
           <ProcessButton
             icon={VkIcon}
             text={['Выгрузить РК', 'во Вконтакт']}
+            className={styles.loadButton}
           />
         </div>
       </div>
