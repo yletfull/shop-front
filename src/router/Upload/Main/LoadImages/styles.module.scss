@@ -30,7 +30,6 @@
 
 .col {
   align-items: center;
-  border: 1px $color-gray-darker solid;
   display: flex;
   flex-grow: 1;
   flex-shrink: 1;
@@ -124,4 +123,13 @@
 
 .table {
   width: 100%;
+
+  &TimesIcon {
+    font-size: .625rem;
+  }
+
+  &FileIcon {
+    height: auto;
+    width: 2.313rem;
+  }
 }

@@ -4,6 +4,7 @@ import cx from 'classnames';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
 import VkIcon from '@/icons/Vk.svg';
+import TestImage from '@/icons/TestImage.jpg';
 import PicturesLoadIcon from '@/icons/PicturesLoad.svg';
 import ProcessButton from '@/components/ProcessButton';
 import Input from '@/components/Input';
@@ -189,8 +190,7 @@ const Upload = function UploadScreen() {
               </span>
               <span>
                 <TimesIcon
-                  style={{ fontSize: '10px' }}
-                  className="red"
+                  className={cx('red', styles.tableTimesIcon)}
                 />
               </span>
               <span />
@@ -220,15 +220,14 @@ const Upload = function UploadScreen() {
             <span className={styles.colBannerIconsWrapper}>
               <span>
                 <img
-                  src={VkIcon}
-                  className={styles.icon}
+                  src={TestImage}
+                  className={cx(styles.icon, styles.tableFileIcon)}
                   alt="upload"
                 />
               </span>
               <span>
                 <TimesIcon
-                  style={{ fontSize: '10px' }}
-                  className="red"
+                  className={cx('red', styles.tableTimesIcon)}
                 />
               </span>
               <span>
