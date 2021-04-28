@@ -2,11 +2,11 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import auth from './auth';
-// import upload from './upload';
+import upload from './upload';
 
 const rootReducer = combineReducers({
   [auth.NS]: auth.reducer,
-  // [upload.NS]: upload.reducer,
+  [upload.NS]: upload.reducer,
 });
 
 export const configureStore = function configureStore() {

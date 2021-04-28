@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-// import cx from 'classnames';
 
 import FirstUploadPage from './FirstUpload';
 import ErrorsCheckPage from './ErrorsCheck';
