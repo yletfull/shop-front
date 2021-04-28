@@ -27,17 +27,16 @@ const defaultProps = {
 };
 
 const Button = function Button(props) {
-  const { onClick, appearance, children, style, className } = props;
+  const { appearance, children, className, ...attrs } = props;
   return (
     <button
       type="button"
-      style={style && style}
       className={cx(
         styles[cssClass],
         styles[`${cssClass}_${appearance}`],
         className,
       )}
-      onClick={onClick}
+      {...attrs}
     >
       {children}
     </button>
