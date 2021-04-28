@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import { authSignIn, setTest } from '../../store/auth/actions';
+import { authSignIn } from '../../store/auth/actions';
 import styles from './styles.module.scss';
 
 const Upload = function UploadScreen() {
@@ -11,7 +11,7 @@ const Upload = function UploadScreen() {
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const test = useSelector((state) => state.auth.test);
+  const error = useSelector((state) => state.auth.error);
 
   const handleLoginInput = (e) => {
     const { value } = e.target;
@@ -24,9 +24,7 @@ const Upload = function UploadScreen() {
     setPassword(value);
   };
   const handleSubmit = (e) => {
-    console.log(e);
     e.preventDefault();
-    dispatch(setTest(login));
     dispatch(authSignIn({ login, password }));
   };
 
@@ -46,8 +44,8 @@ const Upload = function UploadScreen() {
         type="password"
         onInput={handlePasswordInput}
       />
-      <p>
-        {test}
+      <p className={styles.error}>
+        {error}
       </p>
       <Button type="submit">
         Вход

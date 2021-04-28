@@ -8,9 +8,7 @@ import styles from './styles.module.scss';
 const cssClass = 'button';
 
 const propTypes = {
-  onClick: PropTypes.func,
   appearance: PropTypes.string,
-  style: PropTypes.objectOf(PropTypes.any),
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
@@ -19,10 +17,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  onClick: () => {},
   appearance: 'default',
   children: null,
-  style: null,
   className: '',
 };
 

@@ -3,12 +3,13 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   authLogin,
   authLogout,
-  test,
+  authError,
 } from './actions';
 
 const initialState = {
   isChecked: false,
   user: null,
+  error: null,
 };
 
 const reducer = createReducer(initialState, {
@@ -22,9 +23,9 @@ const reducer = createReducer(initialState, {
     isChecked: true,
     user: null,
   }),
-  [test]: (state, action) => ({
+  [authError]: (state, action) => ({
     ...state,
-    test: action.payload,
+    error: action.payload,
   }),
 });
 

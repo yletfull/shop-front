@@ -4,11 +4,7 @@ import service from './service';
 
 export const authLogin = createAction(`${NS}/login`);
 export const authLogout = createAction(`${NS}/logout`);
-
-export const test = createAction('test');
-export const setTest = (value) => async (dispatch) => {
-  dispatch(test(value));
-};
+export const authError = createAction(`${NS}/setError`);
 
 export const authCheck = () => async (dispatch) => {
   try {
@@ -25,13 +21,15 @@ export const authSignIn = ({
   callback,
   ...payload
 } = {}) => async (dispatch) => {
-  const user = await service.login(payload);
-
-  dispatch(authLogin(user.data));
+  try {
+    const user = await service.login(payload);
+    dispatch(authLogin(user.data));
+  } catch (err) {
+    dispatch(authError('Ошибка авторизации'));
+  }
 };
 
 export const authSignOut = () => async (dispatch) => {
   await service.logout();
-
   dispatch(authLogout());
 };
