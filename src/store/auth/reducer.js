@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   authLogin,
   authLogout,
+  test,
 } from './actions';
 
 const initialState = {
@@ -20,6 +21,10 @@ const reducer = createReducer(initialState, {
     ...state,
     isChecked: true,
     user: null,
+  }),
+  [test]: (state, action) => ({
+    ...state,
+    test: action.payload,
   }),
 });
 

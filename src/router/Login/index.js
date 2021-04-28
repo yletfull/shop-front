@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import { authSignIn } from '../../store/auth/actions';
+import { authSignIn, setTest } from '../../store/auth/actions';
 import styles from './styles.module.scss';
-
 
 const Upload = function UploadScreen() {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const test = useSelector((state) => state.auth.test);
 
   const handleLoginInput = (e) => {
     const { value } = e.target;
@@ -23,14 +23,18 @@ const Upload = function UploadScreen() {
 
     setPassword(value);
   };
-  const handleLoginButtonClick = () => {
+  const handleSubmit = (e) => {
+    console.log(e);
+    e.preventDefault();
+    dispatch(setTest(login));
     dispatch(authSignIn({ login, password }));
   };
 
-  console.log(user);
-
   return (
-    <form className={styles.form}>
+    <form
+      onSubmit={handleSubmit}
+      className={styles.form}
+    >
       <Input
         value={login}
         placeholder="Введите логин"
@@ -42,7 +46,10 @@ const Upload = function UploadScreen() {
         type="password"
         onInput={handlePasswordInput}
       />
-      <Button onClick={handleLoginButtonClick}>
+      <p>
+        {test}
+      </p>
+      <Button type="submit">
         Вход
       </Button>
     </form>

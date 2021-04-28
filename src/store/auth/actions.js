@@ -5,10 +5,14 @@ import service from './service';
 export const authLogin = createAction(`${NS}/login`);
 export const authLogout = createAction(`${NS}/logout`);
 
+export const test = createAction('test');
+export const setTest = (value) => async (dispatch) => {
+  dispatch(test(value));
+};
+
 export const authCheck = () => async (dispatch) => {
   try {
     const user = await service.check();
-
     dispatch(authLogin(user));
   } catch (error) {
     console.error(error);
@@ -21,18 +25,9 @@ export const authSignIn = ({
   callback,
   ...payload
 } = {}) => async (dispatch) => {
-  if (method === 'oauth') {
-    service.launchOauth(() => {
-      if (typeof callback === 'function') {
-        callback();
-      }
-    });
-    return;
-  }
-
   const user = await service.login(payload);
 
-  dispatch(authLogin(user));
+  dispatch(authLogin(user.data));
 };
 
 export const authSignOut = () => async (dispatch) => {
