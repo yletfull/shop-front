@@ -1,0 +1,15 @@
+@import '@/theme/include.scss';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  & > *:not(:first-child) {
+    margin-top: .5rem;
+  }
+}
+
