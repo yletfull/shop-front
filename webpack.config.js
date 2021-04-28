@@ -115,8 +115,8 @@ module.exports = {
     hot: true,
     proxy: {
       '/api': {
+        target: 'http://advert.sandbox.ubic.tech',
         changeOrigin: true,
-        target: 'http://sandbox.ubic.tech/',
       },
     },
   },
