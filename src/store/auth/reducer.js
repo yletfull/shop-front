@@ -4,12 +4,14 @@ import {
   authLogin,
   authLogout,
   authError,
+  isFetching,
 } from './actions';
 
 const initialState = {
   isChecked: false,
   user: null,
   error: null,
+  isFetching: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -26,6 +28,10 @@ const reducer = createReducer(initialState, {
   [authError]: (state, action) => ({
     ...state,
     error: action.payload,
+  }),
+  [isFetching]: (state, action) => ({
+    ...state,
+    isFetching: action.payload,
   }),
 });
 
