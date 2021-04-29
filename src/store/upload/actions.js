@@ -31,7 +31,7 @@ export const setAccount = (cabinetId) => async (dispatch) => {
 
 export const fetchClients = () => async (dispatch, getState) => {
   try {
-    const cabinetId = getState.selectAccount.id;
+    const cabinetId = getState().upload.selectAccount.id;
     const data = await service.fetchClientsList({ cabinetId });
     dispatch(clients(data.data.data));
   } catch (err) {

@@ -85,8 +85,12 @@ const Header = function HeaderScreen() {
 
   useEffect(() => {
     if (selectAccount) {
-      dispatch(fetchClients());
-      setClientDisabled(false);
+      (async () => {
+        setIsFetching(true);
+        await dispatch(fetchClients());
+        setClientDisabled(false);
+        setIsFetching(false);
+      })();
     }
 
     setClientDisabled(true);
