@@ -4,7 +4,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // const CopyPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const DotenvPlugin = require('dotenv-webpack');
+const DotenvPlugin = require('dotenv-webpack');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 const publicPath = '/';
@@ -83,7 +83,7 @@ module.exports = {
     ],
   },
   plugins: [
-    // new DotenvPlugin(),
+    new DotenvPlugin(),
     new StyleLintPlugin({
       files: 'src/**/*.scss',
     }),
@@ -109,7 +109,7 @@ module.exports = {
     }),
   ],
   devServer: {
-    host: '127.0.0.1',
+    host: '0.0.0.0',
     historyApiFallback: true,
     overlay: true,
     hot: true,
