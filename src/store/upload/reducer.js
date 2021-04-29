@@ -3,6 +3,10 @@ import { firstUploadStages } from '@/router/Upload/stages';
 
 import {
   stage,
+  accounts,
+  selectAccount,
+  clients,
+  selectClient,
 } from './actions';
 
 const initialState = {
@@ -14,6 +18,23 @@ const reducer = createReducer(initialState, {
     ...state,
     stage: action.payload,
   }),
+  [accounts]: (state, action) => ({
+    ...state,
+    accounts: action.payload,
+  }),
+  [selectAccount]: (state, action) => ({
+    ...state,
+    selectAccount: action.payload,
+  }),
+  [clients]: (state, action) => ({
+    ...state,
+    clients: action.payload,
+  }),
+  [selectClient]: (state, action) => ({
+    ...state,
+    selectClient: action.payload,
+  }),
+
 });
 
 export default reducer;

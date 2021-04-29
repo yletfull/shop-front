@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
 import { firstUploadStages } from '../stages';
+import { fetchAccounts, fetchClients, setAccount, setClient } from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const headerTemplates = [
@@ -24,79 +25,96 @@ const headerTemplates = [
   ],
 ];
 
-const accountOptions = [
-  {
-    value: 'acc1',
-    text: 'account1',
-  },
-  {
-    value: 'acc2',
-    text: 'account2',
-  },
-];
-
-const clientOptions = [
-  {
-    value: 'cli1',
-    text: 'client1',
-  },
-  {
-    value: 'cli2',
-    text: 'client2',
-  },
-];
-
 const Header = function HeaderScreen() {
+  const dispatch = useDispatch();
+
   const stage = useSelector((state) => state.upload.stage);
 
-  const [selectorsValues, setSelectorsValues] = useState({
-    account: '',
-    client: '',
-  });
+  const accounts = useSelector((state) => state.upload?.accounts) || [];
+  const selectAccount = useSelector(
+    (state) => state.upload?.selectAccount?.id
+  ) || '';
+
+  const [clientsDisabled, setClientDisabled] = useState(true);
+  const clients = useSelector((state) => state.upload.clients) || [];
+  const selectClient = useSelector(
+    (state) => state.upload?.selectClient?.id
+  ) || '';
+
+  const accountsSelectorOptions = () => {
+    if (Object.values(accounts).length > 0) {
+      return Object.values(accounts).map((account) => ({
+        value: account?.id,
+        text: account?.data?.account_name,
+      }));
+    }
+    return [];
+  };
+
+  const clientsSelectorOptions = () => {
+    if (Object.values(clients).length > 0) {
+      return Object.values(clients).map((client) => ({
+        value: client?.id,
+        text: client?.title,
+      }));
+    }
+    return [];
+  };
 
   const handleAccountChange = (e) => {
-    const account = e.target.value;
-
-    setSelectorsValues((prev) => ({
-      ...prev,
-      account,
-    }));
+    const id = e.target.value;
+    dispatch(setAccount(id));
   };
 
   const handleClientChange = (e) => {
-    const client = e.target.value;
-
-    setSelectorsValues((prev) => ({
-      ...prev,
-      client,
-    }));
+    const id = e.target.value;
+    dispatch(setClient(id));
   };
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
+
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      setIsFetching(true);
+      await dispatch(fetchAccounts());
+      setIsFetching(false);
+    })();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (selectAccount) {
+      dispatch(fetchClients());
+      setClientDisabled(false);
+    }
+
+    setClientDisabled(true);
+  }, [dispatch, selectAccount]);
 
   return (
     <React.Fragment>
       <div className={styles.topWrapper}>
         <Select
-          value={selectorsValues.account}
-          options={accountOptions}
+          value={selectAccount}
+          options={accountsSelectorOptions()}
           onChange={handleAccountChange}
           resetText="Не выбрано"
           placeholder="Аккаунт"
           className={styles.select}
-          disabled={!firstStage}
+          disabled={isFetching}
         />
         <span className={styles.separator}>
           /
         </span>
         <Select
-          value={selectorsValues.client}
-          options={clientOptions}
+          value={selectClient}
+          options={clientsSelectorOptions()}
           onChange={handleClientChange}
           resetText="Не выбрано"
           placeholder="Клиент"
           className={styles.select}
-          disabled={!firstStage}
+          disabled={clientsDisabled || isFetching}
         />
         <Button
           style={{ 'font-size': '14px' }}
