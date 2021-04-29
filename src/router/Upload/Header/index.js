@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
@@ -7,6 +8,7 @@ import Select from '@/components/Select';
 import Button from '@/components/Button';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
+import { firstUploadStages } from '../stages';
 import styles from './styles.module.scss';
 
 const headerTemplates = [
@@ -45,6 +47,8 @@ const clientOptions = [
 ];
 
 const Header = function HeaderScreen() {
+  const stage = useSelector((state) => state.upload.stage);
+
   const [selectorsValues, setSelectorsValues] = useState({
     account: '',
     client: '',
@@ -68,6 +72,8 @@ const Header = function HeaderScreen() {
     }));
   };
 
+  const firstStage = stage === firstUploadStages.filseIsNotLoaded;
+
   return (
     <React.Fragment>
       <div className={styles.topWrapper}>
@@ -78,7 +84,7 @@ const Header = function HeaderScreen() {
           resetText="Не выбрано"
           placeholder="Аккаунт"
           className={styles.select}
-          disabled
+          disabled={!firstStage}
         />
         <span className={styles.separator}>
           /
@@ -90,7 +96,7 @@ const Header = function HeaderScreen() {
           resetText="Не выбрано"
           placeholder="Клиент"
           className={styles.select}
-          disabled
+          disabled={!firstStage}
         />
         <Button
           style={{ 'font-size': '14px' }}
@@ -111,52 +117,56 @@ const Header = function HeaderScreen() {
           </b>
         </Button>
       </div>
-      <div className={styles.headerTemplatesWrapper}>
-        <HeaderTemplate className={styles.headerTemplate}>
-          <ProcessButton
-            icon={<IconDownload />}
-            text={['Скачать', 'файл']}
-          />
-          <div>
-            {headerTemplates[0].map(({ title, value, id }) => (
-              <div
-                className={styles.textWrapper}
-                key={id}
-              >
-                <span>
-                  {title}
-                </span>
-                <span className={styles.value}>
-                  {value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </HeaderTemplate>
-        <HeaderTemplate className={styles.headerTemplate}>
-          <ProcessButton
-            icon={<IconUpload />}
-            text={['Загрузить', 'файл']}
-          />
-          <div>
-            {headerTemplates[1].map(({ title, value, id, valueColor }) => (
-              <div
-                className={styles.textWrapper}
-                key={id}
-              >
-                <span>
-                  {title}
-                </span>
-                <span
-                  className={cx(styles.value, { [valueColor]: valueColor })}
+      {!firstStage
+        && (
+        <div className={styles.headerTemplatesWrapper}>
+          <HeaderTemplate className={styles.headerTemplate}>
+            <ProcessButton
+              icon={<IconDownload />}
+              text={['Скачать', 'файл']}
+            />
+            <div>
+              {headerTemplates[0].map(({ title, value, id }) => (
+                <div
+                  className={styles.textWrapper}
+                  key={id}
                 >
-                  {value}
-                </span>
-              </div>
-            ))}
-          </div>
-        </HeaderTemplate>
-      </div>
+                  <span>
+                    {title}
+                  </span>
+                  <span className={styles.value}>
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </HeaderTemplate>
+          <HeaderTemplate className={styles.headerTemplate}>
+            <ProcessButton
+              icon={<IconUpload />}
+              text={['Загрузить', 'файл']}
+            />
+            <div>
+              {headerTemplates[1].map(({ title, value, id, valueColor }) => (
+                <div
+                  className={styles.textWrapper}
+                  key={id}
+                >
+                  <span>
+                    {title}
+                  </span>
+                  <span
+                    className={cx(styles.value, { [valueColor]: valueColor })}
+                  >
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </HeaderTemplate>
+        </div>
+        )}
+
     </React.Fragment>
   );
 };
