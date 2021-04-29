@@ -1,13 +1,17 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import { authSignIn } from '../../store/auth/actions';
+import { authSignIn, authCheck } from '../../store/auth/actions';
 import styles from './styles.module.scss';
 
 const Upload = function UploadScreen() {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(authCheck());
+  }, [dispatch]);
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
