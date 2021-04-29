@@ -8,7 +8,7 @@
   top: 50%;
   transform: translate(-50%, -50%);
 
-  & > *:not(:first-child) {
+  & > *:not(:first-child):not(.checkbox) {
     margin-top: .5rem;
   }
 }
@@ -16,5 +16,15 @@
 .error {
   color: $color-red;
   font-size: .8rem;
+  margin: 0;
 }
 
+.checkbox {
+  height: auto;
+
+  &Wrapper {
+    align-items: center;
+    display: flex;
+    font-size: .8rem;
+  }
+}

@@ -5,32 +5,28 @@ import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  onChange: PropTypes.func,
   value: PropTypes.string.isRequired,
-  style: PropTypes.objectOf(PropTypes.any),
   className: PropTypes.string,
   resetText: PropTypes.string,
   fullwidth: PropTypes.bool,
   options: PropTypes.arrayOf(PropTypes.any).isRequired,
   placeholder: PropTypes.string,
-  disabled: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 const defaultProps = {
-  onChange: () => {},
-  style: null,
   className: '',
   resetText: 'Введите текст',
   fullwidth: false,
   placeholder: '',
-  disabled: false,
+  type: 'select',
 };
 
 const Input = function Input(props) {
   const {
-    value, onChange, style, className,
+    value, className,
     resetText, fullwidth, options,
-    placeholder, disabled,
+    placeholder, type, ...attrs
   } = props;
 
   const currentValue = value || 'default';
@@ -38,17 +34,16 @@ const Input = function Input(props) {
 
   return (
     <select
-      onChange={onChange}
       value={currentValue}
       className={cx(
         styles.select,
         className,
         fullwidth && styles.fullwidth,
-        isDefault && styles.default
+        isDefault && styles.default,
+        type === 'checkbox' && styles.checkbox
       )}
-      style={style}
       placeholder={placeholder}
-      disabled={disabled}
+      {...attrs}
     >
       <option
         value="default"

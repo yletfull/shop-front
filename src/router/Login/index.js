@@ -11,6 +11,7 @@ const Upload = function UploadScreen() {
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
   const error = useSelector((state) => state.auth.error);
 
   const handleLoginInput = (e) => {
@@ -18,14 +19,22 @@ const Upload = function UploadScreen() {
 
     setLogin(value);
   };
+
   const handlePasswordInput = (e) => {
     const { value } = e.target;
 
     setPassword(value);
   };
+
+  const handleRememberMeSelect = (e) => {
+    const { checked } = e.target;
+
+    setRememberMe(checked);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(authSignIn({ login, password }));
+    dispatch(authSignIn({ login, password, rememberMe }));
   };
 
   return (
@@ -47,6 +56,19 @@ const Upload = function UploadScreen() {
       <p className={styles.error}>
         {error}
       </p>
+      <label
+        className={styles.checkboxWrapper}
+        htmlFor="rememberMe"
+      >
+        <Input
+          checked={rememberMe}
+          onChange={handleRememberMeSelect}
+          type="checkbox"
+          id="rememberMe"
+          className={styles.checkbox}
+        />
+        Запомнить меня
+      </label>
       <Button type="submit">
         Вход
       </Button>
