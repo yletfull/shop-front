@@ -1,0 +1,46 @@
+@import '@/theme/include.scss';
+
+$u-spinner-animation-time: .6s !default;
+$u-spinner-circle-line-width: 2px !default;
+$u-spinner-circle-size: 2em !default;
+$u-spinner-circle-size_inline: 1em !default;
+$u-spinner-padding: 2 * 1em !default;
+
+.u-spinner {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: $u-spinner-padding;
+
+  &_inline {
+    display: inline-flex;
+    padding: 0;
+  }
+
+  &__circle {
+    animation: u-spinner-keyframes $u-spinner-animation-time linear infinite;
+    background-color: transparent;
+    border: $u-spinner-circle-line-width solid #f4f4f5;
+    border-bottom-color: $color-primary;
+    border-radius: 50%;
+    border-top-color: $color-primary;
+    height: $u-spinner-circle-size;
+    width: $u-spinner-circle-size;
+
+    &_inline {
+      box-sizing: border-box;
+      height: $u-spinner-circle-size_inline;
+      width: $u-spinner-circle-size_inline;
+    }
+  }
+}
+
+@keyframes u-spinner-keyframes {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

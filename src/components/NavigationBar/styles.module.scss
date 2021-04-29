@@ -1,0 +1,28 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: .813rem;
+  padding: 1rem 1.5rem;
+}
+
+.item {
+  align-items: center;
+  display: flex;
+  white-space: nowrap;
+
+  &:not(:last-of-type)::after {
+    content: '🠖';
+    margin: 0 .5rem;
+  }
+}
+
+.currentText {
+  font-weight: bold;
+}
+
+.nextText {
+  color: $color-gray-darker;
+}
+

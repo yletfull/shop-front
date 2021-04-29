@@ -1,0 +1,63 @@
+@import '@/theme/include.scss';
+
+.headerTemplatesWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -1rem;
+}
+
+.headerTemplate {
+  flex-grow: 1;
+  flex-shrink: 1;
+  margin: 1rem;
+
+  &:not(:last-child):not(:focus)::before {
+    background-color: $color-white;
+    content: '';
+    height: 60%;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+  }
+}
+
+.textWrapper {
+  white-space: nowrap;
+}
+
+.value {
+  font-weight: bold;
+
+  &::before {
+    color: $color-black;
+    content: ': ';
+    font-weight: 300;
+  }
+}
+
+.separator {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 1rem;
+}
+
+.topWrapper {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.changeButton {
+  margin-left: 2.5rem;
+}
+
+.downloadExcelModel {
+  position: absolute;
+  right: 1rem;
+}
+
+.select {
+  width: 13rem;
+}
