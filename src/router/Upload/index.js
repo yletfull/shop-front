@@ -15,6 +15,7 @@ const Upload = function UploadScreen() {
   if (isFetching) {
     return <Spinner />;
   }
+
   return (
     authorized
       ? (
