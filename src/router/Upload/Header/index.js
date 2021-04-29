@@ -32,13 +32,13 @@ const Header = function HeaderScreen() {
 
   const accounts = useSelector((state) => state.upload?.accounts) || [];
   const selectAccount = useSelector(
-    (state) => state.upload?.selectAccount?.id
+    (state) => state.upload?.selectAccount
   ) || '';
 
   const [clientsDisabled, setClientDisabled] = useState(true);
   const clients = useSelector((state) => state.upload.clients) || [];
   const selectClient = useSelector(
-    (state) => state.upload?.selectClient?.id
+    (state) => state.upload?.selectClient
   ) || '';
 
   const accountsSelectorOptions = () => {
@@ -88,8 +88,8 @@ const Header = function HeaderScreen() {
       (async () => {
         setIsFetching(true);
         await dispatch(fetchClients());
-        setClientDisabled(false);
         setIsFetching(false);
+        setClientDisabled(false);
       })();
     }
 
@@ -106,7 +106,7 @@ const Header = function HeaderScreen() {
           resetText="Не выбрано"
           placeholder="Аккаунт"
           className={styles.select}
-          disabled={isFetching}
+          disabled={isFetching && !accountsSelectorOptions().length}
         />
         <span className={styles.separator}>
           /
