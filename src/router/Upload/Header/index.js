@@ -9,7 +9,7 @@ import Button from '@/components/Button';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
 import { firstUploadStages } from '../stages';
-import { fetchAccounts, fetchClients, setAccount, setClient } from '../../../store/upload/actions';
+import { fetchAccounts, fetchClients, setAccount, setClient, setStage } from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const headerTemplates = [
@@ -27,6 +27,9 @@ const headerTemplates = [
 
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [changeButtonDisabled, setChangeButtonDisabled] = useState(true);
 
   const stage = useSelector((state) => state.upload.stage);
 
@@ -73,8 +76,6 @@ const Header = function HeaderScreen() {
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
 
-  const [isFetching, setIsFetching] = useState(false);
-
   useEffect(() => {
     (async () => {
       setIsFetching(true);
@@ -85,7 +86,7 @@ const Header = function HeaderScreen() {
 
   useEffect(() => {
     if (selectAccount) {
-      (async () => {
+      return (async () => {
         setIsFetching(true);
         await dispatch(fetchClients());
         setIsFetching(false);
@@ -95,6 +96,16 @@ const Header = function HeaderScreen() {
 
     setClientDisabled(true);
   }, [dispatch, selectAccount]);
+
+  useEffect(() => {
+    if (selectClient && selectAccount) {
+      setChangeButtonDisabled(false);
+      dispatch(setStage(firstUploadStages.selectFile));
+      return;
+    }
+    dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+    setChangeButtonDisabled(true);
+  }, [selectAccount, selectClient, dispatch]);
 
   return (
     <React.Fragment>
@@ -124,6 +135,7 @@ const Header = function HeaderScreen() {
           style={{ 'font-size': '14px' }}
           className={styles.changeButton}
           appearance="control"
+          disabled={changeButtonDisabled}
         >
           <b>
             Изменить

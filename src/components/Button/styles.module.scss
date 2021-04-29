@@ -38,3 +38,12 @@
     background-color: $color-gray-lighter;
   }
 }
+
+.disabled {
+  color: $color-gray-darken;
+
+  &:hover {
+    background-color: transparent;
+    cursor: default;
+  }
+}
