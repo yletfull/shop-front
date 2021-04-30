@@ -47,7 +47,9 @@ const Header = function HeaderScreen() {
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
   ) || '';
-
+  const queueList = useSelector(
+    (state) => state.upload.queueList
+  );
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -91,31 +93,32 @@ const Header = function HeaderScreen() {
   })(), [dispatch]);
 
   useEffect(() => {
+    dispatch((setClient('')));
+    setClientDisabled(true);
     if (selectAccount) {
       dispatch(fetchClients());
     }
   }, [dispatch, selectAccount]);
 
   useEffect(() => {
-    if (clients.length && selectAccount) {
+    if (clients.length) {
       setClientDisabled(false);
     }
-  }, [dispatch, clients, selectAccount]);
+  }, [dispatch, clients]);
 
-  useEffect(() => {
-    dispatch((setClient('')));
-    setClientDisabled(true);
-  }, [dispatch, selectAccount]);
-
-  useEffect(() => {
+  useEffect(() => (async () => {
     if (selectClient && selectAccount) {
       setChangeButtonDisabled(false);
-      dispatch(setStage(firstUploadStages.selectFile));
+      // await dispatch(fetchQueueList());
+      // console.log(queueList.length);
+      // if (queueList.length > 0) {
+      //   return dispatch(setStage(firstUploadStages.selectFile));
+      // }
       return;
     }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     setChangeButtonDisabled(true);
-  }, [selectAccount, selectClient, dispatch]);
+  })(), [dispatch, selectAccount, selectClient, queueList]);
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
 
