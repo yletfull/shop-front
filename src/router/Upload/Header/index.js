@@ -79,8 +79,18 @@ const Header = function HeaderScreen() {
     dispatch(setClient(id));
   };
 
-  const hadleChageButtonClick = () => {
+  const handleReset = () => {
     dispatch(setAccount(''));
+    dispatch(setClient(''));
+  };
+
+  const hanldeAcceptButtonClick = () => {
+    if (selectClient && selectAccount) {
+      setChangeButtonShow(true);
+      setClientDisabled(true);
+      setAccountsDisabled(true);
+      dispatch(setStage(firstUploadStages.selectFile));
+    }
   };
 
   useEffect(() => (async () => {
@@ -90,9 +100,9 @@ const Header = function HeaderScreen() {
       setAccountsDisabled(false);
     } else {
       dispatch(fetchClients());
-      setClientDisabled(true);
     }
     dispatch((setClient('')));
+    setClientDisabled(true);
   })(), [dispatch, selectAccount]);
 
   useEffect(() => {
@@ -102,13 +112,6 @@ const Header = function HeaderScreen() {
   }, [dispatch, clients]);
 
   useEffect(() => (async () => {
-    if (selectClient && selectAccount) {
-      setChangeButtonShow(true);
-      setClientDisabled(true);
-      setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.selectFile));
-      return;
-    }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     setChangeButtonShow(false);
   })(), [dispatch, selectAccount, selectClient]);
@@ -145,7 +148,7 @@ const Header = function HeaderScreen() {
               style={{ 'font-size': '14px' }}
               className={styles.changeButton}
               appearance="control"
-              onClick={hadleChageButtonClick}
+              onClick={handleReset}
             >
               <b>
                 Изменить
@@ -155,7 +158,7 @@ const Header = function HeaderScreen() {
           : (
             <div className={styles.buttonsWrapper}>
               <Button
-                onClick={hadleChageButtonClick}
+                onClick={hanldeAcceptButtonClick}
               >
                 <b>
                   выбрать
@@ -163,7 +166,7 @@ const Header = function HeaderScreen() {
               </Button>
               <Button
                 className={styles.rejectButon}
-                onClick={hadleChageButtonClick}
+                onClick={handleReset}
                 color="secondary"
               >
                 <b>
