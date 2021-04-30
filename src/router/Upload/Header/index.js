@@ -87,18 +87,16 @@ const Header = function HeaderScreen() {
   };
 
   useEffect(() => (async () => {
-    setAccountsDisabled(true);
-    await dispatch(fetchAccounts());
-    setAccountsDisabled(false);
-  })(), [dispatch]);
-
-  useEffect(() => {
-    dispatch((setClient('')));
-    setClientDisabled(true);
-    if (selectAccount) {
+    if (!selectAccount) {
+      setAccountsDisabled(true);
+      await dispatch(fetchAccounts());
+      setAccountsDisabled(false);
+    } else {
       dispatch(fetchClients());
+      setClientDisabled(true);
     }
-  }, [dispatch, selectAccount]);
+    dispatch((setClient('')));
+  })(), [dispatch, selectAccount]);
 
   useEffect(() => {
     if (clients.length) {
@@ -109,11 +107,9 @@ const Header = function HeaderScreen() {
   useEffect(() => (async () => {
     if (selectClient && selectAccount) {
       setChangeButtonDisabled(false);
-      // await dispatch(fetchQueueList());
-      // console.log(queueList.length);
-      // if (queueList.length > 0) {
-      //   return dispatch(setStage(firstUploadStages.selectFile));
-      // }
+      setClientDisabled(true);
+      setAccountsDisabled(true);
+      dispatch(setStage(firstUploadStages.selectFile));
       return;
     }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
