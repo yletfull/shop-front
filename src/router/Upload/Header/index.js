@@ -9,21 +9,19 @@ import Button from '@/components/Button';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
 import { firstUploadStages } from '../stages';
-import { fetchAccounts, fetchClients, setAccount, setClient, setStage } from '../../../store/upload/actions';
+import { fetchAccounts, fetchClients, fetchDocumentDetails, fetchDocuments, setAccount, setClient, setStage } from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
-const headerTemplates = [
-  [
-    { title: 'Последнее скачивание', value: '15.03.2021 15:55:31', id: 0 },
-    { title: 'Всего РК', value: '661', id: 1 },
-  ],
-  [
-    { title: 'Последняя загрузка во ВК', value: '15.03.2021 15:55:31', id: 0 },
-    { title: 'Всего РК', value: '567', id: 1 },
-    { title: 'Новых РК', value: '11', id: 2 },
-    { title: 'Ошибок', value: '9', valueColor: 'red', id: 3 },
-  ],
-];
+const getHeaderTempalteContent = (data) => [[
+  { title: 'Последнее скачивание', value: data.createdAt, id: 0 },
+  { title: 'Всего РК', value: data.siblingsCount, id: 1 },
+],
+[
+  { title: 'Последняя загрузка во ВК', value: data.createdAt, id: 0 },
+  { title: 'Всего РК', value: data.siblingsCount, id: 1 },
+  { title: 'Новых РК', value: '11', id: 2 },
+  { title: 'Ошибок', value: '9', valueColor: 'red', id: 3 },
+]];
 
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
@@ -46,6 +44,12 @@ const Header = function HeaderScreen() {
   ) || '';
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
+  ) || '';
+  const documents = useSelector(
+    (state) => state.upload?.documents
+  ) || '';
+  const documentDetails = useSelector(
+    (state) => state.upload?.documentDetails
   ) || '';
 
   const accountsSelectorOptions = () => {
@@ -117,6 +121,19 @@ const Header = function HeaderScreen() {
   })(), [dispatch, selectAccount, selectClient]);
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
+
+  useEffect(() => (async () => {
+    if (firstStage) {
+      dispatch(fetchDocuments());
+    }
+  })(), [dispatch, firstStage]);
+
+  useEffect(() => (async () => {
+    if (documents.length > 0) {
+      return dispatch(fetchDocumentDetails(documents[0].id));
+    }
+    dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+  })(), [dispatch, documents]);
 
   return (
     <React.Fragment>
@@ -194,19 +211,20 @@ const Header = function HeaderScreen() {
               text={['Скачать', 'файл']}
             />
             <div>
-              {headerTemplates[0].map(({ title, value, id }) => (
-                <div
-                  className={styles.textWrapper}
-                  key={id}
-                >
-                  <span>
-                    {title}
-                  </span>
-                  <span className={styles.value}>
-                    {value}
-                  </span>
-                </div>
-              ))}
+              {getHeaderTempalteContent(documentDetails)[0]
+                .map(({ title, value, id }) => (
+                  <div
+                    className={styles.textWrapper}
+                    key={id}
+                  >
+                    <span>
+                      {title}
+                    </span>
+                    <span className={styles.value}>
+                      {value}
+                    </span>
+                  </div>
+                ))}
             </div>
           </HeaderTemplate>
           <HeaderTemplate className={styles.headerTemplate}>
@@ -215,21 +233,22 @@ const Header = function HeaderScreen() {
               text={['Загрузить', 'файл']}
             />
             <div>
-              {headerTemplates[1].map(({ title, value, id, valueColor }) => (
-                <div
-                  className={styles.textWrapper}
-                  key={id}
-                >
-                  <span>
-                    {title}
-                  </span>
-                  <span
-                    className={cx(styles.value, { [valueColor]: valueColor })}
+              {getHeaderTempalteContent(documentDetails)[1]
+                .map(({ title, value, id, valueColor }) => (
+                  <div
+                    className={styles.textWrapper}
+                    key={id}
                   >
-                    {value}
-                  </span>
-                </div>
-              ))}
+                    <span>
+                      {title}
+                    </span>
+                    <span
+                      className={cx(styles.value, { [valueColor]: valueColor })}
+                    >
+                      {value}
+                    </span>
+                  </div>
+                ))}
             </div>
           </HeaderTemplate>
         </div>
