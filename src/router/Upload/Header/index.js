@@ -47,9 +47,6 @@ const Header = function HeaderScreen() {
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
   ) || '';
-  const queueList = useSelector(
-    (state) => state.upload.queueList
-  );
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -114,7 +111,7 @@ const Header = function HeaderScreen() {
     }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     setChangeButtonDisabled(true);
-  })(), [dispatch, selectAccount, selectClient, queueList]);
+  })(), [dispatch, selectAccount, selectClient]);
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
 
