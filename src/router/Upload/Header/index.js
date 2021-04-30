@@ -80,6 +80,10 @@ const Header = function HeaderScreen() {
     dispatch(setClient(id));
   };
 
+  const hadleChageButtonClick = () => {
+    dispatch(setAccount(''));
+  };
+
   useEffect(() => (async () => {
     setAccountsDisabled(true);
     await dispatch(fetchAccounts());
@@ -93,11 +97,12 @@ const Header = function HeaderScreen() {
   }, [dispatch, selectAccount]);
 
   useEffect(() => {
-    if (clients.length) {
+    if (clients.length && selectAccount) {
       return setClientDisabled(false);
     }
+    dispatch((setClient('')));
     return setClientDisabled(true);
-  }, [clients]);
+  }, [dispatch, clients, selectAccount]);
 
   useEffect(() => {
     if (selectClient && selectAccount) {
@@ -140,6 +145,7 @@ const Header = function HeaderScreen() {
           className={styles.changeButton}
           appearance="control"
           disabled={changeButtonDisabled}
+          onClick={hadleChageButtonClick}
         >
           <b>
             Изменить
