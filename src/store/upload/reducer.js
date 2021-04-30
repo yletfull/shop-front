@@ -7,6 +7,7 @@ import {
   selectAccount,
   clients,
   selectClient,
+  queueList,
 } from './actions';
 
 const initialState = {
@@ -34,7 +35,10 @@ const reducer = createReducer(initialState, {
     ...state,
     selectClient: action.payload,
   }),
-
+  [queueList]: (state, action) => ({
+    ...state,
+    queueList: action.payload,
+  }),
 });
 
 export default reducer;

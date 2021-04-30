@@ -7,6 +7,7 @@ export const accounts = createAction(`${NS}/accounts`);
 export const selectAccount = createAction(`${NS}/selectAccount`);
 export const clients = createAction(`${NS}/clients`);
 export const selectClient = createAction(`${NS}/selectClient`);
+export const queueList = createAction(`${NS}/queueList`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -37,7 +38,18 @@ export const fetchClients = () => async (dispatch, getState) => {
   }
 };
 
-
 export const setClient = (clientId) => (dispatch) => {
   dispatch(selectClient(clientId));
+};
+
+export const fetchQueueList = () => async (dispatch, getState) => {
+  try {
+    const cabinetId = getState().upload.selectAccount;
+    const clientId = getState().upload.selectClient;
+    const data = await service.fetchClientsList({ cabinetId, clientId });
+    dispatch(queueList(data.data.data));
+  } catch (err) {
+    dispatch(queueList([]));
+    console.log(err);
+  }
 };
