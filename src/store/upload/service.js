@@ -8,6 +8,8 @@ const fetchClientsList = ({ cabinetId }) => api.get(`api/v1/ad-cabinet/${cabinet
 
 const fetchDocuments = () => api.get('api/v1/documents').then((data) => data);
 
+const fetchDocumentDetails = ({ documentId }) => api.get(`api/v1/document/${documentId}`).then((data) => data);
+
 const fetchQueueList = ({ cabinetId, clientId }) => api.get(`api/v1/ad-cabinet/${cabinetId}/queue`, {
   params: {
     clientId,
@@ -20,4 +22,5 @@ export default {
   fetchClientsList,
   fetchQueueList,
   fetchDocuments,
+  fetchDocumentDetails,
 };

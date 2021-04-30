@@ -9,6 +9,7 @@ export const clients = createAction(`${NS}/clients`);
 export const selectClient = createAction(`${NS}/selectClient`);
 export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
+export const documentDetails = createAction(`${NS}/documentDetails`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -61,6 +62,16 @@ export const fetchDocuments = () => async (dispatch) => {
     dispatch(documents(data.data.data));
   } catch (err) {
     dispatch(documents([]));
+    console.log(err);
+  }
+};
+
+export const fetchDocumentDetails = (documentId) => async (dispatch) => {
+  try {
+    const data = await service.fetchDocumentDetails({ documentId });
+    dispatch(documentDetails(data.data.data));
+  } catch (err) {
+    dispatch(documentDetails([]));
     console.log(err);
   }
 };
