@@ -98,11 +98,14 @@ const Header = function HeaderScreen() {
 
   useEffect(() => {
     if (clients.length && selectAccount) {
-      return setClientDisabled(false);
+      setClientDisabled(false);
     }
-    dispatch((setClient('')));
-    return setClientDisabled(true);
   }, [dispatch, clients, selectAccount]);
+
+  useEffect(() => {
+    dispatch((setClient('')));
+    setClientDisabled(true);
+  }, [dispatch, selectAccount]);
 
   useEffect(() => {
     if (selectClient && selectAccount) {
