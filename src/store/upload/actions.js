@@ -17,6 +17,7 @@ export const fetchAccounts = () => async (dispatch) => {
     const data = await service.fetchAccountsList();
     dispatch(accounts(data.data.data));
   } catch (err) {
+    dispatch(accounts([]));
     console.log(err);
   }
 };
@@ -31,6 +32,7 @@ export const fetchClients = () => async (dispatch, getState) => {
     const data = await service.fetchClientsList({ cabinetId });
     dispatch(clients(data.data.data));
   } catch (err) {
+    dispatch(clients([]));
     console.log(err);
   }
 };
