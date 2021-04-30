@@ -6,6 +6,8 @@ const setAccount = ({ cabinetId }) => api.patch(`api/v1/ad-cabinet/${cabinetId}`
 
 const fetchClientsList = ({ cabinetId }) => api.get(`api/v1/ad-cabinet/${cabinetId}/clients`).then((data) => data);
 
+const fetchDocuments = () => api.get('api/v1/documents').then((data) => data);
+
 const fetchQueueList = ({ cabinetId, clientId }) => api.get(`api/v1/ad-cabinet/${cabinetId}/queue`, {
   params: {
     clientId,
@@ -17,4 +19,5 @@ export default {
   setAccount,
   fetchClientsList,
   fetchQueueList,
+  fetchDocuments,
 };

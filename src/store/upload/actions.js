@@ -8,6 +8,7 @@ export const selectAccount = createAction(`${NS}/selectAccount`);
 export const clients = createAction(`${NS}/clients`);
 export const selectClient = createAction(`${NS}/selectClient`);
 export const queueList = createAction(`${NS}/queueList`);
+export const documents = createAction(`${NS}/documents`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -50,6 +51,16 @@ export const fetchQueueList = () => async (dispatch, getState) => {
     dispatch(queueList(data.data.data));
   } catch (err) {
     dispatch(queueList([]));
+    console.log(err);
+  }
+};
+
+export const fetchDocuments = () => async (dispatch) => {
+  try {
+    const data = await service.fetchDocuments();
+    dispatch(documents(data.data.data));
+  } catch (err) {
+    dispatch(documents([]));
     console.log(err);
   }
 };

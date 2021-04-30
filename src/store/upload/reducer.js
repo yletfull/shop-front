@@ -8,6 +8,7 @@ import {
   clients,
   selectClient,
   queueList,
+  documents,
 } from './actions';
 
 const initialState = {
@@ -38,6 +39,10 @@ const reducer = createReducer(initialState, {
   [queueList]: (state, action) => ({
     ...state,
     queueList: action.payload,
+  }),
+  [documents]: (state, action) => ({
+    ...state,
+    documents: action.payload,
   }),
 });
 
