@@ -30,7 +30,7 @@ const Header = function HeaderScreen() {
 
   const [accountsDisabled, setAccountsDisabled] = useState(false);
   const [clientsDisabled, setClientDisabled] = useState(true);
-  const [changeButtonDisabled, setChangeButtonDisabled] = useState(true);
+  const [changeButtonShow, setChangeButtonShow] = useState(true);
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -103,14 +103,14 @@ const Header = function HeaderScreen() {
 
   useEffect(() => (async () => {
     if (selectClient && selectAccount) {
-      setChangeButtonDisabled(false);
+      setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
       dispatch(setStage(firstUploadStages.selectFile));
       return;
     }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
-    setChangeButtonDisabled(true);
+    setChangeButtonShow(false);
   })(), [dispatch, selectAccount, selectClient]);
 
   const firstStage = stage === firstUploadStages.filseIsNotLoaded;
@@ -139,17 +139,39 @@ const Header = function HeaderScreen() {
           className={styles.select}
           disabled={clientsDisabled}
         />
-        <Button
-          style={{ 'font-size': '14px' }}
-          className={styles.changeButton}
-          appearance="control"
-          disabled={changeButtonDisabled}
-          onClick={hadleChageButtonClick}
-        >
-          <b>
-            Изменить
-          </b>
-        </Button>
+        {changeButtonShow
+          ? (
+            <Button
+              style={{ 'font-size': '14px' }}
+              className={styles.changeButton}
+              appearance="control"
+              onClick={hadleChageButtonClick}
+            >
+              <b>
+                Изменить
+              </b>
+            </Button>
+          )
+          : (
+            <div className={styles.buttonsWrapper}>
+              <Button
+                onClick={hadleChageButtonClick}
+              >
+                <b>
+                  выбрать
+                </b>
+              </Button>
+              <Button
+                className={styles.rejectButon}
+                onClick={hadleChageButtonClick}
+                color="secondary"
+              >
+                <b>
+                  отменить
+                </b>
+              </Button>
+            </div>
+          )}
         <Button
           style={{ 'font-size': '14px' }}
           className={styles.downloadExcelModel}
