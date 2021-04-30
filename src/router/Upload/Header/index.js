@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import HeaderTemplate from '@/components/HeaderTemplate';
@@ -28,21 +28,26 @@ const headerTemplates = [
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
 
-  const [isFetching, setIsFetching] = useState(false);
+  const [accountsDisabled, setAccountsDisabled] = useState(false);
+  const [clientsDisabled, setClientDisabled] = useState(true);
   const [changeButtonDisabled, setChangeButtonDisabled] = useState(true);
 
   const stage = useSelector((state) => state.upload.stage);
-
-  const accounts = useSelector((state) => state.upload?.accounts) || [];
+  const accountsData = useSelector(
+    (state) => state.upload?.accounts || []
+  );
+  const accounts = useMemo(() => accountsData, [accountsData]);
+  const clientsData = useSelector(
+    (state) => state.upload?.clients || []
+  );
+  const clients = useMemo(() => clientsData, [clientsData]);
   const selectAccount = useSelector(
     (state) => state.upload?.selectAccount
   ) || '';
-
-  const [clientsDisabled, setClientDisabled] = useState(true);
-  const clients = useSelector((state) => state.upload.clients) || [];
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
   ) || '';
+
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -66,6 +71,7 @@ const Header = function HeaderScreen() {
 
   const handleAccountChange = (e) => {
     const id = e.target.value;
+    dispatch(setClient(''));
     dispatch(setAccount(id));
   };
 
@@ -74,28 +80,24 @@ const Header = function HeaderScreen() {
     dispatch(setClient(id));
   };
 
-  const firstStage = stage === firstUploadStages.filseIsNotLoaded;
-
-  useEffect(() => {
-    (async () => {
-      setIsFetching(true);
-      await dispatch(fetchAccounts());
-      setIsFetching(false);
-    })();
-  }, [dispatch]);
+  useEffect(() => (async () => {
+    setAccountsDisabled(true);
+    await dispatch(fetchAccounts());
+    setAccountsDisabled(false);
+  })(), [dispatch]);
 
   useEffect(() => {
     if (selectAccount) {
-      return (async () => {
-        setIsFetching(true);
-        await dispatch(fetchClients());
-        setIsFetching(false);
-        setClientDisabled(false);
-      })();
+      dispatch(fetchClients());
     }
-
-    setClientDisabled(true);
   }, [dispatch, selectAccount]);
+
+  useEffect(() => {
+    if (clients.length) {
+      return setClientDisabled(false);
+    }
+    return setClientDisabled(true);
+  }, [clients]);
 
   useEffect(() => {
     if (selectClient && selectAccount) {
@@ -107,6 +109,8 @@ const Header = function HeaderScreen() {
     setChangeButtonDisabled(true);
   }, [selectAccount, selectClient, dispatch]);
 
+  const firstStage = stage === firstUploadStages.filseIsNotLoaded;
+
   return (
     <React.Fragment>
       <div className={styles.topWrapper}>
@@ -117,7 +121,7 @@ const Header = function HeaderScreen() {
           resetText="Не выбрано"
           placeholder="Аккаунт"
           className={styles.select}
-          disabled={isFetching && !accountsSelectorOptions().length}
+          disabled={accountsDisabled}
         />
         <span className={styles.separator}>
           /
@@ -129,7 +133,7 @@ const Header = function HeaderScreen() {
           resetText="Не выбрано"
           placeholder="Клиент"
           className={styles.select}
-          disabled={clientsDisabled || isFetching}
+          disabled={clientsDisabled}
         />
         <Button
           style={{ 'font-size': '14px' }}
