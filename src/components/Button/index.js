@@ -9,6 +9,7 @@ const cssClass = 'button';
 
 const propTypes = {
   appearance: PropTypes.string,
+  color: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
@@ -20,17 +21,20 @@ const defaultProps = {
   appearance: 'default',
   children: null,
   className: '',
+  color: 'primary',
 };
 
 const Button = function Button(props) {
-  const { appearance, children, className, ...attrs } = props;
+  const { appearance, children, className, color, ...attrs } = props;
   return (
     <button
       type="button"
       className={cx(
         styles[cssClass],
         styles[`${cssClass}_${appearance}`],
+        styles[`${cssClass}_${color}`],
         className,
+        attrs.disabled && styles.disabled,
       )}
       {...attrs}
     >

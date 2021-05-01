@@ -2,32 +2,25 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { globalStages } from '../stages';
 import FirstUploadPage from './FirstUpload';
 import ErrorsCheckPage from './ErrorsCheck';
 import LoadImagesPage from './LoadImages';
 import FinalUploadPage from './FinalUpload';
-
 import styles from './styles.module.scss';
 
 const Upload = function UploadScreen() {
-  const stages = {
-    firstUpload: 'firstUpload',
-    errorCheck: 'errorCheck',
-    loadImage: 'loadImage',
-    finalUpload: 'finalUpload',
-  };
-
   const stage = useSelector((state) => state.upload.stage);
 
   const renderStagesSwitch = () => {
     switch (stage) {
-      case stages.firstUpload:
+      case globalStages.firstUpload:
         return <FirstUploadPage />;
-      case stages.errorCheck:
+      case globalStages.errorCheck:
         return <ErrorsCheckPage />;
-      case stages.loadImage:
+      case globalStages.loadImage:
         return <LoadImagesPage />;
-      case stages.finalUpload:
+      case globalStages.finalUpload:
         return <FinalUploadPage />;
       default:
         return <FirstUploadPage />;

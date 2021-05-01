@@ -53,6 +53,13 @@
   margin-left: 2.5rem;
 }
 
+.buttonsWrapper {
+  & > button {
+    margin-left: 1rem;
+    width: 6.75rem;
+  }
+}
+
 .downloadExcelModel {
   position: absolute;
   right: 1rem;
