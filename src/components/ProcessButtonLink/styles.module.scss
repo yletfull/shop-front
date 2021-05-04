@@ -1,0 +1,41 @@
+@import '@/theme/include.scss';
+
+.icon {
+  color: $color-primary-darkest;
+  font-size: 2em;
+  height: 1em;
+  transition: color .3s;
+}
+
+.button {
+  align-items: center;
+  background-color: unset;
+  border: 0;
+  color: $color-gray-darker;
+  display: flex;
+  flex-direction: column;
+  font-size: .75rem;
+  font-weight: bold;
+  justify-content: space-between;
+  padding: 0 2.5em;
+  position: relative;
+
+  &:disabled {
+    cursor: default;
+
+    .icon {
+      color: currentColor;
+    }
+  }
+
+  &:hover {
+    .icon {
+      color: $color-primary-lighter;
+    }
+  }
+}
+
+.label {
+  margin-top: .75em;
+  text-align: center;
+}
