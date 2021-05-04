@@ -11,29 +11,20 @@ import {
   documents,
   documentDetails,
   uploadedFiles,
+  task,
 } from './actions';
 
 const initialState = {
   stage: firstUploadStages.selectAccount,
-  uploadedFiles: [
-    {
-      id: 'f03ab169-92ed-4d5f-9c13-ab898c0f0dbf',
-      objectId: 'f03ab169-92ed-4d5f-9c13-ab898c0f0dbf',
-      mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      createdAt: '2021-05-04T13:49:52.816262Z',
-      fileName: 'template_vk_cabinet1900013172_client_1606750579.xlsx',
-      title: 'template_vk_cabinet1900013172_client_1606750579.xlsx',
-      sequenceId: 0,
-      childrenCount: 0,
-      siblingsCount: 0,
-      isParentDoc: true,
-      data: {
-        sheets: [
-          'id_рекламного кабинета',
-        ],
-      },
-    },
-  ],
+  accounts: [],
+  selectAccount: '',
+  clients: [],
+  selectClient: '',
+  queueList: [],
+  documents: [],
+  documentDetails: {},
+  uploadedFiles: [],
+  task: {},
 };
 
 const reducer = createReducer(initialState, {
@@ -72,6 +63,10 @@ const reducer = createReducer(initialState, {
   [uploadedFiles]: (state, action) => ({
     ...state,
     uploadedFiles: action.payload,
+  }),
+  [task]: (state, action) => ({
+    ...state,
+    task: action.payload,
   }),
 });
 

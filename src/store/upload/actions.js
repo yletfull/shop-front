@@ -11,6 +11,8 @@ export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
 export const documentDetails = createAction(`${NS}/documentDetails`);
 export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
+export const sheet = createAction(`${NS}/sheet`);
+export const task = createAction(`${NS}/task`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -83,6 +85,24 @@ export const uploadFiles = (files) => async (dispatch) => {
     dispatch(uploadedFiles, data);
   } catch (err) {
     dispatch(documentDetails([]));
+    console.log(err);
+  }
+};
+
+export const setSheet = (data) => (dispatch) => {
+  dispatch(sheet(data));
+};
+
+export const acceptFile = () => async (dispatch, getState) => {
+  try {
+    const data = await service.acceptFile({
+      documentId: getState().upload.documentDetails.id,
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+      sheetNum: getState().upload.sheet,
+    });
+    dispatch(task(data));
+  } catch (err) {
     console.log(err);
   }
 };
