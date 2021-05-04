@@ -26,7 +26,7 @@ const Input = function Input(props) {
     <div
       className={cx(
         styles[cssClass],
-        inline && styles.inline,
+        inline && styles[`${[cssClass]}_inline`],
         className,
       )}
       {...attrs}
