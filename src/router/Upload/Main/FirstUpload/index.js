@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
+import FileIcon from '@/icons/File';
 import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
@@ -62,7 +63,7 @@ const Upload = function UploadScreen() {
         {stage === stages.filseIsNotLoaded
             && (
               <React.Fragment>
-                <FingerIcon className={styles.icon} />
+                <FileIcon className={styles.icon} />
                 <p className={styles.title}>
                   Загрузите файл
                 </p>
