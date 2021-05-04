@@ -19,13 +19,14 @@ const propTypes = {
 
 const defaultProps = {
   appearance: 'default',
-  children: null,
+  children: null || [],
   className: '',
   color: 'primary',
 };
 
 const Button = function Button(props) {
   const { appearance, children, className, color, ...attrs } = props;
+
   return (
     <button
       type="button"

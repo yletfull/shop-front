@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
@@ -20,7 +20,7 @@ const navigationBarParams = {
 
 const Upload = function UploadScreen() {
   const stage = useSelector((state) => state.upload.stage);
-  const list = useSelector((state) => state.upload.selectList);
+  const list = useSelector((state) => state.upload.selectList || 'default');
   const dispatch = useDispatch();
 
   const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
@@ -47,6 +47,14 @@ const Upload = function UploadScreen() {
     }
     setAcceptButtonDisabled(false);
   };
+
+  useEffect(() => {
+    console.log(list);
+    if (list === 'default') {
+      return setAcceptButtonDisabled(true);
+    }
+    setAcceptButtonDisabled(false);
+  }, [list]);
 
   return (
     <div className={styles.wrapper}>
