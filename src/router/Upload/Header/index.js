@@ -101,7 +101,7 @@ const Header = function HeaderScreen() {
       setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+      dispatch(setStage(firstUploadStages.selectAccount));
     }
   };
 
@@ -164,7 +164,7 @@ const Header = function HeaderScreen() {
     if (documents.length > 0) {
       return dispatch(fetchDocumentDetails(documents[0].id));
     }
-    dispatch(setStage(firstUploadStages.selectAccount));
+    dispatch(setStage(firstUploadStages.selectAcount));
   })(), [dispatch, documents]);
 
   return (
