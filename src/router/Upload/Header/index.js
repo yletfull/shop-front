@@ -42,7 +42,9 @@ const Header = function HeaderScreen() {
   const accountsData = useSelector(
     (state) => state.upload?.accounts || []
   );
-  const accounts = useMemo(() => accountsData, [accountsData]);
+  const accounts = useMemo(() => accountsData, [accountsData]).filter(
+    (acc) => acc.data.account_type === 'agency'
+  );
   const clientsData = useSelector(
     (state) => state.upload?.clients || []
   );
