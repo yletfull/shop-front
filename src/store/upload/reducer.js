@@ -12,6 +12,7 @@ import {
   documentDetails,
   uploadedFiles,
   task,
+  selectList,
 } from './actions';
 
 const initialState = {
@@ -40,6 +41,7 @@ const initialState = {
           'id_рекламного кабинета',
         ],
       },
+      selectList: '',
     },
   ],
   task: {},
@@ -85,6 +87,10 @@ const reducer = createReducer(initialState, {
   [task]: (state, action) => ({
     ...state,
     task: action.payload,
+  }),
+  [selectList]: (state, action) => ({
+    ...state,
+    selectList: action.payload,
   }),
 });
 

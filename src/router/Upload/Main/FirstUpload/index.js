@@ -9,7 +9,7 @@ import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
 import { firstUploadStages as stages, globalStages } from '../../stages';
-import { setStage } from '../../../../store/upload/actions';
+import { acceptFile, setStage, setSelectList, fetchDocumentDetails } from '../../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const navigationBarParams = {
@@ -20,20 +20,32 @@ const navigationBarParams = {
 
 const Upload = function UploadScreen() {
   const stage = useSelector((state) => state.upload.stage);
+  const list = useSelector((state) => state.upload.selectList);
   const dispatch = useDispatch();
 
   const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
     .data.sheets.map((value) => ({ value, text: value })));
 
-  const [list, setList] = useState(listOptions[0].value);
+  const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(false);
 
   const handleListSelect = (e) => {
     const { value } = e.target;
-    setList(value);
+    dispatch(setSelectList(value));
   };
 
-  const handleAcceptListButtonClick = () => {
-    dispatch(setStage(globalStages.loadImage));
+  const handleAcceptListButtonClick = async () => {
+    setAcceptButtonDisabled(true);
+    try {
+      const data = await dispatch(acceptFile());
+      if (data) {
+        return dispatch(setStage(globalStages.loadImage));
+      }
+      throw new Error('');
+    } catch (err) {
+      dispatch(fetchDocumentDetails());
+      dispatch(setStage(globalStages.errorCheck));
+    }
+    setAcceptButtonDisabled(false);
   };
 
   return (
@@ -85,6 +97,7 @@ const Upload = function UploadScreen() {
                   <Button
                     className={styles.selectListButton}
                     onClick={handleAcceptListButtonClick}
+                    disabled={acceptButtonDisabled}
                   >
                     выбрать
                   </Button>
