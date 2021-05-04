@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import ProcessButtonLink from '@/components/ProcessButtonLink';
@@ -31,9 +31,12 @@ const getHeaderTempalteContent = (data) => [[
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
 
+  const fileInput = useRef(null);
+
   const [accountsDisabled, setAccountsDisabled] = useState(false);
   const [clientsDisabled, setClientDisabled] = useState(true);
   const [changeButtonShow, setChangeButtonShow] = useState(true);
+  const [loadedFile, setLoadedFile] = useState('');
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -102,6 +105,12 @@ const Header = function HeaderScreen() {
     }
   };
 
+  const handleSelectFileButtonClick = () => {
+    fileInput.current.click();
+    const file = fileInput.current.files[0];
+    setLoadedFile(file);
+  };
+
   useEffect(() => (async () => {
     if (!selectAccount) {
       setAccountsDisabled(true);
@@ -140,6 +149,8 @@ const Header = function HeaderScreen() {
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
   })(), [dispatch, documents]);
 
+  console.log(loadedFile);
+
   return (
     <React.Fragment>
       <div className={styles.topWrapper}>
@@ -167,7 +178,7 @@ const Header = function HeaderScreen() {
         {changeButtonShow
           ? (
             <Button
-              style={{ 'font-size': '14px' }}
+              style={{ fontSize: '14px' }}
               className={styles.changeButton}
               appearance="control"
               onClick={handleReset}
@@ -198,7 +209,7 @@ const Header = function HeaderScreen() {
             </div>
           )}
         <ButtonLink
-          style={{ 'font-size': '14px' }}
+          style={{ fontSize: '14px' }}
           className={styles.downloadExcelModel}
           appearance="control"
           to={`/api/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
@@ -239,10 +250,19 @@ const Header = function HeaderScreen() {
             </div>
           </HeaderTemplate>
           <HeaderTemplate className={styles.headerTemplate}>
-            <ProcessButton
-              icon={<IconUpload />}
-              text={['Загрузить', 'файл']}
-            />
+            <label>
+              <ProcessButton
+                icon={<IconUpload />}
+                text={['Загрузить', 'файл']}
+                onClick={handleSelectFileButtonClick}
+              />
+              <input
+                type="file"
+                id="fileInput"
+                style={{ display: 'none' }}
+                ref={fileInput}
+              />
+            </label>
             <div>
               {getHeaderTempalteContent(documentDetails)[1]
                 .map(({ title, value, id, valueColor }) => (
