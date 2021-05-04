@@ -11,35 +11,23 @@ import NavigationBar from '@/components/NavigationBar';
 import { firstUploadStages as stages } from '../../stages';
 import styles from './styles.module.scss';
 
+const navigationBarParams = {
+  prev: [],
+  current: 'Загрузка файла',
+  next: ['Проверка на ошибки', 'Загрузка изображений', 'Выгрузка на площадку'],
+};
 
 const Upload = function UploadScreen() {
   const stage = useSelector((state) => state.upload.stage);
+  const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
+    .data.sheets.map((value) => ({ value, text: value })));
 
-
-  const selectorMocksOptions = [
-    {
-      value: 'list1',
-      text: 'list1',
-    },
-    {
-      value: 'list2',
-      text: 'list2',
-    },
-  ];
-
-  const navigationBarParams = {
-    prev: [],
-    current: 'Загрузка файла',
-    next: ['Проверка на ошибки', 'Загрузка изображений', 'Выгрузка на площадку'],
-  };
-
-  const [list, setList] = useState(selectorMocksOptions[1].value);
+  const [list, setList] = useState(listOptions[0].value);
 
   const handleListSelect = (e) => {
     const { value } = e.target;
     setList(value);
   };
-
 
   return (
     <div className={styles.wrapper}>
@@ -81,7 +69,7 @@ const Upload = function UploadScreen() {
                 <div>
                   <Select
                     value={list}
-                    options={selectorMocksOptions}
+                    options={listOptions}
                     onChange={handleListSelect}
                     className={styles.select}
                   />
