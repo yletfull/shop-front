@@ -101,7 +101,7 @@ const Header = function HeaderScreen() {
       setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.selectAccount));
+      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
   };
 
