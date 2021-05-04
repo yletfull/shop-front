@@ -38,7 +38,7 @@ const initialState = {
       isParentDoc: true,
       data: {
         sheets: [
-          'id_рекламного кабинета',
+          '57578275-96fc-4525-a632-05b4fa00842d',
         ],
       },
       selectList: '',

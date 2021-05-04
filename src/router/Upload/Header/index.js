@@ -111,9 +111,13 @@ const Header = function HeaderScreen() {
     setFileIsLoading(true);
     try {
       dispatch(setStage(firstUploadStages.fileIsLoading));
-      await dispatch(uploadFiles(data));
-      dispatch(fetchDocumentDetails(documents[0].id));
-      dispatch(setStage(firstUploadStages.selectList));
+      const res = await dispatch(uploadFiles(data));
+      if (res) {
+        dispatch(fetchDocumentDetails(documents[0].id));
+        dispatch(setStage(firstUploadStages.selectList));
+        return;
+      }
+      throw new Error('');
     } catch (err) {
       dispatch(setStage(globalStages.errorCheck));
     }
