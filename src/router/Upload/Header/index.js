@@ -5,13 +5,12 @@ import cx from 'classnames';
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
-import Spinner from '@/components/Spinner';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import ButtonLink from '@/components/ButtonLink';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
-import { firstUploadStages } from '../stages';
+import { firstUploadStages, globalStages } from '../stages';
 import {
   fetchAccounts, fetchClients, fetchDocumentDetails,
   fetchDocuments, setAccount, setClient, setStage, uploadFiles,
@@ -102,17 +101,19 @@ const Header = function HeaderScreen() {
       setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.selectFile));
+      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
   };
 
   const submitFile = async (data) => {
     setFileIsLoading(true);
     try {
+      dispatch(setStage(firstUploadStages.fileIsLoading));
       await dispatch(uploadFiles(data));
       dispatch(fetchDocumentDetails(documents[0].id));
+      dispatch(setStage(globalStages.loadImage));
     } catch (err) {
-      console.log(err);
+      dispatch(setStage(globalStages.errorCheck));
     }
     setFileIsLoading(false);
   };
@@ -147,11 +148,11 @@ const Header = function HeaderScreen() {
   }, [dispatch, clients]);
 
   useEffect(() => (async () => {
-    dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+    dispatch(setStage(firstUploadStages.selectAccount));
     setChangeButtonShow(false);
   })(), [dispatch, selectAccount, selectClient]);
 
-  const firstStage = stage === firstUploadStages.filseIsNotLoaded;
+  const firstStage = stage === firstUploadStages.selectAccount;
 
   useEffect(() => (async () => {
     if (firstStage) {
@@ -163,7 +164,7 @@ const Header = function HeaderScreen() {
     if (documents.length > 0) {
       return dispatch(fetchDocumentDetails(documents[0].id));
     }
-    dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+    dispatch(setStage(firstUploadStages.selectAccount));
   })(), [dispatch, documents]);
 
   return (
@@ -267,7 +268,7 @@ const Header = function HeaderScreen() {
           <HeaderTemplate className={styles.headerTemplate}>
             <label>
               <ProcessButton
-                icon={fileIsLoading ? <Spinner inline /> : <IconUpload />}
+                icon={<IconUpload />}
                 text={['Загрузить', 'файл']}
                 onClick={handleSelectFileButtonClick}
                 disabled={fileIsLoading}

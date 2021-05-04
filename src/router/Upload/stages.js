@@ -6,6 +6,7 @@ export const globalStages = {
 };
 
 export const firstUploadStages = {
+  selectAccount: `${globalStages.firstUpload}/selectAccount`,
   filseIsNotLoaded: `${globalStages.firstUpload}/filseIsNotLoaded`,
   selectFile: `${globalStages.firstUpload}/selectFile`,
   fileIsLoading: `${globalStages.firstUpload}/fileIsLoading`,

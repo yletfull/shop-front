@@ -41,7 +41,7 @@ const Upload = function UploadScreen() {
 
   return (
     <div className={styles.wrapper}>
-      {stage !== stages.filseIsNotLoaded
+      {stage !== stages.selectAccount
             && (
               <NavigationBar
                 params={navigationBarParams}
@@ -49,7 +49,7 @@ const Upload = function UploadScreen() {
             )}
 
       <div className={styles.contentWrapper}>
-        {stage === stages.filseIsNotLoaded
+        {stage === stages.selectAccount
             && (
               <React.Fragment>
                 <FingerIcon className={styles.icon} />
@@ -58,6 +58,17 @@ const Upload = function UploadScreen() {
                 </p>
               </React.Fragment>
             )}
+
+        {stage === stages.filseIsNotLoaded
+            && (
+              <React.Fragment>
+                <FingerIcon className={styles.icon} />
+                <p className={styles.title}>
+                  Загрузите файл
+                </p>
+              </React.Fragment>
+            )}
+
 
         {stage === stages.selectFile
             && (
