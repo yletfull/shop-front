@@ -1,4 +1,4 @@
-image: "gitlab.ubic.tech:4567/docker/node:10"
+image: "gitlab.ubic.tech:4567/docker/node:10.24"
 
 cache:
   paths:
