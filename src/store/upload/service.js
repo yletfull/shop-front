@@ -16,6 +16,8 @@ const fetchQueueList = ({ cabinetId, clientId }) => api.get(`api/v1/ad-cabinet/$
   },
 }).then((data) => data);
 
+const uploadFiles = ({ files }) => api.post('api/v1/documents', files).then((data) => data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -23,4 +25,5 @@ export default {
   fetchQueueList,
   fetchDocuments,
   fetchDocumentDetails,
+  uploadFiles,
 };

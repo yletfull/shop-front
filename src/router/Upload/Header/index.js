@@ -5,6 +5,7 @@ import cx from 'classnames';
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
+import Spinner from '@/components/Spinner';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import ButtonLink from '@/components/ButtonLink';
@@ -13,7 +14,7 @@ import IconUpload from '@/icons/Upload';
 import { firstUploadStages } from '../stages';
 import {
   fetchAccounts, fetchClients, fetchDocumentDetails,
-  fetchDocuments, setAccount, setClient, setStage,
+  fetchDocuments, setAccount, setClient, setStage, uploadFiles,
 } from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
@@ -36,7 +37,7 @@ const Header = function HeaderScreen() {
   const [accountsDisabled, setAccountsDisabled] = useState(false);
   const [clientsDisabled, setClientDisabled] = useState(true);
   const [changeButtonShow, setChangeButtonShow] = useState(true);
-  const [loadedFile, setLoadedFile] = useState('');
+  const [fileIsLoading, setFileIsLoading] = useState(false);
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -105,10 +106,26 @@ const Header = function HeaderScreen() {
     }
   };
 
+  const submitFile = async (data) => {
+    setFileIsLoading(true);
+    try {
+      await dispatch(uploadFiles(data));
+      dispatch(fetchDocumentDetails(documents[0].id));
+    } catch (err) {
+      console.log(err);
+    }
+    setFileIsLoading(false);
+  };
+
+  const handleFileChange = (e) => {
+    const data = new FormData();
+    data.append('file', e.target.files[0]);
+    data.append('filename', e.target.files[0].name);
+    submitFile(data);
+  };
+
   const handleSelectFileButtonClick = () => {
     fileInput.current.click();
-    const file = fileInput.current.files[0];
-    setLoadedFile(file);
   };
 
   useEffect(() => (async () => {
@@ -148,8 +165,6 @@ const Header = function HeaderScreen() {
     }
     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
   })(), [dispatch, documents]);
-
-  console.log(loadedFile);
 
   return (
     <React.Fragment>
@@ -252,15 +267,17 @@ const Header = function HeaderScreen() {
           <HeaderTemplate className={styles.headerTemplate}>
             <label>
               <ProcessButton
-                icon={<IconUpload />}
+                icon={fileIsLoading ? <Spinner inline /> : <IconUpload />}
                 text={['Загрузить', 'файл']}
                 onClick={handleSelectFileButtonClick}
+                disabled={fileIsLoading}
               />
               <input
                 type="file"
                 id="fileInput"
                 style={{ display: 'none' }}
                 ref={fileInput}
+                onChange={handleFileChange}
               />
             </label>
             <div>

@@ -75,3 +75,12 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
     console.log(err);
   }
 };
+
+export const uploadFiles = (files) => async (dispatch) => {
+  try {
+    return await service.uploadFiles({ files });
+  } catch (err) {
+    dispatch(documentDetails([]));
+    console.log(err);
+  }
+};
