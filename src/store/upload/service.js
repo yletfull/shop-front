@@ -10,15 +10,13 @@ const fetchDocuments = () => api.get('api/v1/documents').then((data) => data);
 
 const fetchDocumentDetails = ({ documentId }) => api.get(`api/v1/document/${documentId}`).then((data) => data);
 
-const fetchQueueList = ({ cabinetId, clientId }) => api.get(`api/v1/ad-cabinet/${cabinetId}/queue`, {
-  params: {
-    clientId,
-  },
+const fetchQueueList = ({ cabinetId, ...params }) => api.get(`api/v1/ad-cabinet/${cabinetId}/queue`, {
+  params,
 }).then((data) => data);
 
 const uploadFiles = ({ files }) => api.post('api/v1/documents', files).then((data) => data);
 
-const acceptFile = ({ params }) => api.post('api/v1/import', { params }.then((data) => data));
+const acceptFile = (params) => api.post('api/v1/import', { params }.then((data) => data));
 
 export default {
   fetchAccountsList,
