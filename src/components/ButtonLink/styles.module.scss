@@ -1,0 +1,60 @@
+@import '@/theme/include.scss';
+
+.link {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: .375rem;
+  box-sizing: border-box;
+  display: inline-flex;
+  font: .75rem Arial, Helvetica, sans-serif;
+  height: 2rem;
+  justify-content: center;
+  min-width: 4rem;
+  padding: 0 .625rem;
+  text-transform: lowercase;
+  transition: color .2s, background-color .2s, border-color .2s;
+  vertical-align: middle;
+}
+
+.link_primary {
+  background-color: $color-primary-darkest;
+  border-color: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-primary-lighter;
+    border-color: $color-primary-lighter;
+  }
+}
+
+.link_secondary {
+  background-color: $color-gray-darken;
+  border-color: $color-gray-darken;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-gray;
+    border-color: $color-gray;
+  }
+}
+
+.link_control {
+  background-color: transparent;
+  border: none;
+  color: $color-primary;
+  min-width: 0;
+  transition: background-color .3s;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+  }
+}
+
+.disabled {
+  color: $color-gray-darken;
+
+  &:hover {
+    background-color: transparent;
+    cursor: default;
+  }
+}
