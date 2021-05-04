@@ -164,7 +164,7 @@ const Header = function HeaderScreen() {
     if (documents.length > 0) {
       return dispatch(fetchDocumentDetails(documents[0].id));
     }
-    dispatch(setStage(firstUploadStages.selectAcount));
+    dispatch(setStage(firstUploadStages.selectAccount));
   })(), [dispatch, documents]);
 
   return (

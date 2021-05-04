@@ -14,7 +14,7 @@ import {
 } from './actions';
 
 const initialState = {
-  stage: firstUploadStages.filseIsNotLoaded,
+  stage: firstUploadStages.selectAccount,
   uploadedFiles: [
     {
       id: 'f03ab169-92ed-4d5f-9c13-ab898c0f0dbf',
