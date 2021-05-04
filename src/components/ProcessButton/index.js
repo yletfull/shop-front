@@ -20,12 +20,13 @@ const defaultProps = {
 };
 
 const ProcessButton = function ProcessButton(props) {
-  const { icon, text, className } = props;
+  const { icon, text, className, ...attrs } = props;
 
   return (
     <button
       type="button"
       className={styles.button}
+      {...attrs}
     >
       <span className={styles.icon}>
         {icon || 'Иконка'}
