@@ -15,6 +15,7 @@ import styles from './styles.module.scss';
 const Upload = function UploadScreen() {
   const stage = useSelector((state) => state.upload.stage);
 
+
   const selectorMocksOptions = [
     {
       value: 'list1',
@@ -71,10 +72,10 @@ const Upload = function UploadScreen() {
             )}
 
 
-        {stage === stages.selectFile
+        {stage === stages.selectList
             && (
-              <div className={styles.selectFile}>
-                <p className={styles.selectFileTitle}>
+              <div className={styles.selectList}>
+                <p className={styles.selectList}>
                   Выберите лист:
                 </p>
                 <div>
@@ -85,7 +86,7 @@ const Upload = function UploadScreen() {
                     className={styles.select}
                   />
                   <Button
-                    className={styles.selectFileButton}
+                    className={styles.selectListButton}
                   >
                     выбрать
                   </Button>

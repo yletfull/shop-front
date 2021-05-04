@@ -7,6 +7,7 @@ const AngleDown = function IconAngleDown(props) {
       {...props}
       height={24}
       width={27}
+      color="#003daa"
     >
       <g
         fill="#999DA3"

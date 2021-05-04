@@ -8,7 +8,7 @@ export const globalStages = {
 export const firstUploadStages = {
   selectAccount: `${globalStages.firstUpload}/selectAccount`,
   filseIsNotLoaded: `${globalStages.firstUpload}/filseIsNotLoaded`,
-  selectFile: `${globalStages.firstUpload}/selectFile`,
+  selectList: `${globalStages.firstUpload}/selectList`,
   fileIsLoading: `${globalStages.firstUpload}/fileIsLoading`,
 };
 

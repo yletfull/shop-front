@@ -111,7 +111,7 @@ const Header = function HeaderScreen() {
       dispatch(setStage(firstUploadStages.fileIsLoading));
       await dispatch(uploadFiles(data));
       dispatch(fetchDocumentDetails(documents[0].id));
-      dispatch(setStage(globalStages.loadImage));
+      dispatch(setStage(firstUploadStages.selectList));
     } catch (err) {
       dispatch(setStage(globalStages.errorCheck));
     }
