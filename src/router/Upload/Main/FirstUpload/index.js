@@ -31,7 +31,7 @@ const Upload = function UploadScreen() {
 
   return (
     <div className={styles.wrapper}>
-      {stage !== stages.selectAccount
+      {(stage !== stages.selectAccount)
             && (
               <NavigationBar
                 params={navigationBarParams}
@@ -72,6 +72,8 @@ const Upload = function UploadScreen() {
                     options={listOptions}
                     onChange={handleListSelect}
                     className={styles.select}
+                    placeholder="Лист"
+                    resetText="Ничего не выбрано"
                   />
                   <Button
                     className={styles.selectListButton}
