@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
+import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
 import Select from '@/components/Select';
@@ -213,9 +214,12 @@ const Header = function HeaderScreen() {
         && (
         <div className={styles.headerTemplatesWrapper}>
           <HeaderTemplate className={styles.headerTemplate}>
-            <ProcessButton
+            <ProcessButtonLink
               icon={<IconDownload />}
               text={['Скачать', 'файл']}
+              to={`/api/v1/document?documentId=${documentDetails.id}`}
+              target="_blank"
+              download
             />
             <div>
               {getHeaderTempalteContent(documentDetails)[0]
