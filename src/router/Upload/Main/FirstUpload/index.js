@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
 import FileIcon from '@/icons/File';
@@ -8,7 +8,8 @@ import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
-import { firstUploadStages as stages } from '../../stages';
+import { firstUploadStages as stages, globalStages } from '../../stages';
+import { setStage } from '../../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const navigationBarParams = {
@@ -19,6 +20,8 @@ const navigationBarParams = {
 
 const Upload = function UploadScreen() {
   const stage = useSelector((state) => state.upload.stage);
+  const dispatch = useDispatch();
+
   const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
     .data.sheets.map((value) => ({ value, text: value })));
 
@@ -27,6 +30,10 @@ const Upload = function UploadScreen() {
   const handleListSelect = (e) => {
     const { value } = e.target;
     setList(value);
+  };
+
+  const handleAcceptListButtonClick = () => {
+    dispatch(setStage(globalStages.loadImage));
   };
 
   return (
@@ -77,6 +84,7 @@ const Upload = function UploadScreen() {
                   />
                   <Button
                     className={styles.selectListButton}
+                    onClick={handleAcceptListButtonClick}
                   >
                     выбрать
                   </Button>
