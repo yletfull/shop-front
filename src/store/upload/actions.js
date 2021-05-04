@@ -10,6 +10,7 @@ export const selectClient = createAction(`${NS}/selectClient`);
 export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
 export const documentDetails = createAction(`${NS}/documentDetails`);
+export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -78,7 +79,8 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
 
 export const uploadFiles = (files) => async (dispatch) => {
   try {
-    return await service.uploadFiles({ files });
+    const data = await service.uploadFiles({ files });
+    dispatch(uploadedFiles, data);
   } catch (err) {
     dispatch(documentDetails([]));
     console.log(err);
