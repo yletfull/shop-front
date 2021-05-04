@@ -6,10 +6,14 @@ import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
+import ButtonLink from '@/components/ButtonLink';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
 import { firstUploadStages } from '../stages';
-import { fetchAccounts, fetchClients, fetchDocumentDetails, fetchDocuments, setAccount, setClient, setStage } from '../../../store/upload/actions';
+import {
+  fetchAccounts, fetchClients, fetchDocumentDetails,
+  fetchDocuments, setAccount, setClient, setStage,
+} from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const getHeaderTempalteContent = (data) => [[
@@ -192,15 +196,18 @@ const Header = function HeaderScreen() {
               </Button>
             </div>
           )}
-        <Button
+        <ButtonLink
           style={{ 'font-size': '14px' }}
           className={styles.downloadExcelModel}
           appearance="control"
+          to={`/api/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
+          target="_blank"
+          download
         >
           <b>
             Скачать шаблон Excel-файла
           </b>
-        </Button>
+        </ButtonLink>
       </div>
       {!firstStage
         && (
