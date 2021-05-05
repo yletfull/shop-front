@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
+import dayjs from '@/utils/day';
 
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
@@ -23,14 +24,14 @@ import {
 import styles from './styles.module.scss';
 
 const getHeaderTempalteContent = (data) => [[
-  { title: 'Последнее скачивание', value: data.createdAt, id: 0 },
-  { title: 'Всего РК', value: data.siblingsCount, id: 1 },
+  { title: 'Последнее скачивание', value: '-', id: 0 },
+  { title: 'Всего РК', value: '-', id: 1 },
 ],
 [
-  { title: 'Последняя загрузка во ВК', value: data.createdAt, id: 0 },
-  { title: 'Всего РК', value: data.siblingsCount, id: 1 },
-  { title: 'Новых РК', value: '11', id: 2 },
-  { title: 'Ошибок', value: '9', valueColor: 'red', id: 3 },
+  { title: 'Последняя загрузка во ВК', value: dayjs(data.createdAt).format('DD.MM.YYYY HH:MM:ss'), id: 0 },
+  { title: 'Всего РК', value: '-', id: 1 },
+  { title: 'Новых РК', value: '-', id: 2 },
+  { title: 'Ошибок', value: '-', valueColor: 'red', id: 3 },
 ]];
 
 const Header = function HeaderScreen() {
