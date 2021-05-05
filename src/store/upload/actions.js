@@ -82,10 +82,15 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
   }
 };
 
+export const setUploadedFiles = (files) => async (dispatch) => {
+  dispatch(uploadedFiles(files));
+};
+
 export const uploadFiles = (files) => async (dispatch) => {
   try {
     const data = await service.uploadFiles({ files });
-    dispatch(uploadedFiles, data);
+    console.log(data);
+    dispatch(uploadedFiles(data.data.data));
   } catch (err) {
     dispatch(uploadFiles([]));
     console.log(err);
