@@ -50,11 +50,13 @@
   }
 }
 
-.disabled {
+:disabled {
+  background-color: $color-gray;
+  border: none;
   color: $color-gray-darken;
 
   &:hover {
-    background-color: transparent;
+    background-color: $color-gray;
     cursor: default;
   }
 }

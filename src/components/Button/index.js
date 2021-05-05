@@ -39,7 +39,6 @@ const Button = function Button(props) {
         styles[`${cssClass}_${appearance}`],
         styles[`${cssClass}_${color}`],
         className,
-        attrs.disabled && styles.disabled,
       )}
       {...attrs}
     >
