@@ -26,8 +26,10 @@ const Upload = function UploadScreen() {
   const uploadedFiles = useSelector(
     (state) => state.upload?.uploadedFiles
   ) || [];
-  const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
-    .data.sheets.map((value) => ({ value, text: value })));
+  const listOptions = useSelector((state) => state.upload.accounts
+    .map((account) => (
+      { value: account.id, text: account.data.account_name }
+    )));
   const task = useSelector((state) => state.upload.task);
 
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(false);
