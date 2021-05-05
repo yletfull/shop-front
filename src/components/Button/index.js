@@ -13,19 +13,25 @@ const propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.arrayOf(PropTypes.element),
-  ]),
+    PropTypes.string,
+  ]).isRequired,
   className: PropTypes.string,
 };
 
 const defaultProps = {
   appearance: 'default',
-  children: null || [],
   className: '',
   color: 'primary',
 };
 
 const Button = function Button(props) {
   const { appearance, children, className, color, ...attrs } = props;
+
+  const childrenArr = Array.isArray(children)
+    ? children.map((el) => el)
+    : [children];
+
+  console.log(children);
 
   return (
     <button
@@ -39,7 +45,7 @@ const Button = function Button(props) {
       )}
       {...attrs}
     >
-      {children}
+      {childrenArr.map((child) => child)}
     </button>
 
   );

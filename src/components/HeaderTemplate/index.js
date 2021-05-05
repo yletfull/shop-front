@@ -4,12 +4,14 @@ import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
   className: PropTypes.string,
 };
 
 const defaultProps = {
-  children: '',
   className: '',
 };
 
