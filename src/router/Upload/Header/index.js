@@ -16,7 +16,9 @@ import Spinner from '@/components/Spinner';
 import { firstUploadStages, globalStages } from '../stages';
 import {
   fetchAccounts, fetchClients, fetchDocumentDetails,
-  fetchDocuments, setAccount, setClient, setStage, uploadFiles,
+  fetchDocuments, setAccount, setClient, setStage,
+  // eslint-disable-next-line no-unused-vars
+  setUploadedFiles, uploadFiles,
 } from '../../../store/upload/actions';
 import styles from './styles.module.scss';
 
@@ -60,6 +62,7 @@ const Header = function HeaderScreen() {
   const documents = useSelector(
     (state) => state.upload?.documents
   ) || '';
+  // eslint-disable-next-line no-unused-vars
   const documentDetails = useSelector(
     (state) => state.upload?.documentDetails
   ) || '';
@@ -116,7 +119,7 @@ const Header = function HeaderScreen() {
     setFileIsLoading(true);
     dispatch(setStage(firstUploadStages.fileIsLoading));
     await dispatch(uploadFiles(data));
-    if (uploadedFiles.length) {
+    if (Object.keys(uploadedFiles).length) {
       dispatch(setStage(firstUploadStages.selectList));
     } else {
       dispatch(setStage(globalStages.errorCheck));
@@ -170,10 +173,19 @@ const Header = function HeaderScreen() {
 
   useEffect(() => (async () => {
     if (documents.length > 0) {
-      return dispatch(fetchDocumentDetails(documents[documents.length - 1].id));
+      dispatch(fetchDocumentDetails(documents[documents.length - 1].id));
+      return;
     }
     dispatch(setStage(firstUploadStages.selectAccount));
   })(), [dispatch, documents]);
+
+  useEffect(() => (async () => {
+    if (Object.keys(documentDetails).length > 0) {
+      dispatch(setUploadedFiles([documentDetails]));
+      return;
+    }
+    dispatch(setStage(firstUploadStages.selectAccount));
+  })(), [dispatch, documentDetails]);
 
   return (
     <React.Fragment>
@@ -247,76 +259,76 @@ const Header = function HeaderScreen() {
       </div>
       {!firstStage
         && (
-        <div className={styles.headerTemplatesWrapper}>
-          {detailsIsFetching
-            ? <Spinner />
-            : (
-              <React.Fragment>
-                <HeaderTemplate className={styles.headerTemplate}>
-                  <ProcessButtonLink
-                    icon={<IconDownload />}
-                    text={['Скачать', 'файл']}
-                    to={`/api/v1/document?documentId=${documentDetails.id}`}
-                    target="_blank"
-                    download
-                  />
-                  <div>
-                    {getHeaderTempalteContent(documentDetails)[0]
-                      .map(({ title, value, id }) => (
-                        <div
-                          className={styles.textWrapper}
-                          key={id}
-                        >
-                          <span>
-                            {title}
-                          </span>
-                          <span className={styles.value}>
-                            {value}
-                          </span>
-                        </div>
-                      ))}
-                  </div>
-                </HeaderTemplate>
-                <HeaderTemplate className={styles.headerTemplate}>
-                  <label>
-                    <ProcessButton
-                      icon={<IconUpload />}
-                      text={['Загрузить', 'файл']}
-                      onClick={handleSelectFileButtonClick}
-                      disabled={fileIsLoading}
+          <div className={styles.headerTemplatesWrapper}>
+            {detailsIsFetching
+              ? <Spinner />
+              : (
+                <React.Fragment>
+                  <HeaderTemplate className={styles.headerTemplate}>
+                    <ProcessButtonLink
+                      icon={<IconDownload />}
+                      text={['Скачать', 'файл']}
+                      to={`/api/v1/document/${uploadedFiles[0].id}/raw`}
+                      target="_blank"
+                      download
                     />
-                    <input
-                      type="file"
-                      id="fileInput"
-                      style={{ display: 'none' }}
-                      ref={fileInput}
-                      onChange={handleFileChange}
-                    />
-                  </label>
-                  <div>
-                    {getHeaderTempalteContent(documentDetails)[1]
-                      .map(({ title, value, id, valueColor }) => (
-                        <div
-                          className={styles.textWrapper}
-                          key={id}
-                        >
-                          <span>
-                            {title}
-                          </span>
-                          <span
-                            className={cx(
-                              styles.value, { [valueColor]: valueColor }
-                            )}
+                    <div>
+                      {getHeaderTempalteContent(uploadedFiles[0])[0]
+                        .map(({ title, value, id }) => (
+                          <div
+                            className={styles.textWrapper}
+                            key={id}
                           >
-                            {value}
-                          </span>
-                        </div>
-                      ))}
-                  </div>
-                </HeaderTemplate>
-              </React.Fragment>
-            )}
-        </div>
+                            <span>
+                              {title}
+                            </span>
+                            <span className={styles.value}>
+                              {value}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </HeaderTemplate>
+                  <HeaderTemplate className={styles.headerTemplate}>
+                    <label>
+                      <ProcessButton
+                        icon={<IconUpload />}
+                        text={['Загрузить', 'файл']}
+                        onClick={handleSelectFileButtonClick}
+                        disabled={fileIsLoading}
+                      />
+                      <input
+                        type="file"
+                        id="fileInput"
+                        style={{ display: 'none' }}
+                        ref={fileInput}
+                        onChange={handleFileChange}
+                      />
+                    </label>
+                    <div>
+                      {getHeaderTempalteContent(uploadedFiles[0])[1]
+                        .map(({ title, value, id, valueColor }) => (
+                          <div
+                            className={styles.textWrapper}
+                            key={id}
+                          >
+                            <span>
+                              {title}
+                            </span>
+                            <span
+                              className={cx(
+                                styles.value, { [valueColor]: valueColor }
+                              )}
+                            >
+                              {value}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </HeaderTemplate>
+                </React.Fragment>
+              )}
+          </div>
         )}
 
     </React.Fragment>
