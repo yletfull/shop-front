@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
+
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
@@ -10,6 +11,8 @@ import Button from '@/components/Button';
 import ButtonLink from '@/components/ButtonLink';
 import IconDownload from '@/icons/Download';
 import IconUpload from '@/icons/Upload';
+import Spinner from '@/components/Spinner';
+
 import { firstUploadStages, globalStages } from '../stages';
 import {
   fetchAccounts, fetchClients, fetchDocumentDetails,
@@ -37,6 +40,7 @@ const Header = function HeaderScreen() {
   const [clientsDisabled, setClientDisabled] = useState(true);
   const [changeButtonShow, setChangeButtonShow] = useState(true);
   const [fileIsLoading, setFileIsLoading] = useState(false);
+  const [detailsIsFetching, setDetailsIsFetching] = useState(false);
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -113,7 +117,7 @@ const Header = function HeaderScreen() {
       dispatch(setStage(firstUploadStages.fileIsLoading));
       const res = await dispatch(uploadFiles(data));
       if (res) {
-        dispatch(fetchDocumentDetails(documents[0].id));
+        dispatch(fetchDocumentDetails(documents[documents.length - 1]).id);
         dispatch(setStage(firstUploadStages.selectList));
         return;
       }
@@ -161,8 +165,10 @@ const Header = function HeaderScreen() {
   const firstStage = stage === firstUploadStages.selectAccount;
 
   useEffect(() => (async () => {
-    if (firstStage) {
-      dispatch(fetchDocuments());
+    if (!firstStage) {
+      setDetailsIsFetching(true);
+      await dispatch(fetchDocuments());
+      setDetailsIsFetching(false);
     }
   })(), [dispatch, firstStage]);
 
@@ -246,66 +252,74 @@ const Header = function HeaderScreen() {
       {!firstStage
         && (
         <div className={styles.headerTemplatesWrapper}>
-          <HeaderTemplate className={styles.headerTemplate}>
-            <ProcessButtonLink
-              icon={<IconDownload />}
-              text={['Скачать', 'файл']}
-              to={`/api/v1/document?documentId=${documentDetails.id}`}
-              target="_blank"
-              download
-            />
-            <div>
-              {getHeaderTempalteContent(documentDetails)[0]
-                .map(({ title, value, id }) => (
-                  <div
-                    className={styles.textWrapper}
-                    key={id}
-                  >
-                    <span>
-                      {title}
-                    </span>
-                    <span className={styles.value}>
-                      {value}
-                    </span>
+          {detailsIsFetching
+            ? <Spinner />
+            : (
+              <React.Fragment>
+                <HeaderTemplate className={styles.headerTemplate}>
+                  <ProcessButtonLink
+                    icon={<IconDownload />}
+                    text={['Скачать', 'файл']}
+                    to={`/api/v1/document?documentId=${documentDetails.id}`}
+                    target="_blank"
+                    download
+                  />
+                  <div>
+                    {getHeaderTempalteContent(documentDetails)[0]
+                      .map(({ title, value, id }) => (
+                        <div
+                          className={styles.textWrapper}
+                          key={id}
+                        >
+                          <span>
+                            {title}
+                          </span>
+                          <span className={styles.value}>
+                            {value}
+                          </span>
+                        </div>
+                      ))}
                   </div>
-                ))}
-            </div>
-          </HeaderTemplate>
-          <HeaderTemplate className={styles.headerTemplate}>
-            <label>
-              <ProcessButton
-                icon={<IconUpload />}
-                text={['Загрузить', 'файл']}
-                onClick={handleSelectFileButtonClick}
-                disabled={fileIsLoading}
-              />
-              <input
-                type="file"
-                id="fileInput"
-                style={{ display: 'none' }}
-                ref={fileInput}
-                onChange={handleFileChange}
-              />
-            </label>
-            <div>
-              {getHeaderTempalteContent(documentDetails)[1]
-                .map(({ title, value, id, valueColor }) => (
-                  <div
-                    className={styles.textWrapper}
-                    key={id}
-                  >
-                    <span>
-                      {title}
-                    </span>
-                    <span
-                      className={cx(styles.value, { [valueColor]: valueColor })}
-                    >
-                      {value}
-                    </span>
+                </HeaderTemplate>
+                <HeaderTemplate className={styles.headerTemplate}>
+                  <label>
+                    <ProcessButton
+                      icon={<IconUpload />}
+                      text={['Загрузить', 'файл']}
+                      onClick={handleSelectFileButtonClick}
+                      disabled={fileIsLoading}
+                    />
+                    <input
+                      type="file"
+                      id="fileInput"
+                      style={{ display: 'none' }}
+                      ref={fileInput}
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  <div>
+                    {getHeaderTempalteContent(documentDetails)[1]
+                      .map(({ title, value, id, valueColor }) => (
+                        <div
+                          className={styles.textWrapper}
+                          key={id}
+                        >
+                          <span>
+                            {title}
+                          </span>
+                          <span
+                            className={cx(
+                              styles.value, { [valueColor]: valueColor }
+                            )}
+                          >
+                            {value}
+                          </span>
+                        </div>
+                      ))}
                   </div>
-                ))}
-            </div>
-          </HeaderTemplate>
+                </HeaderTemplate>
+              </React.Fragment>
+            )}
         </div>
         )}
 
