@@ -49,7 +49,6 @@ const Upload = function UploadScreen() {
   };
 
   useEffect(() => {
-    console.log(list);
     if (list === 'default') {
       return setAcceptButtonDisabled(true);
     }

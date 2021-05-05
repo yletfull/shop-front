@@ -31,8 +31,6 @@ const Button = function Button(props) {
     ? children.map((el) => el)
     : [children];
 
-  console.log(children);
-
   return (
     <button
       type="button"
