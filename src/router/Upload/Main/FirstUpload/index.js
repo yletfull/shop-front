@@ -23,9 +23,8 @@ const Upload = function UploadScreen() {
 
   const stage = useSelector((state) => state.upload.stage);
   const list = useSelector((state) => state.upload.selectList || 'default');
-  const uploadedFiles = useSelector(
-    (state) => state.upload?.uploadedFiles
-  ) || [];
+  const uploadedFiles = useSelector((state) => state.upload?.uploadedFiles)
+   || [];
   const listOptions = useSelector((state) => state.upload.accounts
     .map((account) => (
       { value: account.id, text: account.data.account_name }
@@ -44,8 +43,7 @@ const Upload = function UploadScreen() {
     await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
       .id));
     await dispatch(acceptFile());
-    console.log(task);
-    if (task) {
+    if (Object.keys(task).length) {
       dispatch(setStage(globalStages.loadImage));
     } else {
       dispatch(setStage(globalStages.errorCheck));
