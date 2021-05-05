@@ -65,6 +65,9 @@ const Header = function HeaderScreen() {
   const documentDetails = useSelector(
     (state) => state.upload?.documentDetails
   ) || '';
+  const uploadedFiles = useSelector(
+    (state) => state.upload?.uploadedFiles
+  ) || '';
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -107,22 +110,17 @@ const Header = function HeaderScreen() {
       setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.selectList)); //
+      dispatch(setStage(firstUploadStages.filseIsNotLoaded)); //
     }
   };
 
   const submitFile = async (data) => {
     setFileIsLoading(true);
-    try {
-      dispatch(setStage(firstUploadStages.fileIsLoading));
-      const res = await dispatch(uploadFiles(data));
-      if (res) {
-        dispatch(fetchDocumentDetails(documents[documents.length - 1]).id);
-        dispatch(setStage(firstUploadStages.selectList));
-        return;
-      }
-      throw new Error('');
-    } catch (err) {
+    dispatch(setStage(firstUploadStages.fileIsLoading));
+    await dispatch(uploadFiles(data));
+    if (uploadedFiles.length) {
+      dispatch(setStage(firstUploadStages.selectList));
+    } else {
       dispatch(setStage(globalStages.errorCheck));
     }
     setFileIsLoading(false);
