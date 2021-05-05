@@ -110,7 +110,7 @@ const Header = function HeaderScreen() {
       setChangeButtonShow(true);
       setClientDisabled(true);
       setAccountsDisabled(true);
-      dispatch(setStage(firstUploadStages.filseIsNotLoaded)); //
+      dispatch(setStage(firstUploadStages.selectList)); //
     }
   };
 
@@ -172,7 +172,7 @@ const Header = function HeaderScreen() {
 
   useEffect(() => (async () => {
     if (documents.length > 0) {
-      return dispatch(fetchDocumentDetails(documents[0].id));
+      return dispatch(fetchDocumentDetails(documents[documents.length - 1].id));
     }
     dispatch(setStage(firstUploadStages.selectAccount));
   })(), [dispatch, documents]);
