@@ -19,12 +19,16 @@ const navigationBarParams = {
 };
 
 const Upload = function UploadScreen() {
-  const stage = useSelector((state) => state.upload.stage);
-  const list = useSelector((state) => state.upload.selectList || 'default');
   const dispatch = useDispatch();
 
+  const stage = useSelector((state) => state.upload.stage);
+  const list = useSelector((state) => state.upload.selectList || 'default');
+  const uploadedFiles = useSelector(
+    (state) => state.upload?.uploadedFiles
+  ) || [];
   const listOptions = useSelector((state) => state.upload.uploadedFiles[0]
     .data.sheets.map((value) => ({ value, text: value })));
+  const task = useSelector((state) => state.upload.task);
 
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(false);
 
@@ -35,14 +39,13 @@ const Upload = function UploadScreen() {
 
   const handleAcceptListButtonClick = async () => {
     setAcceptButtonDisabled(true);
-    try {
-      const data = await dispatch(acceptFile());
-      if (data) {
-        return dispatch(setStage(globalStages.loadImage));
-      }
-      throw new Error('');
-    } catch (err) {
-      dispatch(fetchDocumentDetails());
+    await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
+      .id));
+    await dispatch(acceptFile());
+    console.log(task);
+    if (task) {
+      dispatch(setStage(globalStages.loadImage));
+    } else {
       dispatch(setStage(globalStages.errorCheck));
     }
     setAcceptButtonDisabled(false);
