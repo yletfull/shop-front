@@ -21,7 +21,10 @@ export const setStage = (value) => (dispatch) => {
 export const fetchAccounts = () => async (dispatch) => {
   try {
     const data = await service.fetchAccountsList();
-    dispatch(accounts(data.data.data));
+    const accountsList = data.data.data.filter(
+      (acc) => acc.data.account_type === 'agency'
+    );
+    dispatch(accounts(accountsList));
   } catch (err) {
     dispatch(accounts([]));
     console.log(err);
