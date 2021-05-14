@@ -109,7 +109,7 @@ export const acceptFile = () => async (dispatch, getState) => {
       clientId: getState().upload.selectClient,
       sheetNum: getState().upload.selectList,
     });
-    dispatch(task(data));
+    dispatch(task(data.data.data));
   } catch (err) {
     dispatch(task([]));
   }
