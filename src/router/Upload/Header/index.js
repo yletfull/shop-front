@@ -197,61 +197,63 @@ const Header = function HeaderScreen() {
   return (
     <React.Fragment>
       <div className={styles.topWrapper}>
-        <Select
-          value={selectAccount}
-          options={accountsSelectorOptions()}
-          onChange={handleAccountChange}
-          resetText="Не выбрано"
-          placeholder="Аккаунт"
-          className={styles.select}
-          disabled={accountsDisabled}
-        />
-        <span className={styles.separator}>
-          /
-        </span>
-        <Select
-          value={selectClient}
-          options={clientsSelectorOptions()}
-          onChange={handleClientChange}
-          resetText="Не выбрано"
-          placeholder="Клиент"
-          className={styles.select}
-          disabled={clientsDisabled}
-        />
-        {changeButtonShow
-          ? (
-            <Button
-              style={{ fontSize: '14px' }}
-              className={styles.changeButton}
-              appearance="control"
-              onClick={handleReset}
-            >
-              <b>
-                Изменить
-              </b>
-            </Button>
-          )
-          : (
-            <div className={styles.buttonsWrapper}>
+        <div className={styles.selectionWrapper}>
+          <Select
+            value={selectAccount}
+            options={accountsSelectorOptions()}
+            onChange={handleAccountChange}
+            resetText="Не выбрано"
+            placeholder="Аккаунт"
+            className={styles.select}
+            disabled={accountsDisabled}
+          />
+          <span className={styles.separator}>
+            /
+          </span>
+          <Select
+            value={selectClient}
+            options={clientsSelectorOptions()}
+            onChange={handleClientChange}
+            resetText="Не выбрано"
+            placeholder="Клиент"
+            className={styles.select}
+            disabled={clientsDisabled}
+          />
+          {changeButtonShow
+            ? (
               <Button
-                onClick={hanldeAcceptButtonClick}
-                disabled={acceptButtonDisabled}
-              >
-                <b>
-                  выбрать
-                </b>
-              </Button>
-              <Button
-                className={styles.rejectButon}
+                style={{ fontSize: '14px' }}
+                className={styles.changeButton}
+                appearance="control"
                 onClick={handleReset}
-                color="secondary"
               >
                 <b>
-                  отменить
+                  Изменить
                 </b>
               </Button>
-            </div>
-          )}
+            )
+            : (
+              <div className={styles.buttonsWrapper}>
+                <Button
+                  onClick={hanldeAcceptButtonClick}
+                  disabled={acceptButtonDisabled}
+                >
+                  <b>
+                    выбрать
+                  </b>
+                </Button>
+                <Button
+                  className={styles.rejectButon}
+                  onClick={handleReset}
+                  color="secondary"
+                >
+                  <b>
+                    отменить
+                  </b>
+                </Button>
+              </div>
+            )}
+        </div>
         <ButtonLink
           style={{ fontSize: '14px' }}
           className={styles.downloadExcelModel}
