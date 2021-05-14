@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
@@ -29,7 +29,9 @@ const Upload = function UploadScreen() {
     .data?.sheets?.map((item, index) => (
       { value: index, text: item }
     ))) || [];
-  const task = useSelector((state) => state.upload.task);
+
+  const taskData = useSelector((state) => state.upload.task || {});
+  const task = useRef(taskData);
 
   const [
     acceptListButtonDisabled, setAcceptListButtonDisabled,
@@ -45,12 +47,12 @@ const Upload = function UploadScreen() {
     await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
       .id));
     await dispatch(acceptFile());
-    if (Object.keys(task).length) {
+
+    if (task && Object.keys(task.current)?.length) {
       dispatch(setStage(globalStages.loadImage));
     } else {
       dispatch(setStage(globalStages.errorCheck));
     }
-    setAcceptListButtonDisabled(false);
   };
 
   useEffect(() => {
@@ -59,6 +61,10 @@ const Upload = function UploadScreen() {
     }
     setAcceptListButtonDisabled(false);
   }, [list]);
+
+  useLayoutEffect(() => {
+    task.current = taskData;
+  }, [taskData]);
 
   return (
     <div className={styles.wrapper}>
