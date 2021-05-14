@@ -7,7 +7,7 @@
   transition: color .3s;
 }
 
-.button {
+.processButton {
   align-items: center;
   background-color: unset;
   border: 0;
@@ -23,12 +23,12 @@
   &:disabled {
     cursor: default;
 
-    .icon {
-      color: currentColor;
+    & > * {
+      color: $color-gray-darken;
     }
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     .icon {
       color: $color-primary-lighter;
     }
