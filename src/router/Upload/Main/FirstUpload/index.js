@@ -31,7 +31,9 @@ const Upload = function UploadScreen() {
     ))) || [];
   const task = useSelector((state) => state.upload.task);
 
-  const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(false);
+  const [
+    acceptListButtonDisabled, setAcceptListButtonDisabled,
+  ] = useState(false);
 
   const handleListSelect = (e) => {
     const { value } = e.target;
@@ -39,7 +41,7 @@ const Upload = function UploadScreen() {
   };
 
   const handleAcceptListButtonClick = async () => {
-    setAcceptButtonDisabled(true);
+    setAcceptListButtonDisabled(true);
     await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
       .id));
     await dispatch(acceptFile());
@@ -48,14 +50,14 @@ const Upload = function UploadScreen() {
     } else {
       dispatch(setStage(globalStages.errorCheck));
     }
-    setAcceptButtonDisabled(false);
+    setAcceptListButtonDisabled(false);
   };
 
   useEffect(() => {
     if (list === 'default') {
-      return setAcceptButtonDisabled(true);
+      return setAcceptListButtonDisabled(true);
     }
-    setAcceptButtonDisabled(false);
+    setAcceptListButtonDisabled(false);
   }, [list]);
 
   return (
@@ -107,7 +109,7 @@ const Upload = function UploadScreen() {
                   <Button
                     className={styles.selectListButton}
                     onClick={handleAcceptListButtonClick}
-                    disabled={acceptButtonDisabled}
+                    disabled={acceptListButtonDisabled}
                   >
                     выбрать
                   </Button>
