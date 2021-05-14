@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const ChevronDown = function ChevronDownIcon(props) {
+const Logo = function LogoIcon(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -24,4 +24,4 @@ const ChevronDown = function ChevronDownIcon(props) {
   );
 };
 
-export default ChevronDown;
+export default Logo;

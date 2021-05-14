@@ -44,6 +44,7 @@ const Header = function HeaderScreen() {
   const [changeButtonShow, setChangeButtonShow] = useState(true);
   const [fileIsLoading, setFileIsLoading] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
+  const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(true);
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -63,7 +64,6 @@ const Header = function HeaderScreen() {
   const documents = useSelector(
     (state) => state.upload?.documents
   ) || '';
-  // eslint-disable-next-line no-unused-vars
   const documentDetails = useSelector(
     (state) => state.upload?.documentDetails
   ) || '';
@@ -158,6 +158,11 @@ const Header = function HeaderScreen() {
   }, [dispatch, clients]);
 
   useEffect(() => (async () => {
+    if (selectAccount && selectClient) {
+      setAcceptButtonDisabled(false);
+    } else {
+      setAcceptButtonDisabled(true);
+    }
     dispatch(setStage(firstUploadStages.selectAccount));
     setChangeButtonShow(false);
   })(), [dispatch, selectAccount, selectClient]);
@@ -229,6 +234,7 @@ const Header = function HeaderScreen() {
             <div className={styles.buttonsWrapper}>
               <Button
                 onClick={hanldeAcceptButtonClick}
+                disabled={acceptButtonDisabled}
               >
                 <b>
                   выбрать
@@ -272,6 +278,7 @@ const Header = function HeaderScreen() {
                       to={`/api/v1/document/${uploadedFiles[0].id}/raw`}
                       target="_blank"
                       download
+                      disabled={fileIsLoading}
                     />
                     <div>
                       {getHeaderTempalteContent(uploadedFiles[0])[0]
