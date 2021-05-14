@@ -168,6 +168,7 @@ const Header = function HeaderScreen() {
   })(), [dispatch, selectAccount, selectClient]);
 
   const firstStage = stage === firstUploadStages.selectAccount;
+  const documentsIsNotLoading = documents.length === 0;
 
   useEffect(() => (async () => {
     if (!firstStage) {
@@ -278,7 +279,7 @@ const Header = function HeaderScreen() {
                       to={`/api/v1/document/${uploadedFiles[0].id}/raw`}
                       target="_blank"
                       download
-                      disabled={fileIsLoading}
+                      disabled={fileIsLoading || documentsIsNotLoading}
                     />
                     <div>
                       {getHeaderTempalteContent(uploadedFiles[0])[0]
