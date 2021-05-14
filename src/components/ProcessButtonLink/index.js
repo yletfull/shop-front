@@ -26,7 +26,7 @@ const ProcessButton = function ProcessButton(props) {
   return (
     <Link
       type="button"
-      className={styles.button}
+      className={styles.processButtonLink}
       {...attrs}
     >
       <span className={styles.icon}>

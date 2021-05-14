@@ -7,7 +7,7 @@
   transition: color .3s;
 }
 
-.button {
+.processButtonLink {
   align-items: center;
   background-color: unset;
   border: 0;
@@ -20,11 +20,12 @@
   padding: 0 2.5em;
   position: relative;
 
-  &:disabled {
+  &[disabled] {
     cursor: default;
+    pointer-events: none;
 
-    .icon {
-      color: currentColor;
+    & > * {
+      color: $color-gray-darken;
     }
   }
 
