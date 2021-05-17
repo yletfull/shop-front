@@ -39,12 +39,12 @@ const Header = function HeaderScreen() {
 
   const fileInput = useRef(null);
 
-  const [accountsDisabled, setAccountsDisabled] = useState(false);
-  const [clientsDisabled, setClientDisabled] = useState(true);
-  const [changeButtonShow, setChangeButtonShow] = useState(true);
-  const [fileIsLoading, setFileIsLoading] = useState(false);
-  const [detailsIsFetching, setDetailsIsFetching] = useState(false);
+  const [accountSelectDisabled, setAccountSelectDisabled] = useState(false);
+  const [clientSelectDisabled, setClientSelectDisabled] = useState(true);
+  const [changeAccountButtonShow, setChangeAccountButtonShow] = useState(true);
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(true);
+  const [fileIsLoaded, setFileIsLoaded] = useState(false);
+  const [detailsIsFetching, setDetailsIsFetching] = useState(false);
 
   const stage = useSelector((state) => state.upload.stage);
   const accountsData = useSelector(
@@ -109,23 +109,23 @@ const Header = function HeaderScreen() {
 
   const hanldeAcceptButtonClick = () => {
     if (selectClient && selectAccount) {
-      setChangeButtonShow(true);
-      setClientDisabled(true);
-      setAccountsDisabled(true);
+      setChangeAccountButtonShow(true);
+      setClientSelectDisabled(true);
+      setAccountSelectDisabled(true);
       dispatch(setStage(firstUploadStages.selectList));
     }
   };
 
   const submitFile = async (data) => {
-    setFileIsLoading(true);
-    dispatch(setStage(firstUploadStages.fileIsLoading));
+    setFileIsLoaded(true);
+    dispatch(setStage(firstUploadStages.fileIsLoaded));
     await dispatch(uploadFiles(data));
     if (Object.keys(uploadedFiles).length) {
       dispatch(setStage(firstUploadStages.selectList));
     } else {
       dispatch(setStage(globalStages.errorCheck));
     }
-    setFileIsLoading(false);
+    setFileIsLoaded(false);
   };
 
   const handleFileChange = (e) => {
@@ -141,19 +141,19 @@ const Header = function HeaderScreen() {
 
   useEffect(() => (async () => {
     if (!selectAccount) {
-      setAccountsDisabled(true);
+      setAccountSelectDisabled(true);
       await dispatch(fetchAccounts());
-      setAccountsDisabled(false);
+      setAccountSelectDisabled(false);
     } else {
       dispatch(fetchClients());
     }
     dispatch((setClient('')));
-    setClientDisabled(true);
+    setClientSelectDisabled(true);
   })(), [dispatch, selectAccount]);
 
   useEffect(() => {
     if (clients.length) {
-      setClientDisabled(false);
+      setClientSelectDisabled(false);
     }
   }, [dispatch, clients]);
 
@@ -164,7 +164,7 @@ const Header = function HeaderScreen() {
       setAcceptButtonDisabled(true);
     }
     dispatch(setStage(firstUploadStages.selectAccount));
-    setChangeButtonShow(false);
+    setChangeAccountButtonShow(false);
   })(), [dispatch, selectAccount, selectClient]);
 
   const firstStage = stage === firstUploadStages.selectAccount;
@@ -205,7 +205,7 @@ const Header = function HeaderScreen() {
             resetText="Не выбрано"
             placeholder="Аккаунт"
             className={styles.select}
-            disabled={accountsDisabled}
+            disabled={accountSelectDisabled}
           />
           <span className={styles.separator}>
             /
@@ -217,9 +217,9 @@ const Header = function HeaderScreen() {
             resetText="Не выбрано"
             placeholder="Клиент"
             className={styles.select}
-            disabled={clientsDisabled}
+            disabled={clientSelectDisabled}
           />
-          {changeButtonShow
+          {changeAccountButtonShow
             ? (
               <Button
                 style={{ fontSize: '14px' }}
@@ -281,7 +281,7 @@ const Header = function HeaderScreen() {
                       to={`/api/v1/document/${uploadedFiles[0].id}/raw`}
                       target="_blank"
                       download
-                      disabled={fileIsLoading || documentsIsNotLoading}
+                      disabled={fileIsLoaded || documentsIsNotLoading}
                     />
                     <div>
                       {getHeaderTempalteContent(uploadedFiles[0])[0]
@@ -306,7 +306,7 @@ const Header = function HeaderScreen() {
                         icon={<IconUpload />}
                         text={['Загрузить', 'файл']}
                         onClick={handleSelectFileButtonClick}
-                        disabled={fileIsLoading}
+                        disabled={fileIsLoaded}
                       />
                       <input
                         type="file"
