@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 import auth from './auth';
 import upload from './upload';
 
@@ -10,7 +11,9 @@ const rootReducer = combineReducers({
 });
 
 export const configureStore = function configureStore() {
-  const middleware = applyMiddleware(thunk);
+  const middleware = process.env.NODE_ENV === 'development'
+    ? applyMiddleware(thunk, logger)
+    : applyMiddleware(thunk);
 
   return createStore(
     rootReducer,
