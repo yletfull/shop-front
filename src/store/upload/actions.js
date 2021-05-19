@@ -13,6 +13,7 @@ export const documentDetails = createAction(`${NS}/documentDetails`);
 export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 export const selectList = createAction(`${NS}/selectList`);
 export const task = createAction(`${NS}/task`);
+export const tasks = createAction(`${NS}/tasks`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -112,5 +113,17 @@ export const acceptFile = () => async (dispatch, getState) => {
     dispatch(task(data.data.data));
   } catch (err) {
     dispatch(task([]));
+  }
+};
+
+export const fetchTasks = () => async (dispatch, getState) => {
+  try {
+    const data = await service.getTasks({
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+    });
+    dispatch(tasks(data.data.data));
+  } catch (err) {
+    dispatch(tasks([]));
   }
 };
