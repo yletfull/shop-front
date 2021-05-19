@@ -1,14 +1,15 @@
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import ButtonLink from '@/components/ButtonLink';
 
-import { firstUploadStages } from '../../stages';
+import { firstUploadStages, globalStages } from '../../stages';
 import {
   fetchAccounts, fetchClients,
+  fetchTasks,
   setAccount, setClient, setStage,
 } from '../../../../store/upload/actions';
 import styles from './styles.module.scss';
@@ -35,9 +36,13 @@ const Header = function HeaderScreen() {
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
   ) || '';
-  const documents = useSelector(
-    (state) => state.upload?.documents
-  ) || [];
+  const tasksArray = useSelector(
+    (state) => state.upload?.tasks
+  );
+  const tasks = useRef(tasksArray);
+  useLayoutEffect(() => {
+    tasks.current = tasksArray;
+  }, [tasksArray]);
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -81,9 +86,13 @@ const Header = function HeaderScreen() {
       setClientSelectDisabled(true);
       setAccountSelectDisabled(true);
 
-      await dispatch(setStage(firstUploadStages.fileIsLoading));
-      if (documents.length > 0) {
-        dispatch(setStage(firstUploadStages.selectList));
+      await dispatch(fetchTasks());
+      if (tasks.current.length > 0) {
+        if (tasks.current[tasks.current.length - 1].status === 1) {
+          dispatch(setStage(firstUploadStages.selectList));
+        } else {
+          dispatch(setStage(globalStages.errorCheck));
+        }
       } else {
         dispatch(setStage(firstUploadStages.filseIsNotLoaded));
       }
