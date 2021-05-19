@@ -8,7 +8,7 @@ import styles from './styles.module.scss';
 
 
 const propTypes = {
-  params: PropTypes.arrayOf(PropTypes.any).isRequired,
+  params: PropTypes.objectOf(PropTypes.any).isRequired,
   className: PropTypes.string,
 };
 
@@ -18,12 +18,6 @@ const defaultProps = {
 
 const NavigationBar = function NavigationBar(props) {
   const { className, params } = props;
-
-  // const params = {
-  //   prev: [],
-  //   current: '',
-  //   next: [],
-  // };
 
   return (
     <div

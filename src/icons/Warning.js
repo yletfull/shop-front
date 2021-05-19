@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from './SVGIconContainer';
 
-const AngleDown = function IconAngleDown(props) {
+const Warning = function WarningIcon(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -16,4 +16,4 @@ const AngleDown = function IconAngleDown(props) {
   );
 };
 
-export default AngleDown;
+export default Warning;

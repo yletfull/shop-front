@@ -1,4 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import auth from './auth';
@@ -16,7 +17,7 @@ export const configureStore = function configureStore() {
 
   return createStore(
     rootReducer,
-    middleware,
+    composeWithDevTools(middleware),
   );
 };
 

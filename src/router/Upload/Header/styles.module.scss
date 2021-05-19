@@ -3,7 +3,13 @@
 .headerTemplatesWrapper {
   display: flex;
   flex-wrap: wrap;
-  margin: -1rem;
+  justify-content: center;
+  margin: -1rem -1rem 0 -1rem;
+}
+
+.selectionWrapper {
+  align-items: center;
+  display: flex;
 }
 
 .headerTemplate {
@@ -46,6 +52,7 @@
 .topWrapper {
   align-items: center;
   display: flex;
+  justify-content: space-between;
   margin-bottom: 1rem;
 }
 
@@ -54,6 +61,8 @@
 }
 
 .buttonsWrapper {
+  display: flex;
+
   & > button {
     margin-left: 1rem;
     width: 6.75rem;
@@ -61,8 +70,7 @@
 }
 
 .downloadExcelModel {
-  position: absolute;
-  right: 1rem;
+  margin-right: 1rem;
 }
 
 .select {

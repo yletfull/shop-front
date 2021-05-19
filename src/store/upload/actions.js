@@ -10,6 +10,9 @@ export const selectClient = createAction(`${NS}/selectClient`);
 export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
 export const documentDetails = createAction(`${NS}/documentDetails`);
+export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
+export const selectList = createAction(`${NS}/selectList`);
+export const task = createAction(`${NS}/task`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -18,7 +21,10 @@ export const setStage = (value) => (dispatch) => {
 export const fetchAccounts = () => async (dispatch) => {
   try {
     const data = await service.fetchAccountsList();
-    dispatch(accounts(data.data.data));
+    const accountsList = data.data.data.filter(
+      (acc) => acc.data.account_type === 'agency'
+    );
+    dispatch(accounts(accountsList));
   } catch (err) {
     dispatch(accounts([]));
     console.log(err);
@@ -73,5 +79,38 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
   } catch (err) {
     dispatch(documentDetails([]));
     console.log(err);
+  }
+};
+
+export const setUploadedFiles = (files) => async (dispatch) => {
+  dispatch(uploadedFiles(files));
+};
+
+export const uploadFiles = (files) => async (dispatch) => {
+  try {
+    const data = await service.uploadFiles({ files });
+    console.log(data);
+    dispatch(uploadedFiles(data.data.data));
+  } catch (err) {
+    dispatch(uploadFiles([]));
+    console.log(err);
+  }
+};
+
+export const setSelectList = (data) => (dispatch) => {
+  dispatch(selectList(data));
+};
+
+export const acceptFile = () => async (dispatch, getState) => {
+  try {
+    const data = await service.acceptFile({
+      documentId: getState().upload.documentDetails.id,
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+      sheetNum: getState().upload.selectList,
+    });
+    dispatch(task(data.data.data));
+  } catch (err) {
+    dispatch(task([]));
   }
 };

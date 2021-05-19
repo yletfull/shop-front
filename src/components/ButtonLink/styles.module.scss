@@ -1,6 +1,6 @@
 @import '@/theme/include.scss';
 
-.button {
+.link {
   align-items: center;
   border: 1px solid transparent;
   border-radius: .375rem;
@@ -15,7 +15,7 @@
   transition: color .2s, background-color .2s, border-color .2s;
   vertical-align: middle;
 
-  &:disabled {
+  :disabled {
     background-color: $color-gray;
     border: none;
     color: $color-gray-darken;
@@ -27,7 +27,7 @@
   }
 }
 
-.button_primary {
+.link_primary {
   background-color: $color-primary-darkest;
   border-color: $color-primary;
   color: $color-white;
@@ -38,25 +38,25 @@
   }
 }
 
-.button_secondary {
+.link_secondary {
   background-color: $color-gray-darken;
   border-color: $color-gray-darken;
   color: $color-white;
 
-  &:hover:not(:disabled) {
+  &:hover {
     background-color: $color-gray;
     border-color: $color-gray;
   }
 }
 
-.button_control {
+.link_control {
   background-color: transparent;
   border: none;
   color: $color-primary;
   min-width: 0;
   transition: background-color .3s;
 
-  &:hover:not(:disabled) {
+  &:hover {
     background-color: $color-gray-lighter;
   }
 }

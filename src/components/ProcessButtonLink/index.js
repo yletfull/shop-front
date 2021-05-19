@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -23,9 +24,9 @@ const ProcessButton = function ProcessButton(props) {
   const { icon, text, className, ...attrs } = props;
 
   return (
-    <button
+    <Link
       type="button"
-      className={styles.processButton}
+      className={styles.processButtonLink}
       {...attrs}
     >
       <span className={styles.icon}>
@@ -44,7 +45,7 @@ const ProcessButton = function ProcessButton(props) {
             </span>
           )}
       </span>
-    </button>
+    </Link>
   );
 };
 

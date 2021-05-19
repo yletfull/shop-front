@@ -1,47 +1,74 @@
 
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
+import FileIcon from '@/icons/File';
 import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
-import { firstUploadStages as stages } from '../../stages';
+import { firstUploadStages as stages, globalStages } from '../../stages';
+import { acceptFile, setStage, setSelectList, fetchDocumentDetails } from '../../../../store/upload/actions';
 import styles from './styles.module.scss';
 
+const navigationBarParams = {
+  prev: [],
+  current: 'Загрузка файла',
+  next: ['Проверка на ошибки', 'Загрузка изображений', 'Выгрузка на площадку'],
+};
 
 const Upload = function UploadScreen() {
+  const dispatch = useDispatch();
+
   const stage = useSelector((state) => state.upload.stage);
+  const list = useSelector((state) => state.upload.selectList || 'default');
+  const uploadedFiles = useSelector((state) => state.upload?.uploadedFiles)
+   || [];
+  const listOptions = useSelector((state) => state.upload.documentDetails
+    .data?.sheets?.map((item, index) => (
+      { value: index, text: item }
+    ))) || [];
 
-  const selectorMocksOptions = [
-    {
-      value: 'list1',
-      text: 'list1',
-    },
-    {
-      value: 'list2',
-      text: 'list2',
-    },
-  ];
+  const taskData = useSelector((state) => state.upload.task || {});
+  const task = useRef(taskData);
 
-  const navigationBarParams = {
-    prev: [],
-    current: 'Загрузка файла',
-    next: ['Проверка на ошибки', 'Загрузка изображений', 'Выгрузка на площадку'],
-  };
-
-  const [list, setList] = useState(selectorMocksOptions[1].value);
+  const [
+    acceptListButtonDisabled, setAcceptListButtonDisabled,
+  ] = useState(false);
 
   const handleListSelect = (e) => {
     const { value } = e.target;
-    setList(value);
+    dispatch(setSelectList(value));
   };
 
+  const handleAcceptListButtonClick = async () => {
+    setAcceptListButtonDisabled(true);
+    await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
+      .id));
+    await dispatch(acceptFile());
+
+    if (task && Object.keys(task.current)?.length) {
+      dispatch(setStage(globalStages.loadImage));
+    } else {
+      dispatch(setStage(globalStages.errorCheck));
+    }
+  };
+
+  useEffect(() => {
+    if (list === 'default') {
+      return setAcceptListButtonDisabled(true);
+    }
+    setAcceptListButtonDisabled(false);
+  }, [list]);
+
+  useLayoutEffect(() => {
+    task.current = taskData;
+  }, [taskData]);
 
   return (
     <div className={styles.wrapper}>
-      {stage !== stages.filseIsNotLoaded
+      {(stage !== stages.selectAccount)
             && (
               <NavigationBar
                 params={navigationBarParams}
@@ -49,7 +76,7 @@ const Upload = function UploadScreen() {
             )}
 
       <div className={styles.contentWrapper}>
-        {stage === stages.filseIsNotLoaded
+        {stage === stages.selectAccount
             && (
               <React.Fragment>
                 <FingerIcon className={styles.icon} />
@@ -59,21 +86,36 @@ const Upload = function UploadScreen() {
               </React.Fragment>
             )}
 
-        {stage === stages.selectFile
+        {stage === stages.filseIsNotLoaded
             && (
-              <div className={styles.selectFile}>
-                <p className={styles.selectFileTitle}>
+              <React.Fragment>
+                <FileIcon className={styles.icon} />
+                <p className={styles.title}>
+                  Загрузите файл
+                </p>
+              </React.Fragment>
+            )}
+
+
+        {stage === stages.selectList
+            && (
+              <div className={styles.selectList}>
+                <p className={styles.selectList}>
                   Выберите лист:
                 </p>
                 <div>
                   <Select
                     value={list}
-                    options={selectorMocksOptions}
+                    options={listOptions}
                     onChange={handleListSelect}
                     className={styles.select}
+                    placeholder="Лист"
+                    resetText="Ничего не выбрано"
                   />
                   <Button
-                    className={styles.selectFileButton}
+                    className={styles.selectListButton}
+                    onClick={handleAcceptListButtonClick}
+                    disabled={acceptListButtonDisabled}
                   >
                     выбрать
                   </Button>

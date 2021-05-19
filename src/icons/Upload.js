@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from './SVGIconContainer';
 
-const AngleDown = function IconAngleDown(props) {
+const Upload = function UploadIcon(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -9,7 +9,6 @@ const AngleDown = function IconAngleDown(props) {
       width={27}
     >
       <g
-        fill="#999DA3"
         fillRule="nonzero"
       >
         <path
@@ -21,4 +20,4 @@ const AngleDown = function IconAngleDown(props) {
   );
 };
 
-export default AngleDown;
+export default Upload;
