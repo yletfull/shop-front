@@ -1,6 +1,5 @@
-@import './variables.scss';
-
-$app-top-padding: 1rem;
+@import './include.scss';
+@import './app-table.scss';
 
 *,
 *::after,
@@ -172,7 +171,7 @@ svg {
   color: $color-primary;
 
   &_nav {
-    border-bottom: 2px $color-red-lightest solid;
+    border-bottom: 5px $color-red-lightest solid;
     color: $color-red-lightest;
   }
 }
