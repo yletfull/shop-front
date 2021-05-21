@@ -1,23 +1,23 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import {
-  users,
-  usersError,
+  list,
+  listError,
 } from './actions';
 
 const initialState = {
-  users: [],
-  usersError: '',
+  list: [],
+  listError: '',
 };
 
 const reducer = createReducer(initialState, {
-  [users]: (state, action) => ({
+  [list]: (state, action) => ({
     ...state,
-    stage: action.payload,
+    list: action.payload,
   }),
-  [usersError]: (state, action) => ({
+  [listError]: (state, action) => ({
     ...state,
-    stage: action.payload,
+    listError: action.payload,
   }),
 });
 

@@ -9,23 +9,19 @@ const Users = function UsersScreen() {
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const usersData = useSelector((state) => state.users);
-  const users = useRef(usersData);
+  const usersList = useSelector((state) => state.users.list);
+  const users = useRef(usersList);
   useLayoutEffect(() => {
-    users.current = usersData;
-  }, [usersData]);
+    users.current = usersList;
+  }, [usersList]);
 
-  console.log(users.current);
-
-  useEffect(() => async () => {
-    console.log('da');
-    setIsFetching(true);
-    await dispatch(fetchUsers());
-    setIsFetching(false);
-  }, [dispatch]);
-
-  useEffect(() => async () => {
-    console.log('da');
+  useEffect(() => {
+    const fetchUsersFn = async () => {
+      setIsFetching(true);
+      await dispatch(fetchUsers());
+      setIsFetching(false);
+    };
+    fetchUsersFn();
   }, [dispatch]);
 
   if (isFetching) {
@@ -63,22 +59,22 @@ const Users = function UsersScreen() {
                 content=""
               >
                 <td>
-                  {user.id}
+                  {user.id || '-'}
                 </td>
                 <td>
-                  {user.login}
+                  {user.login || '-'}
                 </td>
                 <td>
-                  {user.email}
+                  {user.email || '-'}
                 </td>
                 <td>
-                  {user.phone}
+                  {user.phone || '-'}
                 </td>
                 <td>
-                  {user.createdAt}
+                  {user.createdAt || '-'}
                 </td>
                 <td>
-                  {user.upldateAt}
+                  {user.upldateAt || '-'}
                 </td>
               </tr>
             ))
