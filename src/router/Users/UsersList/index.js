@@ -1,6 +1,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import dayjs from '@/utils/day';
 import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
 
@@ -71,10 +72,10 @@ const Users = function UsersScreen() {
                   {user.phone || '-'}
                 </td>
                 <td>
-                  {user.createdAt || '-'}
+                  {dayjs(user.createdAt, 'YYYY:MM:DD HH:mm:ss')}
                 </td>
                 <td>
-                  {user.upldateAt || '-'}
+                  {dayjs(user.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
                 </td>
               </tr>
             ))
