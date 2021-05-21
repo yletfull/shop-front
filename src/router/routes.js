@@ -2,12 +2,12 @@ import Upload from './Upload';
 
 export const patchs = {
   upload: '/',
-  roles: '/roles',
+  users: '/users',
 };
 
 export const titles = {
   upload: 'Загрузка',
-  roles: 'Роли',
+  users: 'Пользователи',
 };
 
 export default [
@@ -20,11 +20,11 @@ export default [
     },
   },
   {
-    path: patchs.roles,
-    redirect: patchs.roles,
+    path: patchs.users,
+    redirect: patchs.users,
     Component: Upload,
     meta: {
-      title: titles.roles,
+      title: titles.users,
     },
   },
 ];
