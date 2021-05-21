@@ -2,6 +2,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import IconLogo from '@/icons/Logo';
+import IconUsers from '@/icons/Users';
 import IconLogout from '@/icons/Logout';
 import MenuItem from '@/components/MenuItem';
 import { patchs, titles } from '@/router/routes';
@@ -17,9 +18,9 @@ const AppAside = function AppAside() {
 
   const menuItemsList = [
     {
-      title: titles.roles,
-      to: patchs.roles,
-      icon: <IconLogout />,
+      title: titles.users,
+      to: patchs.users,
+      icon: <IconUsers />,
     },
   ];
 
