@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import AppLayout from '@/components/AppLayout';
+import Auth from '@/router/Auth';
 import routes from './routes';
 
 const RouterView = function RouterView() {
@@ -22,9 +22,10 @@ const RouterView = function RouterView() {
                   </title>
                 )}
               </Helmet>
-              <AppLayout headerTitle="Вконтакт">
-                <Component {...props} />
-              </AppLayout>
+              <Auth
+                Component={Component}
+                props={props}
+              />
             </Fragment>
           )}
         </Route>
