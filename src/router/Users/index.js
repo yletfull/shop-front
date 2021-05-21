@@ -2,25 +2,28 @@
 import React from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import routes, { patchs } from './routes';
+import styles from './styles.module.scss';
 
 
 const Users = function UsersScreen() {
   return (
     <div>
-      <NavLink
-        to={`${patchs.usersList}`}
-        className="link-class_nav"
-        activeClassName="active-link-class_nav"
-      >
-        Список пользователей
-      </NavLink>
-      <NavLink
-        to={`${patchs.roles}`}
-        className="link-class_nav"
-        activeClassName="active-link-class_nav"
-      >
-        Роли
-      </NavLink>
+      <div className={styles.navItemsWrapper}>
+        <NavLink
+          to={`${patchs.usersList}`}
+          className="link-class_nav"
+          activeClassName="active-link-class_nav"
+        >
+          Список пользователей
+        </NavLink>
+        <NavLink
+          to={`${patchs.roles}`}
+          className="link-class_nav"
+          activeClassName="active-link-class_nav"
+        >
+          Роли
+        </NavLink>
+      </div>
 
       <Switch>
         {routes.map(({ exact, path, title, Component }) => (
