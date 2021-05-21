@@ -1,0 +1,13 @@
+@import '@/theme/include.scss';
+
+.controls {
+  &Add,
+  &Find {
+    display: inline-block;
+    width: 10rem;
+  }
+}
+
+.table {
+  @include table();
+}

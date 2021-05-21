@@ -1,18 +1,22 @@
+import SegmentsList from './SegmentsList';
 import Upload from './Upload';
 import Users from './Users';
 
 export const patchs = {
   upload: '/upload',
   users: '/users',
+  segments: '/segments',
 };
 
 export const titles = {
   upload: 'Загрузка',
   users: 'Пользователи',
+  segments: 'Сегменты',
 };
 
 export default [
   {
+    exact: true,
     path: patchs.upload,
     redirect: patchs.upload,
     Component: Upload,
@@ -27,5 +31,10 @@ export default [
     meta: {
       title: titles.users,
     },
+  },
+  {
+    Component: SegmentsList,
+    path: patchs.segments,
+    title: titles.segments,
   },
 ];
