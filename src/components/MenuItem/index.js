@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 
@@ -21,13 +21,14 @@ const MenuItem = function MenuItem(props) {
   } = props;
 
   return (
-    <Link
+    <NavLink
       className={styles.menuItem}
       to={to}
       title={title}
+      activeClassName={styles.menuItemActive}
     >
       {icon}
-    </Link>
+    </NavLink>
 
   );
 };
