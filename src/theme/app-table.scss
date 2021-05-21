@@ -34,6 +34,14 @@ tr {
       font-weight: bold;
       padding-bottom: 12px;
       padding-top: 12px;
+
+      &:first-child {
+        border-radius: 6px 0 0 6px;
+      }
+
+      &:last-child {
+        border-radius: 0 6px 6px 0;
+      }
     }
   }
 
