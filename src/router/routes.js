@@ -1,7 +1,7 @@
 import Upload from './Upload';
 
 export const patchs = {
-  upload: '/',
+  upload: '/upload',
   users: '/users',
 };
 
