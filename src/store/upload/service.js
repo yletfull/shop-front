@@ -25,9 +25,6 @@ const uploadFiles = ({ files }) => api.post('api/v1/documents', files)
 const acceptFile = (params) => api.post('api/v1/import', { ...params })
   .then((data) => data);
 
-const getTasks = ({ cabinetId, ...params }) => api.get(`api/v1/ad-cabinet/${cabinetId}/queue`, { params })
-  .then((data) => data);
-
 export default {
   fetchAccountsList,
   setAccount,
@@ -37,5 +34,4 @@ export default {
   fetchDocumentDetails,
   uploadFiles,
   acceptFile,
-  getTasks,
 };

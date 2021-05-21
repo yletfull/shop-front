@@ -13,7 +13,6 @@ import {
   uploadedFiles,
   task,
   selectList,
-  tasks,
 } from './actions';
 
 const initialState = {
@@ -46,7 +45,6 @@ const initialState = {
     },
   ],
   task: {},
-  tasks: [],
 };
 
 const reducer = createReducer(initialState, {
@@ -93,10 +91,6 @@ const reducer = createReducer(initialState, {
   [selectList]: (state, action) => ({
     ...state,
     selectList: action.payload,
-  }),
-  [tasks]: (state, action) => ({
-    ...state,
-    tasks: action.payload,
   }),
 });
 
