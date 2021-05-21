@@ -1,4 +1,5 @@
 import Upload from './Upload';
+import Users from './Users';
 
 export const patchs = {
   upload: '/upload',
@@ -22,7 +23,7 @@ export default [
   {
     path: patchs.users,
     redirect: patchs.users,
-    Component: Upload,
+    Component: Users,
     meta: {
       title: titles.users,
     },
