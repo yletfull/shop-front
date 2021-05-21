@@ -6,22 +6,25 @@ import styles from './styles.module.scss';
 const propTypes = {
   to: PropTypes.string.isRequired,
   icon: PropTypes.element.isRequired,
+  title: PropTypes.string,
 };
 
 const defaultProps = {
-
+  title: '',
 };
 
 const MenuItem = function MenuItem(props) {
   const {
     to,
     icon,
+    title,
   } = props;
 
   return (
     <Link
-      className={['button-control', styles.menuItem]}
+      className={styles.menuItem}
       to={to}
+      title={title}
     >
       {icon}
     </Link>
