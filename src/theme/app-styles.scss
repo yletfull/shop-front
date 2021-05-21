@@ -33,10 +33,10 @@ input[type='submit'] {
 a {
   color: $color-primary-darkest;
   text-decoration: none;
+  transition: opacity .3s;
 
-  &:hover,
-  &:focus {
-    color: $color-primary-lighter;
+  &:hover {
+    opacity: .8;
   }
 }
 
@@ -160,6 +160,20 @@ svg {
   color: $color-red-darkest;
 }
 
+.link-class_nav {
+  padding-bottom: .5rem;
+
+  &:not(:first-of-type) {
+    margin-left: 1rem;
+  }
+}
+
 .active-link-class {
   color: $color-primary;
+
+  &_nav {
+    border-bottom: 2px $color-red-lightest solid;
+    color: $color-red-lightest;
+  }
 }
+

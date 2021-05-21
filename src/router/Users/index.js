@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { NavLink, Switch, Route } from 'react-router-dom';
+import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
 import routes, { patchs } from './routes';
 
 
@@ -9,14 +9,15 @@ const Users = function UsersScreen() {
     <div>
       <NavLink
         to={`${patchs.usersList}`}
-        base
-        activeClassName="active-link-class"
+        className="link-class_nav"
+        activeClassName="active-link-class_nav"
       >
         Список пользователей
       </NavLink>
       <NavLink
         to={`${patchs.roles}`}
-        activeClassName="active-link-class"
+        className="link-class_nav"
+        activeClassName="active-link-class_nav"
       >
         Роли
       </NavLink>
@@ -31,6 +32,7 @@ const Users = function UsersScreen() {
             <Component title={title} />
           </Route>
         ))}
+        <Redirect to={routes[0].path} />
       </Switch>
     </div>
   );
