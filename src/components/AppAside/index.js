@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import IconLogo from '@/icons/Logo';
 import IconUsers from '@/icons/Users';
 import IconLogout from '@/icons/Logout';
+import IconUpload from '@/icons/Upload';
 import MenuItem from '@/components/MenuItem';
 import { patchs, titles } from '@/router/routes';
 import { authSignOut } from '../../store/auth/actions';
@@ -18,6 +19,11 @@ const AppAside = function AppAside() {
 
   const menuItemsList = [
     {
+      title: titles.upload,
+      to: patchs.upload,
+      icon: <IconUpload />,
+    },
+    {
       title: titles.users,
       to: patchs.users,
       icon: <IconUsers />,
@@ -28,14 +34,16 @@ const AppAside = function AppAside() {
     <div className={styles.wrapper}>
       <div className={styles.wrapperTop}>
         <IconLogo />
-        {menuItemsList.map((menuItem, ind) => (
-          <MenuItem
-            key={ind}
-            to={menuItem.to}
-            icon={menuItem.icon}
-            title={menuItem.title}
-          />
-        ))}
+        <div className={styles.menuItems}>
+          {menuItemsList.map((menuItem, ind) => (
+            <MenuItem
+              key={ind}
+              to={menuItem.to}
+              icon={menuItem.icon}
+              title={menuItem.title}
+            />
+          ))}
+        </div>
 
       </div>
       <div className={styles.wrapperBottom}>
