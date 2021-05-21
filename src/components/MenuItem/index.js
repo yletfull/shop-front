@@ -25,7 +25,7 @@ const MenuItem = function MenuItem(props) {
       className={styles.menuItem}
       to={to}
       title={title}
-      activeClassName={styles.menuItemActive}
+      activeClassName="active-link-class"
     >
       {icon}
     </NavLink>
