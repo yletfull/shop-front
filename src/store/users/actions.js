@@ -5,13 +5,12 @@ import service from './service';
 export const list = createAction(`${NS}/list`);
 export const listError = createAction(`${NS}/listError`);
 
-export const roles = createAction(`${NS}/roles`);
+export const allRoles = createAction(`${NS}/allRoles`);
+export const userRoles = createAction(`${NS}/userDetails`);
 export const rolesError = createAction(`${NS}/rolesError`);
 
 export const userDetails = createAction(`${NS}/userDetails`);
 export const userDetailsError = createAction(`${NS}/userDetailsError`);
-
-export const userRoles = createAction(`${NS}/userDetails`);
 
 export const fetchUsers = (params) => async (dispatch) => {
   try {
@@ -23,12 +22,12 @@ export const fetchUsers = (params) => async (dispatch) => {
   }
 };
 
-export const fetchRoles = (params) => async (dispatch) => {
+export const fetchAllRoles = (params) => async (dispatch) => {
   try {
-    const data = await service.getRoles(params);
-    dispatch(roles(data.data.data));
+    const data = await service.getAllRoles(params);
+    dispatch(allRoles(data.data.data));
   } catch (err) {
-    dispatch(roles([]));
+    dispatch(allRoles([]));
     dispatch(rolesError(err));
   }
 };
