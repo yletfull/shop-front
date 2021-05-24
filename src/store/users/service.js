@@ -16,10 +16,14 @@ const getUserRoles = ({ userId }) => api.get(`api/v1/user/${userId}/roles`)
 const setUserRoles = ({ userId, params }) => api.patch(`api/v1/user/${userId}/roles`, { ...params })
   .then((data) => data);
 
+const removeUserRole = ({ userId, roleName }) => api.patch(`api/v1/user/${userId}/roles/${roleName}`)
+  .then((data) => data);
+
 export default {
   getUsers,
   getAllRoles,
   getUserDetails,
   getUserRoles,
   setUserRoles,
+  removeUserRole,
 };

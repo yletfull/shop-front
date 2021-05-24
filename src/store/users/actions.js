@@ -59,3 +59,12 @@ export const setUserRoles = ({ userId, ...params }) => async (dispatch) => {
     dispatch(userDetailsError(err));
   }
 };
+
+export const removeUserRole = ({ userId, roleName }) => async (dispatch) => {
+  try {
+    console.log(userId, roleName);
+    // await service.removeUserRole({ userId, roleName });
+  } catch (err) {
+    dispatch(userDetailsError(err));
+  }
+};
