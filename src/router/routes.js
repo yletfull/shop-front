@@ -1,5 +1,6 @@
 import SegmentsDetails from './SegmentsDetails';
 import SegmentsList from './SegmentsList';
+import SegmentsUser from './SegmentsUser';
 import Upload from './Upload';
 import Users from './Users';
 
@@ -8,9 +9,11 @@ export const patchs = {
   users: '/users',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
+  segmentsUser: '/segments/user/',
 };
 
 export const titles = {
+  segmentsUser: 'Портрет пользователя',
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
@@ -44,5 +47,10 @@ export default [
     Component: SegmentsDetails,
     path: patchs.segmentsDetails,
     title: titles.segmentsDetails,
+  },
+  {
+    Component: SegmentsUser,
+    path: patchs.segmentsUser,
+    title: titles.segmentsUser,
   },
 ];
