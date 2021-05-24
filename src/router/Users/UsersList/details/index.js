@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { fetchUserDetails, fetchUserRoles, fetchAllRoles } from '@/store/users/actions';
+import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles } from '@/store/users/actions';
 import dayjs from '@/utils/day';
 import Tag from '@/components/Tag';
 import Button from '@/components/Button';
@@ -17,6 +17,7 @@ const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
+  const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(false);
   const [selectedRole, setSelectedRole] = useState();
 
   const userData = useSelector((state) => state.users.userDetails);
@@ -49,11 +50,6 @@ const Details = function RolesDetailsScreen() {
     fetchUsersFn();
   }, [dispatch, userId]);
 
-  const handleRoleChange = (e) => {
-    const { value } = e.target;
-    setSelectedRole(value);
-  };
-
   const getAllRolesOptions = () => {
     if (allRoles.current?.length) {
       return allRoles.current.map((role) => ({
@@ -63,7 +59,24 @@ const Details = function RolesDetailsScreen() {
     }
     return [];
   };
+  const handleRoleChange = (e) => {
+    const { value } = e.target;
+    setSelectedRole(value);
+  };
 
+  const handleSubmitRole = async (e) => {
+    e.preventDefault();
+    const roles = [];
+    roles.push(selectedRole);
+    if (userRoles.current.length) {
+      roles.push(...userRoles.current.map((el) => el.name));
+    }
+    setAddRoleButtonDisabled(true);
+    await dispatch(setUserRoles({ userId, roles }));
+    await dispatch(fetchUserDetails({ userId }));
+    await dispatch(fetchUserRoles({ userId }));
+    setAddRoleButtonDisabled(false);
+  };
 
   if (isFetching) {
     return <Spinner />;
@@ -163,7 +176,7 @@ const Details = function RolesDetailsScreen() {
               Добавить роль
             </td>
             <td>
-              <form>
+              <form onSubmit={handleSubmitRole}>
                 <Select
                   value={selectedRole}
                   options={getAllRolesOptions(allRoles.current)}
@@ -171,9 +184,13 @@ const Details = function RolesDetailsScreen() {
                   resetText="Не выбрано"
                   placeholder="Выбрать роль"
                   className={styles.select}
-                  disabled={!allRoles.current?.length}
+                  disabled={!allRoles.current?.length || addRoleButtonDisabled}
                 />
-                <Button className={styles.addRoleButton}>
+                <Button
+                  type="submit"
+                  className={styles.addRoleButton}
+                  disabled={addRoleButtonDisabled}
+                >
                   Добавить роль
                 </Button>
               </form>
