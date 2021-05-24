@@ -1,0 +1,51 @@
+image: "gitlab.ubic.tech:4567/docker/node:10.24"
+
+cache:
+  paths:
+    - node_modules/
+
+variables:
+  REGISTRY_URL: "gitlab.ubic.tech:4567"
+  IMAGE_NAME: $REGISTRY_URL/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+
+stages:
+  - lint
+  - build
+  - dockerize
+
+lint:
+  stage: lint
+  except:
+    - tags
+  script:
+    - yarn install
+    - yarn lint
+
+build:
+  stage: build
+  only:
+    - tags
+    - master
+    - develop
+  script:
+    - yarn install
+    - yarn build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/*
+
+dockerize:
+  image: docker:latest
+  cache: {}
+  services:
+    - docker:dind
+  stage: dockerize
+  only:
+    - tags
+    - master
+    - develop
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $REGISTRY_URL
+    - docker build --pull --cache-from $IMAGE_NAME -t $IMAGE_NAME -f Dockerfile .
+    - docker push $IMAGE_NAME
