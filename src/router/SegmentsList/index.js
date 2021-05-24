@@ -1,29 +1,27 @@
 import React from 'react';
 import AppLayout from '@/components/AppLayout';
-import Button from '@/components/Button';
+import Controls from './Controls';
+import ControlsLink from './ControlsLink';
 import TableView from './TableView';
-import styles from './styles.module.scss';
 
 const SegmentsList = function SegmentsList() {
   const tableData = [];
   return (
     <AppLayout headerTitle="Сегменты и выгрузки">
-      <div className={styles.controls}>
-        <Button
-          appearance="control"
-          className={styles.controlsAdd}
-          disabled
+      <Controls>
+        <ControlsLink
+          to="/"
+          type="create"
         >
           Новый сегмент
-        </Button>
-        <Button
-          appearance="control"
-          className={styles.controlsFind}
-          disabled
+        </ControlsLink>
+        <ControlsLink
+          to="/"
+          type="search"
         >
           Найти пользователя
-        </Button>
-      </div>
+        </ControlsLink>
+      </Controls>
 
       <TableView
         data={tableData}
