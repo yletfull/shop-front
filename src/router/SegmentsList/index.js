@@ -1,5 +1,7 @@
 import React from 'react';
 import AppLayout from '@/components/AppLayout';
+import IconPlus from '@/icons/Plus';
+import IconSearch from '@/icons/Search';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
@@ -10,14 +12,14 @@ const SegmentsList = function SegmentsList() {
     <AppLayout headerTitle="Сегменты и выгрузки">
       <Controls>
         <ControlsLink
+          icon={(<IconPlus />)}
           to="/"
-          type="create"
         >
           Новый сегмент
         </ControlsLink>
         <ControlsLink
+          icon={(<IconSearch />)}
           to="/"
-          type="search"
         >
           Найти пользователя
         </ControlsLink>
