@@ -5,11 +5,17 @@ import {
   listError,
   roles,
   rolesError,
+  userDetails,
+  userDetailsError,
 } from './actions';
 
 const initialState = {
   list: [],
   listError: '',
+  roles: [],
+  rolesError: '',
+  userDetails: {},
+  userDetailsError: '',
 };
 
 const reducer = createReducer(initialState, {
@@ -28,6 +34,14 @@ const reducer = createReducer(initialState, {
   [rolesError]: (state, action) => ({
     ...state,
     rolesEror: action.payload,
+  }),
+  [userDetails]: (state, action) => ({
+    ...state,
+    userDetails: action.payload,
+  }),
+  [userDetailsError]: (state, action) => ({
+    ...state,
+    userDetailsError: action.payload,
   }),
 });
 

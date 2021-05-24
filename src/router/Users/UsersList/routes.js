@@ -3,7 +3,7 @@ import Details from './details';
 
 export const patchs = {
   usersTable: '/users/list',
-  details: '/users/list/:id/details',
+  details: '/users/list/:userId/details',
 };
 
 export const titles = {

@@ -1,28 +1,31 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { fetchRoles } from '@/store/users/actions';
+import { fetchUserDetails } from '@/store/users/actions';
+import dayjs from '@/utils/day';
 
 const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const rolesList = useSelector((state) => state.users.roles);
-  const roles = useRef(rolesList);
+  const userData = useSelector((state) => state.users.userDetails);
+  const userDetails = useRef(userData);
   useLayoutEffect(() => {
-    roles.current = rolesList;
-  }, [rolesList]);
+    userDetails.current = userData;
+  }, [userData]);
 
+  const { userId } = useParams();
   useEffect(() => {
     const fetchUsersFn = async () => {
       setIsFetching(true);
-      await dispatch(fetchRoles());
+      await dispatch(fetchUserDetails({ userId }));
       setIsFetching(false);
     };
     fetchUsersFn();
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   if (isFetching) {
     return <Spinner />;
@@ -32,14 +35,70 @@ const Details = function RolesDetailsScreen() {
     <div>
       <table>
         <tbody>
-          <tr>
+          <tr content="">
+            <td>
+              Идентификатор
+            </td>
+            <td>
+              {userDetails.current.id || '-'}
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              Логин
+            </td>
+            <td>
+              {userDetails.current.login || '-'}
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              E-mail
+            </td>
+            <td>
+              {userDetails.current.email || '-'}
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              Телефон
+            </td>
+            <td>
+              {userDetails.current.phone || '-'}
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              Создан
+            </td>
+            <td>
+              {dayjs(userDetails.current.createdAt, 'YYYY:MM:DD HH:mm:ss')}
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              Обновлен
+            </td>
+            <td>
+              {dayjs(userDetails.current.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
+            </td>
+          </tr>
+
+          <tr content="">
             <td>
               Роль
             </td>
             <td>
-              Имя
+              {userDetails.current.id}
             </td>
           </tr>
+
+
         </tbody>
       </table>
     </div>

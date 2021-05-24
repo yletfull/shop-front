@@ -4,8 +4,12 @@ import service from './service';
 
 export const list = createAction(`${NS}/list`);
 export const listError = createAction(`${NS}/listError`);
+
 export const roles = createAction(`${NS}/roles`);
 export const rolesError = createAction(`${NS}/rolesError`);
+
+export const userDetails = createAction(`${NS}/userDetails`);
+export const userDetailsError = createAction(`${NS}/userDetailsError`);
 
 export const fetchUsers = (params) => async (dispatch) => {
   try {
@@ -24,5 +28,15 @@ export const fetchRoles = (params) => async (dispatch) => {
   } catch (err) {
     dispatch(roles([]));
     dispatch(rolesError(err));
+  }
+};
+
+export const fetchUserDetails = ({ userId }) => async (dispatch) => {
+  try {
+    const data = await service.getUserDetails({ userId });
+    dispatch(userDetails(data.data.data));
+  } catch (err) {
+    dispatch(userDetails({}));
+    dispatch(userDetailsError(err));
   }
 };
