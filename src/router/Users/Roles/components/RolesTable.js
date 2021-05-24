@@ -3,14 +3,14 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '@/components/Spinner';
-import { fetchRoles } from '@/store/users/actions';
+import { fetchAllRoles } from '@/store/users/actions';
 
 const RolesTable = function UsersScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const rolesList = useSelector((state) => state.users.roles);
+  const rolesList = useSelector((state) => state.users.allRoles);
   const roles = useRef(rolesList);
   useLayoutEffect(() => {
     roles.current = rolesList;
@@ -19,7 +19,7 @@ const RolesTable = function UsersScreen() {
   useEffect(() => {
     const fetchUsersFn = async () => {
       setIsFetching(true);
-      await dispatch(fetchRoles());
+      await dispatch(fetchAllRoles());
       setIsFetching(false);
     };
     fetchUsersFn();
