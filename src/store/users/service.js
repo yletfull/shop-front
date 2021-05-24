@@ -13,7 +13,7 @@ const getUserDetails = ({ userId }) => api.get(`api/v1/user/${userId}`)
 const getUserRoles = ({ userId }) => api.get(`api/v1/user/${userId}/roles`)
   .then((data) => data);
 
-const setUserRoles = ({ userId, ...params }) => api.patch(`api/v1/user/${userId}/roles`, { params })
+const setUserRoles = ({ userId, params }) => api.patch(`api/v1/user/${userId}/roles`, { ...params })
   .then((data) => data);
 
 export default {
