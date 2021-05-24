@@ -6,7 +6,7 @@ export const list = createAction(`${NS}/list`);
 export const listError = createAction(`${NS}/listError`);
 
 export const allRoles = createAction(`${NS}/allRoles`);
-export const userRoles = createAction(`${NS}/userDetails`);
+export const userRoles = createAction(`${NS}/userRoles`);
 export const rolesError = createAction(`${NS}/rolesError`);
 
 export const userDetails = createAction(`${NS}/userDetails`);
