@@ -1,10 +1,16 @@
+/* eslint-disable react/no-array-index-key */
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { fetchUserDetails } from '@/store/users/actions';
+import { fetchUserDetails, fetchUserRoles } from '@/store/users/actions';
 import dayjs from '@/utils/day';
+import Tag from '@/components/Tag';
+import Button from '@/components/Button';
+import TimesCircleIcon from '@/icons/TimesCircle';
+import styles from './styles.module.scss';
+
 
 const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
@@ -17,11 +23,18 @@ const Details = function RolesDetailsScreen() {
     userDetails.current = userData;
   }, [userData]);
 
+  const userRolesData = useSelector((state) => state.users.userRoles);
+  const userRoles = useRef(userRolesData);
+  useLayoutEffect(() => {
+    userRoles.current = userRolesData;
+  }, [userRolesData]);
+
   const { userId } = useParams();
   useEffect(() => {
     const fetchUsersFn = async () => {
       setIsFetching(true);
       await dispatch(fetchUserDetails({ userId }));
+      await dispatch(fetchUserRoles({ userId }));
       setIsFetching(false);
     };
     fetchUsersFn();
@@ -89,12 +102,29 @@ const Details = function RolesDetailsScreen() {
             </td>
           </tr>
 
+
           <tr content="">
             <td>
-              Роль
+              Роли:
             </td>
             <td>
-              {userDetails.current.id}
+              <div className={styles.tagsWrapper}>
+                {userRoles.current?.length
+                  && userRoles.current.map((role, ind) => (
+                    <div
+                      className={styles.roleItem}
+                      key={ind}
+                    >
+                      <Tag text={role.title} />
+                      <Button
+                        appearance="control"
+                        className={styles.removeRoleButton}
+                      >
+                        <TimesCircleIcon />
+                      </Button>
+                    </div>
+                  ))}
+              </div>
             </td>
           </tr>
 
