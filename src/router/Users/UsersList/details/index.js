@@ -3,8 +3,9 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import cx from 'classnames';
 import Spinner from '@/components/Spinner';
-import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles } from '@/store/users/actions';
+import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles, removeUserRole } from '@/store/users/actions';
 import dayjs from '@/utils/day';
 import Tag from '@/components/Tag';
 import Button from '@/components/Button';
@@ -12,12 +13,11 @@ import Select from '@/components/Select';
 import TimesCircleIcon from '@/icons/TimesCircle';
 import styles from './styles.module.scss';
 
-
 const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
-  const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(false);
+  const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(true);
   const [selectedRole, setSelectedRole] = useState();
 
   const userData = useSelector((state) => state.users.userDetails);
@@ -38,6 +38,25 @@ const Details = function RolesDetailsScreen() {
     allRoles.current = allRolesData;
   }, [allRolesData]);
 
+
+  const userDetailsErrorData = useSelector(
+    (state) => state.users.userDetailsError
+  );
+  const userDetailsError = useRef(userDetailsErrorData);
+  useLayoutEffect(() => {
+    userDetailsError.current = userDetailsErrorData;
+  }, [userDetailsErrorData]);
+
+
+  const userSetRoleErrorData = useSelector(
+    (state) => state.users.userSetRoleError
+  );
+  const userSetRoleError = useRef(userSetRoleErrorData);
+  useLayoutEffect(() => {
+    userSetRoleError.current = userSetRoleErrorData;
+  }, [userSetRoleErrorData]);
+
+
   const { userId } = useParams();
   useEffect(() => {
     const fetchUsersFn = async () => {
@@ -49,6 +68,14 @@ const Details = function RolesDetailsScreen() {
     };
     fetchUsersFn();
   }, [dispatch, userId]);
+
+  useEffect(() => {
+    if (!selectedRole) {
+      setAddRoleButtonDisabled(true);
+      return;
+    }
+    setAddRoleButtonDisabled(false);
+  }, [selectedRole]);
 
   const getAllRolesOptions = () => {
     if (allRoles.current?.length) {
@@ -80,7 +107,7 @@ const Details = function RolesDetailsScreen() {
 
   const handleRemoveRoleButtonClick = async (e) => {
     const { rolename } = e.target.dataset;
-    dispatch({ roleName: rolename, userId });
+    dispatch(removeUserRole({ roleName: rolename, userId }));
   };
 
   if (isFetching) {
@@ -183,7 +210,10 @@ const Details = function RolesDetailsScreen() {
               Добавить роль
             </td>
             <td>
-              <form onSubmit={handleSubmitRole}>
+              <form
+                className={styles.addRoleForm}
+                onSubmit={handleSubmitRole}
+              >
                 <Select
                   value={selectedRole}
                   options={getAllRolesOptions(allRoles.current)}
@@ -191,7 +221,7 @@ const Details = function RolesDetailsScreen() {
                   resetText="Не выбрано"
                   placeholder="Выбрать роль"
                   className={styles.select}
-                  disabled={!allRoles.current?.length || addRoleButtonDisabled}
+                  disabled={!allRoles.current?.length}
                 />
                 <Button
                   type="submit"
@@ -200,8 +230,12 @@ const Details = function RolesDetailsScreen() {
                 >
                   Добавить роль
                 </Button>
+                {userSetRoleError.current && (
+                  <p className={cx('red', styles.addRoleError)}>
+                    Произошла ошибка
+                  </p>
+                )}
               </form>
-
             </td>
           </tr>
 

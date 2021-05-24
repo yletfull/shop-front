@@ -12,10 +12,10 @@ const getUserRoles = ({ userId }) => api.get(`api/v1/user/${userId}/roles`)
 const getAllRoles = (params) => api.get('api/v1/rbac/roles', { params })
   .then((data) => data);
 
-const setUserRoles = ({ userId, ...params }) => api.patch(`api/v1/user/${userId}/roles`, { params })
+const setUserRoles = ({ userId, ...params }) => api.patch(`api/v1/user/${userId}/roles`, { ...params })
   .then((data) => data);
 
-const removeUserRole = ({ userId, roleName }) => api.patch(`api/v1/user/${userId}/roles/${roleName}`)
+const removeUserRole = ({ userId, roleName }) => api.delete(`api/v1/user/${userId}/roles/${roleName}`)
   .then((data) => data);
 
 const getRolesDetails = ({ roleName }) => api.get(`api/v1/rbac/roles/${roleName}`)

@@ -12,6 +12,19 @@
   padding: 0;
 }
 
-.addRoleButton {
-  margin-left: .5rem;
+.addRole {
+  &Button {
+    margin-left: .5rem;
+  }
+
+  &Form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &Error {
+    margin-left: 1rem;
+  }
 }
+
