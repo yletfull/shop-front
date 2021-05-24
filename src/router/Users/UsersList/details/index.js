@@ -18,7 +18,10 @@ const Details = function RolesDetailsScreen() {
 
   const [isFetching, setIsFetching] = useState(false);
   const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(true);
-  const [selectedRole, setSelectedRole] = useState();
+  const [
+    removeRoleButtonDisabled, setRemoveRoleButtonDisabled,
+  ] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('default');
 
   const userData = useSelector((state) => state.users.userDetails);
   const userDetails = useRef(userData);
@@ -70,7 +73,7 @@ const Details = function RolesDetailsScreen() {
   }, [dispatch, userId]);
 
   useEffect(() => {
-    if (!selectedRole) {
+    if (selectedRole === 'default') {
       setAddRoleButtonDisabled(true);
       return;
     }
@@ -99,18 +102,22 @@ const Details = function RolesDetailsScreen() {
       roles.push(...userRoles.current.map((el) => el.name));
     }
     setAddRoleButtonDisabled(true);
+    setRemoveRoleButtonDisabled(true);
     await dispatch(setUserRoles({ userId, ...roles }));
     await dispatch(fetchUserDetails({ userId }));
     await dispatch(fetchUserRoles({ userId }));
+    setRemoveRoleButtonDisabled(false);
     setAddRoleButtonDisabled(false);
   };
 
   const handleRemoveRoleButtonClick = async (e) => {
     const { rolename } = e.target.dataset;
     setAddRoleButtonDisabled(true);
+    setRemoveRoleButtonDisabled(true);
     await dispatch(removeUserRole({ roleName: rolename, userId }));
     await dispatch(fetchUserDetails({ userId }));
     await dispatch(fetchUserRoles({ userId }));
+    setRemoveRoleButtonDisabled(false);
     setAddRoleButtonDisabled(false);
   };
 
@@ -195,7 +202,7 @@ const Details = function RolesDetailsScreen() {
                         className={styles.removeRoleButton}
                         onClick={handleRemoveRoleButtonClick}
                         data-rolename={role.name}
-                        disabled={addRoleButtonDisabled}
+                        disabled={removeRoleButtonDisabled}
                       >
                         <TimesCircleIcon />
                       </Button>
