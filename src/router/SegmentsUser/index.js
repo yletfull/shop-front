@@ -4,6 +4,7 @@ import CommonInfo from './CommonInfo';
 import SearchForm from './SearchForm';
 import UserAttributes from './UserAttributes';
 import UserSegments from './UserSegments';
+import styles from './styles.module.scss';
 
 const SegmentsUser = function SegmentsUser() {
   const user = '';
@@ -28,15 +29,19 @@ const SegmentsUser = function SegmentsUser() {
             lastUpdateDate=""
             lastUptateIdentifier=""
           />
-          <h2>
+
+          <h2 className={styles.heading}>
             Атрибуты пользователя
           </h2>
+
           <UserAttributes
             data={userAttributes}
           />
-          <h2>
+
+          <h2 className={styles.heading}>
             Сегменты, в которые входит пользователь
           </h2>
+
           <UserSegments
             data={userSegments}
           />
