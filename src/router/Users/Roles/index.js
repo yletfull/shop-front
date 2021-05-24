@@ -37,10 +37,10 @@ const Users = function UsersScreen() {
               Идентификатор
             </td>
             <td>
-              Name
+              Имя
             </td>
             <td>
-              Title
+              Наименование
             </td>
           </tr>
           {roles?.current?.length
