@@ -18,7 +18,11 @@ const setUserRoles = ({ userId, ...params }) => api.patch(`api/v1/user/${userId}
 const removeUserRole = ({ userId, roleName }) => api.delete(`api/v1/user/${userId}/roles/${roleName}`)
   .then((data) => data);
 
-const getRolesDetails = ({ roleName }) => api.get(`api/v1/rbac/roles/${roleName}`)
+
+const getRolesDetails = ({ roleName }) => api.get(`api/v1/rbac/role/${roleName}`)
+  .then((data) => data);
+
+const getRoleAbilities = ({ roleName }) => api.get(`api/v1/rbac/role/${roleName}/abilities`)
   .then((data) => data);
 
 export default {
@@ -29,4 +33,5 @@ export default {
   setUserRoles,
   removeUserRole,
   getRolesDetails,
+  getRoleAbilities,
 };

@@ -4,7 +4,8 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { fetchRolesDetails } from '@/store/users/actions';
+import { fetchRolesDetails, fetchRolesAbilities } from '@/store/users/actions';
+
 // import Tag from '@/components/Tag';
 // import Button from '@/components/Button';
 // import Select from '@/components/Select';
@@ -17,37 +18,39 @@ const Details = function RolesDetailsScreen() {
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const rolesDetailsData = useSelector((state) => state.users.rolesDetailsData);
+  const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
   const rolesDetails = useRef(rolesDetailsData);
   useLayoutEffect(() => {
     rolesDetails.current = rolesDetailsData;
   }, [rolesDetailsData]);
 
-  const allRolesData = useSelector((state) => state.users.allRoles);
-  const allRoles = useRef(allRolesData);
+  const rolesAbilitiesData = useSelector((state) => state.users.rolesAbilities);
+  const rolesAbilities = useRef(rolesAbilitiesData);
   useLayoutEffect(() => {
-    allRoles.current = allRolesData;
-  }, [allRolesData]);
+    rolesAbilities.current = rolesAbilitiesData;
+  }, [rolesAbilitiesData]);
 
-  const { roleId } = useParams();
+  const { roleName } = useParams();
   useEffect(() => {
     const fetchRolesDetailsFn = async () => {
       setIsFetching(true);
-      await dispatch(fetchRolesDetails({ roleId }));
+      await dispatch(fetchRolesDetails({ roleName }));
+      await dispatch(fetchRolesAbilities({ roleName }));
       setIsFetching(false);
     };
     fetchRolesDetailsFn();
-  }, [dispatch, roleId]);
-
+  }, [dispatch, roleName]);
 
   if (isFetching) {
     return <Spinner />;
   }
 
+  console.log(rolesDetails.current);
+
   return (
     <div>
       <p>
-        Разрешения
+        {`Разрешения для роли "${rolesDetails.current.title}"`}
       </p>
       <table>
         <tbody>
@@ -59,6 +62,29 @@ const Details = function RolesDetailsScreen() {
               Права
             </td>
           </tr>
+
+          {rolesAbilities.current?.length
+            ? rolesAbilities.current.map((ability) => (
+              <tr
+                key={ability.id}
+                content=""
+              >
+                <td>
+                  {ability.name}
+                </td>
+                <td>
+                  {ability.title}
+                </td>
+              </tr>
+            ))
+            : (
+              <tr>
+                <td>
+                  Нет данных
+                </td>
+              </tr>
+            )}
+
         </tbody>
       </table>
     </div>

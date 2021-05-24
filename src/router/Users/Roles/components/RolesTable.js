@@ -51,7 +51,7 @@ const RolesTable = function UsersScreen() {
                 content=""
               >
                 <td>
-                  <Link to={(location) => ({ location, pathname: `/users/roles/${role.id}/details` })}>
+                  <Link to={(location) => ({ location, pathname: `/users/roles/${role.name}/details` })}>
                     {role.id || '-'}
                   </Link>
                 </td>
