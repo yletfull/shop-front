@@ -9,7 +9,7 @@ const Users = function UsersScreen() {
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const rolesList = useSelector((state) => state.users.list);
+  const rolesList = useSelector((state) => state.users.roles);
   const roles = useRef(rolesList);
   useLayoutEffect(() => {
     roles.current = rolesList;
