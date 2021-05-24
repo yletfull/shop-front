@@ -1,6 +1,5 @@
-@import './variables.scss';
-
-$app-top-padding: 1rem;
+@import './include.scss';
+@import './app-table.scss';
 
 *,
 *::after,
@@ -33,10 +32,10 @@ input[type='submit'] {
 a {
   color: $color-primary-darkest;
   text-decoration: none;
+  transition: opacity .3s;
 
-  &:hover,
-  &:focus {
-    color: $color-primary-lighter;
+  &:hover {
+    opacity: .8;
   }
 }
 
@@ -159,3 +158,22 @@ svg {
 .red {
   color: $color-red-darkest;
 }
+
+.link-class_nav {
+  font-size: .875rem;
+  padding-bottom: .5rem;
+
+  &:not(:first-of-type) {
+    margin-left: 1rem;
+  }
+}
+
+.active-link-class {
+  color: $color-primary;
+
+  &_nav {
+    border-bottom: 5px $color-red-lightest solid;
+    color: $color-red-lightest;
+  }
+}
+
