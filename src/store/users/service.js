@@ -10,8 +10,12 @@ const getRoles = (params) => api.get('api/v1/rbac/roles', { params })
 const getUserDetails = ({ userId }) => api.get(`api/v1/user/${userId}`)
   .then((data) => data);
 
+const getUserRoles = ({ userId }) => api.get(`api/v1/user/${userId}/roles`)
+  .then((data) => data);
+
 export default {
   getUsers,
   getRoles,
   getUserDetails,
+  getUserRoles,
 };

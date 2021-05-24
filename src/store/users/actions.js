@@ -11,6 +11,8 @@ export const rolesError = createAction(`${NS}/rolesError`);
 export const userDetails = createAction(`${NS}/userDetails`);
 export const userDetailsError = createAction(`${NS}/userDetailsError`);
 
+export const userRoles = createAction(`${NS}/userDetails`);
+
 export const fetchUsers = (params) => async (dispatch) => {
   try {
     const data = await service.getUsers(params);
@@ -37,6 +39,16 @@ export const fetchUserDetails = ({ userId }) => async (dispatch) => {
     dispatch(userDetails(data.data.data));
   } catch (err) {
     dispatch(userDetails({}));
+    dispatch(userDetailsError(err));
+  }
+};
+
+export const fetchUserRoles = ({ userId }) => async (dispatch) => {
+  try {
+    const data = await service.getUserRoles({ userId });
+    dispatch(userRoles(data.data.data));
+  } catch (err) {
+    dispatch(userRoles({}));
     dispatch(userDetailsError(err));
   }
 };
