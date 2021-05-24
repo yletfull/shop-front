@@ -72,7 +72,7 @@ const Details = function RolesDetailsScreen() {
       roles.push(...userRoles.current.map((el) => el.name));
     }
     setAddRoleButtonDisabled(true);
-    await dispatch(setUserRoles({ userId, roles }));
+    await dispatch(setUserRoles({ userId, ...roles }));
     await dispatch(fetchUserDetails({ userId }));
     await dispatch(fetchUserRoles({ userId }));
     setAddRoleButtonDisabled(false);

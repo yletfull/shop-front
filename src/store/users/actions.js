@@ -12,6 +12,9 @@ export const rolesError = createAction(`${NS}/rolesError`);
 export const userDetails = createAction(`${NS}/userDetails`);
 export const userDetailsError = createAction(`${NS}/userDetailsError`);
 
+export const rolesDetails = createAction(`${NS}/rolesDetails`);
+export const rolesDetailsError = createAction(`${NS}/rolesDetailsError`);
+
 export const fetchUsers = (params) => async (dispatch) => {
   try {
     const data = await service.getUsers(params);
@@ -54,7 +57,7 @@ export const fetchUserRoles = ({ userId }) => async (dispatch) => {
 
 export const setUserRoles = ({ userId, ...params }) => async (dispatch) => {
   try {
-    await service.setUserRoles({ userId, params });
+    await service.setUserRoles({ userId, ...params });
   } catch (err) {
     dispatch(userDetailsError(err));
   }
@@ -66,5 +69,15 @@ export const removeUserRole = ({ userId, roleName }) => async (dispatch) => {
     // await service.removeUserRole({ userId, roleName });
   } catch (err) {
     dispatch(userDetailsError(err));
+  }
+};
+
+export const fetchRolesDetails = ({ roleName }) => async (dispatch) => {
+  try {
+    const data = await service.getRolesDetails({ roleName });
+    dispatch(rolesDetails(data.data.data));
+  } catch (err) {
+    dispatch(rolesDetails({}));
+    dispatch(rolesDetailsError(err));
   }
 };

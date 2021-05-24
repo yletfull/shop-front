@@ -8,6 +8,8 @@ import {
   userDetails,
   userDetailsError,
   userRoles,
+  rolesDetails,
+  rolesDetailsError,
 } from './actions';
 
 const initialState = {
@@ -18,6 +20,8 @@ const initialState = {
   userDetails: {},
   userDetailsError: '',
   userRoles: {},
+  rolesDetails: {},
+  rolesDetailsError: '',
 };
 
 const reducer = createReducer(initialState, {
@@ -48,6 +52,14 @@ const reducer = createReducer(initialState, {
   [userRoles]: (state, action) => ({
     ...state,
     userRoles: action.payload,
+  }),
+  [rolesDetails]: (state, action) => ({
+    ...state,
+    rolesDetails: action.payload,
+  }),
+  [rolesDetailsError]: (state, action) => ({
+    ...state,
+    rolesDetailsError: action.payload,
   }),
 });
 

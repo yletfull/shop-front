@@ -1,1 +1,17 @@
 @import '@/theme/include.scss';
+
+.tagsWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.removeRoleButton {
+  color: $color-red-darkest;
+  height: 100%;
+  margin-left: .5rem;
+  padding: 0;
+}
+
+.addRoleButton {
+  margin-left: .5rem;
+}
