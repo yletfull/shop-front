@@ -1,0 +1,5 @@
+@import '@/theme/include.scss';
+
+.segmentVersions {
+  @include table();
+}
