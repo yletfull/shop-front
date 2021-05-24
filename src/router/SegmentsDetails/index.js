@@ -2,7 +2,12 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { formatNumber } from '@/utils/format';
 import AppLayout from '@/components/AppLayout';
-import Button from '@/components/Button';
+import IconPencil from '@/icons/Pencil';
+import IconSync from '@/icons/Sync';
+import IconTrash from '@/icons/Trash';
+import Controls from './Controls';
+import ControlsButton from './ControlsButton';
+import ControlsLink from './ControlsLink';
 import styles from './styles.module.scss';
 
 const SegmentsDetails = function SegmentsDetails() {
@@ -11,29 +16,26 @@ const SegmentsDetails = function SegmentsDetails() {
   const meta = [];
   return (
     <AppLayout headerTitle={`Сегмент #${segmentId}`}>
-      <div className={styles.controls}>
-        <Button
-          appearance="control"
-          className={styles.controlsEdit}
-          disabled
+      <Controls>
+        <ControlsLink
+          to="/"
+          icon={(<IconPencil />)}
         >
           Изменить сегмент
-        </Button>
-        <Button
-          appearance="control"
-          className={styles.controlsUpdate}
+        </ControlsLink>
+        <ControlsButton
+          icon={(<IconSync />)}
           disabled
         >
           Пересчитать
-        </Button>
-        <Button
-          appearance="control"
-          className={styles.controlsRemove}
+        </ControlsButton>
+        <ControlsButton
+          icon={(<IconTrash />)}
           disabled
         >
           В архив
-        </Button>
-      </div>
+        </ControlsButton>
+      </Controls>
 
       <table>
         <tbody>
