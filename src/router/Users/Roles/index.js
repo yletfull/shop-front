@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import routes from './routes';
 
 
@@ -17,7 +17,6 @@ const Roles = function UsersScreen() {
             <Component title={title} />
           </Route>
         ))}
-        <Redirect to={routes[0].path} />
       </Switch>
     </div>
   );

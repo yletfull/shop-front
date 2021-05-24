@@ -3,7 +3,7 @@ import Details from './details';
 
 export const patchs = {
   rolesTable: '/users/roles',
-  details: 'users/roles/:id/details',
+  details: '/users/roles/:id/details',
 };
 
 export const titles = {
@@ -19,6 +19,7 @@ export default [
     meta: {
       title: titles.rolesTable,
     },
+    exact: true,
   },
   {
     path: patchs.details,
@@ -27,5 +28,6 @@ export default [
     meta: {
       title: titles.details,
     },
+    exact: true,
   },
 ];

@@ -1,6 +1,7 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import dayjs from '@/utils/day';
 import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
@@ -60,7 +61,9 @@ const Users = function UsersScreen() {
                 content=""
               >
                 <td>
-                  {user.id || '-'}
+                  <Link to={(location) => ({ location, pathname: `${user.id}/details` })}>
+                    {user.id || '-'}
+                  </Link>
                 </td>
                 <td>
                   {user.login || '-'}
