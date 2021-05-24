@@ -1,6 +1,5 @@
 @import '@/theme/include.scss';
 
 .heading {
-  font-size: 1rem;
-  font-weight: bold;
+  @include heading();
 }
