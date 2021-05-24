@@ -4,7 +4,7 @@ const getUsers = (params) => api.get('api/v1/users', { params })
   .then((data) => data);
 
 
-const getRoles = (params) => api.get('api/v1/roles', { params })
+const getRoles = (params) => api.get('api/v1/rbac/roles', { params })
   .then((data) => data);
 
 export default {
