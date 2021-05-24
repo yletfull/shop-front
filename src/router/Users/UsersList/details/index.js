@@ -107,7 +107,11 @@ const Details = function RolesDetailsScreen() {
 
   const handleRemoveRoleButtonClick = async (e) => {
     const { rolename } = e.target.dataset;
-    dispatch(removeUserRole({ roleName: rolename, userId }));
+    setAddRoleButtonDisabled(true);
+    await dispatch(removeUserRole({ roleName: rolename, userId }));
+    await dispatch(fetchUserDetails({ userId }));
+    await dispatch(fetchUserRoles({ userId }));
+    setAddRoleButtonDisabled(false);
   };
 
   if (isFetching) {
@@ -191,6 +195,7 @@ const Details = function RolesDetailsScreen() {
                         className={styles.removeRoleButton}
                         onClick={handleRemoveRoleButtonClick}
                         data-rolename={role.name}
+                        disabled={addRoleButtonDisabled}
                       >
                         <TimesCircleIcon />
                       </Button>
