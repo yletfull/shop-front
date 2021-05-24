@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { formatNumber } from '@/utils/format';
 import AppLayout from '@/components/AppLayout';
 import IconPencil from '@/icons/Pencil';
 import IconSync from '@/icons/Sync';
@@ -8,6 +7,9 @@ import IconTrash from '@/icons/Trash';
 import Controls from './Controls';
 import ControlsButton from './ControlsButton';
 import ControlsLink from './ControlsLink';
+import SegmentInfo from './SegmentInfo';
+import SegmentAudience from './SegmentAudience';
+import SegmentVersions from './SegmentVersions';
 import styles from './styles.module.scss';
 
 const SegmentsDetails = function SegmentsDetails() {
@@ -37,102 +39,26 @@ const SegmentsDetails = function SegmentsDetails() {
         </ControlsButton>
       </Controls>
 
-      <table>
-        <tbody>
-          <tr>
-            <td>
-              ID
-            </td>
-            <td>
-              {data.id || segmentId}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Название
-            </td>
-            <td>
-              {data.name}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              E-mail
-            </td>
-            <td>
-              {formatNumber(data.emailsCount)}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Телефонов
-            </td>
-            <td>
-              {formatNumber(data.phonesCount)}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Последний расчёт
-            </td>
-            <td>
-              {data.date}
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Доступны новые идентификаторы
-            </td>
-            <td>
-              {data.indetificators}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <SegmentInfo
+        data={data}
+      />
 
-      <h2>
+      <h2 className={styles.heading}>
         Аудитория
       </h2>
 
-      <h2>
+      <SegmentAudience
+        data={data}
+      />
+
+      <h2 className={styles.heading}>
         Версии сегмента и файлы для площадок
       </h2>
 
-      <table className={styles.table}>
-        <tbody>
-          <tr>
-            <th>
-              Дата
-            </th>
-            <th>
-              E-mail
-            </th>
-            <th>
-              Телефонов
-            </th>
-            <th>
-              Скачать файлы для площадок
-            </th>
-          </tr>
+      <SegmentVersions
+        data={meta}
+      />
 
-          {meta.map((row) => (
-            <tr key={row.id}>
-              <td>
-                {row.date}
-              </td>
-              <td>
-                {formatNumber(row.emailsCount)}
-              </td>
-              <td>
-                {formatNumber(row.phonesCount)}
-              </td>
-              <td>
-                {row.files}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </AppLayout>
   );
 };

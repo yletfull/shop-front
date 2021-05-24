@@ -1,19 +1,6 @@
 @import '@/theme/include.scss';
 
-.controls {
-  &Edit {
-    //
-  }
-
-  &Remove {
-    //
-  }
-
-  &Update {
-    //
-  }
-}
-
-.table {
-  @include table();
+.heading {
+  font-size: 1rem;
+  font-weight: bold;
 }
