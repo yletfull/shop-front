@@ -51,3 +51,11 @@ export const fetchUserRoles = ({ userId }) => async (dispatch) => {
     dispatch(userDetailsError(err));
   }
 };
+
+export const setUserRoles = ({ userId, ...params }) => async (dispatch) => {
+  try {
+    await service.setUserRoles({ userId, params });
+  } catch (err) {
+    dispatch(userDetailsError(err));
+  }
+};
