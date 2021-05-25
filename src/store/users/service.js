@@ -1,5 +1,8 @@
 import api from '@/api';
 
+const createUser = (params) => api.post('api/v1/api/v1/user', { ...params })
+  .then((data) => data);
+
 const getUsers = (params) => api.get('api/v1/users', { params })
   .then((data) => data);
 
@@ -35,6 +38,7 @@ const createRole = (params) => api.post('api/v1/rbac/role', { ...params })
   .then((data) => data);
 
 export default {
+  createUser,
   getUsers,
   getAllRoles,
   getUserDetails,

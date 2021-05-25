@@ -5,11 +5,15 @@ import { Link } from 'react-router-dom';
 import dayjs from '@/utils/day';
 import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
+import Button from '@/components/Button';
+import styles from './styles.module.scss';
+import AddUserPopup from './AddUserPopup';
 
 const userTable = function UsersScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
+  const [addUserPopupIsOpen, setAddUserPopupIsOpen] = useState(false);
 
   const usersList = useSelector((state) => state.users.list);
   const users = useRef(usersList);
@@ -26,12 +30,33 @@ const userTable = function UsersScreen() {
     fetchUsersFn();
   }, [dispatch]);
 
+  const handleAddUserOpenPopup = () => {
+    setAddUserPopupIsOpen(true);
+  };
+  const handleAddUserClosePopup = () => {
+    setAddUserPopupIsOpen(false);
+  };
+
   if (isFetching) {
     return <Spinner />;
   }
 
   return (
     <div>
+      <div className={styles.headerWrapper}>
+        <p>
+          Список ролей
+        </p>
+        <Button
+          className={styles.editAbilitiesButton}
+          appearance="control"
+          onClick={handleAddUserOpenPopup}
+        >
+          <span>
+            Добавить пользователя
+          </span>
+        </Button>
+      </div>
       <table>
         <tbody>
           <tr header="">
@@ -91,6 +116,10 @@ const userTable = function UsersScreen() {
             )}
         </tbody>
       </table>
+
+      {addUserPopupIsOpen
+        && <AddUserPopup onClose={handleAddUserClosePopup} />}
+
     </div>
   );
 };

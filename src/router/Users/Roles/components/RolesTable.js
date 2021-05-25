@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import { fetchAllRoles } from '@/store/users/actions';
-import AddRolePopup from './AppRolePopup';
+import AddRolePopup from './AddRolePopup';
 import styles from './styles.module.scss';
 
 const RolesTable = function UsersScreen() {

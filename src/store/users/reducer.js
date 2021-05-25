@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import {
+  createUserError,
   list,
   listError,
   allRoles,
@@ -19,6 +20,7 @@ import {
 } from './actions';
 
 const initialState = {
+  createUserError: '',
   list: [],
   listError: '',
   roles: [],
@@ -37,6 +39,10 @@ const initialState = {
 };
 
 const reducer = createReducer(initialState, {
+  [createUserError]: (state, action) => ({
+    ...state,
+    createUserError: action.payload,
+  }),
   [list]: (state, action) => ({
     ...state,
     list: action.payload,

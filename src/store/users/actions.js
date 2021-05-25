@@ -12,6 +12,8 @@ export const rolesError = createAction(`${NS}/rolesError`);
 export const userDetails = createAction(`${NS}/userDetails`);
 export const userDetailsError = createAction(`${NS}/userDetailsError`);
 export const userSetRoleError = createAction(`${NS}/userSetRoleError`);
+export const createUserError = createAction(`${NS}/createUserError`);
+
 
 export const rolesDetails = createAction(`${NS}/rolesDetails`);
 export const rolesDetailsError = createAction(`${NS}/rolesDetailsError`);
@@ -21,6 +23,14 @@ export const allRoleAbilitiesError = createAction(`${NS}/allRoleAbilitiesError`)
 export const editRoleError = createAction(`${NS}/editRoleError`);
 export const createRoleError = createAction(`${NS}/createRoleError`);
 
+
+export const createUser = (params) => async (dispatch) => {
+  try {
+    await service.createUser(params);
+  } catch (err) {
+    dispatch(createUserError(err));
+  }
+};
 
 export const fetchUsers = (params) => async (dispatch) => {
   try {

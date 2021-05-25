@@ -77,8 +77,6 @@ const EditRolePopup = function EditRolePopup(props) {
     setRoleTitle(value);
   };
 
-  const hasErrors = createRoleError.current;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const abilities = [];
@@ -92,8 +90,8 @@ const EditRolePopup = function EditRolePopup(props) {
       }
     ));
     setSubmitButtomDisabed(false);
-    await dispatch(fetchAllRoles());
-    if (!hasErrors) {
+    if (!createRoleError.current) {
+      await dispatch(fetchAllRoles());
       onClose();
     }
   };
@@ -172,7 +170,7 @@ const EditRolePopup = function EditRolePopup(props) {
                     </Button>
                   </td>
                   <td>
-                    {(hasErrors)
+                    {(createRoleError.current)
                       && (
                         <p className={cx('red', styles.editRoleError)}>
                           Произошла ошибка
