@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useParams } from 'react-router';
 import Button from '@/components/Button';
-import Select from '@/components/Select';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
@@ -21,7 +20,7 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const dispatch = useDispatch();
 
-  const [selectedAbility, setSelectedAbility] = useState();
+  const [selectedAbilities, setSelectedAbilities] = useState([]);
   const [submitButtonDisabled, setSubmitButtomDisabed] = useState();
   const [isFetching, setIsFetching] = useState();
 
@@ -72,7 +71,7 @@ const EditRolePopup = function EditRolePopup(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const abilities = [];
-    abilities.push(selectedAbility);
+    abilities.push(...selectedAbilities);
     if (rolesAbilities.current.length) {
       abilities.push(...rolesAbilities.current.map((el) => el.name));
     }
@@ -84,23 +83,19 @@ const EditRolePopup = function EditRolePopup(props) {
   };
 
   const handleAbilityChange = (e) => {
-    const { value } = e.target;
-    setSelectedAbility(value);
+    const { name } = e.target.dataset;
+    const { checked = false } = e.target;
+    if (checked) {
+      setSelectedAbilities((prev) => [...prev, name]);
+      return;
+    }
+    setSelectedAbilities((prev) => prev
+      .filter((n) => n !== name));
   };
 
   const handleNameInputChange = (e) => {
     const { value } = e.target;
     setRoleTitle(value);
-  };
-
-  const getAllAbilitiesOptions = () => {
-    if (allRoleAbilities.current?.length) {
-      return allRoleAbilities.current.map((ability) => ({
-        text: ability.title,
-        value: ability.name,
-      }));
-    }
-    return [];
   };
 
   return (
@@ -111,53 +106,67 @@ const EditRolePopup = function EditRolePopup(props) {
       {isFetching
         ? <Spinner />
         : (
-          <div>
-            <table>
-              <tbody>
-                <tr>
-                  
-                </tr>
-              </tbody>
-            </table>
-            <form
-              className={styles.addAbilityForm}
-              onSubmit={handleSubmit}
-            >
-              <Select
-                value={selectedAbility}
-                options={getAllAbilitiesOptions(
-                  allRoleAbilities.current
-                )}
-                onChange={handleAbilityChange}
-                resetText="Не выбрано"
-                placeholder="Разрешение"
-                className={styles.select}
-                disabled={!allRoleAbilities.current?.length}
-              />
-
-              <Input
-                value={roleTitle}
-                onChange={handleNameInputChange}
-                className={styles.select}
-                disabled={!allRoleAbilities.current?.length}
-              />
-              <Button
-                type="submit"
-                disabled={submitButtonDisabled}
-                className={styles.addAbilityButton}
-              >
-                Сохранить
-              </Button>
-
-              {(allRoleAbilitiesError.current) && (
-                <p className={cx('red', styles.addAbilityError)}>
-                  Произошла ошибка
-                </p>
-              )}
-
-            </form>
-          </div>
-
+          <table>
+            <tbody>
+              <tr content="">
+                <td>
+                  Добавить разрешения
+                </td>
+                <td>
+                  <form
+                    className={styles.editRoleCheckboxWrapper}
+                  >
+                    {allRoleAbilities.current.map((ability) => (
+                      <label
+                        key={ability.id}
+                        htmlFor={ability.id}
+                      >
+                        <input
+                          type="checkbox"
+                          id={ability.id}
+                          value={ability.name}
+                          onChange={handleAbilityChange}
+                          data-name={ability.name}
+                        />
+                        {ability.title}
+                      </label>
+                    ))}
+                  </form>
+                </td>
+              </tr>
+              <tr content="">
+                <td>
+                  Изменить имя
+                </td>
+                <td>
+                  <Input
+                    value={roleTitle}
+                    onChange={handleNameInputChange}
+                    className={styles.select}
+                    disabled={!allRoleAbilities.current?.length}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <Button
+                    disabled={submitButtonDisabled}
+                    className={styles.editRoleButton}
+                    onClick={handleSubmit}
+                  >
+                    Сохранить
+                  </Button>
+                </td>
+                <td>
+                  {(allRoleAbilitiesError.current) && (
+                    <p className={cx('red', styles.editRoleError)}>
+                      Произошла ошибка
+                    </p>
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         )}
     </Popup>
   );

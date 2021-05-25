@@ -1,6 +1,6 @@
 @import '@/theme/include.scss';
 
-.addAbility {
+.editRole {
   &Button {
     margin-left: 1rem;
     white-space: nowrap;
@@ -9,6 +9,11 @@
   &Error {
     margin-left: 1rem;
     white-space: nowrap;
+  }
+
+  &CheckboxWrapper {
+    display: flex;
+    flex-direction: column;
   }
 }
 
