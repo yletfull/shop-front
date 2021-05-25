@@ -7,10 +7,10 @@ import Spinner from '@/components/Spinner';
 import { fetchRolesDetails, fetchRolesAbilities } from '@/store/users/actions';
 
 // import Tag from '@/components/Tag';
-// import Button from '@/components/Button';
+import Button from '@/components/Button';
 // import Select from '@/components/Select';
 // import TimesCircleIcon from '@/icons/TimesCircle';
-// import styles from './styles.module.scss';
+import styles from './styles.module.scss';
 
 
 const Details = function RolesDetailsScreen() {
@@ -49,9 +49,19 @@ const Details = function RolesDetailsScreen() {
 
   return (
     <div>
-      <p>
-        {`Разрешения для роли "${rolesDetails.current.title}"`}
-      </p>
+      <div className={styles.headerWrapper}>
+        <p>
+          {`Разрешения для роли "${rolesDetails.current.title}"`}
+        </p>
+        <Button
+          className={styles.editAbilitiesButton}
+          appearance="control"
+        >
+          <span>
+            редактировать разрешения
+          </span>
+        </Button>
+      </div>
       <table>
         <tbody>
           <tr header="">
