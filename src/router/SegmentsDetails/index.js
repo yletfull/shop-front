@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import AppLayout from '@/components/AppLayout';
 import IconPencil from '@/icons/Pencil';
 import IconSync from '@/icons/Sync';
 import IconTrash from '@/icons/Trash';
@@ -16,8 +15,9 @@ const SegmentsDetails = function SegmentsDetails() {
   const { id: segmentId } = useParams();
   const data = {};
   const meta = [];
+  console.log(segmentId);
   return (
-    <AppLayout headerTitle={`Сегмент #${segmentId}`}>
+    <div className={styles.segmentsDetails}>
       <Controls>
         <ControlsLink
           to="/"
@@ -58,8 +58,7 @@ const SegmentsDetails = function SegmentsDetails() {
       <SegmentVersions
         data={meta}
       />
-
-    </AppLayout>
+    </div>
   );
 };
 
