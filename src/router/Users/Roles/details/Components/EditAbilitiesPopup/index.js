@@ -71,7 +71,7 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
     >
       <table>
         <tr content="">
-          <td>
+          <td className={styles.addAbilityText}>
             Добавить разрешение
           </td>
           <td>
@@ -90,10 +90,10 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
               />
               <Button
                 type="submit"
-                className={styles.addAbilityButton}
                 disabled={addAbilityButtonDisabled}
+                className={styles.addAbilityButton}
               >
-                Добавить роль
+                Добавить разрешение
               </Button>
               {addAbilityError.current && (
               <p className={cx('red', styles.addAbilityError)}>

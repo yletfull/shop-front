@@ -12,8 +12,22 @@
 }
 
 .addAbility {
+  &Text {
+    vertical-align: text-top;
+  }
+
   &Button {
-    margin-left: .5rem;
+    margin-top: .5rem;
+  }
+
+  &Form {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &Error {
+    margin-left: 1rem;
   }
 }
 

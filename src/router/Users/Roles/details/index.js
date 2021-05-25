@@ -7,7 +7,7 @@ import Spinner from '@/components/Spinner';
 import { fetchRolesDetails, fetchRolesAbilities } from '@/store/users/actions';
 import Button from '@/components/Button';
 import TimesCircleIcon from '@/icons/TimesCircle';
-import EditAbilitiesPopup from './EditAbilitiesPopup';
+import EditAbilitiesPopup from './Components/EditAbilitiesPopup';
 import styles from './styles.module.scss';
 
 
