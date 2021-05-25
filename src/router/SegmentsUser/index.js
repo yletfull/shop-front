@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import AppLayout from '@/components/AppLayout';
 import CommonInfo from './CommonInfo';
 import SearchForm from './SearchForm';
 import UserAttributes from './UserAttributes';
@@ -16,7 +15,7 @@ const SegmentsUser = function SegmentsUser() {
   };
 
   return (
-    <AppLayout headerTitle="Портрет пользователя">
+    <div className={styles.segmentsUser}>
       <SearchForm
         inputValue={user}
         onSubmit={handleSearchFormSubmit}
@@ -47,7 +46,7 @@ const SegmentsUser = function SegmentsUser() {
           />
         </Fragment>
       )}
-    </AppLayout>
+    </div>
   );
 };
 
