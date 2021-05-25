@@ -7,7 +7,7 @@ import Button from '@/components/Button';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
-import { fetchAllRoleAbilities, editRole } from '@/store/users/actions';
+import { fetchAllRoleAbilities, editRole, fetchRolesAbilities } from '@/store/users/actions';
 import styles from './styles.module.scss';
 
 
@@ -77,8 +77,8 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
     }
     setAddAbilityButtonDisabled(true);
     await dispatch(editRole({ roleName, roleTitle, abilities }));
-    await dispatch(fetchAllRoleAbilities({ roleName }));
     setAddAbilityButtonDisabled(false);
+    await dispatch(fetchRolesAbilities({ roleName }));
     onClose();
   };
 
@@ -124,7 +124,7 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
               <Button
                 type="submit"
                 disabled={addAbilityButtonDisabled
-                        || !allRoleAbilities.current?.length}
+                  || !allRoleAbilities.current?.length}
                 className={styles.addAbilityButton}
               >
                 Добавить разрешение
