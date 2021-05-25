@@ -100,7 +100,7 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   return (
     <Popup
       onClose={onClose}
-      title="Изменить разрешения"
+      title="Добавить разрешение"
     >
       {isFetching
         ? <Spinner />
