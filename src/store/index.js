@@ -7,22 +7,33 @@ import upload from './upload';
 import users from './users';
 import ui from './ui';
 
-const rootReducer = combineReducers({
+const createRootReducer = (asyncReducers = {}) => combineReducers({
   [auth.NS]: auth.reducer,
   [upload.NS]: upload.reducer,
   [users.NS]: users.reducer,
   [ui.NS]: ui.reducer,
+  ...asyncReducers,
 });
 
-export const configureStore = function configureStore() {
+const configureStore = function configureStore() {
   const middleware = process.env.NODE_ENV === 'development'
     ? applyMiddleware(thunk, logger)
     : applyMiddleware(thunk);
 
-  return createStore(
-    rootReducer,
+  const store = createStore(
+    createRootReducer(),
     composeWithDevTools(middleware),
   );
+
+  store.asyncReducers = {};
+  store.injectReducer = (key, asyncReducer) => {
+    store.asyncReducers[key] = asyncReducer;
+    store.replaceReducer(createRootReducer(store.asyncReducers));
+  };
+
+  return store;
 };
 
-export default configureStore();
+const store = configureStore();
+export const { injectReducer } = store;
+export default store;
