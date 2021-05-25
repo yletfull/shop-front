@@ -57,7 +57,7 @@ const Details = function RolesDetailsScreen() {
       .filter((ability) => ability.name !== abilityName)
       .map((ability) => ability.name);
     const roleTitle = rolesDetails.current.title;
-    setRemoveAbilityButtonDisabled(true);
+    setRemoveAbilityButtonDisabled(abilityName);
     await dispatch(editRole({ roleName, roleTitle, abilities }));
     await dispatch(fetchRolesAbilities({ roleName }));
     setRemoveAbilityButtonDisabled(false);
@@ -112,7 +112,7 @@ const Details = function RolesDetailsScreen() {
                     className={styles.removeAbilityButton}
                     onClick={handleRemoveAbilityButtonClick}
                     data-ability-name={ability.name}
-                    disabled={removeAbilityButtonDisabled}
+                    disabled={removeAbilityButtonDisabled === ability.name}
                   >
                     <TimesCircleIcon />
                   </Button>

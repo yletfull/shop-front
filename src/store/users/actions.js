@@ -112,7 +112,6 @@ export const editRole = (
 ) => async (dispatch) => {
   try {
     await service.editRole({ roleName, ...params });
-    console.log(roleName, params);
   } catch (err) {
     dispatch(editRoleError(err));
   }
