@@ -106,67 +106,69 @@ const EditRolePopup = function EditRolePopup(props) {
       {isFetching
         ? <Spinner />
         : (
-          <table>
-            <tbody>
-              <tr content="">
-                <td>
-                  Добавить разрешения
-                </td>
-                <td>
-                  <form
-                    className={styles.editRoleCheckboxWrapper}
-                  >
-                    {allRoleAbilities.current.map((ability) => (
-                      <label
-                        key={ability.id}
-                        htmlFor={ability.id}
-                      >
-                        <input
-                          type="checkbox"
-                          id={ability.id}
-                          value={ability.name}
-                          onChange={handleAbilityChange}
-                          data-name={ability.name}
-                        />
-                        {ability.title}
-                      </label>
-                    ))}
-                  </form>
-                </td>
-              </tr>
-              <tr content="">
-                <td>
-                  Изменить имя
-                </td>
-                <td>
-                  <Input
-                    value={roleTitle}
-                    onChange={handleNameInputChange}
-                    className={styles.select}
-                    disabled={!allRoleAbilities.current?.length}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <Button
-                    disabled={submitButtonDisabled}
-                    className={styles.editRoleButton}
-                    onClick={handleSubmit}
-                  >
-                    Сохранить
-                  </Button>
-                </td>
-                <td>
-                  {(allRoleAbilitiesError.current) && (
-                    <p className={cx('red', styles.editRoleError)}>
-                      Произошла ошибка
-                    </p>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <form onSubmit={handleSubmit}>
+            <table>
+              <tbody>
+                <tr content="">
+                  <td className={styles.editRoleAddAbilitiesTextWrapper}>
+                    Добавить разрешения:
+                  </td>
+                  <td>
+                    <form
+                      className={styles.editRoleCheckboxWrapper}
+                    >
+                      {allRoleAbilities.current.map((ability) => (
+                        <label
+                          key={ability.id}
+                          htmlFor={ability.id}
+                          className={styles.editRoleCheckboxLabel}
+                        >
+                          <input
+                            type="checkbox"
+                            id={ability.id}
+                            value={ability.name}
+                            onChange={handleAbilityChange}
+                            data-name={ability.name}
+                          />
+                          {ability.title}
+                        </label>
+                      ))}
+                    </form>
+                  </td>
+                </tr>
+                <tr content="">
+                  <td>
+                    Изменить имя:
+                  </td>
+                  <td>
+                    <Input
+                      value={roleTitle}
+                      onChange={handleNameInputChange}
+                      className={styles.select}
+                      disabled={!allRoleAbilities.current?.length}
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <Button
+                      disabled={submitButtonDisabled}
+                      type="submit"
+                    >
+                      Сохранить
+                    </Button>
+                  </td>
+                  <td>
+                    {(allRoleAbilitiesError.current) && (
+                      <p className={cx('red', styles.editRoleError)}>
+                        Произошла ошибка
+                      </p>
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </form>
         )}
     </Popup>
   );

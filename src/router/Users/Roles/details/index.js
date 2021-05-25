@@ -7,7 +7,7 @@ import Spinner from '@/components/Spinner';
 import { fetchRolesDetails, fetchRolesAbilities, editRole } from '@/store/users/actions';
 import Button from '@/components/Button';
 import TimesCircleIcon from '@/icons/TimesCircle';
-import EditAbilitiesPopup from './Components/EditAbilitiesPopup';
+import EditRolePopup from './Components/EditRole';
 import styles from './styles.module.scss';
 
 
@@ -45,10 +45,10 @@ const Details = function RolesDetailsScreen() {
     fetchRolesDetailsFn();
   }, [dispatch, roleName]);
 
-  const handleEditAbilitiesPopupOpen = () => {
+  const handleEditRolePopupOpen = () => {
     setEditAbilitiesPopupIsOpen(true);
   };
-  const handleEditAbilitiesPopupClose = () => {
+  const handleEditRolePopupClose = () => {
     setEditAbilitiesPopupIsOpen(false);
   };
   const handleRemoveAbilityButtonClick = async (e) => {
@@ -76,10 +76,10 @@ const Details = function RolesDetailsScreen() {
         <Button
           className={styles.editAbilitiesButton}
           appearance="control"
-          onClick={handleEditAbilitiesPopupOpen}
+          onClick={handleEditRolePopupOpen}
         >
           <span>
-            добавить разрешение
+            Изменить роль
           </span>
         </Button>
       </div>
@@ -131,7 +131,7 @@ const Details = function RolesDetailsScreen() {
       </table>
 
       {editAbilitiesPopupIsOpen
-      && <EditAbilitiesPopup onClose={handleEditAbilitiesPopupClose} />}
+      && <EditRolePopup onClose={handleEditRolePopupClose} />}
 
     </div>
   );
