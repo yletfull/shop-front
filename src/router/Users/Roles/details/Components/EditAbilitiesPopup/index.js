@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useParams } from 'react-router';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
+import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
 import { fetchAllRoleAbilities, editRole, fetchRolesAbilities } from '@/store/users/actions';
@@ -15,13 +16,13 @@ const propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
+const EditRolePopup = function EditRolePopup(props) {
   const { onClose } = props;
 
   const dispatch = useDispatch();
 
   const [selectedAbility, setSelectedAbility] = useState();
-  const [addAbilityButtonDisabled, setAddAbilityButtonDisabled] = useState();
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState();
   const [isFetching, setIsFetching] = useState();
 
   const rolesAbilitiesData = useSelector((state) => state.users.rolesAbilities);
@@ -54,6 +55,7 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   useLayoutEffect(() => {
     rolesDetails.current = rolesDetailsData;
   }, [rolesDetailsData]);
+  const [roleTitle, setRoleTitle] = useState(rolesDetails.current.title);
 
 
   useEffect(() => {
@@ -67,17 +69,16 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
 
   const { roleName } = useParams();
 
-  const handleSubmitAbility = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const abilities = [];
-    const roleTitle = rolesDetails.current.title;
     abilities.push(selectedAbility);
     if (rolesAbilities.current.length) {
       abilities.push(...rolesAbilities.current.map((el) => el.name));
     }
-    setAddAbilityButtonDisabled(true);
+    setSubmitButtomDisabed(true);
     await dispatch(editRole({ roleName, roleTitle, abilities }));
-    setAddAbilityButtonDisabled(false);
+    setSubmitButtomDisabed(false);
     await dispatch(fetchRolesAbilities({ roleName }));
     onClose();
   };
@@ -85,6 +86,11 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   const handleAbilityChange = (e) => {
     const { value } = e.target;
     setSelectedAbility(value);
+  };
+
+  const handleNameInputChange = (e) => {
+    const { value } = e.target;
+    setRoleTitle(value);
   };
 
   const getAllAbilitiesOptions = () => {
@@ -106,9 +112,16 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
         ? <Spinner />
         : (
           <div>
+            <table>
+              <tbody>
+                <tr>
+                  
+                </tr>
+              </tbody>
+            </table>
             <form
               className={styles.addAbilityForm}
-              onSubmit={handleSubmitAbility}
+              onSubmit={handleSubmit}
             >
               <Select
                 value={selectedAbility}
@@ -121,13 +134,19 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
                 className={styles.select}
                 disabled={!allRoleAbilities.current?.length}
               />
+
+              <Input
+                value={roleTitle}
+                onChange={handleNameInputChange}
+                className={styles.select}
+                disabled={!allRoleAbilities.current?.length}
+              />
               <Button
                 type="submit"
-                disabled={addAbilityButtonDisabled
-                  || !allRoleAbilities.current?.length}
+                disabled={submitButtonDisabled}
                 className={styles.addAbilityButton}
               >
-                Добавить разрешение
+                Сохранить
               </Button>
 
               {(allRoleAbilitiesError.current) && (
@@ -136,11 +155,6 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
                 </p>
               )}
 
-              {(!allRoleAbilities.current?.length) && (
-                <p className={cx('red', styles.addAbilityError)}>
-                  Нет доступных разрешений
-                </p>
-              )}
             </form>
           </div>
 
@@ -149,6 +163,6 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   );
 };
 
-EditAbilitiesPopup.propTypes = propTypes;
+EditRolePopup.propTypes = propTypes;
 
-export default EditAbilitiesPopup;
+export default EditRolePopup;
