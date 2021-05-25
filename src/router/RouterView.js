@@ -21,7 +21,10 @@ const RouterView = function RouterView() {
                   </title>
                 )}
               </Helmet>
-              <Component {...props} />
+              <Component
+                defaultTitle={title}
+                {...props}
+              />
             </Fragment>
           )}
         </Route>
