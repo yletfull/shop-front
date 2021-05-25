@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Auth from '@/router/Auth';
 import routes from './routes';
 
 const RouterView = function RouterView() {
@@ -21,7 +22,10 @@ const RouterView = function RouterView() {
                   </title>
                 )}
               </Helmet>
-              <Component {...props} />
+              <Auth
+                Component={Component}
+                props={props}
+              />
             </Fragment>
           )}
         </Route>
