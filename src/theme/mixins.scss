@@ -4,6 +4,7 @@
   background: transparent;
   border: none;
   color: inherit;
+  cursor: pointer;
   display: inline-flex;
   font-family: inherit;
   font-size: 1em;
@@ -11,6 +12,11 @@
   line-height: inherit;
   margin: 0;
   padding: 0;
+}
+
+@mixin heading {
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 @mixin table {
