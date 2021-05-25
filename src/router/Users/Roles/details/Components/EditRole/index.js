@@ -7,7 +7,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
-import { fetchAllRoleAbilities, editRole, fetchRolesAbilities } from '@/store/users/actions';
+import { fetchAllRoleAbilities, editRole, fetchRolesAbilities, fetchRolesDetails } from '@/store/users/actions';
 import styles from './styles.module.scss';
 
 
@@ -68,20 +68,6 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const { roleName } = useParams();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const abilities = [];
-    abilities.push(...selectedAbilities);
-    if (rolesAbilities.current.length) {
-      abilities.push(...rolesAbilities.current.map((el) => el.name));
-    }
-    setSubmitButtomDisabed(true);
-    await dispatch(editRole({ roleName, roleTitle, abilities }));
-    setSubmitButtomDisabed(false);
-    await dispatch(fetchRolesAbilities({ roleName }));
-    onClose();
-  };
-
   const handleAbilityChange = (e) => {
     const { name } = e.target.dataset;
     const { checked = false } = e.target;
@@ -96,6 +82,23 @@ const EditRolePopup = function EditRolePopup(props) {
   const handleNameInputChange = (e) => {
     const { value } = e.target;
     setRoleTitle(value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const abilities = [];
+    abilities.push(...selectedAbilities);
+    if (rolesAbilities.current.length) {
+      abilities.push(...rolesAbilities.current.map((el) => el.name));
+    }
+    setSubmitButtomDisabed(true);
+    await dispatch(editRole(
+      { roleName: roleName.trim(), roleTitle, abilities }
+    ));
+    setSubmitButtomDisabed(false);
+    await dispatch(fetchRolesDetails({ roleName }));
+    await dispatch(fetchRolesAbilities({ roleName }));
+    onClose();
   };
 
   return (

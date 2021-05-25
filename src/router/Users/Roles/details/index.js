@@ -71,7 +71,7 @@ const Details = function RolesDetailsScreen() {
     <div>
       <div className={styles.headerWrapper}>
         <p>
-          {`Разрешения для роли "${rolesDetails.current.title}"`}
+          {`Разрешения для роли "${rolesDetails.current.title}`}
         </p>
         <Button
           className={styles.editAbilitiesButton}
