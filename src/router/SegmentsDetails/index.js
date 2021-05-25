@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { setHeader } from '@/store/ui/actions';
 import IconPencil from '@/icons/Pencil';
 import IconSync from '@/icons/Sync';
 import IconTrash from '@/icons/Trash';
@@ -11,11 +14,25 @@ import SegmentAudience from './SegmentAudience';
 import SegmentVersions from './SegmentVersions';
 import styles from './styles.module.scss';
 
-const SegmentsDetails = function SegmentsDetails() {
+const propTypes = {
+  defaultTitle: PropTypes.string,
+};
+
+const defaultProps = {
+  defaultTitle: '',
+};
+
+const SegmentsDetails = function SegmentsDetails({ defaultTitle }) {
+  const dispatch = useDispatch();
+
   const { id: segmentId } = useParams();
+
+  useEffect(() => {
+    dispatch(setHeader(`${defaultTitle} #${segmentId}`));
+  }, [dispatch, defaultTitle, segmentId]);
+
   const data = {};
   const meta = [];
-  console.log(segmentId);
   return (
     <div className={styles.segmentsDetails}>
       <Controls>
@@ -61,5 +78,8 @@ const SegmentsDetails = function SegmentsDetails() {
     </div>
   );
 };
+
+SegmentsDetails.propTypes = propTypes;
+SegmentsDetails.defaultProps = defaultProps;
 
 export default SegmentsDetails;
