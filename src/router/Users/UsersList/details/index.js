@@ -170,7 +170,7 @@ const Details = function RolesDetailsScreen() {
               Создан
             </td>
             <td>
-              {dayjs(userDetails.current.createdAt, 'YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.current.createdAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -179,7 +179,7 @@ const Details = function RolesDetailsScreen() {
               Обновлен
             </td>
             <td>
-              {dayjs(userDetails.current.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.current.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -250,7 +250,6 @@ const Details = function RolesDetailsScreen() {
               </form>
             </td>
           </tr>
-
 
         </tbody>
       </table>
