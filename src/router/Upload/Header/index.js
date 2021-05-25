@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
-import dayjs from '@/utils/day';
+import { formatDate } from '@/utils/format';
 
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
@@ -28,7 +28,7 @@ const getHeaderTempalteContent = (data) => [[
   { title: 'Всего РК', value: '-', id: 1 },
 ],
 [
-  { title: 'Последняя загрузка во ВК', value: dayjs(data.createdAt).format('DD.MM.YYYY HH:MM:ss'), id: 0 },
+  { title: 'Последняя загрузка во ВК', value: formatDate(data.createdAt, 'DD.MM.YYYY HH:MM:ss'), id: 0 },
   { title: 'Всего РК', value: '-', id: 1 },
   { title: 'Новых РК', value: '-', id: 2 },
   { title: 'Ошибок', value: '-', valueColor: 'red', id: 3 },

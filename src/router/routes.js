@@ -5,11 +5,11 @@ import Upload from './Upload';
 import Users from './Users';
 
 export const patchs = {
-  upload: '/upload',
-  users: '/users',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
   segmentsUser: '/segments/user/',
+  upload: '/upload',
+  users: '/users',
 };
 
 export const titles = {
