@@ -5,11 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
 import { fetchRolesDetails, fetchRolesAbilities } from '@/store/users/actions';
-
-// import Tag from '@/components/Tag';
 import Button from '@/components/Button';
-// import Select from '@/components/Select';
-// import TimesCircleIcon from '@/icons/TimesCircle';
+import TimesCircleIcon from '@/icons/TimesCircle';
+import EditAbilitiesPopup from './EditAbilitiesPopup';
 import styles from './styles.module.scss';
 
 
@@ -17,6 +15,9 @@ const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
+  const [
+    editAbilitiesPopupIsOpen, setEditAbilitiesPopupIsOpen,
+  ] = useState(false);
 
   const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
   const rolesDetails = useRef(rolesDetailsData);
@@ -41,11 +42,16 @@ const Details = function RolesDetailsScreen() {
     fetchRolesDetailsFn();
   }, [dispatch, roleName]);
 
+  const handleEditAbilitiesPopupOpen = () => {
+    setEditAbilitiesPopupIsOpen(true);
+  };
+  const handleEditAbilitiesPopupClose = () => {
+    setEditAbilitiesPopupIsOpen(false);
+  };
+
   if (isFetching) {
     return <Spinner />;
   }
-
-  console.log(rolesDetails.current);
 
   return (
     <div>
@@ -56,9 +62,10 @@ const Details = function RolesDetailsScreen() {
         <Button
           className={styles.editAbilitiesButton}
           appearance="control"
+          onClick={handleEditAbilitiesPopupOpen}
         >
           <span>
-            редактировать разрешения
+            добавить разрешение
           </span>
         </Button>
       </div>
@@ -68,7 +75,7 @@ const Details = function RolesDetailsScreen() {
             <td>
               Имя
             </td>
-            <td>
+            <td colSpan="2">
               Права
             </td>
           </tr>
@@ -85,6 +92,17 @@ const Details = function RolesDetailsScreen() {
                 <td>
                   {ability.title}
                 </td>
+                <td>
+                  <Button
+                    appearance="control"
+                    className={styles.removeAbilityButton}
+                    // onClick={handleRemoveAbilityButtonClick}
+                    data-ability={ability.name}
+                    // disabled={removeAbilityButtonDisabled}
+                  >
+                    <TimesCircleIcon />
+                  </Button>
+                </td>
               </tr>
             ))
             : (
@@ -97,6 +115,10 @@ const Details = function RolesDetailsScreen() {
 
         </tbody>
       </table>
+
+      {editAbilitiesPopupIsOpen
+      && <EditAbilitiesPopup onClose={handleEditAbilitiesPopupClose} />}
+
     </div>
   );
 };
