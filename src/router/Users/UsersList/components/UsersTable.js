@@ -2,7 +2,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import dayjs from '@/utils/day';
+import { formatDate } from '@/utils/format';
 import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
 
@@ -75,10 +75,10 @@ const userTable = function UsersScreen() {
                   {user.phone || '-'}
                 </td>
                 <td>
-                  {dayjs(user.createdAt, 'YYYY:MM:DD HH:mm:ss')}
+                  {formatDate(user.createdAt, 'YYYY:MM:DD HH:mm:ss')}
                 </td>
                 <td>
-                  {dayjs(user.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
+                  {formatDate(user.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
                 </td>
               </tr>
             ))

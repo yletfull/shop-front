@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
 import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles } from '@/store/users/actions';
-import dayjs from '@/utils/day';
+import { formatDate } from '@/utils/format';
 import Tag from '@/components/Tag';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
@@ -132,7 +132,7 @@ const Details = function RolesDetailsScreen() {
               Создан
             </td>
             <td>
-              {dayjs(userDetails.current.createdAt, 'YYYY:MM:DD HH:mm:ss')}
+              {formatDate(userDetails.current.createdAt, 'YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -141,7 +141,7 @@ const Details = function RolesDetailsScreen() {
               Обновлен
             </td>
             <td>
-              {dayjs(userDetails.current.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
+              {formatDate(userDetails.current.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
