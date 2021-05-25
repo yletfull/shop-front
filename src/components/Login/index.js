@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { authSignIn } from '@/store/auth/actions';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
-import { authSignIn } from '../../store/auth/actions';
 import styles from './styles.module.scss';
 
 const Upload = function UploadScreen() {
