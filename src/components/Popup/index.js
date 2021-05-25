@@ -1,14 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-// import cx from 'classnames';
 import TimesIcon from '@/icons/Times';
 import Button from '@/components/Button';
 import styles from './styles.module.scss';
 
 const propTypes = {
   title: PropTypes.string,
-  content: PropTypes.element.isRequired,
   onClose: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.element,
