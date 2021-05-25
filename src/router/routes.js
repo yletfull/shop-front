@@ -29,6 +29,7 @@ export default [
     meta: {
       title: titles.main,
     },
+    title: titles.upload,
   },
   {
     path: patchs.users,
@@ -37,6 +38,7 @@ export default [
     meta: {
       title: titles.users,
     },
+    title: titles.users,
   },
   {
     Component: SegmentsList,
