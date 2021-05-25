@@ -1,13 +1,12 @@
-/* eslint-disable react/no-array-index-key */
-
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-// import Select from '@/components/Select';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
+import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
+import { fetchAllRoleAbilities } from '@/store/users/actions';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -17,32 +16,46 @@ const propTypes = {
 const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   const { onClose } = props;
 
-  const rolesAbilitiesData = useSelector((state) => state.users.rolesAbilities);
-  const rolesAbilities = useRef(rolesAbilitiesData);
-  useLayoutEffect(() => {
-    rolesAbilities.current = rolesAbilitiesData;
-  }, [rolesAbilitiesData]);
-
-  const addAbilityErrorData = useSelector(
-    (state) => state.users.addAbilityError
-  );
-  const addAbilityError = useRef(addAbilityErrorData);
-  useLayoutEffect(() => {
-    addAbilityError.current = addAbilityErrorData;
-  }, [addAbilityErrorData]);
+  const dispatch = useDispatch();
 
   const [selectedAbility, setSelectedAbility] = useState();
   const [addAbilityButtonDisabled, setAddAbilityButtonDisabled] = useState();
+  const [isFetching, setIsFetching] = useState();
+
+  const allRoleAbilitiesData = useSelector(
+    (state) => state.users.allRolesAbilities
+  );
+  const allRoleAbilities = useRef(allRoleAbilitiesData);
+  useLayoutEffect(() => {
+    allRoleAbilities.current = allRoleAbilitiesData;
+  }, [allRoleAbilitiesData]);
+
+  const allRoleAbilitiesErrorData = useSelector(
+    (state) => state.users.allRoleAbilitiesError
+  );
+  const allRoleAbilitiesError = useRef(allRoleAbilitiesErrorData);
+  useLayoutEffect(() => {
+    allRoleAbilitiesError.current = allRoleAbilitiesErrorData;
+  }, [allRoleAbilitiesErrorData]);
+
+  useEffect(() => {
+    const fetchAllAbilitiesFn = async () => {
+      setIsFetching(true);
+      await dispatch(fetchAllRoleAbilities());
+      setIsFetching(false);
+    };
+    fetchAllAbilitiesFn();
+  }, [dispatch]);
+
 
   const handleSubmitAbility = async (e) => {
     e.preventDefault();
     const abilityArr = [];
     abilityArr.push(selectedAbility);
-    if (rolesAbilities.current.length) {
-      abilityArr.push(...rolesAbilities.current.map((el) => el.name));
+    if (allRoleAbilities.current.length) {
+      abilityArr.push(...allRoleAbilities.current.map((el) => el.name));
     }
     setAddAbilityButtonDisabled(true);
-    console.log(abilityArr);
     // await dispatch(setUserRoles({ userId, ...roles }));
     // await dispatch(fetchUserDetails({ userId }));
     // await dispatch(fetchUserRoles({ userId }));
@@ -55,8 +68,8 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
   };
 
   const getAllAbilitiesOptions = () => {
-    if (rolesAbilities.current?.length) {
-      return rolesAbilities.current.map((ability) => ({
+    if (allRoleAbilities.current?.length) {
+      return allRoleAbilities.current.map((ability) => ({
         text: ability.title,
         value: ability.name,
       }));
@@ -69,41 +82,49 @@ const EditAbilitiesPopup = function EditAbilitiesPopup(props) {
       onClose={onClose}
       title="Изменить разрешения"
     >
-      <table>
-        <tr content="">
-          <td className={styles.addAbilityText}>
-            Добавить разрешение
-          </td>
-          <td>
+      {isFetching
+        ? <Spinner />
+        : (
+          <div>
             <form
-              className={styles.addRoleForm}
+              className={styles.addAbilityForm}
               onSubmit={handleSubmitAbility}
             >
               <Select
                 value={selectedAbility}
-                options={getAllAbilitiesOptions(rolesAbilities.current)}
+                options={getAllAbilitiesOptions(
+                  allRoleAbilities.current
+                )}
                 onChange={handleAbilityChange}
                 resetText="Не выбрано"
                 placeholder="Выбрать роль"
                 className={styles.select}
-                disabled={!rolesAbilities.current?.length}
+                disabled={!allRoleAbilities.current?.length}
               />
               <Button
                 type="submit"
-                disabled={addAbilityButtonDisabled}
+                disabled={addAbilityButtonDisabled
+                        || !allRoleAbilities.current?.length}
                 className={styles.addAbilityButton}
               >
                 Добавить разрешение
               </Button>
-              {addAbilityError.current && (
-              <p className={cx('red', styles.addAbilityError)}>
-                Произошла ошибка
-              </p>
+
+              {(allRoleAbilitiesError.current) && (
+                <p className={cx('red', styles.addAbilityError)}>
+                  Произошла ошибка
+                </p>
+              )}
+
+              {(!allRoleAbilities.current?.length) && (
+                <p className={cx('red', styles.addAbilityError)}>
+                  Нет доступных разрешений
+                </p>
               )}
             </form>
-          </td>
-        </tr>
-      </table>
+          </div>
+
+        )}
     </Popup>
   );
 };

@@ -1,23 +1,9 @@
 @import '@/theme/include.scss';
 
-.headerWrapper {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.editAbilitiesButton {
-  margin-left: .65rem;
-}
-
 .addAbility {
-  &Text {
-    vertical-align: text-top;
-  }
-
   &Button {
-    margin-top: .5rem;
+    margin-left: 1rem;
+    white-space: nowrap;
   }
 
   &Form {
@@ -28,6 +14,7 @@
 
   &Error {
     margin-left: 1rem;
+    white-space: nowrap;
   }
 }
 

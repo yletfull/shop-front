@@ -16,6 +16,8 @@ export const userSetRoleError = createAction(`${NS}/userSetRoleError`);
 export const rolesDetails = createAction(`${NS}/rolesDetails`);
 export const rolesDetailsError = createAction(`${NS}/rolesDetailsError`);
 export const rolesAbilities = createAction(`${NS}/rolesAbilities`);
+export const allRoleAbilities = createAction(`${NS}/allRoleAbilities`);
+export const allRoleAbilitiesError = createAction(`${NS}/allRoleAbilitiesError`);
 
 export const fetchUsers = (params) => async (dispatch) => {
   try {
@@ -90,5 +92,15 @@ export const fetchRolesAbilities = ({ roleName }) => async (dispatch) => {
   } catch (err) {
     dispatch(rolesAbilities({}));
     dispatch(userSetRoleError(err));
+  }
+};
+
+export const fetchAllRoleAbilities = () => async (dispatch) => {
+  try {
+    const data = await service.getAllRoleAbilities();
+    dispatch(allRoleAbilities(data.data.data));
+  } catch (err) {
+    dispatch(allRoleAbilities({}));
+    dispatch(allRoleAbilitiesError(err));
   }
 };

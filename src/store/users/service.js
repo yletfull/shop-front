@@ -25,6 +25,9 @@ const getRolesDetails = ({ roleName }) => api.get(`api/v1/rbac/role/${roleName}`
 const getRoleAbilities = ({ roleName }) => api.get(`api/v1/rbac/role/${roleName}/abilities`)
   .then((data) => data);
 
+const getAllRoleAbilities = () => api.get('api/v1/rbac/abilities')
+  .then((data) => data);
+
 export default {
   getUsers,
   getAllRoles,
@@ -34,4 +37,5 @@ export default {
   removeUserRole,
   getRolesDetails,
   getRoleAbilities,
+  getAllRoleAbilities,
 };
