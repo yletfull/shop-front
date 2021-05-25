@@ -5,6 +5,7 @@ import Upload from './Upload';
 import Users from './Users';
 
 export const patchs = {
+  segments: '/segments',
   upload: '/upload',
   users: '/users',
   segments: '/segments',
