@@ -14,6 +14,7 @@ import {
   rolesAbilities,
   allRoleAbilities,
   allRoleAbilitiesError,
+  editRoleError,
 } from './actions';
 
 const initialState = {
@@ -30,6 +31,7 @@ const initialState = {
   rolesAbilities: '',
   allRoleAbilities: [],
   allRoleAbilitiesError: '',
+  editRoleError: '',
 };
 
 const reducer = createReducer(initialState, {
@@ -84,6 +86,10 @@ const reducer = createReducer(initialState, {
   [allRoleAbilitiesError]: (state, action) => ({
     ...state,
     allRoleAbilitiesError: action.payload,
+  }),
+  [editRoleError]: (state, action) => ({
+    ...state,
+    editRoleError: action.payload,
   }),
 });
 

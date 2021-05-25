@@ -28,6 +28,9 @@ const getRoleAbilities = ({ roleName }) => api.get(`api/v1/rbac/role/${roleName}
 const getAllRoleAbilities = () => api.get('api/v1/rbac/abilities')
   .then((data) => data);
 
+const editRole = ({ roleName, ...params }) => api.patch(`api/v1/rbac/role/${roleName}`, { ...params })
+  .then((data) => data);
+
 export default {
   getUsers,
   getAllRoles,
@@ -38,4 +41,5 @@ export default {
   getRolesDetails,
   getRoleAbilities,
   getAllRoleAbilities,
+  editRole,
 };

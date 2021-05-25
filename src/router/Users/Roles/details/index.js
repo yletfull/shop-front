@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
-import { fetchRolesDetails, fetchRolesAbilities } from '@/store/users/actions';
+import { fetchRolesDetails, fetchRolesAbilities, editRole } from '@/store/users/actions';
 import Button from '@/components/Button';
 import TimesCircleIcon from '@/icons/TimesCircle';
 import EditAbilitiesPopup from './Components/EditAbilitiesPopup';
@@ -17,6 +17,9 @@ const Details = function RolesDetailsScreen() {
   const [isFetching, setIsFetching] = useState(false);
   const [
     editAbilitiesPopupIsOpen, setEditAbilitiesPopupIsOpen,
+  ] = useState(false);
+  const [
+    removeAbilityButtonDisabled, setRemoveAbilityButtonDisabled,
   ] = useState(false);
 
   const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
@@ -47,6 +50,17 @@ const Details = function RolesDetailsScreen() {
   };
   const handleEditAbilitiesPopupClose = () => {
     setEditAbilitiesPopupIsOpen(false);
+  };
+  const handleRemoveAbilityButtonClick = async (e) => {
+    const { abilityName } = e.target.dataset;
+    const abilities = rolesAbilities.current
+      .filter((ability) => ability.name !== abilityName)
+      .map((ability) => ability.name);
+    const roleTitle = rolesDetails.current.title;
+    setRemoveAbilityButtonDisabled(true);
+    await dispatch(editRole({ roleName, roleTitle, abilities }));
+    await dispatch(fetchRolesAbilities({ roleName }));
+    setRemoveAbilityButtonDisabled(false);
   };
 
   if (isFetching) {
@@ -92,13 +106,13 @@ const Details = function RolesDetailsScreen() {
                 <td>
                   {ability.title}
                 </td>
-                <td>
+                <td className={styles.removeAbilityButtonTd}>
                   <Button
                     appearance="control"
                     className={styles.removeAbilityButton}
-                    // onClick={handleRemoveAbilityButtonClick}
-                    data-ability={ability.name}
-                    // disabled={removeAbilityButtonDisabled}
+                    onClick={handleRemoveAbilityButtonClick}
+                    data-ability-name={ability.name}
+                    disabled={removeAbilityButtonDisabled}
                   >
                     <TimesCircleIcon />
                   </Button>
