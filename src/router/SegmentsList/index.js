@@ -1,15 +1,15 @@
 import React from 'react';
-import AppLayout from '@/components/AppLayout';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
+import styles from './styles.module.scss';
 
 const SegmentsList = function SegmentsList() {
   const tableData = [];
   return (
-    <AppLayout headerTitle="Сегменты и выгрузки">
+    <div className={styles.segmentsList}>
       <Controls>
         <ControlsLink
           icon={(<IconPlus />)}
@@ -28,7 +28,7 @@ const SegmentsList = function SegmentsList() {
       <TableView
         data={tableData}
       />
-    </AppLayout>
+    </div>
   );
 };
 
