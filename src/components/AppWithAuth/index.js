@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { authCheck } from '@/store/auth/actions';
+import api from '@/api';
+import { authCheck, authLogout } from '@/store/auth/actions';
 import { getIsAuthorized, getIsFetching } from '@/store/auth/selectors';
 import LoginPage from '@/components/Login';
 import Spinner from '@/components/Spinner';
@@ -21,6 +22,18 @@ const WithAuth = function WithAuth({ children }) {
 
   useEffect(() => {
     dispatch(authCheck());
+
+    const logoutInterceptor = api.interceptors.response.use(null, (error) => {
+      if (error?.response?.status === 401) {
+        dispatch(authLogout());
+      }
+
+      return Promise.reject(error);
+    });
+
+    return () => {
+      api.interceptors.response.eject(logoutInterceptor);
+    };
   }, [dispatch]);
 
   if (isFetching) {
