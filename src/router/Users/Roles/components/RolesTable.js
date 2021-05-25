@@ -3,12 +3,16 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '@/components/Spinner';
+import Button from '@/components/Button';
 import { fetchAllRoles } from '@/store/users/actions';
+import AddRolePopup from './AppRolePopup';
+import styles from './styles.module.scss';
 
 const RolesTable = function UsersScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
+  const [addRolePopupIsOpen, setAddRolePopupIsOpen] = useState(false);
 
   const rolesList = useSelector((state) => state.users.allRoles);
   const roles = useRef(rolesList);
@@ -25,12 +29,34 @@ const RolesTable = function UsersScreen() {
     fetchUsersFn();
   }, [dispatch]);
 
+  const handleAddRoleOpenPopup = () => {
+    setAddRolePopupIsOpen(true);
+  };
+  const handleAddRoleClosePopup = () => {
+    setAddRolePopupIsOpen(false);
+  };
+
   if (isFetching) {
     return <Spinner />;
   }
 
   return (
     <div>
+      <div className={styles.headerWrapper}>
+        <p>
+          Список ролей
+        </p>
+        <Button
+          className={styles.editAbilitiesButton}
+          appearance="control"
+          onClick={handleAddRoleOpenPopup}
+        >
+          <span>
+            Добавить роль
+          </span>
+        </Button>
+      </div>
+
       <table>
         <tbody>
           <tr header="">
@@ -72,6 +98,10 @@ const RolesTable = function UsersScreen() {
             )}
         </tbody>
       </table>
+
+      {addRolePopupIsOpen
+        && <AddRolePopup onClose={handleAddRoleClosePopup} />}
+
     </div>
   );
 };

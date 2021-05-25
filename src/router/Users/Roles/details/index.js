@@ -131,7 +131,7 @@ const Details = function RolesDetailsScreen() {
       </table>
 
       {editAbilitiesPopupIsOpen
-      && <EditRolePopup onClose={handleEditRolePopupClose} />}
+        && <EditRolePopup onClose={handleEditRolePopupClose} />}
 
     </div>
   );
