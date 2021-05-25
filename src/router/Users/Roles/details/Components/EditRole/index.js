@@ -48,6 +48,14 @@ const EditRolePopup = function EditRolePopup(props) {
     allRoleAbilitiesError.current = allRoleAbilitiesErrorData;
   }, [allRoleAbilitiesErrorData]);
 
+  const editRoleErrorData = useSelector(
+    (state) => state.users.editRoleError
+  );
+  const editRoleError = useRef(editRoleErrorData);
+  useLayoutEffect(() => {
+    editRoleError.current = editRoleErrorData;
+  }, [editRoleErrorData]);
+
 
   const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
   const rolesDetails = useRef(rolesDetailsData);
@@ -84,6 +92,8 @@ const EditRolePopup = function EditRolePopup(props) {
     setRoleTitle(value);
   };
 
+  const hasErrors = allRoleAbilitiesError.current || editRoleError.current;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const abilities = [];
@@ -98,13 +108,15 @@ const EditRolePopup = function EditRolePopup(props) {
     setSubmitButtomDisabed(false);
     await dispatch(fetchRolesDetails({ roleName }));
     await dispatch(fetchRolesAbilities({ roleName }));
-    onClose();
+    if (hasErrors) {
+      onClose();
+    }
   };
 
   return (
     <Popup
       onClose={onClose}
-      title="Добавить разрешение"
+      title="Изменить роль"
     >
       {isFetching
         ? <Spinner />
@@ -162,11 +174,12 @@ const EditRolePopup = function EditRolePopup(props) {
                     </Button>
                   </td>
                   <td>
-                    {(allRoleAbilitiesError.current) && (
-                      <p className={cx('red', styles.editRoleError)}>
-                        Произошла ошибка
-                      </p>
-                    )}
+                    {(hasErrors)
+                      && (
+                        <p className={cx('red', styles.editRoleError)}>
+                          Произошла ошибка
+                        </p>
+                      )}
                   </td>
                 </tr>
               </tbody>
