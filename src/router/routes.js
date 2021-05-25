@@ -13,11 +13,11 @@ export const patchs = {
 };
 
 export const titles = {
-  segmentsUser: 'Портрет пользователя',
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
   segmentsDetails: 'Сегмент',
+  segmentsUser: 'Портрет пользователя',
 };
 
 export default [
@@ -52,10 +52,5 @@ export default [
     Component: SegmentsUser,
     path: patchs.segmentsUser,
     title: titles.segmentsUser,
-  },
-  {
-    Component: SegmentsDetails,
-    path: patchs.segmentsDetails,
-    title: titles.segmentsDetails,
   },
 ];
