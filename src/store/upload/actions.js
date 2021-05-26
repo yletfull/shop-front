@@ -55,7 +55,7 @@ export const fetchQueueList = () => async (dispatch, getState) => {
   try {
     const cabinetId = getState().upload.selectAccount;
     const clientId = getState().upload.selectClient;
-    const data = await service.fetchClientsList({ cabinetId, clientId });
+    const data = await service.fetchQueueList({ cabinetId, clientId });
     dispatch(queueList(data.data.data));
   } catch (err) {
     dispatch(queueList([]));

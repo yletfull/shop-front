@@ -73,13 +73,13 @@ const Header = function HeaderScreen() {
   const firstStage = stage === firstUploadStages.selectAccount;
   const documentsIsNotLoading = documents.length === 0;
 
-  useEffect(() => (async () => {
-    if (documents.length > 0) {
-      dispatch(fetchDocumentDetails(documents[documents.length - 1].id));
-    } else {
-      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
-    }
-  })(), [dispatch, documents]);
+  // useEffect(() => (async () => {
+  //   if (documents.length > 0) {
+  //     dispatch(fetchDocumentDetails(documents[documents.length - 1].id));
+  //   } else {
+  //     dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+  //   }
+  // })(), [dispatch, documents]);
 
   return (
     !firstStage
