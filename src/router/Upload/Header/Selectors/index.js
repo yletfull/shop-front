@@ -89,13 +89,12 @@ const Header = function HeaderScreen() {
       setAccountSelectDisabled(true);
 
       await dispatch(fetchQueueList());
-      console.log(queueList);
+
       if (queueList.current.length > 0) {
         if (queueList.current[queueList.current.length - 1].status === 1) {
           return dispatch(setStage(firstUploadStages.selectList));
         }
         if (queueList.current[queueList.current.length - 1].status === -1) {
-          console.log(queueList.current[queueList.current.length - 1].status);
           return dispatch(setStage(globalStages.errorCheck));
         }
         if (queueList.current[queueList.current.length - 1].status === 0) {
