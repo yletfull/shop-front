@@ -1,17 +1,12 @@
 import React, { Fragment, Suspense } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import Spinner from '@/components/Spinner';
 import routes from './routes';
 
 const RouterView = function RouterView() {
   return (
-    <Suspense
-      fallback={(
-        <div>
-          Загрузка...
-        </div>
-      )}
-    >
+    <Suspense fallback={(<Spinner />)}>
       <Switch>
         {routes.map(({ exact, path, title, Component }) => (
           <Route
