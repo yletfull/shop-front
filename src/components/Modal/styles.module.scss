@@ -1,0 +1,21 @@
+@import '@/theme/include.scss';
+
+.modal {
+  left: 0;
+  position: absolute;
+  top: 0;
+
+  &Close {
+    //
+  }
+
+  &Header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.wrapper {
+  position: relative;
+}
