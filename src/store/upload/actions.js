@@ -116,7 +116,7 @@ export const acceptFile = () => async (dispatch, getState) => {
   }
 };
 
-export const getRecentFile = () => async (dispatch, getState) => {
+export const fetchRecentFile = () => async (dispatch, getState) => {
   try {
     const data = await service.getRecentFile({
       cabinetId: getState().upload.selectAccount,
