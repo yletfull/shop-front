@@ -25,6 +25,10 @@ const uploadFiles = ({ files }) => api.post('api/v1/documents', files)
 const acceptFile = (params) => api.post('api/v1/import', { ...params })
   .then((data) => data);
 
+const getRecentFile = ({ cabinetId, ...params }) => api
+  .get(`/ad-cabinet/${cabinetId}/recent-file`, { ...params })
+  .then((data) => data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -34,4 +38,5 @@ export default {
   fetchDocumentDetails,
   uploadFiles,
   acceptFile,
+  getRecentFile,
 };
