@@ -6,12 +6,12 @@ import Select from '@/components/Select';
 import Button from '@/components/Button';
 import ButtonLink from '@/components/ButtonLink';
 
-import { firstUploadStages, globalStages } from '../../stages';
 import {
   fetchAccounts, fetchClients,
   fetchTasks,
   setAccount, setClient, setStage,
-} from '../../../../store/upload/actions';
+} from '@/store/upload/actions';
+import { firstUploadStages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
 const Header = function HeaderScreen() {
