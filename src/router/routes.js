@@ -5,6 +5,11 @@ const SegmentsDetails = lazy(() => import(
   /* webpackMode: 'lazy' */
   './SegmentsDetails'
 ));
+const SegmentsEdit = lazy(() => import(
+  /* webpackChunkName: 'segments-edit' */
+  /* webpackMode: 'lazy' */
+  './SegmentsEdit'
+));
 const SegmentsList = lazy(() => import(
   /* webpackChunkName: 'segments-list' */
   /* webpackMode: 'lazy' */
