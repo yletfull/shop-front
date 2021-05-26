@@ -13,6 +13,7 @@ export const documentDetails = createAction(`${NS}/documentDetails`);
 export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 export const selectList = createAction(`${NS}/selectList`);
 export const task = createAction(`${NS}/task`);
+export const recentFile = createAction(`${NS}/recentFile`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -112,5 +113,17 @@ export const acceptFile = () => async (dispatch, getState) => {
     dispatch(task(data.data.data));
   } catch (err) {
     dispatch(task([]));
+  }
+};
+
+export const getRecentFile = () => async (dispatch, getState) => {
+  try {
+    const data = await service.getRecentFile({
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+    });
+    dispatch(recentFile(data.data.data));
+  } catch (err) {
+    dispatch(recentFile([]));
   }
 };
