@@ -9,13 +9,14 @@ import TemplatesBlock from './Tempaltes';
 const Header = function HeaderScreen() {
   const stage = useSelector((state) => state.upload.stage);
 
-  const firstStage = stage === firstUploadStages.selectAccount;
+  const firstStages = (stage === firstUploadStages.selectAccount)
+    || (stage === firstUploadStages.filseIsNotLoaded);
 
 
   return (
     <React.Fragment>
       <SelectorsBlock />
-      {!firstStage
+      {!firstStages
         && (
           <TemplatesBlock />
         )}
