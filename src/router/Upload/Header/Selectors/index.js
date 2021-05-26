@@ -82,6 +82,34 @@ const Header = function HeaderScreen() {
     dispatch(setClient(''));
   };
 
+  useEffect(() => {
+    if (clients.length) {
+      setClientSelectDisabled(false);
+    }
+  }, [dispatch, clients]);
+
+  useEffect(() => (async () => {
+    if (selectAccount && selectClient) {
+      setAcceptButtonDisabled(false);
+    } else {
+      setAcceptButtonDisabled(true);
+    }
+    dispatch(setStage(firstUploadStages.selectAccount));
+    setChangeAccountButtonShow(false);
+  })(), [dispatch, selectAccount, selectClient]);
+
+  useEffect(() => (async () => {
+    if (!selectAccount) {
+      setAccountSelectDisabled(true);
+      await dispatch(fetchAccounts());
+      setAccountSelectDisabled(false);
+    } else {
+      dispatch(fetchClients());
+    }
+    dispatch((setClient('')));
+    setClientSelectDisabled(true);
+  })(), [dispatch, selectAccount]);
+
   const hanldeAcceptButtonClick = async () => {
     if (selectClient && selectAccount) {
       setChangeAccountButtonShow(true);
@@ -105,34 +133,6 @@ const Header = function HeaderScreen() {
       dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
   };
-
-  useEffect(() => (async () => {
-    if (!selectAccount) {
-      setAccountSelectDisabled(true);
-      await dispatch(fetchAccounts());
-      setAccountSelectDisabled(false);
-    } else {
-      dispatch(fetchClients());
-    }
-    dispatch((setClient('')));
-    setClientSelectDisabled(true);
-  })(), [dispatch, selectAccount]);
-
-  useEffect(() => {
-    if (clients.length) {
-      setClientSelectDisabled(false);
-    }
-  }, [dispatch, clients]);
-
-  useEffect(() => (async () => {
-    if (selectAccount && selectClient) {
-      setAcceptButtonDisabled(false);
-    } else {
-      setAcceptButtonDisabled(true);
-    }
-    dispatch(setStage(firstUploadStages.selectAccount));
-    setChangeAccountButtonShow(false);
-  })(), [dispatch, selectAccount, selectClient]);
 
   return (
     <div className={styles.topWrapper}>
