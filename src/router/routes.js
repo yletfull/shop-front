@@ -1,10 +1,30 @@
 import { lazy } from 'react';
 
-const SegmentsDetails = lazy(() => import('./SegmentsDetails'));
-const SegmentsList = lazy(() => import('./SegmentsList'));
-const SegmentsUser = lazy(() => import('./SegmentsUser'));
-const Upload = lazy(() => import('./Upload'));
-const Users = lazy(() => import('./Users'));
+const SegmentsDetails = lazy(() => import(
+  /* webpackChunkName: 'segments-details' */
+  /* webpackMode: 'lazy' */
+  './SegmentsDetails'
+));
+const SegmentsList = lazy(() => import(
+  /* webpackChunkName: 'segments-list' */
+  /* webpackMode: 'lazy' */
+  './SegmentsList'
+));
+const SegmentsUser = lazy(() => import(
+  /* webpackChunkName: 'segments-user' */
+  /* webpackMode: 'lazy' */
+  './SegmentsUser'
+));
+const Upload = lazy(() => import(
+  /* webpackChunkName: 'upload' */
+  /* webpackMode: 'lazy' */
+  './Upload'
+));
+const Users = lazy(() => import(
+  /* webpackChunkName: 'users' */
+  /* webpackMode: 'lazy' */
+  './Users'
+));
 
 export const patchs = {
   segments: '/segments',
