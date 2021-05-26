@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
+import { namespace as NS } from './constants';
+import reducer from './reducer';
+import { getIsFetchingData, getData } from './selectors';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
@@ -20,11 +24,17 @@ const defaultProps = {
 const SegmentsList = function SegmentsList({ defaultTitle }) {
   const dispatch = useDispatch();
 
+  const isFetching = useSelector(getIsFetchingData);
+  const tableData = useSelector(getData);
+
+  useEffect(() => {
+    injectReducer(NS, reducer);
+  }, []);
+
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
-  const tableData = [];
   return (
     <div className={styles.segmentsList}>
       <Controls>
@@ -43,6 +53,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       </Controls>
 
       <TableView
+        isFetching={isFetching}
         data={tableData}
       />
     </div>
