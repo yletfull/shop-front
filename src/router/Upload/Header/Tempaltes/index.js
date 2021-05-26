@@ -110,21 +110,22 @@ const Header = function HeaderScreen() {
     await dispatch(fetchDocuments());
     if (allUploadedFiles.current?.length) {
       await dispatch(fetchDocumentDetails(allUploadedFiles.current[0]?.id));
-      if (documentDetails.current) {
-        setUploadedFileDetails(documentDetails.current);
+      if (fileDetails.current) {
+        setUploadedFileDetails(fileDetails.current);
       }
     }
 
     await dispatch(fetchRecentFile());
     if (recentFile.current?.length) {
       await dispatch(fetchDocumentDetails(recentFile.current?.id));
-      if (documentDetails.current) {
-        setRecentFileDetails(documentDetails.current);
+      if (fileDetails.current) {
+        setRecentFileDetails(fileDetails.current);
       }
     }
 
     setDetailsIsFetching(false);
   })(), [dispatch]);
+
 
   useEffect(() => {
     if (recentFileDetails.current?.length) {
