@@ -14,13 +14,15 @@ const navigationBarParams = {
 };
 
 const Upload = function UploadScreen() {
-  const recentFileData = useSelector(
-    (state) => state.upload?.recentFile
+  const queueListData = useSelector(
+    (state) => state.upload?.queueList
   );
-  const recentFile = useRef(recentFileData);
+  const queueList = useRef(queueListData);
   useLayoutEffect(() => {
-    recentFile.current = recentFileData;
-  }, [recentFileData]);
+    queueList.current = queueListData;
+  }, [queueListData]);
+
+  console.log(queueList.current);
 
   return (
     <div className={styles.wrapper}>
@@ -35,8 +37,13 @@ const Upload = function UploadScreen() {
           </p>
           <span>
             Вы можете скачать
-            <Link to={`/api/v1/document/${recentFile.current.id}/raw`}>
+            <Link
+              to={`/api/v1/document/${queueList.current[0].data.documentId}/raw`}
+              target="_blank"
+            >
+              {' '}
               файл
+              {' '}
             </Link>
             с отмеченными ошибками
             для их исправления и повторной загрузки
