@@ -13,8 +13,6 @@ import ControlsLink from './ControlsLink';
 import TableView from './TableView';
 import styles from './styles.module.scss';
 
-injectReducer(NS, reducer);
-
 const propTypes = {
   defaultTitle: PropTypes.string,
 };
@@ -28,6 +26,10 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
 
   const isFetching = useSelector(getIsFetchingData);
   const tableData = useSelector(getData);
+
+  useEffect(() => {
+    injectReducer(NS, reducer);
+  }, []);
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));

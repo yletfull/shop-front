@@ -1,8 +1,10 @@
-import SegmentsDetails from './SegmentsDetails';
-import SegmentsList from './SegmentsList';
-import SegmentsUser from './SegmentsUser';
-import Upload from './Upload';
-import Users from './Users';
+import { lazy } from 'react';
+
+const SegmentsDetails = lazy(() => import('./SegmentsDetails'));
+const SegmentsList = lazy(() => import('./SegmentsList'));
+const SegmentsUser = lazy(() => import('./SegmentsUser'));
+const Upload = lazy(() => import('./Upload'));
+const Users = lazy(() => import('./Users'));
 
 export const patchs = {
   segments: '/segments',
