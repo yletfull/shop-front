@@ -1,18 +1,29 @@
 @import '@/theme/include.scss';
 
 .modal {
+  background: $color-gray-lighter;
+  border-radius: .375rem;
+  box-shadow: 0 0 .5rem 0 rgba($color-gray, .25);
   left: 0;
+  padding: .5rem;
   position: absolute;
   top: 0;
 
   &Close {
-    //
+    @include button-reset();
+
+    color: $color-gray-darkest;
+    font-size: 1rem;
+    padding: 0 .125rem;
   }
 
   &Header {
-    align-items: center;
+    align-items: flex-top;
     display: flex;
+    font-size: .875rem;
+    font-weight: bold;
     justify-content: space-between;
+    padding-bottom: .5rem;
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconTimes from '@/icons/Times';
+import IconTimes from '@/icons/TimesLight';
 import styles from './styles.module.scss';
 
 const propTypes = {
