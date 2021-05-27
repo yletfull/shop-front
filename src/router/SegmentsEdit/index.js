@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import Button from '@/components/Button';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
 import {
@@ -77,12 +78,12 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         )}
         onCloseModal={handleCloseParamsModal}
       >
-        <button
+        <Button
           type="button"
           onClick={handleClickShowParams}
         >
-          +
-        </button>
+          + ещё параметр
+        </Button>
       </Params>
     </div>
   );
