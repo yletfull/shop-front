@@ -15,6 +15,7 @@ import {
   selectedList,
   recentFile,
   images,
+  uploadImageError,
 } from './actions';
 
 const initialState = {
@@ -49,6 +50,7 @@ const initialState = {
   task: {},
   recentFile: {},
   images: [],
+  uploadImageError: '',
 };
 
 const reducer = createReducer(initialState, {
@@ -104,6 +106,11 @@ const reducer = createReducer(initialState, {
     ...state,
     images: action.payload,
   }),
+  [uploadImageError]: (state, action) => ({
+    ...state,
+    uploadImageError: action.payload,
+  }),
+
 });
 
 export default reducer;

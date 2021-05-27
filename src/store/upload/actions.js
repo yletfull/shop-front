@@ -15,6 +15,7 @@ export const selectedList = createAction(`${NS}/selectedList`);
 export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
 export const images = createAction(`${NS}/imgaes`);
+export const uploadImageError = createAction(`${NS}/uploadImageError`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -91,11 +92,21 @@ export const setUploadedFiles = (files) => async (dispatch) => {
 export const uploadFiles = (files) => async (dispatch) => {
   try {
     const data = await service.uploadFiles({ files });
-    console.log(data);
     dispatch(uploadedFiles(data.data.data));
   } catch (err) {
     dispatch(uploadFiles([]));
     console.log(err);
+  }
+};
+
+export const uploadImages = ({ formData }) => async (dispatch, getState) => {
+  try {
+    await service.uploadImages({
+      documentId: getState().upload.documentDetails.id,
+      formData,
+    });
+  } catch (err) {
+    dispatch(uploadImageError(err));
   }
 };
 

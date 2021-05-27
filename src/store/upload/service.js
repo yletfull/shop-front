@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import api from '@/api';
 
 const fetchAccountsList = () => api.get('api/v1/ad-cabinets')
@@ -22,6 +23,15 @@ const fetchQueueList = ({ cabinetId, ...params }) => api
 const uploadFiles = ({ files }) => api.post('api/v1/documents', files)
   .then((data) => data);
 
+
+const uploadImages = ({ formData, documentId }) => api.post(`api/v1/document/${documentId}`, formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+})
+  .then((data) => data);
+
+
 const acceptFile = (params) => api.post('api/v1/import', { ...params })
   .then((data) => data);
 
@@ -43,4 +53,5 @@ export default {
   acceptFile,
   getRecentFile,
   fetchImages,
+  uploadImages,
 };
