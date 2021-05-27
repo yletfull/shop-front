@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-destructuring */
-
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
@@ -18,7 +15,7 @@ import {
   uploadFiles,
   fetchRecentFile,
   fetchDocumentDetails,
-  documentDetails, fetchDocuments,
+  fetchDocuments,
 } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
@@ -43,6 +40,9 @@ const Header = function HeaderScreen() {
   const [fileIsLoaded, setFileIsLoaded] = useState(false);
   const [fileIsLoading, setFileIsLoading] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
+  const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
+
+  console.log(uploadButtonDisabled);
 
   const [recentFileDetails, setRecentFileDetails] = useState({});
   const [uploadedFileDetails, setUploadedFileDetails] = useState({});
@@ -81,6 +81,10 @@ const Header = function HeaderScreen() {
   useLayoutEffect(() => {
     allUploadedFiles.current = allUploadedFilesData;
   }, [allUploadedFilesData]);
+
+  const stage = useSelector(
+    (state) => state.upload.stage
+  );
 
 
   const submitFile = async (data) => {
@@ -134,6 +138,17 @@ const Header = function HeaderScreen() {
     setFileIsLoaded(false);
   }, [recentFileDetails]);
 
+  useEffect(() => {
+    switch (stage) {
+      case firstUploadStages.selectList:
+      case firstUploadStages.filseIsNotLoaded:
+        setUploadButtonDisabled(false);
+        break;
+      default:
+        setUploadButtonDisabled(true);
+    }
+  }, [stage]);
+
   return (
     <div className={styles.headerTemplatesWrapper}>
       {detailsIsFetching
@@ -172,7 +187,7 @@ const Header = function HeaderScreen() {
                   icon={<IconUpload />}
                   text={['Загрузить', 'файл']}
                   onClick={handleSelectFileButtonClick}
-                  disabled={fileIsLoading}
+                  disabled={fileIsLoading || uploadButtonDisabled}
                 />
                 <input
                   type="file"
