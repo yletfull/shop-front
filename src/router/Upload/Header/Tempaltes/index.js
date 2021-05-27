@@ -92,6 +92,13 @@ const Header = function HeaderScreen() {
     dispatch(setStage(firstUploadStages.fileIsLoading));
     await dispatch(uploadFiles(data));
     if (uploadedFiles.current?.length) {
+      await dispatch(fetchDocuments());
+      if (allUploadedFiles.current?.length) {
+        await dispatch(fetchDocumentDetails(allUploadedFiles.current[0]?.id));
+        if (fileDetails.current) {
+          setUploadedFileDetails(fileDetails.current);
+        }
+      }
       dispatch(setStage(firstUploadStages.selectList));
     } else {
       dispatch(setStage(globalStages.errorCheck));
