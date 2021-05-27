@@ -129,7 +129,7 @@ export const fetchRecentFile = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchImgaes = ({ documentId }) => async (dispatch) => {
+export const fetchImages = ({ documentId }) => async (dispatch) => {
   try {
     const data = await service.getImage({ documentId });
     dispatch(images(data.data.data));

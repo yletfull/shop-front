@@ -8,7 +8,7 @@ import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
-import { fetchDocumentDetails, setSelectedList } from '@/store/upload/actions';
+import { setSelectedList, fetchImages } from '@/store/upload/actions';
 import { firstUploadStages as stages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -45,7 +45,7 @@ const Upload = function UploadScreen() {
 
   const handleAcceptListButtonClick = async () => {
     setAcceptListButtonDisabled(true);
-    await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
+    await dispatch(fetchImages(uploadedFiles[uploadedFiles.length - 1]
       .id));
   };
 
