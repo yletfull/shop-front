@@ -97,6 +97,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         emailsCount={statistic.emails}
         phonesCount={statistic.phones}
       />
+
+      <Button>
+        Сохранить сегмент
+      </Button>
     </div>
   );
 };
