@@ -1,0 +1,21 @@
+@import '@/theme/include.scss';
+
+.params {
+  &Header {
+    border-bottom: thin solid $color-gray;
+    padding-bottom: .5rem;
+  }
+
+  &Label {
+    font-size: .75rem;
+
+    &SelectAll {
+      display: block;
+      padding-top: .5rem;
+    }
+  }
+
+  &Main {
+    padding: 1rem 0;
+  }
+}

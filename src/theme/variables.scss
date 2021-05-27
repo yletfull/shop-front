@@ -5,32 +5,44 @@ $header-height: 3.625rem;
 $content-top-padding: 2.35rem;
 $categories-height: 2.25rem;
 $categories-margin-bottom: 2.5rem;
+
+// Primary colors
 $color-primary-ultra-light: hsl(220, 35%, 92%);
 $color-primary-lightest: hsl(209, 58%, 70%);
 $color-primary-lighter: hsl(208, 53%, 57%);
 $color-primary: hsl(208, 54%, 47%);
 $color-primary-darker: hsl(208, 74%, 38%);
 $color-primary-darkest: hsl(218, 100%, 33%);
+
+// Accent colors
 $color-accent-lightest: hsl(35, 100%, 78%);
 $color-accent-lighter: hsl(35, 100%, 70%);
 $color-accent: hsl(35, 100%, 63%);
 $color-accent-darker: hsl(35, 100%, 54%);
 $color-accent-darkest: hsl(35, 100%, 41%);
+
+// Red colors
 $color-red-lightest: hsl(9, 100%, 78%);
 $color-red-lighter: hsl(9, 100%, 70%);
 $color-red: hsl(9, 100%, 63%);
 $color-red-darker: hsl(9, 100%, 54%);
 $color-red-darkest: hsl(9, 100%, 41%);
+
+// Green colors
 $color-green-lightest: hsl(140, 68%, 71%);
 $color-green-lighter: #95ca17;
 $color-green: hsl(141, 60%, 49%);
 $color-green-darker: hsl(140, 85%, 41%);
 $color-green-darkest: hsl(141, 100%, 30%);
+
+// Gray colors
 $color-gray-lightest: hsl(240, 6%, 97%);
 $color-gray-lighter: hsl(210, 4%, 91%);
 $color-gray: hsl(225, 6%, 87%);
 $color-gray-darker: hsl(216, 5%, 62%);
 $color-gray-darkest: hsl(0, 0%, 39%);
+
+// Other colors
 $color-pink: hsl(340, 80%, 47%);
 $color-purple: hsl(281, 29%, 47%);
 $color-white: hsl(0, 0%, 100%);

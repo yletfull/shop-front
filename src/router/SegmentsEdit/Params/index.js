@@ -6,14 +6,14 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
-  data: PropTypes.objectOf(PropTypes.sting),
+  form: PropTypes.node,
   isFetching: PropTypes.bool,
   isVisible: PropTypes.bool,
   onCloseModal: PropTypes.func,
 };
 const defaultProps = {
   children: null,
-  data: {},
+  form: null,
   isFetching: false,
   isVisible: false,
   onCloseModal: () => {},
@@ -21,7 +21,7 @@ const defaultProps = {
 
 const Params = function Params({
   children,
-  data,
+  form,
   isFetching,
   isVisible,
   onCloseModal,
@@ -35,7 +35,7 @@ const Params = function Params({
         isVisible={isVisible}
         header={(
           <span>
-            Header
+            Выбрать значения
           </span>
         )}
         onClose={handleCloseModal}
@@ -43,7 +43,7 @@ const Params = function Params({
         {isFetching && (
           <Spinner />
         )}
-        {JSON.stringify(data)}
+        {!isFetching && form}
       </Modal>
     </div>
   );

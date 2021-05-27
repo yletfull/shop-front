@@ -14,6 +14,7 @@ import {
   getParams,
 } from './selectors';
 import Params from './Params';
+import ParamsForm from './ParamsForm';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -59,13 +60,21 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     setIsShowParams(true);
   };
+  const handleSubmitParams = (values) => {
+    console.log(values);
+  };
 
   return (
     <div className={styles.wrapper}>
       <Params
         isFetching={isFetchingParams}
         isVisible={isShowParams}
-        data={params}
+        form={(
+          <ParamsForm
+            data={params}
+            onSubmit={handleSubmitParams}
+          />
+        )}
         onCloseModal={handleCloseParamsModal}
       >
         <button
