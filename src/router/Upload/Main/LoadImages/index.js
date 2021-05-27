@@ -166,9 +166,7 @@ const Upload = function UploadScreen() {
             <td>
               File
             </td>
-            <td>
-              <TimesIcon />
-            </td>
+            <td />
             <td />
             <td>
               Size
@@ -199,7 +197,10 @@ const Upload = function UploadScreen() {
               />
             </td>
             <td>
-              <Button appearance="control">
+              <Button
+                appearance="control"
+                className={styles.tdButton}
+              >
                 <TimesIcon className="red" />
               </Button>
             </td>
@@ -209,7 +210,7 @@ const Upload = function UploadScreen() {
               </Button>
             </td>
             <td>
-              <div>
+              <div className={styles.indicatorWrapper}>
                 480x480
                 <Indicator
                   className={styles.indicator}

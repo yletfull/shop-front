@@ -8,8 +8,19 @@
   }
 }
 
+.indicatorWrapper {
+  align-items: center;
+  display: flex;
+}
+
 .tableFileIcon {
   height: auto;
   width: 2.313rem;
+}
+
+.loadButtonsWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+  margin-top: 1.25rem;
 }
 
