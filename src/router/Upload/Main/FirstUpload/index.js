@@ -8,8 +8,8 @@ import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
-import { setSelectedList, fetchImages } from '@/store/upload/actions';
-import { firstUploadStages as stages } from '../../stages';
+import { setSelectedList, fetchImages, setStage } from '@/store/upload/actions';
+import { firstUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
 const navigationBarParams = {
@@ -47,6 +47,8 @@ const Upload = function UploadScreen() {
     setAcceptListButtonDisabled(true);
     await dispatch(fetchImages(uploadedFiles[uploadedFiles.length - 1]
       .id));
+    setAcceptListButtonDisabled(false);
+    dispatch(setStage(globalStages.loadImage));
   };
 
   useEffect(() => {
