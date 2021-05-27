@@ -8,7 +8,7 @@ import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
-import { setSelectedList, fetchImages, setStage } from '@/store/upload/actions';
+import { setSelectedList, setStage } from '@/store/upload/actions';
 import { firstUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -27,8 +27,6 @@ const Upload = function UploadScreen() {
   const selectedList = useSelector((state) => state.upload.selectedList || 'default');
 
 
-  const uploadedFiles = useSelector((state) => state.upload?.uploadedFiles)
-   || [];
   const listOptions = useSelector((state) => state.upload.documentDetails
     .data?.sheets?.map((item, index) => (
       { value: index, text: item }
@@ -44,10 +42,6 @@ const Upload = function UploadScreen() {
   };
 
   const handleAcceptListButtonClick = async () => {
-    setAcceptListButtonDisabled(true);
-    await dispatch(fetchImages(uploadedFiles[uploadedFiles.length - 1]
-      .id));
-    setAcceptListButtonDisabled(false);
     dispatch(setStage(globalStages.loadImage));
   };
 
