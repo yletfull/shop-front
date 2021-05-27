@@ -16,6 +16,7 @@ import {
 } from './selectors';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
+import Statistics from './Statistics';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -65,6 +66,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     console.log(values);
   };
 
+  const statistic = {};
+
   return (
     <div className={styles.wrapper}>
       <Params
@@ -85,6 +88,15 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           + ещё параметр
         </Button>
       </Params>
+
+      <h2>
+        Выборка
+      </h2>
+
+      <Statistics
+        emailsCount={statistic.emails}
+        phonesCount={statistic.phones}
+      />
     </div>
   );
 };
