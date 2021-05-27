@@ -1,7 +1,18 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import { namespace as NS } from './constants';
+import reducer from './reducer';
+import {
+  fetchData,
+} from './actions';
+import {
+  getIsFetchingData,
+  getData,
+} from './selectors';
+import TableView from './TableView';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -15,13 +26,27 @@ const defaultProps = {
 const AudiencesList = function AudiencesList({ defaultTitle }) {
   const dispatch = useDispatch();
 
+  const isFetching = useSelector(getIsFetchingData);
+  const tableData = useSelector(getData);
+
+  useEffect(() => {
+    injectReducer(NS, reducer);
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
   return (
     <div className={styles.audienceList}>
-      AudiencesList
+      <TableView
+        data={tableData}
+        isFetching={isFetching}
+      />
     </div>
   );
 };
