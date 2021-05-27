@@ -96,156 +96,130 @@ const Upload = function UploadScreen() {
         </div>
       </div>
 
-      <div className={styles.contentWrapper}>
-        <form
-          action="/"
-          className={cx(styles.row, styles.rowFilter)}
-          onSubmit={handleFilterSubmit}
-        >
-          <span className={cx(styles.col, styles.colFilter, styles.colNum)}>
-            <Input
-              value={filter.num}
-              onInput={handleNumInput}
-              fullwidth
-              placeholder="№ строки"
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colTitle)}>
-            <Input
-              value={filter.title}
-              onInput={handleTitleInput}
-              fullwidth
-              placeholder="Title"
-            />
-          </span>
-          <span
-            className={cx(
-              styles.col,
-              styles.colFilter,
-              styles.colAdFormat
-            )}
-          >
-            <Select
-              value={filter.adFormat}
-              options={selectorMocksOptions}
-              resetText="Не выбрано"
-              placeholder="Ad_format"
-              onChange={handleAdFormatChange}
-              className={styles.select}
-              fullwidth
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colBanner)}>
-            <Select
-              value={filter.banner}
-              options={selectorMocksOptions}
-              onChange={handleBannerChange}
-              resetText="Не выбрано"
-              placeholder="Banner"
-              className={styles.select}
-              fullwidth
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colSubmit)}>
-            <Button
-              type="submit"
-              className={styles.filterSubmit}
-            >
-              Найти
-            </Button>
-          </span>
-        </form>
-
-        <div className={cx(styles.row, styles.rowHeader)}>
-          <span className={cx(styles.col, styles.colHeader, styles.colNum)}>
-            <b>
-              № строки
-            </b>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colTitle)}>
-            <b>
-              Title
-            </b>
-          </span>
-          <span
-            className={cx(
-              styles.col,
-              styles.colHeader,
-              styles.colAdFormat
-            )}
-          >
-            <b>
-              Ad_format
-            </b>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colBanner)}>
-            <span>
-              <b>
-                Banner
-              </b>
-            </span>
-            <span className={styles.colBannerIconsWrapper}>
-              <span>
-                <b>
-                  File
-                </b>
-              </span>
-              <span>
-                <TimesIcon
-                  className={cx('red', styles.tableTimesIcon)}
-                />
-              </span>
-              <span className={styles.loadIconEmptySpace} />
-            </span>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colSubmit)}>
-            <b>
-              Size
-            </b>
-          </span>
-        </div>
-
-        <div className={cx(styles.row, styles.rowContent)}>
-          <span className={cx(styles.col, styles.colNum)}>
-            11111
-          </span>
-          <span className={cx(styles.col, styles.colTitle)}>
-            om01_353:: Подать руку помощи:: vk
-          </span>
-          <span className={cx(styles.col, styles.colAdFormat)}>
-            1
-          </span>
-          <span className={cx(styles.col, styles.colBanner)}>
-            <span>
-              480x480
-            </span>
-            <span className={styles.colBannerIconsWrapper}>
-              <span>
-                <img
-                  src={TestImage}
-                  className={cx(styles.icon, styles.tableFileIcon)}
-                  alt="upload"
-                />
-              </span>
-              <Button appearance="control">
-                <TimesIcon className={cx('red', styles.tableTimesIcon)} />
+      <table>
+        <tbody>
+          <tr filter="">
+            <td>
+              <Input
+                value={filter.num}
+                onInput={handleNumInput}
+                fullwidth
+                placeholder="№ строки"
+              />
+            </td>
+            <td colSpan="2">
+              <Input
+                value={filter.title}
+                onInput={handleTitleInput}
+                fullwidth
+                placeholder="Title"
+              />
+            </td>
+            <td>
+              <Select
+                value={filter.adFormat}
+                options={selectorMocksOptions}
+                resetText="Не выбрано"
+                placeholder="Ad_format"
+                onChange={handleAdFormatChange}
+                className={styles.select}
+                fullwidth
+              />
+            </td>
+            <td colSpan="4">
+              <Select
+                value={filter.banner}
+                options={selectorMocksOptions}
+                onChange={handleBannerChange}
+                resetText="Не выбрано"
+                placeholder="Banner"
+                className={styles.select}
+                fullwidth
+              />
+            </td>
+            <td>
+              <Button
+                onClick={handleFilterSubmit}
+                className={styles.filterSubmit}
+              >
+                Найти
               </Button>
+            </td>
+          </tr>
+
+          <tr header="">
+            <td>
+              № строки
+            </td>
+            <td>
+              Title
+            </td>
+            <td>
+              Name
+            </td>
+            <td>
+              Ad_format
+            </td>
+            <td>
+              Banner
+            </td>
+            <td>
+              File
+            </td>
+            <td>
+              <TimesIcon />
+            </td>
+            <td />
+            <td>
+              Size
+            </td>
+          </tr>
+
+          <tr content="">
+            <td>
+              1
+            </td>
+            <td>
+              Title
+            </td>
+            <td>
+              Name
+            </td>
+            <td>
+              Ad_format
+            </td>
+            <td>
+              Banner
+            </td>
+            <td>
+              <img
+                src={TestImage}
+                className={cx(styles.icon, styles.tableFileIcon)}
+                alt="upload"
+              />
+            </td>
+            <td>
+              <Button appearance="control">
+                <TimesIcon className="red" />
+              </Button>
+            </td>
+            <td>
               <Button appearance="control">
                 <UploadIcon />
               </Button>
-            </span>
-          </span>
-          <span className={cx(styles.col, styles.colSubmit)}>
-            480x480
-
-            <Indicator
-              className={styles.indicator}
-              color="red"
-            />
-          </span>
-        </div>
-
-      </div>
+            </td>
+            <td>
+              <div>
+                480x480
+                <Indicator
+                  className={styles.indicator}
+                  color="red"
+                />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
