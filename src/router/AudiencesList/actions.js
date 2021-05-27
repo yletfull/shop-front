@@ -12,6 +12,6 @@ export const fetchData = () => async (dispatch) => {
     dispatch(updateData(response));
   } catch (error) {
     console.error(error);
-    dispatch(updateData({}));
+    dispatch(updateData([]));
   }
 };
