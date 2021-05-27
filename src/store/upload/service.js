@@ -29,6 +29,9 @@ const getRecentFile = ({ cabinetId, ...params }) => api
   .get(`/ad-cabinet/${cabinetId}/recent-file`, { ...params })
   .then((data) => data);
 
+const fetchImages = ({ documentId }) => api.get(`api/v1/import/${documentId}`)
+  .then((data) => data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -39,4 +42,5 @@ export default {
   uploadFiles,
   acceptFile,
   getRecentFile,
+  fetchImages,
 };

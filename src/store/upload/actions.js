@@ -14,6 +14,7 @@ export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 export const selectList = createAction(`${NS}/selectList`);
 export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
+export const images = createAction(`${NS}/imgaes`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -125,5 +126,14 @@ export const fetchRecentFile = () => async (dispatch, getState) => {
     dispatch(recentFile(data.data.data));
   } catch (err) {
     dispatch(recentFile([]));
+  }
+};
+
+export const fetchImgaes = ({ documentId }) => async (dispatch) => {
+  try {
+    const data = await service.getImage({ documentId });
+    dispatch(images(data.data.data));
+  } catch (err) {
+    dispatch(images([]));
   }
 };

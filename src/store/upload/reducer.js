@@ -14,6 +14,7 @@ import {
   task,
   selectList,
   recentFile,
+  images,
 } from './actions';
 
 const initialState = {
@@ -47,6 +48,7 @@ const initialState = {
   ],
   task: {},
   recentFile: {},
+  images: [],
 };
 
 const reducer = createReducer(initialState, {
@@ -97,6 +99,10 @@ const reducer = createReducer(initialState, {
   [recentFile]: (state, action) => ({
     ...state,
     selectList: action.payload,
+  }),
+  [images]: (state, action) => ({
+    ...state,
+    images: action.payload,
   }),
 });
 
