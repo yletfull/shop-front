@@ -12,12 +12,15 @@ cache:
 variables:
   REGISTRY_URL: "gitlab.ubic.tech:4567"
   IMAGE_NAME: $REGISTRY_URL/$CI_PROJECT_PATH:$CI_COMMIT_REF_NAME
+  COMP_PROJECT_NAME: front
+  COMP_PROJECT_DIR: advert-automata
 
 stages:
   - build_cache
   - lint
   - build
   - dockerize
+  - deploy
 
 build_cache:
   stage: build_cache
@@ -71,3 +74,13 @@ dockerize:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $REGISTRY_URL
     - docker build --pull --cache-from $IMAGE_NAME -t $IMAGE_NAME -f Dockerfile .
     - docker push $IMAGE_NAME
+
+deploy:
+  stage: deploy
+  tags:
+    - sandbox-docker
+  only:
+    - develop
+  script:
+    - docker-compose -f /opt/docker/docker-compose/$COMP_PROJECT_DIR/docker-compose.yml -f /opt/docker/docker-compose/$COMP_PROJECT_DIR/docker-compose.override.yml --env-file /opt/docker/docker-compose/$COMP_PROJECT_DIR/.env pull  $COMP_PROJECT_NAME
+    - docker-compose -f /opt/docker/docker-compose/$COMP_PROJECT_DIR/docker-compose.yml -f /opt/docker/docker-compose/$COMP_PROJECT_DIR/docker-compose.override.yml --env-file /opt/docker/docker-compose/$COMP_PROJECT_DIR/.env up -d $COMP_PROJECT_NAME
