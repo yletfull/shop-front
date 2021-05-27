@@ -11,7 +11,7 @@ export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
 export const documentDetails = createAction(`${NS}/documentDetails`);
 export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
-export const selectList = createAction(`${NS}/selectList`);
+export const selectedList = createAction(`${NS}/selectedList`);
 export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
 export const images = createAction(`${NS}/imgaes`);
@@ -99,8 +99,8 @@ export const uploadFiles = (files) => async (dispatch) => {
   }
 };
 
-export const setSelectList = (data) => (dispatch) => {
-  dispatch(selectList(data));
+export const setSelectedList = (data) => (dispatch) => {
+  dispatch(selectedList(data));
 };
 
 export const acceptFile = () => async (dispatch, getState) => {
@@ -109,7 +109,7 @@ export const acceptFile = () => async (dispatch, getState) => {
       documentId: getState().upload.documentDetails.id,
       cabinetId: getState().upload.selectAccount,
       clientId: getState().upload.selectClient,
-      sheetNum: getState().upload.selectList,
+      sheetNum: getState().upload.selectedList,
     });
     dispatch(task(data.data.data));
   } catch (err) {

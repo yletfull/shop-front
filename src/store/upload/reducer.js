@@ -12,7 +12,7 @@ import {
   documentDetails,
   uploadedFiles,
   task,
-  selectList,
+  selectedList,
   recentFile,
   images,
 } from './actions';
@@ -43,7 +43,7 @@ const initialState = {
           '57578275-96fc-4525-a632-05b4fa00842d',
         ],
       },
-      selectList: '',
+      selectedList: '',
     },
   ],
   task: {},
@@ -92,13 +92,13 @@ const reducer = createReducer(initialState, {
     ...state,
     task: action.payload,
   }),
-  [selectList]: (state, action) => ({
+  [selectedList]: (state, action) => ({
     ...state,
-    selectList: action.payload,
+    selectedList: action.payload,
   }),
   [recentFile]: (state, action) => ({
     ...state,
-    selectList: action.payload,
+    recentFile: action.payload,
   }),
   [images]: (state, action) => ({
     ...state,

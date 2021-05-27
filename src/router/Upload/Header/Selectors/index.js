@@ -123,7 +123,7 @@ const Header = function HeaderScreen() {
           return dispatch(setStage(firstUploadStages.selectList));
         }
         if (queueList.current[queueList.current.length - 1].status === -1) {
-          return dispatch(setStage(globalStages.errorCheck));
+          return dispatch(setStage(firstUploadStages.selectList)); // удалить
         }
         if (queueList.current[queueList.current.length - 1].status === 0) {
           return dispatch(setStage(globalStages.loadImage));
