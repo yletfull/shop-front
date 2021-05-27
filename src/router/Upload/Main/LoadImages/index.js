@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
+import Spinner from '@/components/Spinner';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
-import VkIcon from '@/icons/Vk';
 import TestImage from '@/images/TestImage.jpg';
-import PicturesLoadIcon from '@/icons/PicturesLoad';
-import ProcessButton from '@/components/ProcessButton';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
-import NavigationBar from '@/components/NavigationBar';
 import Indicator from '@/components/Indicator';
+import { fetchImages } from '@/store/upload/actions';
+import Header from './Header';
 import styles from './styles.module.scss';
 
 const selectorMocksOptions = [
@@ -25,20 +25,34 @@ const selectorMocksOptions = [
   },
 ];
 
-const navigationBarParams = {
-  prev: ['Загрузка файла', 'Проверка на ошибки'],
-  current: 'Загрузка изображений',
-  next: ['Выгрузка на площадку'],
-};
+const LoadImages = function LoadImagesScreen() {
+  const dispatch = useDispatch();
 
-const Upload = function UploadScreen() {
+  const imagesData = useSelector((state) => state.uplpad?.images);
+  const images = useRef(imagesData);
+  useLayoutEffect(() => {
+    images.current = imagesData;
+  }, [imagesData]);
+
+  const uploadedFiles = useSelector((state) => state.upload?.uploadedFiles);
+
   const [filter, setFilter] = useState({
     num: '',
     title: '',
     adFormat: '',
     banner: '',
   });
+  const [isFetching, setIsFetching] = useState(false);
 
+  useEffect(() => {
+    const getImagesFn = async () => {
+      setIsFetching(true);
+      await dispatch(fetchImages(uploadedFiles[uploadedFiles.length - 1]
+        .id));
+      setIsFetching(false);
+    };
+    getImagesFn();
+  }, [dispatch, uploadedFiles]);
 
   const handleNumInput = (e) => {
     const num = e.target.value;
@@ -76,25 +90,13 @@ const Upload = function UploadScreen() {
 
   const handleFilterSubmit = () => '';
 
+  if (isFetching) {
+    return <Spinner />;
+  }
+
   return (
     <div className={styles.wrapper}>
-      <div className={styles.headerWrapper}>
-        <NavigationBar
-          params={navigationBarParams}
-        />
-        <div className={styles.loadButtonsWrapper}>
-          <ProcessButton
-            icon={<PicturesLoadIcon />}
-            text={['Подгрузить', 'изображения']}
-            className={styles.loadButton}
-          />
-          <ProcessButton
-            icon={<VkIcon />}
-            text={['Выгрузить РК', 'во Вконтакт']}
-            className={styles.loadButton}
-          />
-        </div>
-      </div>
+      <Header />
 
       <table>
         <tbody>
@@ -225,4 +227,4 @@ const Upload = function UploadScreen() {
   );
 };
 
-export default Upload;
+export default LoadImages;
