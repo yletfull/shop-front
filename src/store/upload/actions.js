@@ -17,6 +17,7 @@ export const recentFile = createAction(`${NS}/recentFile`);
 export const images = createAction(`${NS}/images`);
 export const uploadImageError = createAction(`${NS}/uploadImageError`);
 export const parentDocument = createAction(`${NS}/parentDocument`);
+export const uploadedImages = createAction(`${NS}/uploadedImages`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -31,7 +32,6 @@ export const fetchAccounts = () => async (dispatch) => {
     dispatch(accounts(accountsList));
   } catch (err) {
     dispatch(accounts([]));
-    console.log(err);
   }
 };
 
@@ -46,7 +46,6 @@ export const fetchClients = () => async (dispatch, getState) => {
     dispatch(clients(data.data.data));
   } catch (err) {
     dispatch(clients([]));
-    console.log(err);
   }
 };
 
@@ -62,7 +61,6 @@ export const fetchQueueList = () => async (dispatch, getState) => {
     dispatch(queueList(data.data.data));
   } catch (err) {
     dispatch(queueList([]));
-    console.log(err);
   }
 };
 
@@ -72,7 +70,6 @@ export const fetchDocuments = (params) => async (dispatch) => {
     dispatch(documents(data.data.data));
   } catch (err) {
     dispatch(documents([]));
-    console.log(err);
   }
 };
 
@@ -82,7 +79,6 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
     dispatch(documentDetails(data.data.data));
   } catch (err) {
     dispatch(documentDetails([]));
-    console.log(err);
   }
 };
 
@@ -96,7 +92,6 @@ export const uploadFiles = (files) => async (dispatch) => {
     dispatch(uploadedFiles(data.data.data));
   } catch (err) {
     dispatch(uploadFiles([]));
-    console.log(err);
   }
 };
 
@@ -156,3 +151,7 @@ export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
     dispatch(images([]));
   }
 };
+
+export const setUploadedImages = (images) => {
+  dispatch(uploadedImages(images));
+}

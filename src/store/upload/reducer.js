@@ -15,6 +15,7 @@ import {
   selectedList,
   recentFile,
   images,
+  uploadedImages,
   uploadImageError,
   parentDocument,
 } from './actions';
@@ -51,6 +52,7 @@ const initialState = {
   task: {},
   recentFile: {},
   images: [],
+  uploadedImages: [],
   uploadImageError: '',
   parentDocument: {},
 };
@@ -107,6 +109,10 @@ const reducer = createReducer(initialState, {
   [images]: (state, action) => ({
     ...state,
     images: action.payload,
+  }),
+  [uploadedImages]: (state, action) => ({
+    ...state,
+    uploadedImages: action.payload,
   }),
   [uploadImageError]: (state, action) => ({
     ...state,
