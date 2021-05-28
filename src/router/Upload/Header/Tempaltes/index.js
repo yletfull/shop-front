@@ -44,7 +44,6 @@ const Header = function HeaderScreen() {
   const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
 
   const [recentFileDetails, setRecentFileDetails] = useState({});
-  const [uploadedFileDetails, setUploadedFileDetails] = useState({});
 
   const recentFileData = useSelector(
     (state) => state.upload?.recentFile
@@ -99,7 +98,6 @@ const Header = function HeaderScreen() {
         await dispatch(fetchDocumentDetails(parentDoc.id));
         if (fileDetails.current) {
           dispatch(setParentDocument(fileDetails.current));
-          setUploadedFileDetails(fileDetails.current);
         }
       }
       dispatch(setStage(firstUploadStages.selectList));
@@ -127,7 +125,6 @@ const Header = function HeaderScreen() {
       await dispatch(fetchDocumentDetails(parentDoc.id));
       if (fileDetails.current) {
         dispatch(setParentDocument(fileDetails.current));
-        setUploadedFileDetails(fileDetails.current);
       }
     }
 
@@ -210,7 +207,7 @@ const Header = function HeaderScreen() {
                 />
               </label>
               <div>
-                {getHeaderTempalteContent(uploadedFileDetails)[1]
+                {getHeaderTempalteContent(recentFileDetails)[1]
                   .map(({ title, value, id, valueColor }) => (
                     <div
                       className={styles.textWrapper}
