@@ -23,18 +23,20 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
 
   const [fileIsLoading, setFileIsLoading] = useState(false);
 
-  const documentsData = useSelector((state) => state.upload?.documents);
-  const documents = useRef(documentsData);
+  const parentDocumentData = useSelector(
+    (state) => state.upload?.parentDocument
+  );
+  const parentDocument = useRef(parentDocumentData);
   useLayoutEffect(() => {
-    documents.current = documentsData;
-  }, [documentsData]);
+    parentDocument.current = parentDocumentData;
+  }, [parentDocumentData]);
 
   const submitFile = async (formData) => {
     setFileIsLoading(true);
     await dispatch(uploadImages({ formData }));
-    if (document.current) {
+    if (parentDocument.current) {
       await dispatch(fetchImages({
-        documentId: documents.current[0].id,
+        documentId: parentDocument.current.id,
       }));
     }
     // if (uploadedFiles.current?.length) {

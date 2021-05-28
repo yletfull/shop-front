@@ -22,8 +22,6 @@ const Upload = function UploadScreen() {
     queueList.current = queueListData;
   }, [queueListData]);
 
-  console.log(queueList.current);
-
   return (
     <div className={styles.wrapper}>
       <NavigationBar

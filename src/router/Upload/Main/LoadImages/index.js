@@ -11,7 +11,7 @@ import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import Indicator from '@/components/Indicator';
-import { fetchImages, fetchDocuments } from '@/store/upload/actions';
+import { fetchImages } from '@/store/upload/actions';
 import Header from './Header';
 import styles from './styles.module.scss';
 
@@ -32,17 +32,15 @@ const LoadImagesTable = function LoadImagesTableScreen() {
 
   const [isFetching, setIsFetching] = useState(false);
 
-  const imagesData = useSelector((state) => state.upload?.images);
-  const images = useRef(imagesData);
-  useLayoutEffect(() => {
-    images.current = imagesData;
-  }, [imagesData]);
+  const images = useSelector((state) => state.upload?.images) || [];
 
-  const documentsData = useSelector((state) => state.upload?.documents);
-  const documents = useRef(documentsData);
+  const parentDocumentData = useSelector(
+    (state) => state.upload?.parentDocument
+  );
+  const parentDocument = useRef(parentDocumentData);
   useLayoutEffect(() => {
-    documents.current = documentsData;
-  }, [documentsData]);
+    parentDocument.current = parentDocumentData;
+  }, [parentDocumentData]);
 
   const [filter, setFilter] = useState({
     num: '',
@@ -52,24 +50,17 @@ const LoadImagesTable = function LoadImagesTableScreen() {
   });
 
   useEffect(() => {
-    const getDocumentsFn = async () => {
-      setIsFetching(true);
-      await dispatch(fetchDocuments());
-    };
-    getDocumentsFn();
-  }, [dispatch]);
-
-  useEffect(() => {
     const getImagesFn = async () => {
-      if (documents.current?.length) {
+      if (parentDocument.current) {
+        setIsFetching(true);
         await dispatch(fetchImages({
-          documentId: documents.current[0].id,
+          documentId: parentDocument.current.id,
         }));
+        setIsFetching(false);
       }
-      setIsFetching(false);
     };
     getImagesFn();
-  }, [dispatch, documents]);
+  }, [dispatch, parentDocument]);
 
   const handleNumInput = (e) => {
     const num = e.target.value;
@@ -189,8 +180,8 @@ const LoadImagesTable = function LoadImagesTableScreen() {
             </td>
           </tr>
 
-          {images.current.length
-            ? images.current.map((image, ind) => (
+          {images.length
+            ? images.map((image, ind) => (
               <tr
                 content=""
                 key={ind}
