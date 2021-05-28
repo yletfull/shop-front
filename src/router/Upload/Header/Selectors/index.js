@@ -120,13 +120,13 @@ const Header = function HeaderScreen() {
 
       if (queueList.current.length > 0) {
         if (queueList.current[0].status === -1) {
-          return dispatch(setStage(globalStages.errorCheck)); // удалить
+          return dispatch(setStage(globalStages.errorCheck));
         }
         if (queueList.current[0].status === 2) {
-          return dispatch(setStage(firstUploadStages.selectList)); // удалить
+          return dispatch(setStage(firstUploadStages.selectList));
         }
         if (queueList.current[0].status === 1) {
-          return dispatch(setStage(finalUploadStages.fileIsLoading)); // удалить
+          return dispatch(setStage(finalUploadStages.fileIsLoading));
         }
         dispatch(setStage(firstUploadStages.filseIsNotLoaded));
       }
