@@ -6,7 +6,7 @@ import VkIcon from '@/icons/Vk';
 import PicturesLoadIcon from '@/icons/PicturesLoad';
 import ProcessButton from '@/components/ProcessButton';
 import NavigationBar from '@/components/NavigationBar';
-import { setStage, uploadedFiles, uploadImages, fetchImages } from '@/store/upload/actions';
+import { setStage, uploadedFiles, uploadImages, fetchImages, fetchDocuments, setUploadedImages } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../../stages';
 import styles from './styles.module.scss';
 
@@ -23,6 +23,12 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
 
   const [fileIsLoading, setFileIsLoading] = useState(false);
 
+  const documentsData = useSelector((state) => state.upload?.documents);
+  const documents = useRef(documentsData);
+  useLayoutEffect(() => {
+    documents.current = documentsData;
+  }, [documentsData]);
+
   const parentDocumentData = useSelector(
     (state) => state.upload?.parentDocument
   );
@@ -34,16 +40,13 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
   const submitFile = async (formData) => {
     setFileIsLoading(true);
     await dispatch(uploadImages({ formData }));
-    if (parentDocument.current) {
-      await dispatch(fetchImages({
-        documentId: parentDocument.current.id,
-      }));
+    await dispatch(fetchDocuments({
+      'filter[sequenceId][>]': '0',
+      'filter[objectId]': parentDocument.current.id,
+    }));
+    if (documents.current.length) {
+      dispatch(setUploadedImages(documents.current));
     }
-    // if (uploadedFiles.current?.length) {
-    //   dispatch(setStage(firstUploadStages.selectList));
-    // } else {
-    //   dispatch(setStage(globalStages.errorCheck));
-    // }
     setFileIsLoading(false);
   };
   const handleFileChange = (e) => {
