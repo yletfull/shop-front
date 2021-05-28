@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useLayoutEffect, useRef, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,8 +5,7 @@ import VkIcon from '@/icons/Vk';
 import PicturesLoadIcon from '@/icons/PicturesLoad';
 import ProcessButton from '@/components/ProcessButton';
 import NavigationBar from '@/components/NavigationBar';
-import { setStage, uploadedFiles, uploadImages, fetchImages, fetchDocuments, setUploadedImages } from '@/store/upload/actions';
-import { firstUploadStages, globalStages } from '../../../stages';
+import { uploadImages, fetchDocuments, setUploadedImages } from '@/store/upload/actions';
 import styles from './styles.module.scss';
 
 
@@ -51,8 +49,11 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
   };
   const handleFileChange = (e) => {
     const data = new FormData();
-    data.append('file', e.target.files[0]);
-    data.append('filename', e.target.files[0].name);
+    Object.values(e.target.files).forEach((file, ind) => {
+      console.log(file);
+      data.append(`file${ind}`, file);
+      data.append(`filename${ind}`, file.name);
+    });
     submitFile(data);
   };
   const handleSelectFileButtonClick = () => {
@@ -80,6 +81,7 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
             style={{ display: 'none' }}
             ref={fileInput}
             onChange={handleFileChange}
+            multiple
           />
         </label>
         <ProcessButton

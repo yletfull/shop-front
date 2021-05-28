@@ -5,13 +5,12 @@ import cx from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
-// import TestImage from '@/images/TestImage.jpg';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import Indicator from '@/components/Indicator';
-import { fetchImages, fetchDocuments, setUploadedImages } from '@/store/upload/actions';
+import { fetchImages, fetchDocuments, setUploadedImages, uploadImages } from '@/store/upload/actions';
 import Header from './Header';
 import styles from './styles.module.scss';
 
@@ -30,7 +29,10 @@ const selectorMocksOptions = [
 const LoadImagesTable = function LoadImagesTableScreen() {
   const dispatch = useDispatch();
 
+  const fileInput = useRef(null);
+
   const [isFetching, setIsFetching] = useState(false);
+  const [fileIsLoading, setFileIsLoading] = useState();
 
   const images = useSelector((state) => state.upload?.images);
 
@@ -137,6 +139,30 @@ const LoadImagesTable = function LoadImagesTableScreen() {
   };
 
   const handleFilterSubmit = () => '';
+
+  const submitFile = async (formData) => {
+    await dispatch(uploadImages({ formData }));
+    await dispatch(fetchDocuments({
+      'filter[sequenceId][>]': '0',
+      'filter[objectId]': parentDocument.current.id,
+    }));
+    if (documents.current.length) {
+      dispatch(setUploadedImages(documents.current));
+    }
+    setFileIsLoading(false);
+  };
+  const handleFileChange = (e) => {
+    const data = new FormData();
+    data.append('file', e.target.files[0]);
+    data.append('filename', e.target.files[0].name);
+    submitFile(data);
+  };
+  const handleSelectFileButtonClick = (e) => {
+    const { filename } = e.target.dataset;
+    setFileIsLoading(filename);
+    fileInput.current.click();
+  };
+
   if (isFetching) {
     return <Spinner />;
   }
@@ -252,16 +278,25 @@ const LoadImagesTable = function LoadImagesTableScreen() {
                     )}
                 </td>
                 <td>
-                  <Button
-                    appearance="control"
-                    className={styles.tdButton}
-                  >
-                    {image.imageFile
-                      && <TimesIcon className="red" />}
-                  </Button>
+                  {image.imageFile
+                    && (
+                      <Button
+                        appearance="control"
+                        className={styles.tdButton}
+                        disabled
+                      >
+
+                        <TimesIcon className="red" />
+                      </Button>
+                    )}
                 </td>
                 <td>
-                  <Button appearance="control">
+                  <Button
+                    appearance="control"
+                    disabled={fileIsLoading === image.imageName}
+                    data-filename={image.imageName}
+                    onClick={handleSelectFileButtonClick}
+                  >
                     <UploadIcon />
                   </Button>
                 </td>
@@ -291,8 +326,14 @@ const LoadImagesTable = function LoadImagesTableScreen() {
             )}
         </tbody>
       </table>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: 'none' }}
+        ref={fileInput}
+        onChange={handleFileChange}
+      />
     </div>
-
   );
 };
 
