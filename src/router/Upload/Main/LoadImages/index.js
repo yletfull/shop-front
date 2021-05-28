@@ -226,7 +226,7 @@ const LoadImagesTable = function LoadImagesTableScreen() {
                 <td>
                   {image.rowIndex || '-'}
                 </td>
-                <td></td>
+                <td>
                   {image.campaignName || '-'}
                 </td>
                 <td>
