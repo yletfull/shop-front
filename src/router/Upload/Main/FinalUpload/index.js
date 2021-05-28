@@ -34,8 +34,10 @@ const FinalUpload = function FinalUploadScreen() {
   useEffect(() => {
     const finalImportFn = async () => {
       setLocalStage(finalUploadStages.fileIsLoading);
+
       const importedDocument = await dispatch(importDocument());
       let task = await dispatch(fetchTask(importedDocument.id));
+
       if (Object.keys(task).length) {
         (function check() {
           setTimeout(async () => {
@@ -57,7 +59,6 @@ const FinalUpload = function FinalUploadScreen() {
             }
           }, 1000);
         })();
-        console.log(task);
         return;
       }
       dispatch(setStage(globalStages.errorCheck));

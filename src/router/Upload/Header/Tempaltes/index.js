@@ -24,14 +24,15 @@ import styles from './styles.module.scss';
 
 const getHeaderTempalteContent = (data) => [[
   { title: 'Последнее скачивание', value: '-', id: 0 },
-  { title: 'Всего РК', value: '-', id: 1 },
+  { title: 'Всего РК', value: data.data?.total, id: 1 },
 ],
 [
   { title: 'Последняя загрузка во ВК', value: formatDate(data.createdAt, 'DD.MM.YYYY HH:MM:ss'), id: 0 },
-  { title: 'Всего РК', value: '-', id: 1 },
-  { title: 'Новых РК', value: '-', id: 2 },
-  { title: 'Ошибок', value: '-', valueColor: 'red', id: 3 },
+  { title: 'Всего РК', value: data.data?.correct, id: 1 },
+  { title: 'Новых РК', value: data.data?.new, id: 2 },
+  { title: 'Ошибок', value: data.data?.incorrect, valueColor: 'red', id: 3 },
 ]];
+
 
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
@@ -42,8 +43,6 @@ const Header = function HeaderScreen() {
   const [fileIsLoading, setFileIsLoading] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
   const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
-
-  const [recentFileDetails, setRecentFileDetails] = useState({});
 
   const recentFileData = useSelector(
     (state) => state.upload?.recentFile
@@ -119,6 +118,8 @@ const Header = function HeaderScreen() {
   useEffect(() => (async () => {
     setDetailsIsFetching(true);
 
+    await dispatch(fetchRecentFile());
+
     await dispatch(fetchDocuments());
     if (allUploadedFiles.current?.length) {
       const parentDoc = getParentDocumentState(allUploadedFiles.current);
@@ -128,24 +129,16 @@ const Header = function HeaderScreen() {
       }
     }
 
-    await dispatch(fetchRecentFile());
-    if (recentFile.current?.length) {
-      await dispatch(fetchDocumentDetails(recentFile.current?.id));
-      if (fileDetails.current) {
-        setRecentFileDetails(fileDetails.current);
-      }
-    }
-
     setDetailsIsFetching(false);
   })(), [dispatch]);
 
 
   useEffect(() => {
-    if (recentFileDetails.current?.length) {
-      return setFileIsLoaded(true);
+    if (Object.keys(recentFile.current).length) {
+      return setFileIsLoaded(false);
     }
-    setFileIsLoaded(false);
-  }, [recentFileDetails]);
+    setFileIsLoaded(true);
+  }, [recentFile]);
 
   useEffect(() => {
     switch (stage) {
@@ -175,7 +168,7 @@ const Header = function HeaderScreen() {
                 disabled={!fileIsLoaded}
               />
               <div>
-                {getHeaderTempalteContent(recentFileDetails)[0]
+                {getHeaderTempalteContent(recentFile.current)[0]
                   .map(({ title, value, id }) => (
                     <div
                       className={styles.textWrapper}
@@ -208,7 +201,7 @@ const Header = function HeaderScreen() {
                 />
               </label>
               <div>
-                {getHeaderTempalteContent(recentFileDetails)[1]
+                {getHeaderTempalteContent(recentFile.current)[1]
                   .map(({ title, value, id, valueColor }) => (
                     <div
                       className={styles.textWrapper}

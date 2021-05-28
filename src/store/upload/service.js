@@ -41,7 +41,7 @@ const importDocument = (params) => api
   .then((data) => data);
 
 const getRecentFile = ({ cabinetId, ...params }) => api
-  .get(`/ad-cabinet/${cabinetId}/recent-file`, { params })
+  .get(`api/v1/ad-cabinet/${cabinetId}/recent-file`, { params })
   .then((data) => data);
 
 const getImages = ({ documentId, ...params }) => api
