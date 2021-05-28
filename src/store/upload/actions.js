@@ -53,11 +53,12 @@ export const setClient = (clientId) => (dispatch) => {
   dispatch(selectClient(clientId));
 };
 
-export const fetchQueueList = () => async (dispatch, getState) => {
+export const fetchQueueList = (params) => async (dispatch, getState) => {
   try {
     const cabinetId = getState().upload.selectAccount;
     const clientId = getState().upload.selectClient;
-    const data = await service.fetchQueueList({ cabinetId, clientId });
+    const data = await service
+      .fetchQueueList({ cabinetId, clientId, params });
     dispatch(queueList(data.data.data));
   } catch (err) {
     dispatch(queueList([]));
@@ -110,10 +111,10 @@ export const setSelectedList = (data) => (dispatch) => {
   dispatch(selectedList(data));
 };
 
-export const acceptFile = () => async (dispatch, getState) => {
+export const importDocument = () => async (dispatch, getState) => {
   try {
-    const data = await service.acceptFile({
-      documentId: getState().upload.documentDetails.id,
+    const data = await service.importDocument({
+      documentId: getState().upload.parentDocument.id,
       cabinetId: getState().upload.selectAccount,
       clientId: getState().upload.selectClient,
       sheetNum: getState().upload.selectedList,
@@ -123,6 +124,16 @@ export const acceptFile = () => async (dispatch, getState) => {
     dispatch(task([]));
   }
 };
+
+export const fetchTask = (taskId) => async (dispatch) => {
+  try {
+    const data = await service.getTask({ taskId });
+    dispatch(task(data.data.data));
+  } catch (err) {
+    dispatch(task([]));
+  }
+};
+
 
 export const fetchRecentFile = () => async (dispatch, getState) => {
   try {

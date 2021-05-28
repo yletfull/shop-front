@@ -36,8 +36,8 @@ const uploadImages = ({ formData, documentId }) => api
   })
   .then((data) => data);
 
-const acceptFile = (params) => api
-  .post('api/v1/import', { params })
+const importDocument = (params) => api
+  .post('api/v1/import', { ...params })
   .then((data) => data);
 
 const getRecentFile = ({ cabinetId, ...params }) => api
@@ -48,6 +48,10 @@ const getImages = ({ documentId, ...params }) => api
   .get(`api/v1/import/${documentId}/images`, { params })
   .then((data) => data);
 
+const getTask = ({ taskId }) => api
+  .get(`api/v1/task/${taskId}`)
+  .then((data) => data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -56,8 +60,9 @@ export default {
   fetchDocuments,
   fetchDocumentDetails,
   uploadFiles,
-  acceptFile,
+  importDocument,
   getRecentFile,
   getImages,
   uploadImages,
+  getTask,
 };
