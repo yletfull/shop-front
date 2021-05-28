@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SuccessIcon from '@/icons/Success';
 import VentIcon from '@/icons/Vent';
 import NavigationBar from '@/components/NavigationBar';
-import { importDocument, setStage, fetchTask } from '@/store/upload/actions';
+import { importDocument, setStage, fetchTask, fetchRecentFile } from '@/store/upload/actions';
 import { finalUploadStages, finalUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -15,44 +16,50 @@ const navigationBarParams = {
   next: [],
 };
 
-const Upload = function UploadScreen() {
+const FinalUpload = function FinalUploadScreen() {
   const dispatch = useDispatch();
-  const stage = useSelector((state) => state.upload?.stage);
 
-  const taskData = useSelector(
-    (state) => state.upload?.task
-  );
-  const task = useRef(taskData);
+  const [localStage, setLocalStage] = useState(finalUploadStages.fileIsLoading);
+
+  const stageData = useSelector((state) => state.upload?.stage);
+  const stage = useRef(stageData);
   useLayoutEffect(() => {
-    task.current = taskData;
-  }, [taskData]);
+    stage.current = stageData;
+  }, [stageData]);
 
   useEffect(() => {
     const finalImportFn = async () => {
-      dispatch(setStage(finalUploadStages.fileIsLoading));
-      await dispatch(importDocument());
-      if (task.current) {
-        console.log(task.current.id);
+      setLocalStage(finalUploadStages.fileIsLoading);
+      const importedDocument = await dispatch(importDocument());
+      let task = await dispatch(fetchTask(importedDocument.id));
+      if (Object.keys(task).length) {
+        (function check() {
+          setTimeout(async () => {
+            task = await dispatch(fetchTask(importedDocument.id));
+            if (task.status === 0 || task.status === 1) {
+              return check();
+            }
+
+            clearTimeout(check);
+
+            if (task.status === 2) {
+              setLocalStage(finalUploadStages.fileIsLoaded);
+              dispatch(fetchRecentFile());
+              return;
+            }
+            if (task.status === -1) {
+              return dispatch(setStage(globalStages.errorCheck));
+            }
+          }, 1000);
+        })();
+        console.log(task);
+        return;
       }
-      await dispatch(fetchTask(task.current?.id));
-      // if (Object.keys(task.current).length) {
-      //   (function check() {
-      //     setTimeout(() => {
-      //       if (task.current.status === 0 || task.current.status === 1) {
-      //         return check();
-      //       }
-      //       clearTimeout(check);
-      //     }, 1000);
-      //   })();
-      //   if (task.current.status === 2) {
-      //     dispatch(setStage(finalUploadStages.fileIsLoaded));
-      //   }
-      //   return;
-      // }
       dispatch(setStage(globalStages.errorCheck));
     };
     finalImportFn();
   }, [dispatch]);
+
 
   return (
     <div className={styles.wrapper}>
@@ -60,7 +67,7 @@ const Upload = function UploadScreen() {
         params={navigationBarParams}
       />
       <div className={styles.contentWrapper}>
-        {stage === stages.fileIsLoading
+        {localStage === stages.fileIsLoading
         && (
           <React.Fragment>
             <VentIcon className={styles.icon} />
@@ -72,7 +79,7 @@ const Upload = function UploadScreen() {
           </React.Fragment>
         )}
 
-        {stage === stages.fileIsLoaded
+        {localStage === stages.fileIsLoaded
         && (
           <React.Fragment>
             <SuccessIcon className={styles.icon} />
@@ -87,4 +94,4 @@ const Upload = function UploadScreen() {
   );
 };
 
-export default Upload;
+export default FinalUpload;

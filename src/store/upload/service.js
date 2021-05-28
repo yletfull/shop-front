@@ -49,7 +49,7 @@ const getImages = ({ documentId, ...params }) => api
   .then((data) => data);
 
 const getTask = ({ taskId }) => api
-  .get(`api/v1/task/${taskId}`)
+  .get(`api/v1/queue/${taskId}`)
   .then((data) => data);
 
 export default {

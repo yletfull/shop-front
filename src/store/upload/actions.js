@@ -121,6 +121,7 @@ export const importDocument = () => async (dispatch, getState) => {
       sheetNum: getState().upload.selectedList,
     });
     dispatch(importedDocument(data.data.data));
+    return data.data.data;
   } catch (err) {
     dispatch(importedDocument([]));
   }
@@ -130,11 +131,11 @@ export const fetchTask = (taskId) => async (dispatch) => {
   try {
     const data = await service.getTask({ taskId });
     dispatch(task(data.data.data));
+    return data.data.data;
   } catch (err) {
     dispatch(task([]));
   }
 };
-
 
 export const fetchRecentFile = () => async (dispatch, getState) => {
   try {

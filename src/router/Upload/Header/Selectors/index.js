@@ -10,7 +10,7 @@ import {
   fetchAccounts, fetchClients, fetchQueueList,
   setAccount, setClient, setStage,
 } from '@/store/upload/actions';
-import { firstUploadStages, globalStages } from '../../stages';
+import { finalUploadStages, firstUploadStages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
 
@@ -119,18 +119,17 @@ const Header = function HeaderScreen() {
       await dispatch(fetchQueueList());
 
       if (queueList.current.length > 0) {
-        if (queueList.current[queueList.current.length - 1].status === 1) {
-          return dispatch(setStage(firstUploadStages.selectList));
+        if (queueList.current[0].status === -1) {
+          return dispatch(setStage(globalStages.errorCheck)); // удалить
         }
-        if (queueList.current[queueList.current.length - 1].status === -1) {
+        if (queueList.current[0].status === 2) {
           return dispatch(setStage(firstUploadStages.selectList)); // удалить
         }
-        if (queueList.current[queueList.current.length - 1].status === 0) {
-          return dispatch(setStage(globalStages.loadImage));
+        if (queueList.current[0].status === 1) {
+          return dispatch(setStage(finalUploadStages.fileIsLoading)); // удалить
         }
-        return;
+        dispatch(setStage(firstUploadStages.filseIsNotLoaded));
       }
-      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
   };
 
