@@ -152,6 +152,6 @@ export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
   }
 };
 
-export const setUploadedImages = (images) => {
-  dispatch(uploadedImages(images));
-}
+export const setUploadedImages = (data) => (dispatch) => {
+  dispatch(uploadedImages(data));
+};
