@@ -50,7 +50,6 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
   const handleFileChange = (e) => {
     const data = new FormData();
     Object.values(e.target.files).forEach((file, ind) => {
-      console.log(file);
       data.append(`file${ind}`, file);
       data.append(`filename${ind}`, file.name);
     });
