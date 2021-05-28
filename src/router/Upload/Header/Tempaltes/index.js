@@ -151,6 +151,7 @@ const Header = function HeaderScreen() {
     switch (stage) {
       case firstUploadStages.selectList:
       case firstUploadStages.filseIsNotLoaded:
+      case globalStages.errorCheck:
         setUploadButtonDisabled(false);
         break;
       default:
