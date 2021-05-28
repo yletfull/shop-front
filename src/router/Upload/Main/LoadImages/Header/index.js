@@ -32,9 +32,11 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
   const submitFile = async (formData) => {
     setFileIsLoading(true);
     await dispatch(uploadImages({ formData }));
-    await dispatch(fetchImages(
-      documents.current[document.currnet.length - 1]
-    ));
+    if (document.current) {
+      await dispatch(fetchImages({
+        documentId: documents.current[0].id,
+      }));
+    }
     // if (uploadedFiles.current?.length) {
     //   dispatch(setStage(firstUploadStages.selectList));
     // } else {

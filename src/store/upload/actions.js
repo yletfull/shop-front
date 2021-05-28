@@ -16,6 +16,7 @@ export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
 export const images = createAction(`${NS}/images`);
 export const uploadImageError = createAction(`${NS}/uploadImageError`);
+export const parentDocument = createAction(`${NS}/parentDocument`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -140,13 +141,16 @@ export const fetchRecentFile = () => async (dispatch, getState) => {
   }
 };
 
+export const setParentDocument = (value) => (dispatch) => {
+  dispatch(parentDocument(value));
+};
+
 export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
   try {
     const data = await service.getImages({
       documentId,
       sheetNum: getState().upload.selectedList,
     });
-    console.log(data);
     dispatch(images(data.data.meta.images));
   } catch (err) {
     dispatch(images([]));

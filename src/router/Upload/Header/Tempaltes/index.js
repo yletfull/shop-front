@@ -16,6 +16,7 @@ import {
   fetchRecentFile,
   fetchDocumentDetails,
   fetchDocuments,
+  setParentDocument,
 } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
@@ -41,8 +42,6 @@ const Header = function HeaderScreen() {
   const [fileIsLoading, setFileIsLoading] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
   const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
-
-  console.log(uploadButtonDisabled);
 
   const [recentFileDetails, setRecentFileDetails] = useState({});
   const [uploadedFileDetails, setUploadedFileDetails] = useState({});
@@ -86,6 +85,8 @@ const Header = function HeaderScreen() {
     (state) => state.upload.stage
   );
 
+  const getParentDocumentState = (documents) => documents
+    .find((doc) => doc.sequenceId === 0);
 
   const submitFile = async (data) => {
     setFileIsLoading(true);
@@ -94,8 +95,10 @@ const Header = function HeaderScreen() {
     if (uploadedFiles.current?.length) {
       await dispatch(fetchDocuments());
       if (allUploadedFiles.current?.length) {
-        await dispatch(fetchDocumentDetails(allUploadedFiles.current[0]?.id));
+        const parentDoc = getParentDocumentState(allUploadedFiles.current);
+        await dispatch(fetchDocumentDetails(parentDoc.id));
         if (fileDetails.current) {
+          dispatch(setParentDocument(fileDetails.current));
           setUploadedFileDetails(fileDetails.current);
         }
       }
@@ -120,8 +123,10 @@ const Header = function HeaderScreen() {
 
     await dispatch(fetchDocuments());
     if (allUploadedFiles.current?.length) {
-      await dispatch(fetchDocumentDetails(allUploadedFiles.current[0]?.id));
+      const parentDoc = getParentDocumentState(allUploadedFiles.current);
+      await dispatch(fetchDocumentDetails(parentDoc.id));
       if (fileDetails.current) {
+        dispatch(setParentDocument(fileDetails.current));
         setUploadedFileDetails(fileDetails.current);
       }
     }

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
@@ -62,13 +63,12 @@ const LoadImagesTable = function LoadImagesTableScreen() {
     const getImagesFn = async () => {
       if (documents.current?.length) {
         await dispatch(fetchImages({
-          documentId: documents.current[documents.current.length - 1].id,
+          documentId: documents.current[0].id,
         }));
       }
       setIsFetching(false);
     };
     getImagesFn();
-    console.log(documents);
   }, [dispatch, documents]);
 
   const handleNumInput = (e) => {
@@ -171,7 +171,7 @@ const LoadImagesTable = function LoadImagesTableScreen() {
               Title
             </td>
             <td>
-              Name
+              Image name
             </td>
             <td>
               Ad_format
@@ -190,22 +190,22 @@ const LoadImagesTable = function LoadImagesTableScreen() {
           </tr>
 
           {images.current.length
-            ? images.current.map((image) => (
+            ? images.current.map((image, ind) => (
               <tr
                 content=""
-                key={image.id}
+                key={ind}
               >
                 <td>
                   1
                 </td>
                 <td>
-                  {image.title || '-'}
+                  {image.campaignName || '-'}
                 </td>
                 <td>
-                  {image.fileName || '-'}
+                  {image.imageName || '-'}
                 </td>
                 <td>
-                  Ad_format
+                  {image.adFormat || '-'}
                 </td>
                 <td>
                   Banner

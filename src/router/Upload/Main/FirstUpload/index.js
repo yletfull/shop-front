@@ -23,11 +23,9 @@ const Upload = function UploadScreen() {
 
   const stage = useSelector((state) => state.upload.stage);
 
-
   const selectedList = useSelector((state) => state.upload.selectedList || 'default');
 
-
-  const listOptions = useSelector((state) => state.upload.documentDetails
+  const listOptions = useSelector((state) => state.upload.parentDocument
     .data?.sheets?.map((item, index) => (
       { value: index, text: item }
     ))) || [];
