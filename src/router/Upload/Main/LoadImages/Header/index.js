@@ -5,7 +5,8 @@ import VkIcon from '@/icons/Vk';
 import PicturesLoadIcon from '@/icons/PicturesLoad';
 import ProcessButton from '@/components/ProcessButton';
 import NavigationBar from '@/components/NavigationBar';
-import { uploadImages, fetchDocuments, setUploadedImages } from '@/store/upload/actions';
+import { uploadImages, fetchDocuments, setUploadedImages, setStage } from '@/store/upload/actions';
+import { globalStages } from '../../../stages';
 import styles from './styles.module.scss';
 
 
@@ -59,6 +60,9 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
     fileInput.current.click();
   };
 
+  const handleImportButtonClick = () => {
+    dispatch(setStage(globalStages.finalUpload));
+  };
 
   return (
     <div className={styles.headerWrapper}>
@@ -87,6 +91,7 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
           icon={<VkIcon />}
           text={['Выгрузить РК', 'во Вконтакт']}
           className={styles.loadButton}
+          onClick={handleImportButtonClick}
         />
       </div>
     </div>
