@@ -80,7 +80,9 @@ const LoadImagesTable = function LoadImagesTableScreen() {
       }));
       if (documents.current?.length) {
         dispatch(setUploadedImages(documents.current));
+        return;
       }
+      dispatch(setUploadedImages([]));
     };
     getDocumentsFn();
   }, [dispatch, parentDocument]);
@@ -94,9 +96,10 @@ const LoadImagesTable = function LoadImagesTableScreen() {
             (uploadedImage) => uploadedImage.fileName === image.imageName
           ),
       }));
-      console.log(list, 'resultList');
       setImagesList(list);
+      return;
     }
+    setImagesList(images);
   }, [uploadedImages, images]);
 
   const handleNumInput = (e) => {
@@ -193,13 +196,13 @@ const LoadImagesTable = function LoadImagesTableScreen() {
 
           <tr header="">
             <td>
+              Image name
+            </td>
+            <td>
               № строки
             </td>
             <td>
               Title
-            </td>
-            <td>
-              Image name
             </td>
             <td>
               Ad_format
@@ -224,13 +227,13 @@ const LoadImagesTable = function LoadImagesTableScreen() {
                 key={ind}
               >
                 <td>
+                  {image.imageName || '-'}
+                </td>
+                <td>
                   {image.rowIndex || '-'}
                 </td>
                 <td>
                   {image.campaignName || '-'}
-                </td>
-                <td>
-                  {image.imageName || '-'}
                 </td>
                 <td>
                   {image.adFormat || '-'}
