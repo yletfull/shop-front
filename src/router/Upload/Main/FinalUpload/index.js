@@ -10,16 +10,20 @@ import { finalUploadStages, finalUploadStages as stages, globalStages } from '..
 import styles from './styles.module.scss';
 
 
-const navigationBarParams = {
+const defaultNavigationBarParams = {
   prev: ['Загрузка файла', 'Проверка на ошибки', 'Загрузка изображений'],
   current: 'Выгрузка на площадку',
   next: [],
+  finally: false,
 };
 
 const FinalUpload = function FinalUploadScreen() {
   const dispatch = useDispatch();
 
   const [localStage, setLocalStage] = useState(finalUploadStages.fileIsLoading);
+  const [
+    navigationBarParams, setNaVigationBarParams,
+  ] = useState(defaultNavigationBarParams);
 
   const stageData = useSelector((state) => state.upload?.stage);
   const stage = useRef(stageData);
@@ -43,6 +47,7 @@ const FinalUpload = function FinalUploadScreen() {
             clearTimeout(check);
 
             if (task.status === 2) {
+              setNaVigationBarParams((prev) => ({ ...prev, finally: true }));
               setLocalStage(finalUploadStages.fileIsLoaded);
               dispatch(fetchRecentFile());
               return;
