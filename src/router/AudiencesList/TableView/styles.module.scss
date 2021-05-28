@@ -1,5 +1,17 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.tableView {
+  @include table();
+
+  &Cell {
+    display: flex;
+    width: 100%;
+  }
+
+  &Input {
+    &_grow {
+      flex-grow: 1;
+      margin-right: 1rem;
+    }
+  }
 }

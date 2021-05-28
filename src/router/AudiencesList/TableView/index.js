@@ -91,6 +91,7 @@ const TableView = function TableView({
               type="text"
               value={searchDate}
               onChange={handleChangeSearchDate}
+              fullwidth
             />
           </td>
           <td data-purpose="filter">
@@ -103,6 +104,7 @@ const TableView = function TableView({
               type="text"
               value={searchName}
               onChange={handleChangeSearchName}
+              fullwidth
             />
           </td>
           <td
