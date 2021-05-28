@@ -30,14 +30,14 @@ const uploadImages = ({ formData, documentId }) => api.post(`api/v1/document/${d
 })
   .then((data) => data);
 
-const acceptFile = (params) => api.post('api/v1/import', { ...params })
+const acceptFile = (params) => api.post('api/v1/import', { params })
   .then((data) => data);
 
 const getRecentFile = ({ cabinetId, ...params }) => api
-  .get(`/ad-cabinet/${cabinetId}/recent-file`, { ...params })
+  .get(`/ad-cabinet/${cabinetId}/recent-file`, { params })
   .then((data) => data);
 
-const getImages = ({ documentId, ...params }) => api.get(`api/v1/import/${documentId}/images`, { ...params })
+const getImages = ({ documentId, ...params }) => api.get(`api/v1/import/${documentId}/images`, { params })
   .then((data) => data);
 
 export default {
