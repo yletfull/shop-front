@@ -18,6 +18,7 @@ export const images = createAction(`${NS}/images`);
 export const uploadImageError = createAction(`${NS}/uploadImageError`);
 export const parentDocument = createAction(`${NS}/parentDocument`);
 export const uploadedImages = createAction(`${NS}/uploadedImages`);
+export const importedDocument = createAction(`${NS}/importedDocument`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -119,9 +120,9 @@ export const importDocument = () => async (dispatch, getState) => {
       clientId: getState().upload.selectClient,
       sheetNum: getState().upload.selectedList,
     });
-    dispatch(task(data.data.data));
+    dispatch(importedDocument(data.data.data));
   } catch (err) {
-    dispatch(task([]));
+    dispatch(importedDocument([]));
   }
 };
 
