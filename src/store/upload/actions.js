@@ -14,7 +14,7 @@ export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 export const selectedList = createAction(`${NS}/selectedList`);
 export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
-export const images = createAction(`${NS}/imgaes`);
+export const images = createAction(`${NS}/images`);
 export const uploadImageError = createAction(`${NS}/uploadImageError`);
 
 export const setStage = (value) => (dispatch) => {
@@ -140,10 +140,14 @@ export const fetchRecentFile = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchImages = ({ documentId }) => async (dispatch) => {
+export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
   try {
-    const data = await service.getImage({ documentId });
-    dispatch(images(data.data.data));
+    const data = await service.getImages({
+      documentId,
+      sheetNum: getState().upload.selectedList,
+    });
+    console.log(data);
+    dispatch(images(data.data.meta.images));
   } catch (err) {
     dispatch(images([]));
   }

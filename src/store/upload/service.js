@@ -23,14 +23,12 @@ const fetchQueueList = ({ cabinetId, ...params }) => api
 const uploadFiles = ({ files }) => api.post('api/v1/documents', files)
   .then((data) => data);
 
-
 const uploadImages = ({ formData, documentId }) => api.post(`api/v1/document/${documentId}`, formData, {
   headers: {
     'Content-Type': 'multipart/form-data',
   },
 })
   .then((data) => data);
-
 
 const acceptFile = (params) => api.post('api/v1/import', { ...params })
   .then((data) => data);
@@ -39,7 +37,7 @@ const getRecentFile = ({ cabinetId, ...params }) => api
   .get(`/ad-cabinet/${cabinetId}/recent-file`, { ...params })
   .then((data) => data);
 
-const fetchImages = ({ documentId }) => api.get(`api/v1/import/${documentId}`)
+const getImages = ({ documentId, ...params }) => api.get(`api/v1/import/${documentId}/images`, { ...params })
   .then((data) => data);
 
 export default {
@@ -52,6 +50,6 @@ export default {
   uploadFiles,
   acceptFile,
   getRecentFile,
-  fetchImages,
+  getImages,
   uploadImages,
 };
