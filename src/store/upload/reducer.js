@@ -18,6 +18,7 @@ import {
   uploadedImages,
   uploadImageError,
   parentDocument,
+  importedDocument,
 } from './actions';
 
 const initialState = {
@@ -55,6 +56,7 @@ const initialState = {
   uploadedImages: [],
   uploadImageError: '',
   parentDocument: {},
+  importedDocument: {},
 };
 
 const reducer = createReducer(initialState, {
@@ -121,6 +123,10 @@ const reducer = createReducer(initialState, {
   [parentDocument]: (state, action) => ({
     ...state,
     parentDocument: action.payload,
+  }),
+  [importedDocument]: (state, action) => ({
+    ...state,
+    importedDocument: action.payload,
   }),
 });
 
