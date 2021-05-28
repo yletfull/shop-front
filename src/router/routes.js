@@ -1,12 +1,38 @@
 import { lazy } from 'react';
 
-const SegmentsDetails = lazy(() => import('./SegmentsDetails'));
-const SegmentsList = lazy(() => import('./SegmentsList'));
-const SegmentsUser = lazy(() => import('./SegmentsUser'));
-const Upload = lazy(() => import('./Upload'));
-const Users = lazy(() => import('./Users'));
+const AudiencesList = lazy(() => import(
+  /* webpackChunkName: 'audiences-list' */
+  /* webpackMode: 'lazy' */
+  './AudiencesList'
+));
+const SegmentsDetails = lazy(() => import(
+  /* webpackChunkName: 'segments-details' */
+  /* webpackMode: 'lazy' */
+  './SegmentsDetails'
+));
+const SegmentsList = lazy(() => import(
+  /* webpackChunkName: 'segments-list' */
+  /* webpackMode: 'lazy' */
+  './SegmentsList'
+));
+const SegmentsUser = lazy(() => import(
+  /* webpackChunkName: 'segments-user' */
+  /* webpackMode: 'lazy' */
+  './SegmentsUser'
+));
+const Upload = lazy(() => import(
+  /* webpackChunkName: 'upload' */
+  /* webpackMode: 'lazy' */
+  './Upload'
+));
+const Users = lazy(() => import(
+  /* webpackChunkName: 'users' */
+  /* webpackMode: 'lazy' */
+  './Users'
+));
 
 export const patchs = {
+  audiencesList: '/audiences',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
   segmentsUser: '/segments/user/',
@@ -15,6 +41,7 @@ export const patchs = {
 };
 
 export const titles = {
+  audiencesList: 'Аудитории',
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
@@ -56,5 +83,10 @@ export default [
     Component: SegmentsUser,
     path: patchs.segmentsUser,
     title: titles.segmentsUser,
+  },
+  {
+    Component: AudiencesList,
+    path: patchs.audiencesList,
+    title: titles.audiencesList,
   },
 ];
