@@ -66,9 +66,9 @@ export const fetchQueueList = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchDocuments = () => async (dispatch) => {
+export const fetchDocuments = (params) => async (dispatch) => {
   try {
-    const data = await service.fetchDocuments();
+    const data = await service.fetchDocuments(params);
     dispatch(documents(data.data.data));
   } catch (err) {
     dispatch(documents([]));

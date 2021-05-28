@@ -12,11 +12,12 @@ const fetchClientsList = ({ cabinetId }) => api
   .get(`api/v1/ad-cabinet/${cabinetId}/clients`)
   .then((data) => data);
 
-const fetchDocuments = () => api
-  .get('api/v1/documents')
+const fetchDocuments = (params) => api
+  .get('api/v1/documents', { params })
   .then((data) => data);
 
-const fetchDocumentDetails = ({ documentId }) => api.get(`api/v1/document/${documentId}`)
+const fetchDocumentDetails = ({ documentId }) => api
+  .get(`api/v1/document/${documentId}`)
   .then((data) => data);
 
 const fetchQueueList = ({ cabinetId, ...params }) => api
