@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import FingerIcon from '@/icons/Finger';
@@ -8,8 +8,8 @@ import VentIcon from '@/icons/Vent';
 import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
+import { setSelectedList, setStage } from '@/store/upload/actions';
 import { firstUploadStages as stages, globalStages } from '../../stages';
-import { acceptFile, setStage, setSelectList, fetchDocumentDetails } from '../../../../store/upload/actions';
 import styles from './styles.module.scss';
 
 const navigationBarParams = {
@@ -22,49 +22,33 @@ const Upload = function UploadScreen() {
   const dispatch = useDispatch();
 
   const stage = useSelector((state) => state.upload.stage);
-  const list = useSelector((state) => state.upload.selectList || 'default');
-  const uploadedFiles = useSelector((state) => state.upload?.uploadedFiles)
-   || [];
-  const listOptions = useSelector((state) => state.upload.documentDetails
+
+  const selectedList = useSelector((state) => state.upload.selectedList || 'default');
+
+  const listOptions = useSelector((state) => state.upload.parentDocument
     .data?.sheets?.map((item, index) => (
       { value: index, text: item }
     ))) || [];
 
-  const taskData = useSelector((state) => state.upload.task || {});
-  const task = useRef(taskData);
-
   const [
     acceptListButtonDisabled, setAcceptListButtonDisabled,
-  ] = useState(false);
+  ] = useState(true);
 
   const handleListSelect = (e) => {
     const { value } = e.target;
-    dispatch(setSelectList(value));
+    dispatch(setSelectedList(value));
   };
 
   const handleAcceptListButtonClick = async () => {
-    setAcceptListButtonDisabled(true);
-    await dispatch(fetchDocumentDetails(uploadedFiles[uploadedFiles.length - 1]
-      .id));
-    await dispatch(acceptFile());
-
-    if (task && Object.keys(task.current)?.length) {
-      dispatch(setStage(globalStages.loadImage));
-    } else {
-      dispatch(setStage(globalStages.errorCheck));
-    }
+    dispatch(setStage(globalStages.loadImage));
   };
 
   useEffect(() => {
-    if (list === 'default') {
+    if (selectedList === 'default') {
       return setAcceptListButtonDisabled(true);
     }
     setAcceptListButtonDisabled(false);
-  }, [list]);
-
-  useLayoutEffect(() => {
-    task.current = taskData;
-  }, [taskData]);
+  }, [selectedList]);
 
   return (
     <div className={styles.wrapper}>
@@ -105,7 +89,7 @@ const Upload = function UploadScreen() {
                 </p>
                 <div>
                   <Select
-                    value={list}
+                    value={selectedList}
                     options={listOptions}
                     onChange={handleListSelect}
                     className={styles.select}

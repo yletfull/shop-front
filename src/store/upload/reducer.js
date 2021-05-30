@@ -12,7 +12,13 @@ import {
   documentDetails,
   uploadedFiles,
   task,
-  selectList,
+  selectedList,
+  recentFile,
+  images,
+  uploadedImages,
+  uploadImageError,
+  parentDocument,
+  importedDocument,
 } from './actions';
 
 const initialState = {
@@ -41,10 +47,16 @@ const initialState = {
           '57578275-96fc-4525-a632-05b4fa00842d',
         ],
       },
-      selectList: '',
+      selectedList: '',
     },
   ],
   task: {},
+  recentFile: {},
+  images: [],
+  uploadedImages: [],
+  uploadImageError: '',
+  parentDocument: {},
+  importedDocument: {},
 };
 
 const reducer = createReducer(initialState, {
@@ -88,9 +100,33 @@ const reducer = createReducer(initialState, {
     ...state,
     task: action.payload,
   }),
-  [selectList]: (state, action) => ({
+  [selectedList]: (state, action) => ({
     ...state,
-    selectList: action.payload,
+    selectedList: action.payload,
+  }),
+  [recentFile]: (state, action) => ({
+    ...state,
+    recentFile: action.payload,
+  }),
+  [images]: (state, action) => ({
+    ...state,
+    images: action.payload,
+  }),
+  [uploadedImages]: (state, action) => ({
+    ...state,
+    uploadedImages: action.payload,
+  }),
+  [uploadImageError]: (state, action) => ({
+    ...state,
+    uploadImageError: action.payload,
+  }),
+  [parentDocument]: (state, action) => ({
+    ...state,
+    parentDocument: action.payload,
+  }),
+  [importedDocument]: (state, action) => ({
+    ...state,
+    importedDocument: action.payload,
   }),
 });
 
