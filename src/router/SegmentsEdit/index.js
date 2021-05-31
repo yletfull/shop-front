@@ -10,6 +10,7 @@ import reducer from './reducer';
 import {
   fetchParams,
   fetchSegment,
+  addSegmentParam,
 } from './actions';
 import {
   getIsFetchingParams,
@@ -17,6 +18,9 @@ import {
   getParams,
   getSegment,
 } from './selectors';
+import Attribute from './Attribute';
+import AttributesGroup from './AttributesGroup';
+import Constructor from './Constructor';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
 import Statistics from './Statistics';
@@ -31,6 +35,8 @@ const defaultProps = {
 };
 
 const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
+  const generateKeyByIndex = (key, index) => `${key}-${index}`;
+
   const dispatch = useDispatch();
 
   const { id: segmentId } = useParams();
@@ -39,7 +45,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const params = useSelector(getParams);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
-  const segment = useSelector(getSegment);
+  const segmentStructure = useSelector(getSegment);
 
   const [isShowParams, setIsShowParams] = useState(false);
 
@@ -72,16 +78,37 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     setIsShowParams(true);
   };
-  const handleSubmitParams = (values) => {
-    console.log(values);
+  const handleSubmitParams = ({ params: selectedParams }) => {
+    if (!selectedParams) {
+      return;
+    }
+    dispatch(addSegmentParam(selectedParams));
   };
 
   const statistic = {};
 
-  console.log(segment, isFetchingSegment);
-
   return (
     <div className={styles.wrapper}>
+      <Constructor isFetching={isFetchingSegment}>
+        {segmentStructure
+          && Array.isArray(segmentStructure)
+          && segmentStructure.map((group, index) => {
+            const groupKey = generateKeyByIndex('group', index);
+            return (
+              <AttributesGroup key={groupKey}>
+                {group.map((attribute) => (
+                  <Attribute
+                    key={`${groupKey}-${attribute.attributeName}`}
+                    title={attribute.title}
+                    type={attribute.type}
+                    data={attribute}
+                  />
+                ))}
+              </AttributesGroup>
+            );
+          })}
+      </Constructor>
+
       <Params
         isFetching={isFetchingParams}
         isVisible={isShowParams}

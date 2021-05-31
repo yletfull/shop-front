@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import { namespace as NS } from './constants';
+import { getSegment } from './selectors';
 import service from './service';
 
 export const requestParams = createAction(`${NS}/params/request`);
@@ -27,4 +28,8 @@ export const fetchSegment = (id) => async (dispatch) => {
     console.error(error);
     dispatch(updateSegment([]));
   }
+};
+export const addSegmentParam = (params) => (dispatch, getState) => {
+  const segment = getSegment(getState());
+  dispatch(updateSegment(segment.concat([params])));
 };
