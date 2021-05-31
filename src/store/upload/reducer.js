@@ -19,6 +19,7 @@ import {
   uploadImageError,
   parentDocument,
   importedDocument,
+  recentFileIsLoading,
 } from './actions';
 
 const initialState = {
@@ -52,6 +53,7 @@ const initialState = {
   ],
   task: {},
   recentFile: {},
+  recentFileIsLoading: false,
   images: [],
   uploadedImages: [],
   uploadImageError: '',
@@ -107,6 +109,10 @@ const reducer = createReducer(initialState, {
   [recentFile]: (state, action) => ({
     ...state,
     recentFile: action.payload,
+  }),
+  [recentFileIsLoading]: (state, action) => ({
+    ...state,
+    recentFileIsLoading: action.payload,
   }),
   [images]: (state, action) => ({
     ...state,
