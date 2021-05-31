@@ -8,10 +8,10 @@ export const updateParams = createAction(`${NS}/params/update`);
 export const fetchParams = () => async (dispatch) => {
   dispatch(requestParams());
   try {
-    const response = await service.fetchParams();
-    dispatch(updateParams(response));
+    const { groups } = await service.fetchParams();
+    dispatch(updateParams(groups));
   } catch (error) {
     console.error(error);
-    dispatch(updateParams({}));
+    dispatch(updateParams([]));
   }
 };

@@ -7,11 +7,22 @@ import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.objectOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    group: PropTypes.string,
+    attributes: PropTypes.arrayOf(PropTypes.shape({
+      attributeName: PropTypes.string,
+      profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      options: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string,
+      })),
+      title: PropTypes.string,
+      type: PropTypes.string,
+    })),
+  })),
   onSubmit: PropTypes.func,
 };
 const defaultProps = {
-  data: {},
+  data: [],
   onSubmit: () => {},
 };
 
@@ -51,28 +62,30 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
             </label>
           </div>
           <div className={styles.paramsMain}>
-            {Object.keys(data)
-              .map((section) => (
-                <div
-                  key={section}
-                  className={styles.paramsSection}
-                >
-                  <span className={styles.paramsSectionName}>
-                    {section}
-                  </span>
-                  {data[section].map((sectionParam) => (
-                    <label key={sectionParam.value}>
-                      <Field
-                        name="params"
-                        component="input"
-                        type="checkbox"
-                        value={sectionParam.value}
-                      />
-                      {sectionParam.label}
-                    </label>
-                  ))}
-                </div>
-              ))}
+            {data.map(({ group, attributes }) => (
+              <div
+                key={group}
+                className={styles.paramsSection}
+              >
+                <span className={styles.paramsSectionName}>
+                  {group}
+                </span>
+                {attributes.map((attribute) => (
+                  <label
+                    key={attribute.attributeName}
+                    className={styles.paramsSectionLabel}
+                  >
+                    <Field
+                      name="params"
+                      component="input"
+                      type="checkbox"
+                      value={attribute}
+                    />
+                    {attribute.title || attribute.attributeName}
+                  </label>
+                ))}
+              </div>
+            ))}
           </div>
           <div className={styles.paramsFooter}>
             <Button

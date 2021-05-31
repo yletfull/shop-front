@@ -6,7 +6,7 @@ import {
 
 const initialState = {
   isFetchingParams: false,
-  params: {},
+  params: [],
 };
 
 export default createReducer(initialState, {
@@ -17,6 +17,6 @@ export default createReducer(initialState, {
   [updateParams]: (state, action) => ({
     ...state,
     isFetchingParams: false,
-    params: action.payload || {},
+    params: action.payload || [],
   }),
 });
