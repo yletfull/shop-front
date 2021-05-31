@@ -5,7 +5,11 @@ const fetchParams = function serviceFetchSegmentsAttributes() {
     .get('api/v1/external/api/v1/attributes/')
     .then((response) => response.data.data);
 };
+const fetchSegment = function serviceFetchSegment() {
+  return Promise.resolve([]);
+};
 
 export default {
   fetchParams,
+  fetchSegment,
 };

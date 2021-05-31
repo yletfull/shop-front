@@ -9,10 +9,13 @@ import { namespace as NS } from './constants';
 import reducer from './reducer';
 import {
   fetchParams,
+  fetchSegment,
 } from './actions';
 import {
   getIsFetchingParams,
+  getIsFetchingSegment,
   getParams,
+  getSegment,
 } from './selectors';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
@@ -35,6 +38,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
+  const isFetchingSegment = useSelector(getIsFetchingSegment);
+  const segment = useSelector(getSegment);
+
   const [isShowParams, setIsShowParams] = useState(false);
 
   const isNewSegment = typeof segmentId === 'undefined';
@@ -51,6 +57,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(setHeader(isNewSegment
       ? 'Новый сегмент'
       : `${defaultTitle} #${segmentId}`));
+
+    if (!isNewSegment) {
+      dispatch(fetchSegment(segmentId));
+    }
   }, [dispatch, defaultTitle, isNewSegment, segmentId]);
 
   const handleCloseParamsModal = () => {
@@ -67,6 +77,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
 
   const statistic = {};
+
+  console.log(segment, isFetchingSegment);
 
   return (
     <div className={styles.wrapper}>

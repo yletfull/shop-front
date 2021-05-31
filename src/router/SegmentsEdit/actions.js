@@ -5,6 +5,9 @@ import service from './service';
 export const requestParams = createAction(`${NS}/params/request`);
 export const updateParams = createAction(`${NS}/params/update`);
 
+export const requestSegment = createAction(`${NS}/segment/request`);
+export const updateSegment = createAction(`${NS}/segment/update`);
+
 export const fetchParams = () => async (dispatch) => {
   dispatch(requestParams());
   try {
@@ -13,5 +16,15 @@ export const fetchParams = () => async (dispatch) => {
   } catch (error) {
     console.error(error);
     dispatch(updateParams([]));
+  }
+};
+export const fetchSegment = (id) => async (dispatch) => {
+  dispatch(requestSegment());
+  try {
+    const response = await service.fetchSegment(id);
+    dispatch(updateSegment(response));
+  } catch (error) {
+    console.error(error);
+    dispatch(updateSegment([]));
   }
 };
