@@ -52,6 +52,10 @@ const Header = function HeaderScreen() {
     recentFile.current = recentFileData;
   }, [recentFileData]);
 
+  const recentFileIsLoading = useSelector(
+    (store) => store.upload?.recentFileIsLoading
+  );
+  console.log(recentFileIsLoading);
 
   const fileDetailsData = useSelector(
     (state) => state.upload?.documentDetails
@@ -134,11 +138,11 @@ const Header = function HeaderScreen() {
 
 
   useEffect(() => {
-    if (Object.keys(recentFile.current).length) {
-      return setFileIsLoaded(false);
+    if (Object.keys(recentFileData).length) {
+      return setFileIsLoaded(true);
     }
-    setFileIsLoaded(true);
-  }, [recentFile]);
+    setFileIsLoaded(false);
+  }, [recentFileData]);
 
   useEffect(() => {
     switch (stage) {
@@ -162,13 +166,13 @@ const Header = function HeaderScreen() {
               <ProcessButtonLink
                 icon={<IconDownload />}
                 text={['Скачать', 'файл']}
-                to={`/api/v1/document/${recentFile.current.id}/raw`}
+                to={`/api/v1/document/${recentFileData.id}/raw`}
                 target="_blank"
                 download
-                disabled={!fileIsLoaded}
+                disabled={recentFileIsLoading || !fileIsLoaded}
               />
               <div>
-                {getHeaderTempalteContent(recentFile.current)[0]
+                {getHeaderTempalteContent(recentFileData)[0]
                   .map(({ title, value, id }) => (
                     <div
                       className={styles.textWrapper}
@@ -201,7 +205,7 @@ const Header = function HeaderScreen() {
                 />
               </label>
               <div>
-                {getHeaderTempalteContent(recentFile.current)[1]
+                {getHeaderTempalteContent(recentFileData)[1]
                   .map(({ title, value, id, valueColor }) => (
                     <div
                       className={styles.textWrapper}
