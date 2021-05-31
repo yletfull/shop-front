@@ -14,6 +14,7 @@ export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
 export const selectedList = createAction(`${NS}/selectedList`);
 export const task = createAction(`${NS}/task`);
 export const recentFile = createAction(`${NS}/recentFile`);
+export const recentFileIsLoading = createAction(`${NS}/recentFileIsLoading`);
 export const images = createAction(`${NS}/images`);
 export const uploadImageError = createAction(`${NS}/uploadImageError`);
 export const parentDocument = createAction(`${NS}/parentDocument`);
@@ -147,6 +148,10 @@ export const fetchRecentFile = () => async (dispatch, getState) => {
   } catch (err) {
     dispatch(recentFile([]));
   }
+};
+
+export const setRecentFileIsLoading = (value) => (dispatch) => {
+  dispatch(recentFileIsLoading(value));
 };
 
 export const setParentDocument = (value) => (dispatch) => {

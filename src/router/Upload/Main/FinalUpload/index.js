@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SuccessIcon from '@/icons/Success';
 import VentIcon from '@/icons/Vent';
 import NavigationBar from '@/components/NavigationBar';
-import { importDocument, setStage, fetchTask, fetchRecentFile } from '@/store/upload/actions';
+import { importDocument, setStage, fetchTask, fetchRecentFile, setRecentFile, setRecentFileIsLoading } from '@/store/upload/actions';
 import { finalUploadStages, finalUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -37,6 +37,7 @@ const FinalUpload = function FinalUploadScreen() {
 
       const importedDocument = await dispatch(importDocument());
       let task = await dispatch(fetchTask(importedDocument.id));
+      dispatch(setRecentFileIsLoading(true));
 
       if (Object.keys(task).length) {
         (function check() {
@@ -47,6 +48,7 @@ const FinalUpload = function FinalUploadScreen() {
             }
 
             clearTimeout(check);
+            dispatch(setRecentFileIsLoading(false));
 
             if (task.status === 2) {
               setNaVigationBarParams((prev) => ({ ...prev, finally: true }));
@@ -55,7 +57,7 @@ const FinalUpload = function FinalUploadScreen() {
               return;
             }
             if (task.status === -1) {
-              return dispatch(setStage(globalStages.errorCheck));
+              dispatch(setStage(globalStages.errorCheck));
             }
           }, 1000);
         })();
