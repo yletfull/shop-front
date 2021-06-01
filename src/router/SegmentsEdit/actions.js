@@ -33,3 +33,20 @@ export const addSegmentParam = (params) => (dispatch, getState) => {
   const segment = getSegment(getState());
   dispatch(updateSegment(segment.concat(params.map((p) => [p]))));
 };
+export const removeSegmentAttribute = (position) => (dispatch, getState) => {
+  const segment = getSegment(getState());
+  const [groupIndex, attributeIndex] = position;
+  const attribute = segment[groupIndex];
+  if (!attribute) {
+    return;
+  }
+  const newAttribute = [
+    ...attribute.slice(0, attributeIndex),
+    ...attribute.slice(attributeIndex + 1),
+  ];
+  dispatch(updateSegment([
+    ...segment.slice(0, groupIndex),
+    newAttribute,
+    ...segment.slice(groupIndex + 1),
+  ].filter((a) => a.length > 0)));
+};

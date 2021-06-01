@@ -11,6 +11,7 @@ import {
   fetchParams,
   fetchSegment,
   addSegmentParam,
+  removeSegmentAttribute,
 } from './actions';
 import {
   getIsFetchingParams,
@@ -84,6 +85,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
   };
+  const handleRemoveAttribute = (position) => {
+    const [groupIndex, attributeIndex] = position || [];
+    if (typeof attributeIndex === 'undefined'
+      || typeof groupIndex === 'undefined') {
+      return;
+    }
+    dispatch(removeSegmentAttribute([
+      Number(groupIndex),
+      Number(attributeIndex),
+    ]));
+  };
   const handleSubmitParams = ({ params: selectedParams }) => {
     setIsShowParams(false);
 
@@ -101,16 +113,19 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       <Constructor isFetching={isFetchingSegment}>
         {segmentStructure
           && Array.isArray(segmentStructure)
-          && segmentStructure.map((group, index) => {
-            const groupKey = generateKeyByIndex('group', index);
+          && segmentStructure.map((group, groupIndex) => {
+            const groupKey = generateKeyByIndex('group', groupIndex);
             return (
               <AttributesGroup key={groupKey}>
-                {group.map((attribute) => (
+                {group.map((attribute, attributeIndex) => (
                   <Attribute
                     key={`${groupKey}-${attribute.attributeName}`}
+                    groupIndex={groupIndex}
+                    index={attributeIndex}
                     name={attribute.attributeName}
                     title={attribute.title}
                     type={attribute.type}
+                    onRemove={handleRemoveAttribute}
                   >
                     <AttributeOptions
                       data={attribute.options}
