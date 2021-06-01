@@ -22,10 +22,6 @@ const defaultProps = {
 const Popup = function Popup(props) {
   const { title, children, onClose } = props;
 
-  const childrenArr = Array.isArray(children)
-    ? children.map((el) => el)
-    : [children];
-
   return (
     <div
       {...props}
@@ -45,7 +41,7 @@ const Popup = function Popup(props) {
       </div>
 
       <div className={styles.content}>
-        {childrenArr.map((child) => child)}
+        {React.Children.map(children, (child) => child)}
       </div>
     </div>
   );
