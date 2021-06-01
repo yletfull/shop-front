@@ -21,6 +21,7 @@ import {
 import Attribute from './Attribute';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
+import AttributeStatistics from './AttributeStatistics';
 import AttributesGroup from './AttributesGroup';
 import Constructor from './Constructor';
 import Params from './Params';
@@ -116,6 +117,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     <AttributePeriod
                       from={attribute.from}
                       to={attribute.to}
+                    />
+                    <AttributeStatistics
+                      data={attribute.statistics}
                     />
                   </Attribute>
                 ))}
