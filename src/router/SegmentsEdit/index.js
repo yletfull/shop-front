@@ -19,6 +19,8 @@ import {
   getSegment,
 } from './selectors';
 import Attribute from './Attribute';
+import AttributeDatasets from './AttributeDatasets';
+import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
 import AttributeStatistics from './AttributeStatistics';
@@ -118,6 +120,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       from={attribute.from}
                       to={attribute.to}
                     />
+                    <AttributeDatasets data={attribute.inDatasets}>
+                      <AttributeDatasetsForm
+                        data={attribute.inDatasets}
+                      />
+                    </AttributeDatasets>
                     <AttributeStatistics
                       data={attribute.statistics}
                     />
