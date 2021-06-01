@@ -19,7 +19,7 @@ const defaultProps = {
   title: '',
 };
 
-const Modal = function Modal(props) {
+const Popup = function Popup(props) {
   const { title, children, onClose } = props;
 
   const childrenArr = Array.isArray(children)
@@ -51,7 +51,7 @@ const Modal = function Modal(props) {
   );
 };
 
-Modal.propTypes = propTypes;
-Modal.defaultProps = defaultProps;
+Popup.propTypes = propTypes;
+Popup.defaultProps = defaultProps;
 
-export default Modal;
+export default Popup;
