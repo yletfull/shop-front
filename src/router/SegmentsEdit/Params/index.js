@@ -1,46 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
+  form: PropTypes.node,
   isFetching: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  onCloseForm: PropTypes.func,
 };
 const defaultProps = {
   children: null,
+  form: null,
   isFetching: false,
+  isVisible: false,
+  onCloseForm: () => {},
 };
 
 const Params = function Params({
   children,
+  form,
   isFetching,
+  isVisible,
+  onCloseForm,
 }) {
-  const [isShowModal, setIsShowModal] = useState(false);
-
-  const handleClickShowModal = () => {
-    if (isShowModal) {
-      return;
-    }
-    setIsShowModal(true);
-  };
   const handleCloseModal = () => {
-    setIsShowModal(false);
+    onCloseForm();
   };
 
   return (
     <div className={styles.params}>
-      <Button
-        type="button"
-        onClick={handleClickShowModal}
-      >
-        + ещё параметр
-      </Button>
-
+      {children}
       <Modal
-        isVisible={isShowModal}
+        isVisible={isVisible}
         header={(
           <span>
             Выбрать значения
@@ -51,7 +45,7 @@ const Params = function Params({
         {isFetching && (
           <Spinner />
         )}
-        {!isFetching && children}
+        {!isFetching && form}
       </Modal>
     </div>
   );

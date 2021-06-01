@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -53,6 +53,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const segmentStructure = useSelector(getSegment);
 
+  const [isShowParams, setIsShowParams] = useState(false);
+
   const isNewSegment = typeof segmentId === 'undefined';
 
   useEffect(() => {
@@ -76,10 +78,19 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleChangeAttributeOptions = (value) => {
     console.log(value);
   };
+  const handleClickShowParams = () => {
+    setIsShowParams(true);
+  };
+  const handleCloseParamsForm = () => {
+    setIsShowParams(false);
+  };
   const handleSubmitParams = ({ params: selectedParams }) => {
+    setIsShowParams(false);
+
     if (!selectedParams) {
       return;
     }
+
     dispatch(addSegmentParam(selectedParams));
   };
 
@@ -138,11 +149,23 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           })}
       </Constructor>
 
-      <Params isFetching={isFetchingParams}>
-        <ParamsForm
-          data={params}
-          onSubmit={handleSubmitParams}
-        />
+      <Params
+        isFetching={isFetchingParams}
+        isVisible={isShowParams}
+        form={(
+          <ParamsForm
+            data={params}
+            onSubmit={handleSubmitParams}
+          />
+        )}
+        onCloseForm={handleCloseParamsForm}
+      >
+        <Button
+          type="button"
+          onClick={handleClickShowParams}
+        >
+          + ещё параметр
+        </Button>
       </Params>
 
       <h2>
