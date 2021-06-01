@@ -21,10 +21,14 @@ const AttributeEnum = function AttributeEnum({
 }) {
   return (
     <div className={styles.attributeEnum}>
-      AttributeEnum
-      {name || title}
-      =
-      {children}
+      <div className={styles.attributeEnumSection}>
+        <span className={styles.attributeEnumTitle}>
+          {name || title}
+        </span>
+      </div>
+      <div className={styles.attributeEnumSection}>
+        {children}
+      </div>
     </div>
   );
 };

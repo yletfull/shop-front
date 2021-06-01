@@ -4,18 +4,21 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
+  dateRange: PropTypes.node,
   from: PropTypes.string,
   to: PropTypes.string,
 };
 
 const defaultProps = {
   children: null,
+  dateRange: null,
   from: '',
   to: '',
 };
 
 const AttributePeriod = function AttributePeriod({
   children,
+  dateRange,
   from,
   to,
 }) {
@@ -31,7 +34,7 @@ const AttributePeriod = function AttributePeriod({
     <div className={styles.attributePeriod}>
       <select
         name="select"
-        defaultValue="0"
+        defaultValue={Number(from && to)}
         onChange={handleChangePeriodSelect}
       >
         <option value="0">
@@ -42,7 +45,8 @@ const AttributePeriod = function AttributePeriod({
         </option>
       </select>
 
-      {from && to && children}
+      {dateRange}
+      {children}
     </div>
   );
 };

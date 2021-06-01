@@ -1,6 +1,10 @@
 @import '@/theme/include.scss';
 
 .attributeOptions {
+  font-size: .75rem;
+  padding: 0 .5rem;
+  width: 10rem;
+
   &Label {
     display: block;
   }

@@ -120,25 +120,27 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     <AttributePeriod
                       from={attribute.from}
                       to={attribute.to}
+                      dateRange={(
+                        <AttributeDateRange
+                          from={attribute.from}
+                          to={attribute.to}
+                          datasets={attribute.availableDatasetsDates}
+                        />
+                      )}
                     >
-                      <AttributeDateRange
-                        from={attribute.from}
-                        to={attribute.to}
-                        datasets={attribute.availableDatasetsDates}
-                      />
+                      <AttributeDatasets data={attribute.inDatasets}>
+                        <AttributeDatasetsForm
+                          data={attribute.inDatasets}
+                          dateRange={(
+                            <AttributeDateRange
+                              from={attribute.from}
+                              to={attribute.to}
+                              datasets={attribute.availableDatasetsDates}
+                            />
+                          )}
+                        />
+                      </AttributeDatasets>
                     </AttributePeriod>
-                    <AttributeDatasets data={attribute.inDatasets}>
-                      <AttributeDatasetsForm
-                        data={attribute.inDatasets}
-                        dateRange={(
-                          <AttributeDateRange
-                            from={attribute.from}
-                            to={attribute.to}
-                            datasets={attribute.availableDatasetsDates}
-                          />
-                        )}
-                      />
-                    </AttributeDatasets>
                     <AttributeStatistics
                       data={attribute.statistics}
                     />
