@@ -21,6 +21,7 @@ import {
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
+import AttributeDateRange from './AttributeDateRange';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
 import AttributeStatistics from './AttributeStatistics';
@@ -119,10 +120,23 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     <AttributePeriod
                       from={attribute.from}
                       to={attribute.to}
-                    />
+                    >
+                      <AttributeDateRange
+                        from={attribute.from}
+                        to={attribute.to}
+                        datasets={attribute.availableDatasetsDates}
+                      />
+                    </AttributePeriod>
                     <AttributeDatasets data={attribute.inDatasets}>
                       <AttributeDatasetsForm
                         data={attribute.inDatasets}
+                        dateRange={(
+                          <AttributeDateRange
+                            from={attribute.from}
+                            to={attribute.to}
+                            datasets={attribute.availableDatasetsDates}
+                          />
+                        )}
                       />
                     </AttributeDatasets>
                     <AttributeStatistics

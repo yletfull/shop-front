@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  children: PropTypes.node,
   from: PropTypes.string,
   to: PropTypes.string,
 };
 
 const defaultProps = {
+  children: null,
   from: '',
   to: '',
 };
 
-const AttributePeriod = function AttributePeriod({ from, to }) {
+const AttributePeriod = function AttributePeriod({
+  children,
+  from,
+  to,
+}) {
   const handleChangePeriodSelect = (e) => {
     const { value } = e?.target || {};
     if (!value) {
@@ -37,23 +42,7 @@ const AttributePeriod = function AttributePeriod({ from, to }) {
         </option>
       </select>
 
-      {from && to && (
-        <div className={styles.attributePeriodRange}>
-          <Input
-            type="text"
-            value={from}
-            placeholder="From"
-            disabled
-          />
-          &nbsp;
-          <Input
-            type="text"
-            value={to}
-            placeholder="To"
-            disabled
-          />
-        </div>
-      )}
+      {from && to && children}
     </div>
   );
 };
