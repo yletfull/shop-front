@@ -1,0 +1,18 @@
+@import '@/theme/include.scss';
+
+.attributeEnum {
+  display: flex;
+
+  &Section {
+    align-items: stretch;
+    display: flex;
+  }
+
+  &Title {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: bold;
+    padding: 0 .5rem;
+    width: 10rem;
+  }
+}

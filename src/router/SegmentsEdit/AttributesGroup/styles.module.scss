@@ -1,0 +1,21 @@
+@import '@/theme/include.scss';
+
+.attributesGroup {
+  background: $color-gray;
+  border-radius: .5rem;
+  padding: .5rem;
+  position: relative;
+
+  & + & {
+    margin-top: 2rem;
+
+    &::before {
+      color: $color-primary;
+      content: 'И';
+      font-size: .75rem;
+      left: 10rem;
+      position: absolute;
+      top: -1.325rem;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import '@/theme/include.scss';
+
+.params {
+  &Header {
+    border-bottom: thin solid $color-gray;
+    padding-bottom: .5rem;
+  }
+
+  &Label {
+    font-size: .75rem;
+
+    &SelectAll {
+      display: block;
+      padding-top: .5rem;
+    }
+  }
+
+  &Main {
+    max-height: 10rem;
+    overflow-y: auto;
+    padding: 1rem 0;
+  }
+
+  &Section {
+    padding-bottom: .5rem;
+
+    &Label,
+    &Name {
+      display: block;
+    }
+
+    &Name {
+      font-weight: bold;
+    }
+  }
+}

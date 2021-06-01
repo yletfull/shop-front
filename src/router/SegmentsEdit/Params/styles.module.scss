@@ -1,0 +1,11 @@
+@import '@/theme/include.scss';
+
+.params {
+  position: relative;
+
+  &Modal {
+    left: 0;
+    position: absolute;
+    top: 0;
+  }
+}

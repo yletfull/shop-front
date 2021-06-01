@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import styles from './styles.module.scss';
@@ -18,7 +18,7 @@ const defaultProps = {
   fullwidth: false,
 };
 
-const Input = function Input(props) {
+const Input = forwardRef((props, ref) => {
   const {
     className, placeholder, fullwidth,
     ...attrs
@@ -26,6 +26,7 @@ const Input = function Input(props) {
 
   return (
     <input
+      ref={ref}
       className={cx(
         styles[cssClass],
         className,
@@ -35,7 +36,7 @@ const Input = function Input(props) {
       {...attrs}
     />
   );
-};
+});
 
 Input.propTypes = propTypes;
 Input.defaultProps = defaultProps;

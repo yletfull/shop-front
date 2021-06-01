@@ -1,0 +1,23 @@
+@import '@/theme/include.scss';
+
+.attribute {
+  align-items: stretch;
+  display: flex;
+
+  &Aside {
+    width: 1rem;
+  }
+
+  &Button {
+    @include button-reset();
+  }
+
+  &Main {
+    flex-grow: 1;
+  }
+
+  &Icon {
+    color: $color-accent-darkest;
+    pointer-events: none;
+  }
+}
