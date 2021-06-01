@@ -21,7 +21,7 @@ const Constructor = function Constructor({ children, isFetching }) {
   }
 
   return (
-    <div className={styles.constructor}>
+    <div className={styles.wrapper}>
       {children}
     </div>
   );

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Form, Field } from 'react-final-form';
+import { Form, FormSpy, Field } from 'react-final-form';
+import { useDebounce } from '@/hooks';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import styles from './styles.module.scss';
@@ -21,12 +22,54 @@ const propTypes = {
   })),
   onSubmit: PropTypes.func,
 };
+
 const defaultProps = {
   data: [],
   onSubmit: () => {},
 };
 
 const ParamsForm = function ParamsForm({ data, onSubmit }) {
+  const searchRef = useRef(null);
+
+  const [searchPhrase, setSearchPhrase] = useState('');
+  const [filteredParams, setFilteredParams] = useState(data);
+
+  const delayedSearchRequest = useDebounce(searchPhrase, 300);
+
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current.focus();
+    }
+  }, []);
+
+  useEffect(() => {
+    const filterAttributes = (attribute) => {
+      const searched = attribute.title || attribute.attributeName;
+      if (!searched) {
+        return false;
+      }
+      return searched.includes(delayedSearchRequest);
+    };
+    const reduceGroups = (acc, { group, attributes }) => {
+      if (!attributes && !Array.isArray(attributes)) {
+        return acc;
+      }
+      const filteredAttributes = attributes.filter(filterAttributes);
+      if (filteredAttributes.length === 0) {
+        return acc;
+      }
+      return [...acc, { group, attributes: filteredAttributes }];
+    };
+    setFilteredParams(data.reduce(reduceGroups, []));
+  }, [data, delayedSearchRequest]);
+
+  const handleChangeFormValues = ({ values }) => {
+    const { search } = values || {};
+    if (typeof search === 'undefined') {
+      return;
+    }
+    setSearchPhrase(search);
+  };
   const handleSubmitParams = (formValues) => {
     onSubmit(formValues);
   };
@@ -35,10 +78,16 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
     <Form onSubmit={handleSubmitParams}>
       {({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
+          <FormSpy
+            subscriptions={{ search: true }}
+            onChange={handleChangeFormValues}
+          />
+
           <div className={styles.paramsHeader}>
             <Field name="search">
               {({ input }) => (
                 <Input
+                  ref={searchRef}
                   name={input.name}
                   value={input.value}
                   onChange={input.onChange}
@@ -57,12 +106,13 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
                 name="all"
                 component="input"
                 type="checkbox"
+                disabled
               />
               Выбрать все
             </label>
           </div>
           <div className={styles.paramsMain}>
-            {data.map(({ group, attributes }) => (
+            {filteredParams.map(({ group, attributes }) => (
               <div
                 key={group}
                 className={styles.paramsSection}
