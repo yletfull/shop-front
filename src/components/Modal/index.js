@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useOnClickOutside } from '@/hooks';
 import IconTimes from '@/icons/TimesLight';
 import styles from './styles.module.scss';
 
@@ -22,12 +23,30 @@ const Modal = function Modal({
   header,
   onClose,
 }) {
-  const handleClickCloseButton = () => onClose();
+  const modalRef = useRef(null);
+
+  const [isShowModal, setIsShowModal] = useState(isVisible);
+
+  const closeModal = () => {
+    setIsShowModal(false);
+    onClose();
+  };
+  const handleClickCloseButton = () => closeModal();
+  const handleClickOutside = () => closeModal();
+
+  useEffect(() => {
+    setIsShowModal(isVisible);
+  }, [isVisible]);
+
+  useOnClickOutside(modalRef, handleClickOutside);
 
   return (
     <div className={styles.wrapper}>
-      {isVisible && (
-        <div className={styles.modal}>
+      {isShowModal && (
+        <div
+          ref={modalRef}
+          className={styles.modal}
+        >
           <div className={styles.modalHeader}>
             {header}
             <button
