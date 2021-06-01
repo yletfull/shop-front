@@ -20,6 +20,7 @@ import {
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeOptions from './AttributeOptions';
+import AttributePeriod from './AttributePeriod';
 import AttributesGroup from './AttributesGroup';
 import Constructor from './Constructor';
 import Params from './Params';
@@ -111,6 +112,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       data={attribute.options}
                       selected={[]}
                       onChange={handleChangeAttributeOptions}
+                    />
+                    <AttributePeriod
+                      from={attribute.from}
+                      to={attribute.to}
                     />
                   </Attribute>
                 ))}
