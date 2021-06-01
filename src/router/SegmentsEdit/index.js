@@ -19,6 +19,7 @@ import {
   getSegment,
 } from './selectors';
 import Attribute from './Attribute';
+import AttributeOptions from './AttributeOptions';
 import AttributesGroup from './AttributesGroup';
 import Constructor from './Constructor';
 import Params from './Params';
@@ -69,6 +70,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   }, [dispatch, defaultTitle, isNewSegment, segmentId]);
 
+  const handleChangeAttributeOptions = (value) => {
+    console.log(value);
+  };
   const handleCloseParamsModal = () => {
     setIsShowParams(false);
   };
@@ -99,10 +103,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                 {group.map((attribute) => (
                   <Attribute
                     key={`${groupKey}-${attribute.attributeName}`}
+                    name={attribute.attributeName}
                     title={attribute.title}
                     type={attribute.type}
-                    data={attribute}
-                  />
+                  >
+                    <AttributeOptions
+                      data={attribute.options}
+                      selected={[]}
+                      onChange={handleChangeAttributeOptions}
+                    />
+                  </Attribute>
                 ))}
               </AttributesGroup>
             );

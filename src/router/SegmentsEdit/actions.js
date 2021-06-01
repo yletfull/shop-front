@@ -31,5 +31,5 @@ export const fetchSegment = (id) => async (dispatch) => {
 };
 export const addSegmentParam = (params) => (dispatch, getState) => {
   const segment = getSegment(getState());
-  dispatch(updateSegment(segment.concat([params])));
+  dispatch(updateSegment(segment.concat(params.map((p) => [p]))));
 };

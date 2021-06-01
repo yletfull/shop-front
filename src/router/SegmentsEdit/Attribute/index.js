@@ -4,18 +4,24 @@ import AttributeEnum from './AttributeEnum';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  type: PropTypes.string,
+  children: PropTypes.node,
+  name: PropTypes.string,
   title: PropTypes.string,
+  type: PropTypes.string,
 };
 
 const defaultProps = {
-  type: '',
+  children: null,
+  name: '',
   title: '',
+  type: '',
 };
 
 const Attribute = function Attribute({
-  type,
+  children,
+  name,
   title,
+  type,
 }) {
   const types = {
     enum: 'ENUM',
@@ -28,11 +34,13 @@ const Attribute = function Attribute({
   const TypedAttribute = attributes[type] || null;
 
   return (
-    <div className={styles.attribute}>
-      <TypedAttribute
-        title={title}
-      />
-    </div>
+    <TypedAttribute
+      className={styles.attribute}
+      name={name}
+      title={title}
+    >
+      {children}
+    </TypedAttribute>
   );
 };
 
