@@ -20,24 +20,15 @@ const EditRolePopup = function EditRolePopup(props) {
   const dispatch = useDispatch();
 
   const [selectedAbilities, setSelectedAbilities] = useState([]);
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState();
-  const [isFetching, setIsFetching] = useState();
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-  const allRoleAbilitiesData = useSelector(
+  const allRoleAbilities = useSelector(
     (state) => state.users.allRoleAbilities
   );
-  const allRoleAbilities = useRef(allRoleAbilitiesData);
-  useLayoutEffect(() => {
-    allRoleAbilities.current = allRoleAbilitiesData;
-  }, [allRoleAbilitiesData]);
 
-  const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
-  const rolesDetails = useRef(rolesDetailsData);
-  useLayoutEffect(() => {
-    rolesDetails.current = rolesDetailsData;
-  }, [rolesDetailsData]);
-  const [roleTitle, setRoleTitle] = useState();
-  const [roleName, setRoleName] = useState();
+  const [roleTitle, setRoleTitle] = useState('');
+  const [roleName, setRoleName] = useState('');
 
   const createRoleErrorData = useSelector(
     (state) => state.users.createRoleError
@@ -46,7 +37,6 @@ const EditRolePopup = function EditRolePopup(props) {
   useLayoutEffect(() => {
     createRoleError.current = createRoleErrorData;
   }, [createRoleErrorData]);
-
 
   useEffect(() => {
     const fetchAllAbilitiesFn = async () => {
@@ -79,14 +69,12 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const abilities = [];
-    abilities.push(...selectedAbilities);
     setSubmitButtomDisabed(true);
     await dispatch(createRole(
       {
         roleName: roleName.trim(),
         roleTitle: roleTitle.trim(),
-        abilities,
+        abilities: selectedAbilities,
       }
     ));
     setSubmitButtomDisabed(false);
@@ -112,10 +100,10 @@ const EditRolePopup = function EditRolePopup(props) {
                     Добавить разрешения:
                   </td>
                   <td>
-                    <form
+                    <div
                       className={styles.editRoleCheckboxWrapper}
                     >
-                      {allRoleAbilities.current.map((ability) => (
+                      {allRoleAbilities.map((ability) => (
                         <label
                           key={ability.id}
                           htmlFor={ability.id}
@@ -131,7 +119,7 @@ const EditRolePopup = function EditRolePopup(props) {
                           {ability.title}
                         </label>
                       ))}
-                    </form>
+                    </div>
                   </td>
                 </tr>
                 <tr content="">
