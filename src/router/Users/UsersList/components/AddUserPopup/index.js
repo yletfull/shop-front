@@ -6,6 +6,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Popup from '@/components/Popup';
 import { createUser, fetchUsers } from '@/store/users/actions';
+import { getCreateUserError } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
 
@@ -23,14 +24,11 @@ const EditRolePopup = function EditRolePopup(props) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
-  const createUserErrorData = useSelector(
-    (state) => state.users.createUserError
-  );
+  const createUserErrorData = useSelector(getCreateUserError);
   const createUserError = useRef(createUserErrorData);
   useLayoutEffect(() => {
     createUserError.current = createUserErrorData;
   }, [createUserErrorData]);
-
 
   const handleLoginInputChange = (e) => {
     const { value } = e.target;
