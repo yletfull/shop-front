@@ -25,9 +25,9 @@ import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDateRange from './AttributeDateRange';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
+import AttributesConstructor from './AttributesConstructor';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesGroup from './AttributesGroup';
-import Constructor from './Constructor';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
 import Statistics from './Statistics';
@@ -110,7 +110,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   return (
     <div className={styles.wrapper}>
-      <Constructor isFetching={isFetchingSegment}>
+      <AttributesConstructor isFetching={isFetchingSegment}>
         {segmentStructure
           && Array.isArray(segmentStructure)
           && segmentStructure.map((group, groupIndex) => {
@@ -164,7 +164,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
               </AttributesGroup>
             );
           })}
-      </Constructor>
+      </AttributesConstructor>
 
       <Params
         isFetching={isFetchingParams}
