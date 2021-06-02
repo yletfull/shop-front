@@ -21,24 +21,14 @@ const EditRolePopup = function EditRolePopup(props) {
   const dispatch = useDispatch();
 
   const [selectedAbilities, setSelectedAbilities] = useState([]);
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState();
-  const [isFetching, setIsFetching] = useState();
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
 
-  const rolesAbilitiesData = useSelector((state) => state.users.rolesAbilities);
-  const rolesAbilities = useRef(rolesAbilitiesData);
-  useLayoutEffect(() => {
-    rolesAbilities.current = rolesAbilitiesData;
-  }, [rolesAbilitiesData]);
+  const rolesAbilities = useSelector((state) => state.users.rolesAbilities);
 
-
-  const allRoleAbilitiesData = useSelector(
+  const allRoleAbilities = useSelector(
     (state) => state.users.allRoleAbilities
   );
-  const allRoleAbilities = useRef(allRoleAbilitiesData);
-  useLayoutEffect(() => {
-    allRoleAbilities.current = allRoleAbilitiesData;
-  }, [allRoleAbilitiesData]);
-
 
   const allRoleAbilitiesErrorData = useSelector(
     (state) => state.users.allRoleAbilitiesError
@@ -57,12 +47,8 @@ const EditRolePopup = function EditRolePopup(props) {
   }, [editRoleErrorData]);
 
 
-  const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
-  const rolesDetails = useRef(rolesDetailsData);
-  useLayoutEffect(() => {
-    rolesDetails.current = rolesDetailsData;
-  }, [rolesDetailsData]);
-  const [roleTitle, setRoleTitle] = useState(rolesDetails.current.title);
+  const rolesDetails = useSelector((state) => state.users.rolesDetails);
+  const [roleTitle, setRoleTitle] = useState(rolesDetails.title);
 
 
   useEffect(() => {
@@ -92,14 +78,14 @@ const EditRolePopup = function EditRolePopup(props) {
     setRoleTitle(value);
   };
 
-  const hasErrors = allRoleAbilitiesError.current || editRoleError.current;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const abilities = [];
-    abilities.push(...selectedAbilities);
-    if (rolesAbilities.current.length) {
-      abilities.push(...rolesAbilities.current.map((el) => el.name));
+    let abilities = [];
+    abilities = selectedAbilities;
+    if (rolesAbilities.length) {
+      abilities = [
+        ...abilities, ...rolesAbilities.map((el) => el.name),
+      ];
     }
     setSubmitButtomDisabed(true);
     await dispatch(editRole(
@@ -108,7 +94,7 @@ const EditRolePopup = function EditRolePopup(props) {
     setSubmitButtomDisabed(false);
     await dispatch(fetchRolesDetails({ roleName }));
     await dispatch(fetchRolesAbilities({ roleName }));
-    if (hasErrors) {
+    if (!allRoleAbilitiesError.current && !editRoleError.current) {
       onClose();
     }
   };
@@ -129,10 +115,10 @@ const EditRolePopup = function EditRolePopup(props) {
                     Добавить разрешения:
                   </td>
                   <td>
-                    <form
+                    <div
                       className={styles.editRoleCheckboxWrapper}
                     >
-                      {allRoleAbilities.current.map((ability) => (
+                      {allRoleAbilities.map((ability) => (
                         <label
                           key={ability.id}
                           htmlFor={ability.id}
@@ -148,7 +134,7 @@ const EditRolePopup = function EditRolePopup(props) {
                           {ability.title}
                         </label>
                       ))}
-                    </form>
+                    </div>
                   </td>
                 </tr>
                 <tr content="">
@@ -160,7 +146,7 @@ const EditRolePopup = function EditRolePopup(props) {
                       value={roleTitle}
                       onChange={handleNameInputChange}
                       className={styles.select}
-                      disabled={!allRoleAbilities.current?.length}
+                      disabled={!allRoleAbilities.length}
                     />
                   </td>
                 </tr>
@@ -174,7 +160,7 @@ const EditRolePopup = function EditRolePopup(props) {
                     </Button>
                   </td>
                   <td>
-                    {(hasErrors)
+                    {(allRoleAbilitiesError.current || editRoleError.current)
                       && (
                         <p className={cx('red', styles.editRoleError)}>
                           Произошла ошибка
