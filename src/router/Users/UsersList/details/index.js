@@ -11,6 +11,8 @@ import Tag from '@/components/Tag';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import TimesCircleIcon from '@/icons/TimesCircle';
+import { getAllRoles, getUserRoles, getUserDetails } from '@/store/users/selectors';
+
 import styles from './styles.module.scss';
 
 const Details = function RolesDetailsScreen() {
@@ -23,23 +25,9 @@ const Details = function RolesDetailsScreen() {
   ] = useState(false);
   const [selectedRole, setSelectedRole] = useState('default');
 
-  const userData = useSelector((state) => state.users.userDetails);
-  const userDetails = useRef(userData);
-  useLayoutEffect(() => {
-    userDetails.current = userData;
-  }, [userData]);
-
-  const userRolesData = useSelector((state) => state.users.userRoles);
-  const userRoles = useRef(userRolesData);
-  useLayoutEffect(() => {
-    userRoles.current = userRolesData;
-  }, [userRolesData]);
-
-  const allRolesData = useSelector((state) => state.users.allRoles);
-  const allRoles = useRef(allRolesData);
-  useLayoutEffect(() => {
-    allRoles.current = allRolesData;
-  }, [allRolesData]);
+  const userDetails = useSelector(getUserDetails);
+  const userRoles = useSelector(getUserRoles);
+  const allRoles = useSelector(getAllRoles);
 
 
   const userDetailsErrorData = useSelector(
@@ -81,8 +69,8 @@ const Details = function RolesDetailsScreen() {
   }, [selectedRole]);
 
   const getAllRolesOptions = () => {
-    if (allRoles.current?.length) {
-      return allRoles.current.map((role) => ({
+    if (allRoles?.length) {
+      return allRoles.map((role) => ({
         text: role.title,
         value: role.name,
       }));
@@ -98,8 +86,8 @@ const Details = function RolesDetailsScreen() {
     e.preventDefault();
     const roles = [];
     roles.push(selectedRole);
-    if (userRoles.current.length) {
-      roles.push(...userRoles.current.map((el) => el.name));
+    if (userRoles.length) {
+      roles.push(...userRoles.map((el) => el.name));
     }
     setAddRoleButtonDisabled(true);
     setRemoveRoleButtonDisabled(true);
@@ -134,7 +122,7 @@ const Details = function RolesDetailsScreen() {
               Идентификатор
             </td>
             <td>
-              {userDetails.current.id || '-'}
+              {userDetails.id || '-'}
             </td>
           </tr>
 
@@ -143,7 +131,7 @@ const Details = function RolesDetailsScreen() {
               Логин
             </td>
             <td>
-              {userDetails.current.login || '-'}
+              {userDetails.login || '-'}
             </td>
           </tr>
 
@@ -152,7 +140,7 @@ const Details = function RolesDetailsScreen() {
               E-mail
             </td>
             <td>
-              {userDetails.current.email || '-'}
+              {userDetails.email || '-'}
             </td>
           </tr>
 
@@ -161,7 +149,7 @@ const Details = function RolesDetailsScreen() {
               Телефон
             </td>
             <td>
-              {userDetails.current.phone || '-'}
+              {userDetails.phone || '-'}
             </td>
           </tr>
 
@@ -170,7 +158,7 @@ const Details = function RolesDetailsScreen() {
               Создан
             </td>
             <td>
-              {dayjs(userDetails.current.createdAt).format('YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.createdAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -179,7 +167,7 @@ const Details = function RolesDetailsScreen() {
               Обновлен
             </td>
             <td>
-              {dayjs(userDetails.current.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -190,8 +178,8 @@ const Details = function RolesDetailsScreen() {
             </td>
             <td>
               <div className={styles.tagsWrapper}>
-                {userRoles.current?.length
-                  ? userRoles.current.map((role, ind) => (
+                {userRoles?.length
+                  ? userRoles.map((role, ind) => (
                     <div
                       className={styles.roleItem}
                       key={ind}
@@ -228,12 +216,12 @@ const Details = function RolesDetailsScreen() {
               >
                 <Select
                   value={selectedRole}
-                  options={getAllRolesOptions(allRoles.current)}
+                  options={getAllRolesOptions(allRoles)}
                   onChange={handleRoleChange}
                   resetText="Не выбрано"
                   placeholder="Выбрать роль"
                   className={styles.select}
-                  disabled={!allRoles.current?.length}
+                  disabled={!allRoles?.length}
                 />
                 <Button
                   type="submit"
