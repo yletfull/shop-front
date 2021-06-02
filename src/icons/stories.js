@@ -24,7 +24,7 @@ import Vk from './Vk';
 import Warning from './Warning';
 
 export default {
-  title: 'Components',
+  title: 'Components/Icons',
   argTypes: {
     color: { control: { type: 'color' } },
     size: { control: { type: 'number' } },
@@ -84,6 +84,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Warning)}
   </div>
 );
+Icons.storyName = 'Icons';
 Icons.args = {
   color: '#000000',
   size: 1,
