@@ -1,12 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import Spinner from '@/components/Spinner';
 import { fetchRolesDetails, fetchRolesAbilities, editRole } from '@/store/users/actions';
 import Button from '@/components/Button';
 import TimesCircleIcon from '@/icons/TimesCircle';
+import { getRolesAbilities, getRolesDetails } from '../../../../store/users/selectors';
 import EditRolePopup from './Components/EditRole';
 import styles from './styles.module.scss';
 
@@ -22,17 +23,8 @@ const Details = function RolesDetailsScreen() {
     removeAbilityButtonDisabled, setRemoveAbilityButtonDisabled,
   ] = useState(false);
 
-  const rolesDetailsData = useSelector((state) => state.users.rolesDetails);
-  const rolesDetails = useRef(rolesDetailsData);
-  useLayoutEffect(() => {
-    rolesDetails.current = rolesDetailsData;
-  }, [rolesDetailsData]);
-
-  const rolesAbilitiesData = useSelector((state) => state.users.rolesAbilities);
-  const rolesAbilities = useRef(rolesAbilitiesData);
-  useLayoutEffect(() => {
-    rolesAbilities.current = rolesAbilitiesData;
-  }, [rolesAbilitiesData]);
+  const rolesDetails = useSelector(getRolesDetails);
+  const rolesAbilities = useSelector(getRolesAbilities);
 
   const { roleName } = useParams();
   useEffect(() => {
@@ -53,10 +45,10 @@ const Details = function RolesDetailsScreen() {
   };
   const handleRemoveAbilityButtonClick = async (e) => {
     const { abilityName } = e.target.dataset;
-    const abilities = rolesAbilities.current
+    const abilities = rolesAbilities
       .filter((ability) => ability.name !== abilityName)
       .map((ability) => ability.name);
-    const roleTitle = rolesDetails.current.title;
+    const roleTitle = rolesDetails.title;
     setRemoveAbilityButtonDisabled(abilityName);
     await dispatch(editRole({ roleName, roleTitle, abilities }));
     await dispatch(fetchRolesAbilities({ roleName }));
@@ -71,7 +63,7 @@ const Details = function RolesDetailsScreen() {
     <div>
       <div className={styles.headerWrapper}>
         <p>
-          {`Разрешения для роли "${rolesDetails.current.title}"`}
+          {`Разрешения для роли "${rolesDetails.title}"`}
         </p>
         <Button
           className={styles.editAbilitiesButton}
@@ -94,8 +86,8 @@ const Details = function RolesDetailsScreen() {
             </td>
           </tr>
 
-          {rolesAbilities.current?.length
-            ? rolesAbilities.current.map((ability) => (
+          {rolesAbilities?.length
+            ? rolesAbilities.map((ability) => (
               <tr
                 key={ability.id}
                 content=""
