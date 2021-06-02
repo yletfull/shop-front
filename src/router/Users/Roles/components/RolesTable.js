@@ -1,10 +1,11 @@
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import { fetchAllRoles } from '@/store/users/actions';
+import { getAllRoles } from '@/store/users/selectors';
 import AddRolePopup from './AddRolePopup';
 import styles from './styles.module.scss';
 
@@ -14,11 +15,7 @@ const RolesTable = function UsersScreen() {
   const [isFetching, setIsFetching] = useState(false);
   const [addRolePopupIsOpen, setAddRolePopupIsOpen] = useState(false);
 
-  const rolesList = useSelector((state) => state.users.allRoles);
-  const roles = useRef(rolesList);
-  useLayoutEffect(() => {
-    roles.current = rolesList;
-  }, [rolesList]);
+  const roles = useSelector(getAllRoles);
 
   useEffect(() => {
     const fetchUsersFn = async () => {
@@ -70,8 +67,8 @@ const RolesTable = function UsersScreen() {
               Наименование
             </td>
           </tr>
-          {roles?.current?.length
-            ? roles.current.map((role) => (
+          {roles?.length
+            ? roles.map((role) => (
               <tr
                 key={role.id}
                 content=""
