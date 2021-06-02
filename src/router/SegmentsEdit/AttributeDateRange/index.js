@@ -20,7 +20,7 @@ const AttributeDateRange = function AttributeDateRange({
   datasets,
 }) {
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.attributeDataRange}>
       AttributeDateRange Component
       {from}
       {to}
