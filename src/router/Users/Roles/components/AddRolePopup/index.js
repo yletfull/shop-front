@@ -7,6 +7,7 @@ import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
 import { fetchAllRoleAbilities, createRole, fetchAllRoles } from '@/store/users/actions';
+import { getAllRoleAbilities, getCreateRoleError } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
 
@@ -16,27 +17,23 @@ const propTypes = {
 
 const EditRolePopup = function EditRolePopup(props) {
   const { onClose } = props;
-
   const dispatch = useDispatch();
 
-  const [selectedAbilities, setSelectedAbilities] = useState([]);
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
-  const [isFetching, setIsFetching] = useState(false);
+  const allRoleAbilities = useSelector(getAllRoleAbilities);
 
-  const allRoleAbilities = useSelector(
-    (state) => state.users.allRoleAbilities
-  );
-
-  const [roleTitle, setRoleTitle] = useState('');
-  const [roleName, setRoleName] = useState('');
-
-  const createRoleErrorData = useSelector(
-    (state) => state.users.createRoleError
-  );
+  const createRoleErrorData = useSelector(getCreateRoleError);
   const createRoleError = useRef(createRoleErrorData);
   useLayoutEffect(() => {
     createRoleError.current = createRoleErrorData;
   }, [createRoleErrorData]);
+
+
+  const [roleTitle, setRoleTitle] = useState('');
+  const [roleName, setRoleName] = useState('');
+  const [selectedAbilities, setSelectedAbilities] = useState([]);
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+
 
   useEffect(() => {
     const fetchAllAbilitiesFn = async () => {
