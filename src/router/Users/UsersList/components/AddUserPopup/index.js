@@ -18,10 +18,10 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const dispatch = useDispatch();
 
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState();
-  const [login, setLogin] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(true);
+  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
   const createUserErrorData = useSelector(
     (state) => state.users.createUserError
@@ -122,11 +122,11 @@ const EditRolePopup = function EditRolePopup(props) {
               </td>
               <td>
                 {(createUserError.current)
-                      && (
-                        <p className={cx('red', styles.editRoleError)}>
-                          Произошла ошибка
-                        </p>
-                      )}
+                  && (
+                    <p className={cx('red', styles.editRoleError)}>
+                      Произошла ошибка
+                    </p>
+                  )}
               </td>
             </tr>
           </tbody>
