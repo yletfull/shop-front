@@ -11,9 +11,10 @@ import Tag from '@/components/Tag';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import TimesCircleIcon from '@/icons/TimesCircle';
-import { getAllRoles, getUserRoles, getUserDetails } from '@/store/users/selectors';
+import { getAllRoles, getUserRoles, getUserDetails, getUserSetRoleError } from '@/store/users/selectors';
 
 import styles from './styles.module.scss';
+
 
 const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
@@ -29,7 +30,6 @@ const Details = function RolesDetailsScreen() {
   const userRoles = useSelector(getUserRoles);
   const allRoles = useSelector(getAllRoles);
 
-
   const userDetailsErrorData = useSelector(
     (state) => state.users.userDetailsError
   );
@@ -38,15 +38,11 @@ const Details = function RolesDetailsScreen() {
     userDetailsError.current = userDetailsErrorData;
   }, [userDetailsErrorData]);
 
-
-  const userSetRoleErrorData = useSelector(
-    (state) => state.users.userSetRoleError
-  );
+  const userSetRoleErrorData = useSelector(getUserSetRoleError);
   const userSetRoleError = useRef(userSetRoleErrorData);
   useLayoutEffect(() => {
     userSetRoleError.current = userSetRoleErrorData;
   }, [userSetRoleErrorData]);
-
 
   const { userId } = useParams();
   useEffect(() => {

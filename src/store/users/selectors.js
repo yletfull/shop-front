@@ -48,3 +48,7 @@ export const getUserRoles = createSelector(
   [getState],
   (state) => state.userRoles,
 );
+export const getUserSetRoleError = createSelector(
+  [getState],
+  (state) => state.userSetRoleError,
+);
