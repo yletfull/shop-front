@@ -24,10 +24,14 @@ export const Index = ({ key, event, onKeypress, ...args }) => {
     </div>
   );
 };
+Index.storyName = 'use-key-press';
 Index.args = {
   key: 'Enter',
   event: 'keydown',
 };
 Index.parameters = {
-  controls: { hideNoControlsWarning: true },
+  controls: {
+    expanded: false,
+    hideNoControlsWarning: true,
+  },
 };

@@ -35,9 +35,13 @@ export const Index = ({ currentUrl, ...args }) => {
     </pre>
   );
 };
+Index.storyName = 'use-query';
 Index.args = {
   currentUrl: '/some/path/?foo=bar&test=42',
 };
 Index.parameters = {
-  controls: { hideNoControlsWarning: true },
+  controls: {
+    expanded: false,
+    hideNoControlsWarning: true,
+  },
 };

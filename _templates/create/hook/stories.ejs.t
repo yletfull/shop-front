@@ -19,8 +19,12 @@ export const Index = ({ ...args }) => {
     </pre>
   );
 };
+Index.storyName = '<%= h.changeCase.param(name) %>';
 Index.args = {
 };
 Index.parameters = {
-  controls: { hideNoControlsWarning: true },
+  controls: {
+    expanded: false,
+    hideNoControlsWarning: true,
+  },
 };

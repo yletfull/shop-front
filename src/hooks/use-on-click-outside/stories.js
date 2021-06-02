@@ -37,6 +37,10 @@ export const Index = ({ onClick, onClickOutside, ...args }) => {
     </div>
   );
 };
+Index.storyName = 'use-on-click-outside';
 Index.parameters = {
-  controls: { hideNoControlsWarning: true },
+  controls: {
+    expanded: false,
+    hideNoControlsWarning: true,
+  },
 };
