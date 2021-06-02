@@ -13,7 +13,10 @@ const defaultProps = {
   isFetching: false,
 };
 
-const Constructor = function Constructor({ children, isFetching }) {
+const AttributesConstructor = function AttributesConstructor({
+  children,
+  isFetching,
+}) {
   if (isFetching) {
     return (
       <Spinner />
@@ -21,13 +24,13 @@ const Constructor = function Constructor({ children, isFetching }) {
   }
 
   return (
-    <div className={styles.construct}>
+    <div className={styles.attributesConstructor}>
       {children}
     </div>
   );
 };
 
-Constructor.propTypes = propTypes;
-Constructor.defaultProps = defaultProps;
+AttributesConstructor.propTypes = propTypes;
+AttributesConstructor.defaultProps = defaultProps;
 
-export default Constructor;
+export default AttributesConstructor;
