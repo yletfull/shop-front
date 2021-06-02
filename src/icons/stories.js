@@ -89,3 +89,8 @@ Icons.args = {
   color: '#000000',
   size: 1,
 };
+Icons.parameters = {
+  controls: {
+    expanded: false,
+  },
+};
