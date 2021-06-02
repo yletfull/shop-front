@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useDrag } from 'react-dnd';
 import IconTimes from '@/icons/TimesLight';
 import AttributeEnum from './AttributeEnum';
 import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
+  dragType: PropTypes.string.isRequired,
   groupIndex: PropTypes.number.isRequired,
   name: PropTypes.string,
   index: PropTypes.number.isRequired,
@@ -24,6 +26,7 @@ const defaultProps = {
 
 const Attribute = function Attribute({
   children,
+  dragType,
   groupIndex,
   name,
   index,
@@ -41,6 +44,14 @@ const Attribute = function Attribute({
 
   const TypedAttribute = attributes[type] || null;
 
+  const [{ opacity }, dragRef] = useDrag(() => ({
+    type: dragType,
+    item: { from: [groupIndex, index] },
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.5 : 1,
+    }),
+  }), [dragType, groupIndex, index]);
+
   const handleClickCloseAttribute = (e) => {
     const { index: attributeIndex, group } = e?.target?.dataset || {};
     if (typeof attributeIndex === 'undefined'
@@ -51,7 +62,11 @@ const Attribute = function Attribute({
   };
 
   return (
-    <div className={styles.attribute}>
+    <div
+      ref={dragRef}
+      className={styles.attribute}
+      style={{ opacity }}
+    >
       <div className={styles.attributeMain}>
         <TypedAttribute
           className={styles.attribute}

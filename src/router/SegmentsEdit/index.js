@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Button from '@/components/Button';
-import { namespace as NS } from './constants';
+import { namespace as NS, dndTypes } from './constants';
 import reducer from './reducer';
 import {
   fetchParams,
   fetchSegment,
   addSegmentParam,
+  moveSegmentAttribute,
   removeSegmentAttribute,
 } from './actions';
 import {
@@ -85,6 +88,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
   };
+  const handleDropAttribute = (targetGroupIndex) => (sourceIndexes) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = sourceIndexes?.from || [];
+    if (typeof sourceGroupIndex === 'undefined'
+      || typeof sourceAttributeIndex === 'undefined') {
+      return;
+    }
+    dispatch(moveSegmentAttribute(
+      [sourceGroupIndex, sourceAttributeIndex],
+      [targetGroupIndex, 0],
+    ));
+  };
   const handleRemoveAttribute = (position) => {
     const [groupIndex, attributeIndex] = position || [];
     if (typeof attributeIndex === 'undefined'
@@ -110,61 +124,68 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   return (
     <div className={styles.segmentsEdit}>
-      <AttributesConstructor isFetching={isFetchingSegment}>
-        {segmentStructure
-          && Array.isArray(segmentStructure)
-          && segmentStructure.map((group, groupIndex) => {
-            const groupKey = generateKeyByIndex('group', groupIndex);
-            return (
-              <AttributesGroup key={groupKey}>
-                {group.map((attribute, attributeIndex) => (
-                  <Attribute
-                    key={`${groupKey}-${attribute.attributeName}`}
-                    groupIndex={groupIndex}
-                    index={attributeIndex}
-                    name={attribute.attributeName}
-                    title={attribute.title}
-                    type={attribute.type}
-                    onRemove={handleRemoveAttribute}
-                  >
-                    <AttributeOptions
-                      data={attribute.options}
-                      selected={[]}
-                      onChange={handleChangeAttributeOptions}
-                    />
-                    <AttributePeriod
-                      from={attribute.from}
-                      to={attribute.to}
-                      dateRange={(
-                        <AttributeDateRange
-                          from={attribute.from}
-                          to={attribute.to}
-                          datasets={attribute.availableDatasetsDates}
-                        />
-                      )}
+      <DndProvider backend={HTML5Backend}>
+        <AttributesConstructor isFetching={isFetchingSegment}>
+          {segmentStructure
+            && Array.isArray(segmentStructure)
+            && segmentStructure.map((group, groupIndex) => {
+              const groupKey = generateKeyByIndex('group', groupIndex);
+              return (
+                <AttributesGroup
+                  key={groupKey}
+                  accept={dndTypes.attribute}
+                  onDrop={handleDropAttribute(groupIndex)}
+                >
+                  {group.map((attribute, attributeIndex) => (
+                    <Attribute
+                      key={`${groupKey}-${attribute.attributeName}`}
+                      groupIndex={groupIndex}
+                      index={attributeIndex}
+                      name={attribute.attributeName}
+                      title={attribute.title}
+                      type={attribute.type}
+                      dragType={dndTypes.attribute}
+                      onRemove={handleRemoveAttribute}
                     >
-                      <AttributeDatasets data={attribute.inDatasets}>
-                        <AttributeDatasetsForm
-                          data={attribute.inDatasets}
-                          dateRange={(
-                            <AttributeDateRange
-                              from={attribute.from}
-                              to={attribute.to}
-                              datasets={attribute.availableDatasetsDates}
-                            />
-                          )}
-                        />
-                      </AttributeDatasets>
-                    </AttributePeriod>
-                    <AttributeStatistics
-                      data={attribute.statistics}
-                    />
-                  </Attribute>
-                ))}
-              </AttributesGroup>
-            );
-          })}
-      </AttributesConstructor>
+                      <AttributeOptions
+                        data={attribute.options}
+                        selected={[]}
+                        onChange={handleChangeAttributeOptions}
+                      />
+                      <AttributePeriod
+                        from={attribute.from}
+                        to={attribute.to}
+                        dateRange={(
+                          <AttributeDateRange
+                            from={attribute.from}
+                            to={attribute.to}
+                            datasets={attribute.availableDatasetsDates}
+                          />
+                        )}
+                      >
+                        <AttributeDatasets data={attribute.inDatasets}>
+                          <AttributeDatasetsForm
+                            data={attribute.inDatasets}
+                            dateRange={(
+                              <AttributeDateRange
+                                from={attribute.from}
+                                to={attribute.to}
+                                datasets={attribute.availableDatasetsDates}
+                              />
+                            )}
+                          />
+                        </AttributeDatasets>
+                      </AttributePeriod>
+                      <AttributeStatistics
+                        data={attribute.statistics}
+                      />
+                    </Attribute>
+                  ))}
+                </AttributesGroup>
+              );
+            })}
+        </AttributesConstructor>
+      </DndProvider>
 
       <Params
         isFetching={isFetchingParams}
