@@ -31,3 +31,20 @@ export const getAllRoles = createSelector(
   [getState],
   (state) => state.allRoles,
 );
+
+export const getUsersList = createSelector(
+  [getState],
+  (state) => state.list,
+);
+export const getCreateUserError = createSelector(
+  [getState],
+  (state) => state.createUserError,
+);
+export const getUserDetails = createSelector(
+  [getState],
+  (state) => state.userDetails,
+);
+export const getUserRoles = createSelector(
+  [getState],
+  (state) => state.userRoles,
+);
