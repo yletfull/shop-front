@@ -1,11 +1,12 @@
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { formatDate } from '@/utils/format';
 import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
 import Button from '@/components/Button';
+import { getUsersList } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 import AddUserPopup from './AddUserPopup';
 
@@ -15,11 +16,7 @@ const userTable = function UsersScreen() {
   const [isFetching, setIsFetching] = useState(false);
   const [addUserPopupIsOpen, setAddUserPopupIsOpen] = useState(false);
 
-  const usersList = useSelector((state) => state.users.list);
-  const users = useRef(usersList);
-  useLayoutEffect(() => {
-    users.current = usersList;
-  }, [usersList]);
+  const users = useSelector(getUsersList);
 
   useEffect(() => {
     const fetchUsersFn = async () => {
@@ -79,8 +76,8 @@ const userTable = function UsersScreen() {
               Дата обновления
             </td>
           </tr>
-          {users?.current?.length
-            ? users.current.map((user) => (
+          {users?.length
+            ? users.map((user) => (
               <tr
                 key={user.id}
                 content=""
