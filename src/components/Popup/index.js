@@ -8,11 +8,7 @@ import styles from './styles.module.scss';
 const propTypes = {
   title: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.arrayOf(PropTypes.element),
-    PropTypes.string,
-  ]).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 const defaultProps = {
@@ -41,7 +37,7 @@ const Popup = function Popup(props) {
       </div>
 
       <div className={styles.content}>
-        {React.Children.map(children, (child) => child)}
+        {children}
       </div>
     </div>
   );
