@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+// FIXME: re-init on key, handler or event change
 const useKeyPress = function useKeyPressHook(
   key,
   handler,
