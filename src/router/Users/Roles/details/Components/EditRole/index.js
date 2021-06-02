@@ -8,6 +8,7 @@ import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
 import { fetchAllRoleAbilities, editRole, fetchRolesAbilities, fetchRolesDetails } from '@/store/users/actions';
+import { getAllRoleAbilities, getRolesAbilities, getAllRoleAbilitiesError, getEditRoleError, getRolesDetails } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
 
@@ -24,30 +25,24 @@ const EditRolePopup = function EditRolePopup(props) {
   const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
-  const rolesAbilities = useSelector((state) => state.users.rolesAbilities);
+  const rolesAbilities = useSelector(getRolesAbilities);
 
-  const allRoleAbilities = useSelector(
-    (state) => state.users.allRoleAbilities
-  );
+  const allRoleAbilities = useSelector(getAllRoleAbilities);
 
-  const allRoleAbilitiesErrorData = useSelector(
-    (state) => state.users.allRoleAbilitiesError
-  );
+  const allRoleAbilitiesErrorData = useSelector(getAllRoleAbilitiesError);
   const allRoleAbilitiesError = useRef(allRoleAbilitiesErrorData);
   useLayoutEffect(() => {
     allRoleAbilitiesError.current = allRoleAbilitiesErrorData;
   }, [allRoleAbilitiesErrorData]);
 
-  const editRoleErrorData = useSelector(
-    (state) => state.users.editRoleError
-  );
+  const editRoleErrorData = useSelector(getEditRoleError);
   const editRoleError = useRef(editRoleErrorData);
   useLayoutEffect(() => {
     editRoleError.current = editRoleErrorData;
   }, [editRoleErrorData]);
 
 
-  const rolesDetails = useSelector((state) => state.users.rolesDetails);
+  const rolesDetails = useSelector(getRolesDetails);
   const [roleTitle, setRoleTitle] = useState(rolesDetails.title);
 
 
