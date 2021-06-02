@@ -1,17 +1,26 @@
 ---
-to: src/hooks/<%= h.changeCase.param(name) %>/story.js
+to: src/hooks/<%= h.changeCase.param(name) %>/stories.js
 ---
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import <%= h.changeCase.camel(name) %> from './index';
 
-storiesOf('Hooks/<%= h.changeCase.camel(name) %>', module)
-  .add('index', () => {
-    const values = <%= h.changeCase.camel(name) %>();
+export default {
+  title: 'Hooks/<%= h.changeCase.param(name) %>',
+  argTypes: {
+  },
+};
 
-    return (
-      <pre>
-        {JSON.stringify(values, null, 2)}
-      </pre>
-    );
-  });
+export const Index = ({ ...args }) => {
+  const values = <%= h.changeCase.camel(name) %>();
+
+  return (
+    <pre {...args}>
+      {JSON.stringify(values, null, 2)}
+    </pre>
+  );
+};
+Index.args = {
+};
+Index.parameters = {
+  controls: { hideNoControlsWarning: true },
+};
