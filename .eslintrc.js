@@ -17,6 +17,7 @@ module.exports = {
         'import/no-anonymous-default-export': 'off',
         'import/exports-last': 'off',
         'react/function-component-definition': 'off',
+        'react/prop-types': 'off',
       },
     },
   ],
