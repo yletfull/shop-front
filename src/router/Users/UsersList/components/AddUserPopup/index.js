@@ -5,7 +5,7 @@ import cx from 'classnames';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Popup from '@/components/Popup';
-import { createUser, fetchUsers } from '@/store/users/actions';
+import { createUser } from '@/store/users/actions';
 import { getCreateUserError } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
@@ -55,7 +55,6 @@ const EditRolePopup = function EditRolePopup(props) {
     ));
     setSubmitButtomDisabed(false);
     if (!createUserError.current) {
-      await dispatch(fetchUsers());
       onClose();
     }
   };
