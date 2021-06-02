@@ -27,3 +27,8 @@ export const getRolesDetails = createSelector(
   [getState],
   (state) => state.rolesDetails,
 );
+
+export const getCreateRoleError = createSelector(
+  [getState],
+  (state) => state.createRoleError,
+);
