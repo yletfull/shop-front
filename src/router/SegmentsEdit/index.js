@@ -109,7 +109,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const statistic = {};
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.segmentsEdit}>
       <AttributesConstructor isFetching={isFetchingSegment}>
         {segmentStructure
           && Array.isArray(segmentStructure)
