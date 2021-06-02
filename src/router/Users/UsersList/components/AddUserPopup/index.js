@@ -18,7 +18,7 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const dispatch = useDispatch();
 
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(true);
+  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -114,7 +114,7 @@ const EditRolePopup = function EditRolePopup(props) {
               <td>
                 <Button
                   disabled={submitButtonDisabled
-                        || !phone || !login || !email}
+                    || !phone || !login || !email}
                   type="submit"
                 >
                   Cоздать пользователя
