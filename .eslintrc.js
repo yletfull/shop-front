@@ -10,9 +10,13 @@ module.exports = {
     {
       files: [
         '**/*.stories.*',
+        '**/stories.*',
       ],
       rules: {
+        'no-console': 'off',
         'import/no-anonymous-default-export': 'off',
+        'import/exports-last': 'off',
+        'react/function-component-definition': 'off',
       },
     },
   ],
