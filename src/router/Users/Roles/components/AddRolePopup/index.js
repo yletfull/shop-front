@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
-import { fetchAllRoleAbilities, createRole, fetchAllRoles } from '@/store/users/actions';
+import { fetchAllRoleAbilities, createRole } from '@/store/users/actions';
 import { getAllRoleAbilities, getCreateRoleError } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
@@ -76,7 +76,6 @@ const EditRolePopup = function EditRolePopup(props) {
     ));
     setSubmitButtomDisabed(false);
     if (!createRoleError.current) {
-      await dispatch(fetchAllRoles());
       onClose();
     }
   };
