@@ -1,26 +1,21 @@
 ---
-to: src/components/<%= h.changeCase.pascal(name) %>/story.js
+to: src/components/<%= h.changeCase.pascal(name) %>/stories.js
 ---
 import React from 'react';
-import { storiesOf } from '@storybook/react';
-<% if (!('props' in locals) || locals.props) { -%>
-import { withKnobs<%= locals.container ? ', text' : '' %> } from '@storybook/addon-knobs';
-<% } -%>
 import <%= h.changeCase.pascal(name) %> from './index';
 
-storiesOf('components/<%= h.changeCase.pascal(name) %>', module)
-<% if (!('props' in locals) || locals.props) { -%>
-  .addDecorator(withKnobs)
-<% } -%>
-<% if (locals.container) { -%>
-  .add('index', () => (
-    <<%= h.changeCase.pascal(name) %>>
-      {text('content', 'content')}
-    </<%= h.changeCase.pascal(name) %>>
-  ));
-<% } -%>
-<% if (!locals.container) { -%>
-  .add('index', () => (
-    <<%= h.changeCase.pascal(name) %> />
-  ));
-<% } -%>
+export default {
+  title: 'Components/<%= h.changeCase.pascal(name) %>',
+  component: <%= h.changeCase.pascal(name) %>,
+  argTypes: {<% if (locals.container) { %>
+    children: { control: { type: 'text' } },<% } %>
+  },
+};
+
+const Template = (args) => (
+  <<%= h.changeCase.pascal(name) %> {...args} />
+);
+
+export const Playground = Template.bind({});
+Playground.args = {
+};
