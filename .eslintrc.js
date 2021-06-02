@@ -6,4 +6,14 @@ module.exports = {
     'react/no-danger': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
   },
+  overrides: [
+    {
+      files: [
+        '**/*.stories.*',
+      ],
+      rules: {
+        'import/no-anonymous-default-export': 'off',
+      },
+    },
+  ],
 };
