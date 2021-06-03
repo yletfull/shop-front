@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
@@ -6,8 +6,9 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Popup from '@/components/Popup';
-import { fetchAllRoleAbilities, createRole } from '@/store/users/actions';
-import { getAllRoleAbilities, getCreateRoleError } from '@/store/users/selectors';
+import { fetchAllRoleAbilities, fetchAllRoles } from '@/store/users/actions';
+import { getAllRoleAbilities } from '@/store/users/selectors';
+import service from '@/store/users/service';
 import styles from './styles.module.scss';
 
 
@@ -21,19 +22,12 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const allRoleAbilities = useSelector(getAllRoleAbilities);
 
-  const createRoleErrorData = useSelector(getCreateRoleError);
-  const createRoleError = useRef(createRoleErrorData);
-  useLayoutEffect(() => {
-    createRoleError.current = createRoleErrorData;
-  }, [createRoleErrorData]);
-
-
   const [roleTitle, setRoleTitle] = useState('');
   const [roleName, setRoleName] = useState('');
   const [selectedAbilities, setSelectedAbilities] = useState([]);
   const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
+  const [submittingError, setSubmittingError] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
-
 
   useEffect(() => {
     const fetchAllAbilitiesFn = async () => {
@@ -66,18 +60,23 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const params = {
+      roleName: roleName.trim(),
+      roleTitle: roleTitle.trim(),
+      abilities: selectedAbilities,
+    };
+
     setSubmitButtomDisabed(true);
-    await dispatch(createRole(
-      {
-        roleName: roleName.trim(),
-        roleTitle: roleTitle.trim(),
-        abilities: selectedAbilities,
-      }
-    ));
-    setSubmitButtomDisabed(false);
-    if (!createRoleError.current) {
+    try {
+      await service.createRole(params);
+      dispatch(fetchAllRoles());
       onClose();
+    } catch (error) {
+      console.error(error);
+      setSubmittingError(error?.responce?.data || 'Ошибка');
     }
+    setSubmitButtomDisabed(false);
   };
 
   return (
@@ -154,7 +153,7 @@ const EditRolePopup = function EditRolePopup(props) {
                     </Button>
                   </td>
                   <td>
-                    {(createRoleError.current)
+                    {(submittingError)
                       && (
                         <p className={cx('red', styles.editRoleError)}>
                           Произошла ошибка

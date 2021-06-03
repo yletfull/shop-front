@@ -135,7 +135,8 @@ export const createRole = (params) => async (dispatch) => {
     await service.createRole(params);
     dispatch(createRoleError(''));
     dispatch(fetchAllRoles());
-  } catch (err) {
-    dispatch(createRoleError(err));
+  } catch (error) {
+    console.error(error);
+    dispatch(createRoleError(error?.response?.data || 'Error'));
   }
 };
