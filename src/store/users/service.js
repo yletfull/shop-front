@@ -1,6 +1,6 @@
 import api from '@/api';
 
-const createUser = (params) => api.post('api/v1/api/v1/usertttt/', { ...params })
+const createUser = (params) => api.post('api/v1/api/v1/user', { ...params })
   .then((data) => data);
 
 const getUsers = (params) => api.get('api/v1/users', { params })
