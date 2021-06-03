@@ -48,7 +48,7 @@ const Details = function RolesDetailsScreen() {
   useEffect(() => {
     const fetchUsersFn = async () => {
       setIsFetching(true);
-      await dispatch(fetch({ userId }));
+      await dispatch(fetchUserDetails({ userId }));
       await dispatch(fetchUserRoles({ userId }));
       await dispatch(fetchAllRoles());
       setIsFetching(false);
