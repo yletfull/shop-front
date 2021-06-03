@@ -1,0 +1,20 @@
+@import '@/theme/include.scss';
+
+.comparison {
+  &Filter {
+    padding: .5rem 0;
+
+    &Form {
+      display: flex;
+
+      & > input {
+        flex-grow: 1;
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  &Table {
+    @include table();
+  }
+}

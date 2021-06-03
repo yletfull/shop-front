@@ -5,6 +5,11 @@ const AudiencesList = lazy(() => import(
   /* webpackMode: 'lazy' */
   './AudiencesList'
 ));
+const AudiencesDetails = lazy(() => import(
+  /* webpackChunkName: 'audiences-details' */
+  /* webpackMode: 'lazy' */
+  './AudiencesDetails'
+));
 const SegmentsDetails = lazy(() => import(
   /* webpackChunkName: 'segments-details' */
   /* webpackMode: 'lazy' */
@@ -38,6 +43,7 @@ const Users = lazy(() => import(
 
 export const patchs = {
   audiencesList: '/audiences',
+  audiencesDetails: '/audiences/details/:id',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
   segmentsEdit: '/segments/edit/:id?',
@@ -48,6 +54,7 @@ export const patchs = {
 
 export const titles = {
   audiencesList: 'Аудитории',
+  audiencesDetails: 'Описание аудитории',
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
@@ -100,5 +107,10 @@ export default [
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
+  },
+  {
+    Component: AudiencesDetails,
+    path: patchs.audiencesDetails,
+    title: titles.audiencesDetails,
   },
 ];
