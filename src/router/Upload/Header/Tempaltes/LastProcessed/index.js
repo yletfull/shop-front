@@ -102,7 +102,7 @@ const LastProcessedTemplate = function LastProcessedTemplateScreen() {
     detailsIsFetching
       ? <Spinner />
       : (
-        <HeaderTemplate>
+        <HeaderTemplate className={styles.wrapper}>
           <ProcessButtonLink
             icon={<IconDownload />}
             text={['Скачать', 'последний файл']}
