@@ -18,7 +18,7 @@ import {
 } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../../stages';
 
-const Header = function HeaderScreen() {
+const UploadFileTemplate = function UploadFileTemplateScreen() {
   const dispatch = useDispatch();
 
   const fileInput = useRef(null);
@@ -153,4 +153,4 @@ const Header = function HeaderScreen() {
   );
 };
 
-export default Header;
+export default UploadFileTemplate;

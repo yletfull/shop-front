@@ -24,7 +24,7 @@ const getHeaderTempalteContent = (data) => [
 ];
 
 
-const Header = function HeaderScreen() {
+const LastProcessedTemplate = function LastProcessedTemplateScreen() {
   const dispatch = useDispatch();
 
   const [fileIsLoaded, setFileIsLoaded] = useState(false);
@@ -134,4 +134,4 @@ const Header = function HeaderScreen() {
   );
 };
 
-export default Header;
+export default LastProcessedTemplate;

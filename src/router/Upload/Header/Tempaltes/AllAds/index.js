@@ -5,7 +5,7 @@ import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import IconDownload from '@/icons/Download';
 
-const Header = function HeaderScreen() {
+const AllAdsTemplate = function AllAdsTemplateScreen() {
   const selectAccount = useSelector(
     (state) => state.upload?.selectAccount
   ) || '';
@@ -27,4 +27,4 @@ const Header = function HeaderScreen() {
   );
 };
 
-export default Header;
+export default AllAdsTemplate;
