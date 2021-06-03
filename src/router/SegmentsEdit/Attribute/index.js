@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag } from 'react-dnd';
+import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
 import AttributeEnum from './AttributeEnum';
 import styles from './styles.module.scss';
@@ -67,6 +68,12 @@ const Attribute = function Attribute({
       className={styles.attribute}
       style={{ opacity }}
     >
+      <div className={styles.attributeAside}>
+        <span className={styles.attributeIcon}>
+          <IconArrows />
+        </span>
+      </div>
+
       <div className={styles.attributeMain}>
         <TypedAttribute
           className={styles.attribute}
