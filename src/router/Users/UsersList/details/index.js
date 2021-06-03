@@ -3,13 +3,16 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
+import cx from 'classnames';
 import Spinner from '@/components/Spinner';
-import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles } from '@/store/users/actions';
-import { formatDate } from '@/utils/format';
+import { fetchUserDetails, fetchUserRoles, fetchAllRoles, setUserRoles, removeUserRole } from '@/store/users/actions';
+import dayjs from '@/utils/day';
 import Tag from '@/components/Tag';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import TimesCircleIcon from '@/icons/TimesCircle';
+import { getAllRoles, getUserRoles, getUserDetails, getUserSetRoleError } from '@/store/users/selectors';
+
 import styles from './styles.module.scss';
 
 
@@ -17,26 +20,29 @@ const Details = function RolesDetailsScreen() {
   const dispatch = useDispatch();
 
   const [isFetching, setIsFetching] = useState(false);
-  const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(false);
-  const [selectedRole, setSelectedRole] = useState();
+  const [addRoleButtonDisabled, setAddRoleButtonDisabled] = useState(true);
+  const [
+    removeRoleButtonDisabled, setRemoveRoleButtonDisabled,
+  ] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('default');
 
-  const userData = useSelector((state) => state.users.userDetails);
-  const userDetails = useRef(userData);
-  useLayoutEffect(() => {
-    userDetails.current = userData;
-  }, [userData]);
+  const userDetails = useSelector(getUserDetails);
+  const userRoles = useSelector(getUserRoles);
+  const allRoles = useSelector(getAllRoles);
 
-  const userRolesData = useSelector((state) => state.users.userRoles);
-  const userRoles = useRef(userRolesData);
+  const userDetailsErrorData = useSelector(
+    (state) => state.users.userDetailsError
+  );
+  const userDetailsError = useRef(userDetailsErrorData);
   useLayoutEffect(() => {
-    userRoles.current = userRolesData;
-  }, [userRolesData]);
+    userDetailsError.current = userDetailsErrorData;
+  }, [userDetailsErrorData]);
 
-  const allRolesData = useSelector((state) => state.users.allRoles);
-  const allRoles = useRef(allRolesData);
+  const userSetRoleErrorData = useSelector(getUserSetRoleError);
+  const userSetRoleError = useRef(userSetRoleErrorData);
   useLayoutEffect(() => {
-    allRoles.current = allRolesData;
-  }, [allRolesData]);
+    userSetRoleError.current = userSetRoleErrorData;
+  }, [userSetRoleErrorData]);
 
   const { userId } = useParams();
   useEffect(() => {
@@ -50,9 +56,17 @@ const Details = function RolesDetailsScreen() {
     fetchUsersFn();
   }, [dispatch, userId]);
 
+  useEffect(() => {
+    if (selectedRole === 'default') {
+      setAddRoleButtonDisabled(true);
+      return;
+    }
+    setAddRoleButtonDisabled(false);
+  }, [selectedRole]);
+
   const getAllRolesOptions = () => {
-    if (allRoles.current?.length) {
-      return allRoles.current.map((role) => ({
+    if (allRoles?.length) {
+      return allRoles.map((role) => ({
         text: role.title,
         value: role.name,
       }));
@@ -68,19 +82,27 @@ const Details = function RolesDetailsScreen() {
     e.preventDefault();
     const roles = [];
     roles.push(selectedRole);
-    if (userRoles.current.length) {
-      roles.push(...userRoles.current.map((el) => el.name));
+    if (userRoles.length) {
+      roles.push(...userRoles.map((el) => el.name));
     }
     setAddRoleButtonDisabled(true);
+    setRemoveRoleButtonDisabled(true);
     await dispatch(setUserRoles({ userId, ...roles }));
     await dispatch(fetchUserDetails({ userId }));
     await dispatch(fetchUserRoles({ userId }));
+    setRemoveRoleButtonDisabled(false);
     setAddRoleButtonDisabled(false);
   };
 
   const handleRemoveRoleButtonClick = async (e) => {
     const { rolename } = e.target.dataset;
-    dispatch({ roleName: rolename, userId });
+    setAddRoleButtonDisabled(true);
+    setRemoveRoleButtonDisabled(true);
+    await dispatch(removeUserRole({ roleName: rolename, userId }));
+    await dispatch(fetchUserDetails({ userId }));
+    await dispatch(fetchUserRoles({ userId }));
+    setRemoveRoleButtonDisabled(false);
+    setAddRoleButtonDisabled(false);
   };
 
   if (isFetching) {
@@ -96,7 +118,7 @@ const Details = function RolesDetailsScreen() {
               Идентификатор
             </td>
             <td>
-              {userDetails.current.id || '-'}
+              {userDetails.id || '-'}
             </td>
           </tr>
 
@@ -105,7 +127,7 @@ const Details = function RolesDetailsScreen() {
               Логин
             </td>
             <td>
-              {userDetails.current.login || '-'}
+              {userDetails.login || '-'}
             </td>
           </tr>
 
@@ -114,7 +136,7 @@ const Details = function RolesDetailsScreen() {
               E-mail
             </td>
             <td>
-              {userDetails.current.email || '-'}
+              {userDetails.email || '-'}
             </td>
           </tr>
 
@@ -123,7 +145,7 @@ const Details = function RolesDetailsScreen() {
               Телефон
             </td>
             <td>
-              {userDetails.current.phone || '-'}
+              {userDetails.phone || '-'}
             </td>
           </tr>
 
@@ -132,7 +154,7 @@ const Details = function RolesDetailsScreen() {
               Создан
             </td>
             <td>
-              {formatDate(userDetails.current.createdAt, 'YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.createdAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -141,7 +163,7 @@ const Details = function RolesDetailsScreen() {
               Обновлен
             </td>
             <td>
-              {formatDate(userDetails.current.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
+              {dayjs(userDetails.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
             </td>
           </tr>
 
@@ -152,8 +174,8 @@ const Details = function RolesDetailsScreen() {
             </td>
             <td>
               <div className={styles.tagsWrapper}>
-                {userRoles.current?.length
-                  ? userRoles.current.map((role, ind) => (
+                {userRoles?.length
+                  ? userRoles.map((role, ind) => (
                     <div
                       className={styles.roleItem}
                       key={ind}
@@ -164,6 +186,7 @@ const Details = function RolesDetailsScreen() {
                         className={styles.removeRoleButton}
                         onClick={handleRemoveRoleButtonClick}
                         data-rolename={role.name}
+                        disabled={removeRoleButtonDisabled}
                       >
                         <TimesCircleIcon />
                       </Button>
@@ -183,15 +206,18 @@ const Details = function RolesDetailsScreen() {
               Добавить роль
             </td>
             <td>
-              <form onSubmit={handleSubmitRole}>
+              <form
+                className={styles.addRoleForm}
+                onSubmit={handleSubmitRole}
+              >
                 <Select
                   value={selectedRole}
-                  options={getAllRolesOptions(allRoles.current)}
+                  options={getAllRolesOptions(allRoles)}
                   onChange={handleRoleChange}
                   resetText="Не выбрано"
                   placeholder="Выбрать роль"
                   className={styles.select}
-                  disabled={!allRoles.current?.length || addRoleButtonDisabled}
+                  disabled={!allRoles?.length}
                 />
                 <Button
                   type="submit"
@@ -200,11 +226,14 @@ const Details = function RolesDetailsScreen() {
                 >
                   Добавить роль
                 </Button>
+                {userSetRoleError.current && (
+                  <p className={cx('red', styles.addRoleError)}>
+                    Произошла ошибка
+                  </p>
+                )}
               </form>
-
             </td>
           </tr>
-
 
         </tbody>
       </table>
