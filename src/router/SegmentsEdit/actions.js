@@ -50,3 +50,64 @@ export const removeSegmentAttribute = (position) => (dispatch, getState) => {
     ...segment.slice(groupIndex + 1),
   ].filter((a) => a.length > 0)));
 };
+export const moveSegmentAttribute = (source, target) => (
+  (dispatch, getState) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
+    const [targetGroupIndex, targetAttributeIndex = 0] = target || [];
+    if ([
+      sourceGroupIndex,
+      targetGroupIndex,
+      targetAttributeIndex,
+    ].some((index) => typeof index === 'undefined')) {
+      return;
+    }
+    const segment = getSegment(getState());
+    dispatch(updateSegment(segment
+      .reduce((acc, attributes, index) => {
+        if (index === sourceGroupIndex) {
+          const newSourceAttributes = [
+            ...attributes.slice(0, sourceAttributeIndex),
+            ...attributes.slice(sourceAttributeIndex + 1),
+          ];
+          return [...acc, newSourceAttributes];
+        }
+
+        if (index === targetGroupIndex) {
+          const newTargetAttributes = [
+            ...attributes,
+            segment[sourceGroupIndex][sourceAttributeIndex],
+          ];
+          return [...acc, newTargetAttributes];
+        }
+
+        return [...acc, attributes];
+      }, [])
+      .filter((attributes) => attributes.length > 0)));
+  });
+export const insertSegmentAttribute = (position, source) => (
+  (dispatch, getState) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
+    if (!position
+      || !['top', 'bottom'].includes(position)
+      || typeof sourceGroupIndex === 'undefined'
+      || typeof sourceAttributeIndex === 'undefined') {
+      return;
+    }
+    const segment = getSegment(getState());
+    const sourceAttribute = segment[sourceGroupIndex][sourceAttributeIndex];
+    const newSourceAttributes = [
+      ...segment[sourceGroupIndex].slice(0, sourceAttributeIndex),
+      ...segment[sourceGroupIndex].slice(sourceAttributeIndex + 1),
+    ];
+    dispatch(updateSegment([
+      ...(position === 'top'
+        ? [[sourceAttribute]]
+        : []),
+      ...segment.slice(0, sourceGroupIndex),
+      newSourceAttributes,
+      ...segment.slice(sourceGroupIndex + 1),
+      ...(position === 'bottom'
+        ? [[sourceAttribute]]
+        : []),
+    ].filter((attributes) => attributes.length > 0)));
+  });

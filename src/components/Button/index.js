@@ -1,36 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
 import styles from './styles.module.scss';
-
 
 const cssClass = 'button';
 
 const propTypes = {
   appearance: PropTypes.string,
   color: PropTypes.string,
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.arrayOf(PropTypes.element),
-    PropTypes.string,
-  ]).isRequired,
+  children: PropTypes.node,
   className: PropTypes.string,
 };
 
 const defaultProps = {
   appearance: 'default',
+  children: null,
   className: '',
   color: 'primary',
 };
 
-const Button = function Button(props) {
-  const { appearance, children, className, color, ...attrs } = props;
-
-  const childrenArr = Array.isArray(children)
-    ? children.map((el) => el)
-    : [children];
-
+const Button = function Button({
+  appearance,
+  children,
+  className,
+  color,
+  ...attrs
+}) {
   return (
     <button
       type="button"
@@ -42,9 +37,8 @@ const Button = function Button(props) {
       )}
       {...attrs}
     >
-      {childrenArr.map((child) => child)}
+      {children}
     </button>
-
   );
 };
 
