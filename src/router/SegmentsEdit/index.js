@@ -91,7 +91,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleDropAttribute = (targetGroupIndex) => (sourceIndexes) => {
     const [sourceGroupIndex, sourceAttributeIndex] = sourceIndexes?.from || [];
     if (typeof sourceGroupIndex === 'undefined'
-      || typeof sourceAttributeIndex === 'undefined') {
+      || typeof sourceAttributeIndex === 'undefined'
+      || sourceGroupIndex === targetGroupIndex) {
       return;
     }
     dispatch(moveSegmentAttribute(
