@@ -1,34 +1,31 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import cx from 'classnames';
+import service from '@/store/users/service';
+import { fetchUsers } from '@/store/users/actions';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Popup from '@/components/Popup';
-import { createUser } from '@/store/users/actions';
-import { getCreateUserError } from '@/store/users/selectors';
 import styles from './styles.module.scss';
 
-
 const propTypes = {
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
-const EditRolePopup = function EditRolePopup(props) {
-  const { onClose } = props;
+const defaultProps = {
+  onClose: () => {},
+};
 
+const EditRolePopup = function EditRolePopup({ onClose }) {
   const dispatch = useDispatch();
 
-  const [submitButtonDisabled, setSubmitButtomDisabed] = useState(false);
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
 
-  const createUserErrorData = useSelector(getCreateUserError);
-  const createUserError = useRef(createUserErrorData);
-  useLayoutEffect(() => {
-    createUserError.current = createUserErrorData;
-  }, [createUserErrorData]);
+  const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+  const [submittingError, setSubmittingError] = useState(null);
 
   const handleLoginInputChange = (e) => {
     const { value } = e.target;
@@ -45,26 +42,30 @@ const EditRolePopup = function EditRolePopup(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitButtomDisabed(true);
-    await dispatch(createUser(
-      {
-        login,
-        email,
-        phone,
-      }
-    ));
-    setSubmitButtomDisabed(false);
-    if (!createUserError.current) {
+
+    const params = { login, email, phone };
+    setIsSubmittingForm(true);
+    try {
+      await service.createUser(params);
+      dispatch(fetchUsers());
       onClose();
+    } catch (error) {
+      console.error(error);
+      setSubmittingError(error?.response?.data || 'Error');
     }
+    setIsSubmittingForm(false);
   };
+
+  const isSubmitButtonDisabled = isSubmittingForm
+    || !login
+    || !email
+    || !phone;
 
   return (
     <Popup
       onClose={onClose}
       title="Создать пользователя"
     >
-
       <form onSubmit={handleSubmit}>
         <table>
           <tbody>
@@ -110,30 +111,28 @@ const EditRolePopup = function EditRolePopup(props) {
             <tr>
               <td>
                 <Button
-                  disabled={submitButtonDisabled
-                    || !phone || !login || !email}
                   type="submit"
+                  disabled={isSubmitButtonDisabled}
                 >
                   Cоздать пользователя
                 </Button>
               </td>
               <td>
-                {(createUserError.current)
-                  && (
-                    <p className={cx('red', styles.editRoleError)}>
-                      Произошла ошибка
-                    </p>
-                  )}
+                {submittingError && (
+                  <p className={cx('red', styles.editRoleError)}>
+                    Произошла ошибка
+                  </p>
+                )}
               </td>
             </tr>
           </tbody>
         </table>
       </form>
-
     </Popup>
   );
 };
 
 EditRolePopup.propTypes = propTypes;
+EditRolePopup.defaultProps = defaultProps;
 
 export default EditRolePopup;

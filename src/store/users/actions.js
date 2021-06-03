@@ -38,8 +38,9 @@ export const createUser = (params) => async (dispatch) => {
     await service.createUser(params);
     dispatch(createUserError(''));
     dispatch(fetchUsers());
-  } catch (err) {
-    dispatch(createUserError(err));
+  } catch (error) {
+    console.error(error);
+    dispatch(createUserError(error?.response?.data || 'Error'));
   }
 };
 
