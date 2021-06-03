@@ -38,3 +38,15 @@
 .select {
   width: 13rem;
 }
+
+.errorListPopupOpenButton {
+  color: $color-primary-darkest;
+  font-size: 1rem;
+  margin-left: .2em;
+  padding: 0;
+}
+
+.textWrapper {
+  align-items: center;
+  display: flex;
+}
