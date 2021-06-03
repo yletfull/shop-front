@@ -13,6 +13,7 @@ import {
   fetchParams,
   fetchSegment,
   addSegmentParam,
+  insertSegmentAttribute,
   moveSegmentAttribute,
   removeSegmentAttribute,
 } from './actions';
@@ -26,6 +27,7 @@ import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDateRange from './AttributeDateRange';
+import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
 import AttributesConstructor from './AttributesConstructor';
@@ -100,6 +102,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       [targetGroupIndex, 0],
     ));
   };
+  const handleDropAttributeInPlaceholder = (position) => (sourceIndexes) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = sourceIndexes?.from || [];
+    if (typeof sourceGroupIndex === 'undefined'
+      || typeof sourceAttributeIndex === 'undefined') {
+      return;
+    }
+    dispatch(insertSegmentAttribute(
+      position,
+      [sourceGroupIndex, sourceAttributeIndex],
+    ));
+  };
   const handleRemoveAttribute = (position) => {
     const [groupIndex, attributeIndex] = position || [];
     if (typeof attributeIndex === 'undefined'
@@ -127,6 +140,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     <div className={styles.segmentsEdit}>
       <DndProvider backend={HTML5Backend}>
         <AttributesConstructor isFetching={isFetchingSegment}>
+          <AttributeDropPlaceholder
+            accept={dndTypes.attribute}
+            position="top"
+            onDrop={handleDropAttributeInPlaceholder('top')}
+          />
           {segmentStructure
             && Array.isArray(segmentStructure)
             && segmentStructure.map((group, groupIndex) => {
@@ -185,6 +203,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                 </AttributesGroup>
               );
             })}
+          <AttributeDropPlaceholder
+            accept={dndTypes.attribute}
+            position="bottom"
+            onDrop={handleDropAttributeInPlaceholder('bottom')}
+          />
         </AttributesConstructor>
       </DndProvider>
 
