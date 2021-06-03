@@ -19,7 +19,13 @@ const defaultProps = {
   color: 'primary',
 };
 
-const Button = function Button({ appearance, children, className, color, ...attrs }) {
+const Button = function Button({
+  appearance,
+  children,
+  className,
+  color,
+  ...attrs
+}) {
   return (
     <button
       type="button"
