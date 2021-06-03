@@ -12,7 +12,7 @@
     "serve": "NODE_ENV=development webpack serve --config webpack.config.js --mode development",
     "build": "NODE_ENV=production webpack --config webpack.config.js --mode production",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public -o dist/__storybook"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
