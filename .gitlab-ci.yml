@@ -55,7 +55,18 @@ build:
   script:
     - yarn install --cache-folder .yarn
     - yarn build
-    - if [[ "$CI_COMMIT_REF_NAME" == "develop" ]]; then yarn build-storybook fi
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/*
+
+build_storybook:
+  stage: build
+  only:
+    - develop
+  script:
+    - yarn install --cache-folder .yarn
+    - yarn build-storybook
   artifacts:
     expire_in: 1 day
     paths:
