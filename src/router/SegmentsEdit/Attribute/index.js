@@ -75,17 +75,19 @@ const Attribute = function Attribute({
       </div>
 
       <div className={styles.attributeMain}>
+        <div className={styles.attributeSection}>
+          <span className={styles.attributeTitle}>
+            {title || name}
+          </span>
+        </div>
+
         {!TypedAttribute && (
           <span className={styles.attributeMessage}>
             Неизвестный тип аттрибута
           </span>
         )}
         {TypedAttribute && (
-          <TypedAttribute
-            className={styles.attribute}
-            name={name}
-            title={title}
-          >
+          <TypedAttribute className={styles.attribute}>
             {children}
           </TypedAttribute>
         )}
