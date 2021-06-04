@@ -15,34 +15,31 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   const [syncError, setSyncError] = useState(false);
 
   const handleSyncButtonClick = async () => {
+    setSyncError(false);
     setIsSyncInProcess(true);
     dispatch(setDownloadAllAdsButtonDisabled(true));
 
     const initialTask = await dispatch(syncVk());
 
-    if (Object.keys(initialTask).length) {
+    if (initialTask && Object.keys(initialTask).length) {
       let task = await dispatch(fetchTask(initialTask.id));
       (function check() {
-        if (Object.keys(task).length) {
-          setTimeout(async () => {
-            task = await dispatch(fetchTask(initialTask.id));
-            if (task.status === 0) {
-              return check();
-            }
+        setTimeout(async () => {
+          task = await dispatch(fetchTask(initialTask.id));
 
-            clearTimeout(check);
-            setIsSyncInProcess(false);
+          if (task && Object.keys(task).length && task.status === 0) {
+            return check();
+          }
 
-            if (task.status === 1 && Object.keys(task).length) {
-              return dispatch(setDownloadAllAdsButtonDisabled(false));
-            }
-            setIsSyncInProcess(false);
-            setSyncError(true);
-          }, 1000);
-          return;
-        }
-        setIsSyncInProcess(false);
-        setSyncError(true);
+          clearTimeout(check);
+          setIsSyncInProcess(false);
+
+          if (task && Object.keys(task).length && task.status === 1) {
+            return dispatch(setDownloadAllAdsButtonDisabled(false));
+          }
+
+          setSyncError(true);
+        }, 1000);
       }
       )();
       return;
