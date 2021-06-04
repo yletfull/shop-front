@@ -8,39 +8,53 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
+  data: PropTypes.shape({
+    attributeName: PropTypes.string,
+    maxValue: PropTypes.string,
+    minValue: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string,
+    })),
+    profileId: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    title: PropTypes.string,
+    type: PropTypes.string,
+  }),
   dragType: PropTypes.string.isRequired,
   groupIndex: PropTypes.number.isRequired,
-  name: PropTypes.string,
   index: PropTypes.number.isRequired,
-  title: PropTypes.string,
-  type: PropTypes.string,
+  onChange: PropTypes.func,
   onRemove: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
-  name: '',
-  title: '',
-  type: '',
+  data: {},
+  onChange: () => {},
   onRemove: () => {},
 };
 
 const Attribute = function Attribute({
   children,
+  data,
   dragType,
   groupIndex,
-  name,
   index,
-  title,
-  type,
+  onChange,
   onRemove,
 }) {
+  const { attributeName: name, title, type } = data || {};
+
   const types = {
     enum: 'ENUM',
+    string: 'STRING',
   };
 
   const attributes = {
     [types.enum]: AttributeEnum,
+    [types.string]: AttributeEnum,
   };
 
   const TypedAttribute = type && attributes[type] ? attributes[type] : null;
@@ -53,6 +67,12 @@ const Attribute = function Attribute({
     }),
   }), [dragType, groupIndex, index]);
 
+  const handleChangeAttribute = (key, values) => {
+    if (!key) {
+      return;
+    }
+    onChange({ ...data, [key]: values });
+  };
   const handleClickCloseAttribute = (e) => {
     const { index: attributeIndex, group } = e?.target?.dataset || {};
     if (typeof attributeIndex === 'undefined'
@@ -87,7 +107,11 @@ const Attribute = function Attribute({
           </span>
         )}
         {TypedAttribute && (
-          <TypedAttribute className={styles.attribute}>
+          <TypedAttribute
+            data={data}
+            className={styles.attribute}
+            onChange={handleChangeAttribute}
+          >
             {children}
           </TypedAttribute>
         )}

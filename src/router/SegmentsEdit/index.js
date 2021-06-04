@@ -29,7 +29,6 @@ import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDateRange from './AttributeDateRange';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
-import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
@@ -84,8 +83,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   }, [dispatch, defaultTitle, isNewSegment, segmentId]);
 
-  const handleChangeAttributeOptions = (value) => {
-    console.log(value);
+  const handleChangeAttribute = (attribute) => {
+    console.log(attribute);
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -166,17 +165,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       key={`${groupKey}-${attribute.attributeName}`}
                       groupIndex={groupIndex}
                       index={attributeIndex}
-                      name={attribute.attributeName}
-                      title={attribute.title}
-                      type={attribute.type}
+                      data={attribute}
                       dragType={dndTypes.attribute}
+                      onChange={handleChangeAttribute}
                       onRemove={handleRemoveAttribute}
                     >
-                      <AttributeOptions
-                        data={attribute.options}
-                        selected={[]}
-                        onChange={handleChangeAttributeOptions}
-                      />
                       <AttributePeriod
                         from={attribute.from}
                         to={attribute.to}

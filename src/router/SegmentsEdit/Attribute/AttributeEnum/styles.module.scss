@@ -3,6 +3,12 @@
 .attributeEnum {
   display: flex;
 
+  &Option {
+    display: block;
+    font-size: .75rem;
+    line-height: 1.25rem;
+  }
+
   &Section {
     align-items: stretch;
     display: flex;
