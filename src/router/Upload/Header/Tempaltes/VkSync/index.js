@@ -27,14 +27,17 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
         setTimeout(async () => {
           task = await dispatch(fetchTask(initialTask.id));
 
-          if (task && Object.keys(task).length && task.status === 0) {
+          if (
+            task
+            && Object.keys(task).length
+            && (task.status === 0 || task.status === 1)) {
             return check();
           }
 
           clearTimeout(check);
           setIsSyncInProcess(false);
 
-          if (task && Object.keys(task).length && task.status === 1) {
+          if (task && Object.keys(task).length && task.status === 2) {
             return dispatch(setDownloadAllAdsButtonDisabled(false));
           }
 
