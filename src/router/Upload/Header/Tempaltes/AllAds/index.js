@@ -12,6 +12,9 @@ const AllAdsTemplate = function AllAdsTemplateScreen() {
   const selectClient = useSelector(
     (state) => state.upload?.selectClient
   ) || '';
+  const uploadButtonDisabled = useSelector(
+    (state) => state.upload?.downloadAllAdsButtonDisabled
+  ) ?? true;
 
   return (
     <HeaderTemplate>
@@ -21,7 +24,7 @@ const AllAdsTemplate = function AllAdsTemplateScreen() {
         to={`/api/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
         target="_blank"
         download
-        disabled={!(selectAccount && selectClient)}
+        disabled={!selectAccount || !selectClient || uploadButtonDisabled}
       />
     </HeaderTemplate>
   );
