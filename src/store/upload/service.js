@@ -53,7 +53,7 @@ const getTask = ({ taskId }) => api
   .then((data) => data);
 
 const syncVk = ({ cabinetId }) => api
-  .post(`v1/ad-cabinet/${cabinetId}/sync`)
+  .post(`api/v1/ad-cabinet/${cabinetId}/sync`)
   .then((data) => data);
 
 export default {
