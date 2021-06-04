@@ -1,5 +1,26 @@
 @import '@/theme/include.scss';
 
 .segmentsEdit {
-  display: block;
+  align-items: stretch;
+  display: flex;
+
+  &Aside {
+    padding: 0 1.5rem;
+    width: 18rem;
+  }
+
+  &Main {
+    flex-grow: 1;
+  }
+
+  &Title {
+    font-size: .875rem;
+    font-weight: bold;
+    margin: 0;
+    padding: .5rem 0;
+
+    &_level3 {
+      font-size: .75rem;
+    }
+  }
 }
