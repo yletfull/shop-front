@@ -28,7 +28,6 @@ import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
-import AttributePeriod from './AttributePeriod';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
 import AttributesGroup from './AttributesGroup';
@@ -169,16 +168,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       onChange={handleChangeAttribute}
                       onRemove={handleRemoveAttribute}
                     >
-                      <AttributePeriod
-                        from={attribute.from}
-                        to={attribute.to}
-                      >
-                        <AttributeDatasets data={attribute.inDatasets}>
-                          <AttributeDatasetsForm
-                            data={attribute.inDatasets}
-                          />
-                        </AttributeDatasets>
-                      </AttributePeriod>
+                      <AttributeDatasets data={attribute.inDatasets}>
+                        <AttributeDatasetsForm
+                          data={attribute.inDatasets}
+                        />
+                      </AttributeDatasets>
                       <AttributeStatistics
                         data={attribute.statistics}
                       />
