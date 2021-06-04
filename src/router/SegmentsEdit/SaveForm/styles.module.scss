@@ -1,0 +1,21 @@
+@import '@/theme/include.scss';
+
+$form-padding-top: .375rem;
+$button-width: 5.625rem;
+
+.saveForm {
+  padding: $form-padding-top 0;
+  position: relative;
+
+  &Button {
+    font-weight: bold;
+    position: absolute;
+    right: 0;
+    top: $form-padding-top;
+    width: $button-width;
+  }
+
+  &Input {
+    padding-right: $button-width + .5rem;
+  }
+}

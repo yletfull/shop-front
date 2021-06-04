@@ -36,6 +36,7 @@ import AttributeStatistics from './AttributeStatistics';
 import AttributesGroup from './AttributesGroup';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
+import SaveForm from './SaveForm';
 import Statistics from './Statistics';
 import styles from './styles.module.scss';
 
@@ -261,9 +262,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Сохранение сегмента
         </h3>
 
-        <Button>
-          Сохранить сегмент
-        </Button>
+        <SaveForm />
       </div>
     </div>
   );
