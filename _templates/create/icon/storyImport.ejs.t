@@ -1,6 +1,6 @@
 ---
 inject: true
-to: src/icons/story.js
-after: addon-knobs
+to: src/icons/stories.js
+after: import React
 ---
-<% if (true) { -%>import Icon<%= h.changeCase.pascal(name) %> from './<%= h.changeCase.pascal(name) %>';<% } -%>
+<% if (true) { -%>import <%= h.changeCase.pascal(name) %> from './<%= h.changeCase.pascal(name) %>';<% } -%>
