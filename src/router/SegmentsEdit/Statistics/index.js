@@ -4,18 +4,15 @@ import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  children: PropTypes.node,
   emailsCount: PropTypes.number,
   phonesCount: PropTypes.number,
 };
 const defaultProps = {
-  children: null,
   emailsCount: 0,
   phonesCount: 0,
 };
 
 const Statistics = function Statistics({
-  children,
   emailsCount,
   phonesCount,
 }) {
@@ -36,14 +33,6 @@ const Statistics = function Statistics({
           </td>
           <td>
             {formatNumber(phonesCount)}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Файлы для площадок
-          </td>
-          <td>
-            {children}
           </td>
         </tr>
       </tbody>
