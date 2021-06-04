@@ -40,28 +40,30 @@ const Modal = function Modal({
 
   useOnClickOutside(modalRef, handleClickOutside);
 
+  if (!isShowModal) {
+    return null;
+  }
+
   return (
     <div className={styles.wrapper}>
-      {isShowModal && (
-        <div
-          ref={modalRef}
-          className={styles.modal}
-        >
-          <div className={styles.modalHeader}>
-            {header}
-            <button
-              type="button"
-              className={styles.modalClose}
-              onClick={handleClickCloseButton}
-            >
-              <IconTimes />
-            </button>
-          </div>
-          <div className={styles.modalContent}>
-            {children}
-          </div>
+      <div
+        ref={modalRef}
+        className={styles.modal}
+      >
+        <div className={styles.modalHeader}>
+          {header}
+          <button
+            type="button"
+            className={styles.modalClose}
+            onClick={handleClickCloseButton}
+          >
+            <IconTimes />
+          </button>
         </div>
-      )}
+        <div className={styles.modalContent}>
+          {children}
+        </div>
+      </div>
     </div>
   );
 };
