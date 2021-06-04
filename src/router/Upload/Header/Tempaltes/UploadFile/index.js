@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import cx from 'classnames';
-// import { formatDate } from '@/utils/format';
-
 import HeaderTemplate from '@/components/HeaderTemplate';
 import ProcessButton from '@/components/ProcessButton';
 import IconUpload from '@/icons/Upload';
@@ -17,6 +14,7 @@ import {
   setParentDocument,
 } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../../stages';
+import styles from './styles.module.scss';
 
 const UploadFileTemplate = function UploadFileTemplateScreen() {
   const dispatch = useDispatch();
@@ -130,7 +128,7 @@ const UploadFileTemplate = function UploadFileTemplateScreen() {
     detailsIsFetching
       ? <Spinner />
       : (
-        <HeaderTemplate>
+        <HeaderTemplate className={styles.wrapper}>
           <label>
             <ProcessButton
               icon={<IconUpload />}

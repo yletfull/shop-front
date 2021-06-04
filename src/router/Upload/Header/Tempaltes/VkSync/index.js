@@ -6,7 +6,7 @@ import HeaderTemplate from '@/components/HeaderTemplate';
 import VkIcon from '@/icons/Vk';
 import Spinner from '@/components/Spinner';
 import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled } from '@/store/upload/actions';
-
+import styles from './styles.module.scss';
 
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   };
 
   return (
-    <HeaderTemplate>
+    <HeaderTemplate className={styles.wrapper}>
       {!isSyncInProcess
         ? (
           <ProcessButton

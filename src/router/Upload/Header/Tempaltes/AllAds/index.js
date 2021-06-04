@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import IconDownload from '@/icons/Download';
+import styles from './styles.module.scss';
 
 const AllAdsTemplate = function AllAdsTemplateScreen() {
   const selectAccount = useSelector(
@@ -17,7 +18,7 @@ const AllAdsTemplate = function AllAdsTemplateScreen() {
   ) ?? true;
 
   return (
-    <HeaderTemplate>
+    <HeaderTemplate className={styles.wrapper}>
       <ProcessButtonLink
         icon={<IconDownload />}
         text={['Скачать', 'все объявления']}
