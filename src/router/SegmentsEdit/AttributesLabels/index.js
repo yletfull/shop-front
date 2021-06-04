@@ -16,7 +16,7 @@ const AttributesLabels = function AttributesLabels({
   isVisible,
   labels,
 }) {
-  if (!isVisible && 0) {
+  if (!isVisible) {
     return null;
   }
 

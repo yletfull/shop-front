@@ -30,6 +30,11 @@
     flex-grow: 1;
   }
 
+  &Message {
+    font-size: .75rem;
+    padding: 0 1rem;
+  }
+
   &Icon {
     color: $color-accent-darkest;
     pointer-events: none;
