@@ -1,3 +1,4 @@
+
 import { createReducer } from '@reduxjs/toolkit';
 import { firstUploadStages } from '@/router/Upload/stages';
 
@@ -20,14 +21,17 @@ import {
   parentDocument,
   importedDocument,
   recentFileIsLoading,
+  syncVkTask,
+  syncVkError,
+  downloadAllAdsButtonDisabled,
 } from './actions';
 
 const initialState = {
   stage: firstUploadStages.selectAccount,
   accounts: [],
-  selectAccount: '',
+  selectAccount: null,
   clients: [],
-  selectClient: '',
+  selectClient: null,
   queueList: [],
   documents: [],
   documentDetails: {},
@@ -48,7 +52,7 @@ const initialState = {
           '57578275-96fc-4525-a632-05b4fa00842d',
         ],
       },
-      selectedList: '',
+      selectedList: null,
     },
   ],
   task: {},
@@ -56,9 +60,12 @@ const initialState = {
   recentFileIsLoading: false,
   images: [],
   uploadedImages: [],
-  uploadImageError: '',
+  uploadImageError: null,
   parentDocument: {},
   importedDocument: {},
+  syncVkTask: {},
+  syncVkError: null,
+  downloadAllAdsButtonDisabled: true,
 };
 
 const reducer = createReducer(initialState, {
@@ -133,6 +140,18 @@ const reducer = createReducer(initialState, {
   [importedDocument]: (state, action) => ({
     ...state,
     importedDocument: action.payload,
+  }),
+  [syncVkTask]: (state, action) => ({
+    ...state,
+    syncVkTask: action.payload,
+  }),
+  [syncVkError]: (state, action) => ({
+    ...state,
+    syncVkError: action.payload,
+  }),
+  [downloadAllAdsButtonDisabled]: (state, action) => ({
+    ...state,
+    downloadAllAdsButtonDisabled: action.payload,
   }),
 });
 

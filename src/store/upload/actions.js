@@ -20,6 +20,10 @@ export const uploadImageError = createAction(`${NS}/uploadImageError`);
 export const parentDocument = createAction(`${NS}/parentDocument`);
 export const uploadedImages = createAction(`${NS}/uploadedImages`);
 export const importedDocument = createAction(`${NS}/importedDocument`);
+export const syncVkTask = createAction(`${NS}/syncVkTask`);
+export const syncVkError = createAction(`${NS}/syncVkError`);
+export const downloadAllAdsButtonDisabled = createAction(`${NS}/downloadAllAdsButtonDisabled`);
+
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -124,7 +128,7 @@ export const importDocument = () => async (dispatch, getState) => {
     dispatch(importedDocument(data.data.data));
     return data.data.data;
   } catch (err) {
-    dispatch(importedDocument([]));
+    dispatch(importedDocument({}));
   }
 };
 
@@ -134,7 +138,7 @@ export const fetchTask = (taskId) => async (dispatch) => {
     dispatch(task(data.data.data));
     return data.data.data;
   } catch (err) {
-    dispatch(task([]));
+    dispatch(task({}));
   }
 };
 
@@ -172,4 +176,21 @@ export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
 
 export const setUploadedImages = (data) => (dispatch) => {
   dispatch(uploadedImages(data));
+};
+
+export const syncVk = () => async (dispatch, getState) => {
+  try {
+    const data = await service.syncVk({
+      cabinetId: getState().upload.selectAccount,
+    });
+    dispatch(syncVkTask(data.data.data));
+    return data.data.data;
+  } catch (err) {
+    dispatch(syncVkTask({}));
+    dispatch(syncVkError(err));
+  }
+};
+
+export const setDownloadAllAdsButtonDisabled = (data) => (dispatch) => {
+  dispatch(downloadAllAdsButtonDisabled(data));
 };
