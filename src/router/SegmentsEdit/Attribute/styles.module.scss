@@ -9,7 +9,7 @@
     margin-top: 2rem;
 
     &::before {
-      color: $color-primary;
+      color: $color-pink;
       content: 'ИЛИ';
       font-size: .75rem;
       left: 9rem;
@@ -27,11 +27,26 @@
   }
 
   &Main {
+    align-items: inherit;
+    display: inherit;
     flex-grow: 1;
+  }
+
+  &Message {
+    font-size: .75rem;
+    padding: 0 1rem;
   }
 
   &Icon {
     color: $color-accent-darkest;
     pointer-events: none;
+  }
+
+  &Title {
+    display: inline-block;
+    font-size: .75rem;
+    font-weight: bold;
+    padding: 0 .5rem;
+    width: 10rem;
   }
 }

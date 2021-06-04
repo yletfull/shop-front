@@ -43,7 +43,7 @@ const Attribute = function Attribute({
     [types.enum]: AttributeEnum,
   };
 
-  const TypedAttribute = attributes[type] || null;
+  const TypedAttribute = type && attributes[type] ? attributes[type] : null;
 
   const [{ opacity }, dragRef] = useDrag(() => ({
     type: dragType,
@@ -75,13 +75,22 @@ const Attribute = function Attribute({
       </div>
 
       <div className={styles.attributeMain}>
-        <TypedAttribute
-          className={styles.attribute}
-          name={name}
-          title={title}
-        >
-          {children}
-        </TypedAttribute>
+        <div className={styles.attributeSection}>
+          <span className={styles.attributeTitle}>
+            {title || name}
+          </span>
+        </div>
+
+        {!TypedAttribute && (
+          <span className={styles.attributeMessage}>
+            Неизвестный тип аттрибута
+          </span>
+        )}
+        {TypedAttribute && (
+          <TypedAttribute className={styles.attribute}>
+            {children}
+          </TypedAttribute>
+        )}
       </div>
 
       <div className={styles.attributeAside}>

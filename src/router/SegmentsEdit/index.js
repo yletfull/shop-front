@@ -31,9 +31,10 @@ import AttributeDateRange from './AttributeDateRange';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeOptions from './AttributeOptions';
 import AttributePeriod from './AttributePeriod';
-import AttributesConstructor from './AttributesConstructor';
 import AttributeStatistics from './AttributeStatistics';
+import AttributesConstructor from './AttributesConstructor';
 import AttributesGroup from './AttributesGroup';
+import AttributesLabels from './AttributesLabels';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
 import SaveForm from './SaveForm';
@@ -143,69 +144,71 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       <div className={styles.segmentsEditMain}>
         <DndProvider backend={HTML5Backend}>
           <AttributesConstructor isFetching={isFetchingSegment}>
+            <AttributesLabels
+              isVisible={segmentStructure.length > 0}
+              labels={['Датасеты', 'Телефонов', 'E-mail']}
+            />
             <AttributeDropPlaceholder
               accept={dndTypes.attribute}
               position="top"
               onDrop={handleDropAttributeInPlaceholder('top')}
             />
-            {segmentStructure
-              && Array.isArray(segmentStructure)
-              && segmentStructure.map((group, groupIndex) => {
-                const groupKey = generateKeyByIndex('group', groupIndex);
-                return (
-                  <AttributesGroup
-                    key={groupKey}
-                    accept={dndTypes.attribute}
-                    onDrop={handleDropAttribute(groupIndex)}
-                  >
-                    {group.map((attribute, attributeIndex) => (
-                      <Attribute
-                        key={`${groupKey}-${attribute.attributeName}`}
-                        groupIndex={groupIndex}
-                        index={attributeIndex}
-                        name={attribute.attributeName}
-                        title={attribute.title}
-                        type={attribute.type}
-                        dragType={dndTypes.attribute}
-                        onRemove={handleRemoveAttribute}
+            {segmentStructure.map((group, groupIndex) => {
+              const groupKey = generateKeyByIndex('group', groupIndex);
+              return (
+                <AttributesGroup
+                  key={groupKey}
+                  accept={dndTypes.attribute}
+                  onDrop={handleDropAttribute(groupIndex)}
+                >
+                  {group.map((attribute, attributeIndex) => (
+                    <Attribute
+                      key={`${groupKey}-${attribute.attributeName}`}
+                      groupIndex={groupIndex}
+                      index={attributeIndex}
+                      name={attribute.attributeName}
+                      title={attribute.title}
+                      type={attribute.type}
+                      dragType={dndTypes.attribute}
+                      onRemove={handleRemoveAttribute}
+                    >
+                      <AttributeOptions
+                        data={attribute.options}
+                        selected={[]}
+                        onChange={handleChangeAttributeOptions}
+                      />
+                      <AttributePeriod
+                        from={attribute.from}
+                        to={attribute.to}
+                        dateRange={(
+                          <AttributeDateRange
+                            from={attribute.from}
+                            to={attribute.to}
+                            datasets={attribute.availableDatasetsDates}
+                          />
+                        )}
                       >
-                        <AttributeOptions
-                          data={attribute.options}
-                          selected={[]}
-                          onChange={handleChangeAttributeOptions}
-                        />
-                        <AttributePeriod
-                          from={attribute.from}
-                          to={attribute.to}
-                          dateRange={(
-                            <AttributeDateRange
-                              from={attribute.from}
-                              to={attribute.to}
-                              datasets={attribute.availableDatasetsDates}
-                            />
-                          )}
-                        >
-                          <AttributeDatasets data={attribute.inDatasets}>
-                            <AttributeDatasetsForm
-                              data={attribute.inDatasets}
-                              dateRange={(
-                                <AttributeDateRange
-                                  from={attribute.from}
-                                  to={attribute.to}
-                                  datasets={attribute.availableDatasetsDates}
-                                />
-                              )}
-                            />
-                          </AttributeDatasets>
-                        </AttributePeriod>
-                        <AttributeStatistics
-                          data={attribute.statistics}
-                        />
-                      </Attribute>
-                    ))}
-                  </AttributesGroup>
-                );
-              })}
+                        <AttributeDatasets data={attribute.inDatasets}>
+                          <AttributeDatasetsForm
+                            data={attribute.inDatasets}
+                            dateRange={(
+                              <AttributeDateRange
+                                from={attribute.from}
+                                to={attribute.to}
+                                datasets={attribute.availableDatasetsDates}
+                              />
+                            )}
+                          />
+                        </AttributeDatasets>
+                      </AttributePeriod>
+                      <AttributeStatistics
+                        data={attribute.statistics}
+                      />
+                    </Attribute>
+                  ))}
+                </AttributesGroup>
+              );
+            })}
             <AttributeDropPlaceholder
               accept={dndTypes.attribute}
               position="bottom"

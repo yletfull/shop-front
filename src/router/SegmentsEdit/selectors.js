@@ -16,5 +16,11 @@ export const getParams = createSelector(
 );
 export const getSegment = createSelector(
   [getState],
-  (state) => state.segment,
+  (state) => {
+    const { segment } = state;
+    if (segment && Array.isArray(segment)) {
+      return segment;
+    }
+    return [];
+  },
 );
