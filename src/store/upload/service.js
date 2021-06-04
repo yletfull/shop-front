@@ -52,6 +52,10 @@ const getTask = ({ taskId }) => api
   .get(`api/v1/queue/${taskId}`)
   .then((data) => data);
 
+const syncVk = ({ cabinetId }) => api
+  .post(`v1/ad-cabinet/${cabinetId}/sync`)
+  .then((data) => data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -65,4 +69,5 @@ export default {
   getImages,
   uploadImages,
   getTask,
+  syncVk,
 };
