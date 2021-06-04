@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
-import VkIcon from '@/icons/Vk';
+import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled } from '@/store/upload/actions';
 import styles from './styles.module.scss';
@@ -53,7 +53,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
       {!isSyncInProcess
         ? (
           <ProcessButton
-            icon={<VkIcon />}
+            icon={<SyncAltIcon />}
             text={['Cинхронизироваться ', 'c ВК']}
             download
             onClick={handleSyncButtonClick}
