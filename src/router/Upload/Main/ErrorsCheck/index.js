@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import WarningIcon from '@/icons/Warning';
 import NavigationBar from '@/components/NavigationBar';
 import Button from '@/components/Button';
+import { getQueueList } from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 import ErrorListPopup from './components/ErrorListPopup';
 
@@ -16,9 +17,7 @@ const navigationBarParams = {
 };
 
 const Upload = function UploadScreen() {
-  const queueList = useSelector(
-    (state) => state.upload?.queueList
-  );
+  const queueList = useSelector(getQueueList);
 
   const [errorListPopupIsOpen, setErrorListPopupIsOpen] = useState(false);
 

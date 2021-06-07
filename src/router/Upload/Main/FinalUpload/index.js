@@ -6,6 +6,7 @@ import SuccessIcon from '@/icons/Success';
 import VentIcon from '@/icons/Vent';
 import NavigationBar from '@/components/NavigationBar';
 import { importDocument, setStage, fetchTask, fetchRecentFile, setRecentFile, setRecentFileIsLoading } from '@/store/upload/actions';
+import { getStage } from '@/store/upload/selectors';
 import { finalUploadStages, finalUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -25,7 +26,7 @@ const FinalUpload = function FinalUploadScreen() {
     navigationBarParams, setNaVigationBarParams,
   ] = useState(defaultNavigationBarParams);
 
-  const stageData = useSelector((state) => state.upload?.stage);
+  const stageData = useSelector(getStage);
   const stage = useRef(stageData);
   useLayoutEffect(() => {
     stage.current = stageData;

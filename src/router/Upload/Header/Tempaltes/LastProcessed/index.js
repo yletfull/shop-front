@@ -13,6 +13,7 @@ import {
   fetchDocuments,
   setParentDocument,
 } from '@/store/upload/actions';
+import { getDocumentDetails, getRecentFile, getRecentFileIsLoading, getUploadedFiles, getDocuments } from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 
 
@@ -30,39 +31,29 @@ const LastProcessedTemplate = function LastProcessedTemplateScreen() {
   const [fileIsLoaded, setFileIsLoaded] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
 
-  const recentFileData = useSelector(
-    (state) => state.upload?.recentFile
-  );
+  const recentFileData = useSelector(getRecentFile);
   const recentFile = useRef(recentFileData);
   useLayoutEffect(() => {
     recentFile.current = recentFileData;
   }, [recentFileData]);
 
-  const recentFileIsLoading = useSelector(
-    (store) => store.upload?.recentFileIsLoading
-  );
+  const recentFileIsLoading = useSelector(getRecentFileIsLoading);
 
-  const fileDetailsData = useSelector(
-    (state) => state.upload?.documentDetails
-  );
+  const fileDetailsData = useSelector(getDocumentDetails);
   const fileDetails = useRef(fileDetailsData);
   useLayoutEffect(() => {
     fileDetails.current = fileDetailsData;
   }, [fileDetailsData]);
 
 
-  const uploadedFilesData = useSelector(
-    (state) => state.upload?.uploadedFiles || []
-  );
+  const uploadedFilesData = useSelector(getUploadedFiles);
   const uploadedFiles = useRef(uploadedFilesData);
   useLayoutEffect(() => {
     uploadedFiles.current = uploadedFilesData;
   }, [uploadedFilesData]);
 
 
-  const allUploadedFilesData = useSelector(
-    (state) => state.upload?.documents
-  );
+  const allUploadedFilesData = useSelector(getDocuments);
   const allUploadedFiles = useRef(allUploadedFilesData);
   useLayoutEffect(() => {
     allUploadedFiles.current = allUploadedFilesData;

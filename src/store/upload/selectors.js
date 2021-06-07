@@ -59,3 +59,11 @@ export const getParentDocument = createSelector(
   [getState],
   (state) => state.parentDocument,
 );
+export const getImages = createSelector(
+  [getState],
+  (state) => state.images,
+);
+export const getUploadedImages = createSelector(
+  [getState],
+  (state) => state.uploadedImages,
+);

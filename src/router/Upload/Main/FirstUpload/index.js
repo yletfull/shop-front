@@ -9,8 +9,10 @@ import Select from '@/components/Select';
 import Button from '@/components/Button';
 import NavigationBar from '@/components/NavigationBar';
 import { setSelectedList, setStage } from '@/store/upload/actions';
+import { getStage, getSelectedList, getParentDocument } from '@/store/upload/selectors';
 import { firstUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
+
 
 const navigationBarParams = {
   prev: [],
@@ -21,14 +23,14 @@ const navigationBarParams = {
 const Upload = function UploadScreen() {
   const dispatch = useDispatch();
 
-  const stage = useSelector((state) => state.upload.stage);
+  const stage = useSelector(getStage);
 
-  const selectedList = useSelector((state) => state.upload.selectedList || 'default');
+  const selectedList = useSelector(getSelectedList) || 'default';
 
-  const listOptions = useSelector((state) => state.upload.parentDocument
+  const listOptions = useSelector(getParentDocument)
     .data?.sheets?.map((item, index) => (
       { value: index, text: item }
-    ))) || [];
+    )) || [];
 
   const [
     acceptListButtonDisabled, setAcceptListButtonDisabled,

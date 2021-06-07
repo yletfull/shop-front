@@ -12,6 +12,7 @@ import {
   fetchRecentFile,
 } from '@/store/upload/actions';
 import { finalUploadStages, firstUploadStages, globalStages } from '../../stages';
+import { getAccounts, getClients, getQueueList, getRecentFile, getSelectAccount, getSelectClient } from '../../../../store/upload/selectors';
 import styles from './styles.module.scss';
 
 
@@ -23,33 +24,21 @@ const Header = function HeaderScreen() {
   const [changeAccountButtonShow, setChangeAccountButtonShow] = useState(true);
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(true);
 
-  const accounts = useSelector(
-    (state) => state.upload?.accounts
-  );
+  const accounts = useSelector(getAccounts);
 
-  const clients = useSelector(
-    (state) => state.upload?.clients
-  );
+  const clients = useSelector(getClients);
 
-  const selectAccount = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
+  const selectAccount = useSelector(getSelectAccount) || '';
 
-  const selectClient = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
+  const selectClient = useSelector(getSelectClient) || '';
 
-  const queueListData = useSelector(
-    (state) => state.upload?.queueList
-  );
+  const queueListData = useSelector(getQueueList);
   const queueList = useRef(queueListData);
   useLayoutEffect(() => {
     queueList.current = queueListData;
   }, [queueListData]);
 
-  const recentFileData = useSelector(
-    (state) => state.upload?.recentFile
-  );
+  const recentFileData = useSelector(getRecentFile);
   const recentFile = useRef(recentFileData);
   useLayoutEffect(() => {
     recentFile.current = recentFileData;

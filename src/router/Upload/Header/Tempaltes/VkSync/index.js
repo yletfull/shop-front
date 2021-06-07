@@ -8,31 +8,28 @@ import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled } from '@/store/upload/actions';
 import { formatDate } from '@/utils/format';
+import { getQueueList, getSelectAccount, getSelectClient, getSyncVkTask } from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 
 
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
 
-  const queueList = useSelector((state) => state.upload?.queueList);
+  const queueList = useSelector(getQueueList);
 
-  const selectAccountData = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
+  const selectAccountData = useSelector(getSelectAccount) || '';
   const selectAccount = useRef(selectAccountData);
   useLayoutEffect(() => {
     selectAccount.current = selectAccountData;
   }, [selectAccountData]);
 
-  const selectClientData = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
+  const selectClientData = useSelector(getSelectClient) || '';
   const selectClient = useRef(selectClientData);
   useLayoutEffect(() => {
     selectClient.current = selectClientData;
   }, [selectClientData]);
 
-  const syncVkTaskData = useSelector((state) => state.upload?.syncVkTask);
+  const syncVkTaskData = useSelector(getSyncVkTask);
   const syncVkTask = useRef(syncVkTaskData);
   useLayoutEffect(() => {
     syncVkTask.current = syncVkTaskData;
