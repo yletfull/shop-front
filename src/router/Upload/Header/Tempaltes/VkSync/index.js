@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import SyncAltIcon from '@/icons/SyncAlt';
@@ -8,24 +9,54 @@ import Spinner from '@/components/Spinner';
 import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled } from '@/store/upload/actions';
 import styles from './styles.module.scss';
 
+
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
+
+  const queueList = useSelector((state) => state.upload?.queueList);
+
+  const selectAccountData = useSelector(
+    (state) => state.upload?.selectAccount
+  ) || '';
+  const selectAccount = useRef(selectAccountData);
+  useLayoutEffect(() => {
+    selectAccount.current = selectAccountData;
+  }, [selectAccountData]);
+
+  const selectClientData = useSelector(
+    (state) => state.upload?.selectClient
+  ) || '';
+  const selectClient = useRef(selectClientData);
+  useLayoutEffect(() => {
+    selectClient.current = selectClientData;
+  }, [selectClientData]);
+
+  const syncVkTaskData = useSelector((state) => state.upload?.syncVkTask);
+  const syncVkTask = useRef(syncVkTaskData);
+  useLayoutEffect(() => {
+    syncVkTask.current = syncVkTaskData;
+  });
 
   const [isSyncInProcess, setIsSyncInProcess] = useState(false);
   const [syncError, setSyncError] = useState(false);
 
-  const handleSyncButtonClick = async () => {
+  const sync = async () => {
     setSyncError(false);
     setIsSyncInProcess(true);
     dispatch(setDownloadAllAdsButtonDisabled(true));
 
-    const initialTask = await dispatch(syncVk());
+    await dispatch(syncVk());
 
-    if (initialTask && Object.keys(initialTask).length) {
-      let task = await dispatch(fetchTask(initialTask.id));
+    if (syncVkTask.current && Object.keys(syncVkTask.current).length) {
+      let task = await dispatch(fetchTask(syncVkTask.current.id));
       (function check() {
-        setTimeout(async () => {
-          task = await dispatch(fetchTask(initialTask.id));
+        return setTimeout(async () => {
+          if (!selectAccount.current || !selectClient.current) {
+            clearTimeout(check);
+            return;
+          }
+
+          task = await dispatch(fetchTask(syncVkTask.current.id));
 
           if (
             task
@@ -49,6 +80,16 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
     }
     setIsSyncInProcess(false);
     setSyncError(true);
+  };
+
+  useEffect(() => {
+    if (queueList[0].status === 0 || queueList[0].status === 1) {
+      sync();
+    }
+  }, [queueList]);
+
+  const handleSyncButtonClick = async () => {
+    sync();
   };
 
   return (
