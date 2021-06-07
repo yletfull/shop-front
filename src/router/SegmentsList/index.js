@@ -7,6 +7,7 @@ import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
+import { fetchSegments } from './actions';
 import { getIsFetchingData, getData } from './selectors';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
@@ -34,6 +35,10 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
+
+  useEffect(() => {
+    dispatch(fetchSegments());
+  }, [dispatch]);
 
   return (
     <div className={styles.segmentsList}>
