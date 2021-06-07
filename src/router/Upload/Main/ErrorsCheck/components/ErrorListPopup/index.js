@@ -14,8 +14,7 @@ const defaultProps = {
   onClose: () => {},
 };
 
-const ErrorListPopup = function ErrorListPopupScreen(props) {
-  const { onClose, error } = props;
+const ErrorListPopup = function ErrorListPopupScreen({ onClose, error }) {
   return (
     <Popup
       onClose={onClose}
