@@ -10,8 +10,8 @@ const HeaderTemplates = function HeaderTemplatesScreen() {
     <div className={styles.headerTemplatesWrapper}>
       <LastProcessed className={styles.headerTemplate} />
       <UploadFile className={styles.headerTemplate} />
-      <AllAds className={styles.headerTemplate} />
       <VkSync className={styles.headerTemplate} />
+      <AllAds className={styles.headerTemplate} />
     </div>
 
   );
