@@ -68,6 +68,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
           clearTimeout(check);
           setIsSyncInProcess(false);
+          dispatch(setUploadButtonDisabled(false));
 
           if (task && Object.keys(task).length && task.status === 2) {
             dispatch(setDownloadAllAdsButtonDisabled(false));
