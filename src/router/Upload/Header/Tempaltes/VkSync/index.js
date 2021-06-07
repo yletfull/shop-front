@@ -7,6 +7,7 @@ import HeaderTemplate from '@/components/HeaderTemplate';
 import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled } from '@/store/upload/actions';
+import { formatDate } from '@/utils/format';
 import styles from './styles.module.scss';
 
 
@@ -39,6 +40,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
   const [isSyncInProcess, setIsSyncInProcess] = useState(false);
   const [syncError, setSyncError] = useState(false);
+  const [taksData, setTaskData] = useState({});
 
   const sync = async () => {
     setSyncError(false);
@@ -66,6 +68,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
             return check();
           }
 
+          setTaskData(task);
           clearTimeout(check);
           setIsSyncInProcess(false);
           dispatch(setUploadButtonDisabled(false));
@@ -96,8 +99,6 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
     sync();
   };
 
-  console.log(syncVkTaskData);
-
   return (
     <HeaderTemplate className={styles.wrapper}>
       {!isSyncInProcess
@@ -117,7 +118,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           Последняя синхронизация
         </span>
         <span className={styles.value}>
-          {syncVkTaskData?.finishedAt}
+          {formatDate(taksData?.finishedAt, 'DD.MM.YYYY HH:MM:ss')}
         </span>
       </div>
 
