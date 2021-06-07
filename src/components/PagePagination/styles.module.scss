@@ -1,0 +1,36 @@
+@import '@/theme/include.scss';
+
+.pagination {
+  &Button {
+    @include button-reset();
+
+    color: $color-primary-darkest;
+    font-size: .75rem;
+    font-weight: bold;
+    padding: .375rem .25rem;
+
+    &:disabled,
+    &[data-selected='true'] {
+      color: $color-black;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    &:disabled {
+      color: $color-gray-darker;
+    }
+
+    &[data-direction='backward'] {
+      margin-right: .5rem;
+    }
+
+    &[data-direction='forward'] {
+      margin-left: .5rem;
+    }
+  }
+
+  &List {
+    align-items: center;
+    display: flex;
+  }
+}

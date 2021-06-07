@@ -5,6 +5,7 @@ import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
+import Pagination from '@/components/PagePagination';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
 import { getIsFetchingData, getData } from './selectors';
@@ -35,6 +36,10 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
+  const handleChangePage = (value) => {
+    console.log(value);
+  };
+
   return (
     <div className={styles.segmentsList}>
       <Controls>
@@ -55,6 +60,14 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       <TableView
         isFetching={isFetching}
         data={tableData}
+      />
+
+      <Pagination
+        page={9}
+        numberOfPages={100}
+        numberOfVisiblePages={9}
+        isDisabled={isFetching}
+        onChangePage={handleChangePage}
       />
     </div>
   );
