@@ -11,8 +11,8 @@ import {
   setAccount, setClient, setStage,
   fetchRecentFile,
 } from '@/store/upload/actions';
+import { getAccounts, getClients, getQueueList, getRecentFile, getSelectAccount, getSelectClient } from '@/store/upload/selectors';
 import { finalUploadStages, firstUploadStages, globalStages } from '../../stages';
-import { getAccounts, getClients, getQueueList, getRecentFile, getSelectAccount, getSelectClient } from '../../../../store/upload/selectors';
 import styles from './styles.module.scss';
 
 
