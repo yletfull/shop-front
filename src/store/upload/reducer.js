@@ -65,7 +65,7 @@ const initialState = {
   importedDocument: {},
   syncVkTask: {},
   syncVkError: null,
-  downloadAllAdsButtonDisabled: true,
+  downloadAllAdsButtonDisabled: false,
 };
 
 const reducer = createReducer(initialState, {
