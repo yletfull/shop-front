@@ -8,7 +8,7 @@ import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Button from '@/components/Button';
-import { namespace as NS, dndTypes } from './constants';
+import { namespace as NS, dndTypes, segmentProps } from './constants';
 import reducer from './reducer';
 import {
   fetchParams,
@@ -134,11 +134,35 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     dispatch(addSegmentAttribute(selectedParams));
   };
-  const handleSubmitSaveForm = (values) => {
-    if (0) {
-      console.log(service.createSegment);
+  const handleSubmitSaveForm = async ({ fileName }) => {
+    const mapOrSegmentAttributes = (attr) => {
+      const {
+        attributeId,
+        datasetIds,
+        negation,
+        equality: type,
+        values,
+      } = attr || {};
+      return ({
+        attributeId,
+        datasetIds,
+        negation,
+        type,
+        values,
+      });
+    };
+    const mapAndSegmentAttributes = (andAttributes) => andAttributes
+      .map(mapOrSegmentAttributes);
+    try {
+      await service.saveSegment({
+        ...(isNewSegment ? { [segmentProps.id]: segmentId } : {}),
+        [segmentProps.name]: fileName,
+        [segmentProps.attributes]: segmentAttributes
+          .map(mapAndSegmentAttributes),
+      });
+    } catch (error) {
+      console.error(error);
     }
-    console.log(values);
   };
 
   const statistic = {};

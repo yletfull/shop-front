@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { namespace as NS, segmentProps } from './constants';
+import { namespace as NS, segmentProps, equalityTypes } from './constants';
 import { getSegmentAttributes } from './selectors';
 import service from './service';
 
@@ -29,10 +29,20 @@ export const fetchSegment = (id) => async (dispatch) => {
     dispatch(updateSegment([]));
   }
 };
-export const addSegmentAttribute = (params) => (dispatch, getState) => {
+export const addSegmentAttribute = (values) => (dispatch, getState) => {
   const attributes = getSegmentAttributes(getState());
+  const mapAttribute = (attr) => {
+    const initial = {
+      attributeId: null,
+      equality: equalityTypes.any,
+      negation: false,
+      values: [],
+      datasetIds: [],
+    };
+    return ([{ ...initial, ...attr }]);
+  };
   dispatch(updateSegment({
-    [segmentProps.attributes]: attributes.concat(params.map((p) => [p])),
+    [segmentProps.attributes]: attributes.concat(values.map(mapAttribute)),
   }));
 };
 export const removeSegmentAttribute = (position) => (dispatch, getState) => {

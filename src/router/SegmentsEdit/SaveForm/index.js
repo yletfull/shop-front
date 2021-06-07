@@ -15,7 +15,11 @@ const defaultProps = {
 const SaveForm = function SaveForm({ onSubmit }) {
   const [fileName, setFileName] = useState('');
 
-  const handleChangeFileName = (value) => {
+  const handleChangeFileName = (e) => {
+    const { value } = e?.target || {};
+    if (typeof value === 'undefined') {
+      return;
+    }
     setFileName(value);
   };
   const handleSubmitForm = (e) => {
