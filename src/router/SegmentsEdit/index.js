@@ -13,7 +13,7 @@ import reducer from './reducer';
 import {
   fetchParams,
   fetchSegment,
-  addSegmentParam,
+  addSegmentAttribute,
   insertSegmentAttribute,
   moveSegmentAttribute,
   removeSegmentAttribute,
@@ -22,7 +22,7 @@ import {
   getIsFetchingParams,
   getIsFetchingSegment,
   getParams,
-  getSegment,
+  getSegmentAttributes,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
@@ -36,6 +36,7 @@ import Params from './Params';
 import ParamsForm from './ParamsForm';
 import SaveForm from './SaveForm';
 import Statistics from './Statistics';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -57,7 +58,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const params = useSelector(getParams);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
-  const segmentStructure = useSelector(getSegment);
+  const segmentAttributes = useSelector(getSegmentAttributes);
 
   const [isShowParams, setIsShowParams] = useState(false);
 
@@ -131,7 +132,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       return;
     }
 
-    dispatch(addSegmentParam(selectedParams));
+    dispatch(addSegmentAttribute(selectedParams));
+  };
+  const handleSubmitSaveForm = (values) => {
+    if (0) {
+      console.log(service.createSegment);
+    }
+    console.log(values);
   };
 
   const statistic = {};
@@ -142,7 +149,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <DndProvider backend={HTML5Backend}>
           <AttributesConstructor isFetching={isFetchingSegment}>
             <AttributesLabels
-              isVisible={segmentStructure.length > 0}
+              isVisible={segmentAttributes.length > 0}
               labels={['Датасеты', 'Телефонов', 'E-mail']}
             />
             <AttributeDropPlaceholder
@@ -150,7 +157,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
               position="top"
               onDrop={handleDropAttributeInPlaceholder('top')}
             />
-            {segmentStructure.map((group, groupIndex) => {
+            {segmentAttributes.map((group, groupIndex) => {
               const groupKey = generateKeyByIndex('group', groupIndex);
               return (
                 <AttributesGroup
@@ -241,7 +248,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Сохранение сегмента
         </h3>
 
-        <SaveForm />
+        <SaveForm
+          onSubmit={handleSubmitSaveForm}
+        />
       </div>
     </div>
   );

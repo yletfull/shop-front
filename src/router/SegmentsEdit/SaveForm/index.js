@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
@@ -13,9 +13,14 @@ const defaultProps = {
 };
 
 const SaveForm = function SaveForm({ onSubmit }) {
+  const [fileName, setFileName] = useState('');
+
+  const handleChangeFileName = (value) => {
+    setFileName(value);
+  };
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    onSubmit();
+    onSubmit({ fileName });
   };
 
   return (
@@ -27,6 +32,8 @@ const SaveForm = function SaveForm({ onSubmit }) {
         name="segmentName"
         className={styles.saveFormInput}
         placeholder="Укажите название"
+        value={fileName}
+        onChange={handleChangeFileName}
         fullwidth
       />
       <Button

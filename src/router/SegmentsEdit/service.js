@@ -1,8 +1,15 @@
 import api from '@/api';
 
+const baseUrl = 'api/v1/external/api/v1';
+
+const createSegment = function serviceCreateSegment(params) {
+  return api
+    .post(`${baseUrl}/segments/`, { params })
+    .then((response) => response.data.data);
+};
 const fetchParams = function serviceFetchSegmentsAttributes() {
   return api
-    .get('api/v1/external/api/v1/attributes/')
+    .get(`${baseUrl}/attributes/`)
     .then((response) => response.data.data);
 };
 const fetchSegment = function serviceFetchSegment() {
@@ -10,6 +17,7 @@ const fetchSegment = function serviceFetchSegment() {
 };
 
 export default {
+  createSegment,
   fetchParams,
   fetchSegment,
 };

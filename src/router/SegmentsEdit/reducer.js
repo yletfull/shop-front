@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { segmentProps } from './constants';
 import {
   requestParams,
   requestSegment,
@@ -6,11 +7,17 @@ import {
   updateSegment,
 } from './actions';
 
+const initialSegment = {
+  [segmentProps.id]: null,
+  [segmentProps.name]: '',
+  [segmentProps.attributes]: [],
+};
+
 const initialState = {
   isFetchingParams: false,
   isFetchingSegment: false,
   params: [],
-  segment: [],
+  segment: initialSegment,
 };
 
 export default createReducer(initialState, {
@@ -30,6 +37,9 @@ export default createReducer(initialState, {
   [updateSegment]: (state, action) => ({
     ...state,
     isFetchingSegment: false,
-    segment: action.payload || [],
+    segment: {
+      ...state.segment,
+      ...action.payload || {},
+    },
   }),
 });
