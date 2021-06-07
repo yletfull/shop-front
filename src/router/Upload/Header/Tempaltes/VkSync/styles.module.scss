@@ -1,5 +1,21 @@
 @import '@/theme/include.scss';
 
+
+.textWrapper {
+  white-space: nowrap;
+}
+
+.value {
+  font-weight: bold;
+
+  &::before {
+    color: $color-black;
+    content: ': ';
+    font-weight: 300;
+  }
+}
+
 .wrapper {
-  width: 10%;
+  flex-grow: 2;
+  max-width: 60%;
 }

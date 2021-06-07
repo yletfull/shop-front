@@ -96,6 +96,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
     sync();
   };
 
+  console.log(syncVkTaskData);
+
   return (
     <HeaderTemplate className={styles.wrapper}>
       {!isSyncInProcess
@@ -108,6 +110,18 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           />
         )
         : <Spinner />}
+      <div
+        className={styles.textWrapper}
+      >
+        <span>
+          Последняя синхронизация
+        </span>
+        <span className={styles.value}>
+          {syncVkTaskData?.finishedAt}
+        </span>
+      </div>
+
+
       {syncError && (
       <p>
         Произошла ошибка
