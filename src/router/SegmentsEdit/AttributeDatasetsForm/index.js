@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '@/components/Button';
 import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
@@ -16,7 +17,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
 }) {
   return (
     <div className={styles.attributeDatasetsForm}>
-      <table>
+      <table className={styles.attributeDatasetsFormTable}>
         <tbody>
           <tr>
             <th>
@@ -59,6 +60,23 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           ))}
         </tbody>
       </table>
+
+      <div className={styles.attributeDatasetsFormFooter}>
+        <div className={styles.attributeDatasetsFormFooterSection}>
+          <span>
+            Выбрано: 0 из 0
+          </span>
+        </div>
+        <div className={styles.attributeDatasetsFormFooterSection}>
+          <Button>
+            отменить
+          </Button>
+          <Button>
+            выбрать
+          </Button>
+        </div>
+        <div className={styles.attributeDatasetsFormFooterSection} />
+      </div>
     </div>
   );
 };

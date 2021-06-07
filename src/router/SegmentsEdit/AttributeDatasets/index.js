@@ -50,7 +50,7 @@ const AttributeDatasets = function AttributeDatasets({
       <Modal
         isVisible={isShowModal}
         header={(
-          <span>
+          <span className={styles.attributeDatasetsHeader}>
             Датасеты
             {name ? ` с параметром «${name}»` : ''}
           </span>
