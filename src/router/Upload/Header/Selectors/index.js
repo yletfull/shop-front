@@ -9,6 +9,7 @@ import ButtonLink from '@/components/ButtonLink';
 import {
   fetchAccounts, fetchClients, fetchQueueList,
   setAccount, setClient, setStage,
+  fetchRecentFile,
 } from '@/store/upload/actions';
 import { finalUploadStages, firstUploadStages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
@@ -45,6 +46,14 @@ const Header = function HeaderScreen() {
   useLayoutEffect(() => {
     queueList.current = queueListData;
   }, [queueListData]);
+
+  const recentFileData = useSelector(
+    (state) => state.upload?.recentFile
+  );
+  const recentFile = useRef(recentFileData);
+  useLayoutEffect(() => {
+    recentFile.current = recentFileData;
+  }, [recentFileData]);
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -117,19 +126,25 @@ const Header = function HeaderScreen() {
       setAccountSelectDisabled(true);
 
       await dispatch(fetchQueueList());
+      const importTasks = queueList.current.map((task) => (
+        task.command === 'sync-xlsx:vk'
+      ));
+      await dispatch(fetchRecentFile());
 
-      if (queueList.current.length > 0) {
-        if (queueList.current[0].status === -1) {
-          return dispatch(setStage(globalStages.errorCheck));
-        }
-        if (queueList.current[0].status === 2) {
+
+      if (importTasks.length > 0) {
+        if (recentFile.current) {
+          if (importTasks[0].status === -1) {
+            return dispatch(setStage(globalStages.errorCheck));
+          }
+          if (importTasks[0].status === 1) {
+            return dispatch(setStage(finalUploadStages.fileIsLoading));
+          }
           return dispatch(setStage(firstUploadStages.selectList));
         }
-        if (queueList.current[0].status === 1) {
-          return dispatch(setStage(finalUploadStages.fileIsLoading));
-        }
-        dispatch(setStage(firstUploadStages.filseIsNotLoaded));
+        return;
       }
+      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
   };
 

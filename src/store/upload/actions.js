@@ -182,6 +182,7 @@ export const syncVk = () => async (dispatch, getState) => {
   try {
     const data = await service.syncVk({
       cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
     });
     dispatch(syncVkTask(data.data.data));
     return data.data.data;
@@ -190,6 +191,11 @@ export const syncVk = () => async (dispatch, getState) => {
     dispatch(syncVkError(err));
   }
 };
+
+export const setSyncVkTask = (data) => (dispatch) => {
+  dispatch(syncVkTask(data));
+};
+
 
 export const setDownloadAllAdsButtonDisabled = (data) => (dispatch) => {
   dispatch(downloadAllAdsButtonDisabled(data));
