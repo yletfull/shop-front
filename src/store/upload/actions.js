@@ -23,7 +23,7 @@ export const importedDocument = createAction(`${NS}/importedDocument`);
 export const syncVkTask = createAction(`${NS}/syncVkTask`);
 export const syncVkError = createAction(`${NS}/syncVkError`);
 export const downloadAllAdsButtonDisabled = createAction(`${NS}/downloadAllAdsButtonDisabled`);
-
+export const uploadButtonDisabled = createAction(`${NS}/uploadButtonDisabled`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -196,7 +196,10 @@ export const setSyncVkTask = (data) => (dispatch) => {
   dispatch(syncVkTask(data));
 };
 
-
 export const setDownloadAllAdsButtonDisabled = (data) => (dispatch) => {
   dispatch(downloadAllAdsButtonDisabled(data));
+};
+
+export const setUploadButtonDisabled = (data) => (dispatch) => {
+  dispatch(uploadButtonDisabled(data));
 };

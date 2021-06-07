@@ -24,6 +24,7 @@ import {
   syncVkTask,
   syncVkError,
   downloadAllAdsButtonDisabled,
+  uploadButtonDisabled,
 } from './actions';
 
 const initialState = {
@@ -66,6 +67,7 @@ const initialState = {
   syncVkTask: {},
   syncVkError: null,
   downloadAllAdsButtonDisabled: false,
+  uploadButtonDisabled: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -152,6 +154,10 @@ const reducer = createReducer(initialState, {
   [downloadAllAdsButtonDisabled]: (state, action) => ({
     ...state,
     downloadAllAdsButtonDisabled: action.payload,
+  }),
+  [uploadButtonDisabled]: (state, action) => ({
+    ...state,
+    uploadButtonDisabled: action.payload,
   }),
 });
 
