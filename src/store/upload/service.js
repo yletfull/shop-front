@@ -52,8 +52,8 @@ const getTask = ({ taskId }) => api
   .get(`api/v1/queue/${taskId}`)
   .then((data) => data);
 
-const syncVk = ({ cabinetId }) => api
-  .post(`api/v1/ad-cabinet/${cabinetId}/sync`)
+const syncVk = ({ cabinetId, clientId }) => api
+  .post(`api/v1/ad-cabinet/${cabinetId}/sync`, { clientId })
   .then((data) => data);
 
 export default {
