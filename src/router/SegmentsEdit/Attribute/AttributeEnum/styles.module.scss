@@ -12,5 +12,11 @@
   &Section {
     align-items: stretch;
     display: flex;
+
+    &_form {
+      max-height: 10rem;
+      overflow: auto;
+      width: 18rem;
+    }
   }
 }

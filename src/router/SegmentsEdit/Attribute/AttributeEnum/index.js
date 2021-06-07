@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, FormSpy, Field } from 'react-final-form';
+import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -41,7 +42,12 @@ const AttributeEnum = function AttributeEnum({
 
   return (
     <div className={styles.attributeEnum}>
-      <div className={styles.attributeEnumSection}>
+      <div
+        className={cx(
+          styles.attributeEnumSection,
+          styles.attributeEnumSection_form,
+        )}
+      >
         {isVisibleOptions && (
           <Form onSubmit={handleSubmitForm}>
             {({ handleSubmit }) => (

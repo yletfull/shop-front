@@ -1,68 +1,64 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field } from 'react-final-form';
-import Button from '@/components/Button';
+import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
-  dateRange: PropTypes.node,
-  selected: PropTypes.arrayOf(PropTypes.string),
+  datasets: PropTypes.arrayOf(PropTypes.string),
 };
 
 const defaultProps = {
-  data: [],
-  dateRange: null,
-  selected: [],
+  datasets: [],
 };
 
 const AttributeDatasetsForm = function AttributeDatasetsForm({
-  data,
-  dateRange,
-  selected,
+  datasets,
 }) {
-  const handleClickSelectAllButton = () => {};
-  const handleSubmitForm = () => {};
-
   return (
     <div className={styles.attributeDatasetsForm}>
-      {dateRange}
-      <Form onSubmit={handleSubmitForm}>
-        {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <div className={styles.attributeDatasetsFormSection}>
-              <span>
-                Выбрано
-                &nbsp;
-                {selected.length}
-              </span>
+      <table>
+        <tbody>
+          <tr>
+            <th>
+              Название
+            </th>
+            <th>
+              Дата загрузки
+            </th>
+            <th>
+              Телефонов
+            </th>
+            <th>
+              E-mail
+            </th>
+          </tr>
 
-              <Button
-                onClick={handleClickSelectAllButton}
-                disabled
-              >
-                Выбрать все
-              </Button>
-            </div>
+          {(!datasets || !Array.isArray(datasets)) && (
+            <tr>
+              <td colSpan="4">
+                Нет данных
+              </td>
+            </tr>
+          )}
 
-            {data.map((d) => (
-              <label
-                key={d}
-                className={styles.attributeDatasetsFormLabel}
-              >
-                <Field
-                  name="datasets"
-                  component="input"
-                  type="checkbox"
-                  value={d}
-                  checked
-                />
+          {datasets.map((d) => (
+            <tr key={d}>
+              <td>
                 {d}
-              </label>
-            ))}
-          </form>
-        )}
-      </Form>
+              </td>
+              <td>
+                -
+              </td>
+              <td>
+                {formatNumber(0)}
+              </td>
+              <td>
+                {formatNumber(0)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

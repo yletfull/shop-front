@@ -168,9 +168,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       onChange={handleChangeAttribute}
                       onRemove={handleRemoveAttribute}
                     >
-                      <AttributeDatasets data={attribute.inDatasets}>
+                      <AttributeDatasets
+                        name={attribute?.title || attribute?.attributeName}
+                        selected={attribute?.inDatasets || []}
+                        datasets={attribute?.inDatasets || []}
+                      >
                         <AttributeDatasetsForm
-                          data={attribute.inDatasets}
+                          datasets={attribute?.inDatasets || []}
                         />
                       </AttributeDatasets>
                       <AttributeStatistics

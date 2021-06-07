@@ -101,20 +101,22 @@ const Attribute = function Attribute({
           </span>
         </div>
 
-        {!TypedAttribute && (
-          <span className={styles.attributeMessage}>
-            Неизвестный тип аттрибута
-          </span>
-        )}
-        {TypedAttribute && (
-          <TypedAttribute
-            data={data}
-            className={styles.attribute}
-            onChange={handleChangeAttribute}
-          >
-            {children}
-          </TypedAttribute>
-        )}
+        <div className={styles.attributeSection}>
+          {!TypedAttribute && (
+            <span className={styles.attributeMessage}>
+              Неизвестный тип аттрибута
+            </span>
+          )}
+          {TypedAttribute && (
+            <TypedAttribute
+              data={data}
+              className={styles.attribute}
+              onChange={handleChangeAttribute}
+            >
+              {children}
+            </TypedAttribute>
+          )}
+        </div>
       </div>
 
       <div className={styles.attributeAside}>
