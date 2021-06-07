@@ -97,7 +97,7 @@ const Header = function HeaderScreen() {
     }
   }, [dispatch, clients]);
 
-  useEffect(() => (async () => {
+  useEffect(() => {
     if (selectAccount && selectClient) {
       setAcceptButtonDisabled(false);
     } else {
@@ -105,7 +105,7 @@ const Header = function HeaderScreen() {
     }
     dispatch(setStage(firstUploadStages.selectAccount));
     setChangeAccountButtonShow(false);
-  })(), [dispatch, selectAccount, selectClient]);
+  }, [dispatch, selectAccount, selectClient]);
 
   useEffect(() => (async () => {
     if (!selectAccount) {
