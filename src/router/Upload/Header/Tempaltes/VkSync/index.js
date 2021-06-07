@@ -6,7 +6,7 @@ import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
-import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled } from '@/store/upload/actions';
+import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled } from '@/store/upload/actions';
 import styles from './styles.module.scss';
 
 
@@ -44,6 +44,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
     setSyncError(false);
     setIsSyncInProcess(true);
     dispatch(setDownloadAllAdsButtonDisabled(true));
+    dispatch(setUploadButtonDisabled(true));
 
     await dispatch(syncVk());
 
@@ -67,9 +68,11 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
           clearTimeout(check);
           setIsSyncInProcess(false);
+          dispatch(setUploadButtonDisabled(false));
 
           if (task && Object.keys(task).length && task.status === 2) {
-            return dispatch(setDownloadAllAdsButtonDisabled(false));
+            dispatch(setDownloadAllAdsButtonDisabled(false));
+            return;
           }
 
           setSyncError(true);
@@ -78,6 +81,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
       )();
       return;
     }
+    dispatch(setUploadButtonDisabled(false));
     setIsSyncInProcess(false);
     setSyncError(true);
   };

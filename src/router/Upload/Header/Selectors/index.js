@@ -126,9 +126,7 @@ const Header = function HeaderScreen() {
       setAccountSelectDisabled(true);
 
       await dispatch(fetchQueueList());
-      const importTasks = queueList.current.map((task) => (
-        task.command === 'sync-xlsx:vk'
-      ));
+      const importTasks = queueList.current.map((task) => task.command === 'sync-xlsx:vk' && task);
       await dispatch(fetchRecentFile());
 
 

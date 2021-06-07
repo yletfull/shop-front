@@ -12,9 +12,11 @@ import {
   fetchDocumentDetails,
   fetchDocuments,
   setParentDocument,
+  setUploadButtonDisabled,
 } from '@/store/upload/actions';
 import { firstUploadStages, globalStages } from '../../../stages';
 import styles from './styles.module.scss';
+
 
 const UploadFileTemplate = function UploadFileTemplateScreen() {
   const dispatch = useDispatch();
@@ -23,7 +25,10 @@ const UploadFileTemplate = function UploadFileTemplateScreen() {
 
   const [fileIsLoading, setFileIsLoading] = useState(false);
   const [detailsIsFetching, setDetailsIsFetching] = useState(false);
-  const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
+
+  const uploadButtonDisabled = useSelector(
+    (state) => state.upload?.uploadButtonDisabled
+  );
 
   const recentFileData = useSelector(
     (state) => state.upload?.recentFile
@@ -117,12 +122,12 @@ const UploadFileTemplate = function UploadFileTemplateScreen() {
       case firstUploadStages.selectList:
       case firstUploadStages.filseIsNotLoaded:
       case globalStages.errorCheck:
-        setUploadButtonDisabled(false);
+        dispatch(setUploadButtonDisabled(false));
         break;
       default:
-        setUploadButtonDisabled(true);
+        dispatch(setUploadButtonDisabled(true));
     }
-  }, [stage]);
+  }, [dispatch, stage]);
 
   return (
     detailsIsFetching
