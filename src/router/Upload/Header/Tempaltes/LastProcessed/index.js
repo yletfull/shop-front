@@ -16,7 +16,7 @@ import {
 import styles from './styles.module.scss';
 
 
-const getHeaderTempalteContent = (data) => [
+const getHeaderTemplateContent = (data) => [
   { title: 'Последняя загрузка во ВК', value: formatDate(data.createdAt, 'DD.MM.YYYY HH:mm:ss'), id: 0 },
   { title: 'Всего РК', value: data.data?.total, id: 1 },
   { title: 'Новых РК', value: data.data?.new, id: 2 },
@@ -112,7 +112,7 @@ const LastProcessedTemplate = function LastProcessedTemplateScreen() {
             disabled={recentFileIsLoading || !fileIsLoaded}
           />
           <div>
-            {getHeaderTempalteContent(recentFileData)
+            {getHeaderTemplateContent(recentFileData)
               .map(({ title, value, id }) => (
                 <div
                   className={styles.textWrapper}
