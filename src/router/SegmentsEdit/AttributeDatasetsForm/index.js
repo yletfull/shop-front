@@ -30,10 +30,13 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
       validateOnBlur
       onSubmit={(values) => console.log(values)}
     >
-      {(
-        values, handleChange,
-        handleBlur, handleSubmit, dirty
-      ) => {
+      {({
+        values,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        dirty,
+      }) => (
         <Form className={styles.attributeDatasetsForm}>
           <div className={styles.attributeDatasetsHeaderSelectors}>
             <label>
@@ -135,8 +138,8 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
               </Button>
             </div>
           </div>
-        </Form>;
-      }}
+        </Form>
+      )}
     </Formik>
   );
 };
