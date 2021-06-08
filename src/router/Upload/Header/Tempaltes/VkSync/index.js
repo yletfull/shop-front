@@ -6,9 +6,13 @@ import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
-import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled } from '@/store/upload/actions';
+import {
+  syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled,
+} from '@/store/upload/actions';
 import { formatDate } from '@/utils/format';
-import { getQueueList, getSelectAccount, getSelectClient, getSyncVkTask } from '@/store/upload/selectors';
+import {
+  getQueueList, getSelectAccount, getSelectClient, getSyncVkTask,
+} from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 
 

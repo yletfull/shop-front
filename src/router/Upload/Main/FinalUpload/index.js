@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import SuccessIcon from '@/icons/Success';
 import VentIcon from '@/icons/Vent';
 import NavigationBar from '@/components/NavigationBar';
-import { importDocument, setStage, fetchTask, fetchRecentFile, setRecentFile, setRecentFileIsLoading } from '@/store/upload/actions';
+import {
+  importDocument, setStage, fetchTask,
+  fetchRecentFile, setRecentFile, setRecentFileIsLoading,
+} from '@/store/upload/actions';
 import { getStage } from '@/store/upload/selectors';
 import { finalUploadStages, finalUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';

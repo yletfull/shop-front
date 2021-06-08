@@ -14,8 +14,10 @@ import {
   setParentDocument,
   setUploadButtonDisabled,
 } from '@/store/upload/actions';
+import {
+  getDocumentDetails, getDocuments, getRecentFile, getStage, getUploadedFiles,
+} from '@/store/upload/selectors';
 import { firstUploadStages, globalStages } from '../../../stages';
-import { getDocumentDetails, getDocuments, getRecentFile, getStage, getUploadedFiles } from '../../../../../store/upload/selectors';
 import styles from './styles.module.scss';
 
 

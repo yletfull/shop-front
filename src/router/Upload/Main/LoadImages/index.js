@@ -10,8 +10,12 @@ import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import Indicator from '@/components/Indicator';
-import { fetchImages, fetchDocuments, setUploadedImages, uploadImages } from '@/store/upload/actions';
-import { getDocuments, getImages, getParentDocument, getUploadedImages } from '@/store/upload/selectors';
+import {
+  fetchImages, fetchDocuments, setUploadedImages, uploadImages,
+} from '@/store/upload/actions';
+import {
+  getDocuments, getImages, getParentDocument, getUploadedImages,
+} from '@/store/upload/selectors';
 import Header from './Header';
 import styles from './styles.module.scss';
 

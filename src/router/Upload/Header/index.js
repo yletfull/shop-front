@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getStage } from '../../../store/upload/selectors';
+import { getStage } from '@/store/upload/selectors';
 import { firstUploadStages } from '../stages';
 import SelectorsBlock from './Selectors';
 import TemplatesBlock from './Tempaltes';
