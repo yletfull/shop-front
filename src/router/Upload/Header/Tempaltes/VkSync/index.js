@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
+import { queueTasksStatuses } from '@/constants/statuses';
 import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import {
@@ -65,7 +66,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           if (
             task
             && Object.keys(task).length
-            && (task.status === 0 || task.status === 1)) {
+            && (task.status === queueTasksStatuses.created
+              || task.status === queueTasksStatuses.inProgress)) {
             return check();
           }
 
@@ -91,7 +93,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   };
 
   useEffect(() => {
-    if (queueList[0].status === 0 || queueList[0].status === 1) {
+    if (queueList[0].status === queueTasksStatuses.created
+       || queueList[0].status === queueTasksStatuses.inProgress) {
       sync();
     }
   }, [queueList]);

@@ -10,6 +10,7 @@ import {
   fetchRecentFile, setRecentFile, setRecentFileIsLoading,
 } from '@/store/upload/actions';
 import { getStage } from '@/store/upload/selectors';
+import { queueTasksStatuses } from '@/constants/statuses';
 import { finalUploadStages, finalUploadStages as stages, globalStages } from '../../stages';
 import styles from './styles.module.scss';
 
@@ -47,20 +48,21 @@ const FinalUpload = function FinalUploadScreen() {
         (function check() {
           setTimeout(async () => {
             task = await dispatch(fetchTask(importedDocument.id));
-            if (task.status === 0 || task.status === 1) {
+            if (task.status === queueTasksStatuses.created
+              || task.status === queueTasksStatuses.inProgress) {
               return check();
             }
 
             clearTimeout(check);
             dispatch(setRecentFileIsLoading(false));
 
-            if (task.status === 2) {
+            if (task.status === queueTasksStatuses.finished) {
               setNaVigationBarParams((prev) => ({ ...prev, finally: true }));
               setLocalStage(finalUploadStages.fileIsLoaded);
               dispatch(fetchRecentFile());
               return;
             }
-            if (task.status === -1) {
+            if (task.status === queueTasksStatuses.error) {
               dispatch(setStage(globalStages.errorCheck));
             }
           }, 1000);
