@@ -17,65 +17,94 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
 }) {
   return (
     <div className={styles.attributeDatasetsForm}>
-      <table className={styles.attributeDatasetsFormTable}>
-        <tbody>
-          <tr>
-            <th>
-              Название
-            </th>
-            <th>
-              Дата загрузки
-            </th>
-            <th>
-              Телефонов
-            </th>
-            <th>
-              E-mail
-            </th>
-          </tr>
-
-          {(!datasets || !Array.isArray(datasets)) && (
-            <tr>
-              <td colSpan="4">
-                Нет данных
-              </td>
+      <form className={styles.attributeDatasetsHeaderSelectors}>
+        <label>
+          <input
+            name="datasets-radio"
+            type="radio"
+            value="other"
+          />
+          Любой
+        </label>
+        <label>
+          <input
+            name="datasets-radio"
+            type="radio"
+            value="choose"
+          />
+          Выбрать из списка
+        </label>
+      </form>
+      <div className={styles.attributeDatasetsFormTableWrapper}>
+        <table className={styles.attributeDatasetsFormTable}>
+          <tbody>
+            <tr className={styles.trHeader}>
+              <th className={styles.tdSelect}>
+                <input type="checkbox" />
+                Название
+              </th>
+              <th>
+                Дата загрузки
+              </th>
+              <th>
+                Телефонов
+              </th>
+              <th>
+                E-mail
+              </th>
             </tr>
-          )}
 
-          {datasets.map((d) => (
-            <tr key={d}>
-              <td>
-                {d}
-              </td>
-              <td>
-                -
-              </td>
-              <td>
-                {formatNumber(0)}
-              </td>
-              <td>
-                {formatNumber(0)}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {(!datasets || !Array.isArray(datasets)) && (
+              <tr>
+                <td colSpan="4">
+                  Нет данных
+                </td>
+              </tr>
+            )}
+
+            {datasets.map((d) => (
+              <tr key={d}>
+                <td className={styles.tdSelect}>
+                  <input type="checkbox" />
+                  {d}
+                </td>
+                <td>
+                  -
+                </td>
+                <td>
+                  {formatNumber(0)}
+                </td>
+                <td>
+                  {formatNumber(0)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className={styles.attributeDatasetsFormFooter}>
-        <div className={styles.attributeDatasetsFormFooterSection}>
-          <span>
-            Выбрано: 0 из 0
-          </span>
+        <div className={styles.attributeDatasetsFormFooterCounter}>
+          Выбрано:
+          {' '}
+          <b>
+            0
+          </b>
+          {' '}
+          из
+          {' '}
+          <b>
+            0
+          </b>
         </div>
-        <div className={styles.attributeDatasetsFormFooterSection}>
-          <Button>
+        <div className={styles.attributeDatasetsFormFooterButtons}>
+          <Button appearance="secondary">
             отменить
           </Button>
           <Button>
             выбрать
           </Button>
         </div>
-        <div className={styles.attributeDatasetsFormFooterSection} />
       </div>
     </div>
   );
