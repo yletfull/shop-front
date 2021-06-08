@@ -23,6 +23,7 @@ import {
   getIsFetchingSegment,
   getParams,
   getSegmentAttributes,
+  getSegmentId,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
@@ -52,17 +53,18 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const dispatch = useDispatch();
 
-  const { id: segmentId } = useParams();
+  const { id: paramsSegmentId } = useParams();
 
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
+  const segmentId = useSelector(getSegmentId);
 
   const [isShowParams, setIsShowParams] = useState(false);
 
-  const isNewSegment = typeof segmentId === 'undefined';
+  const isNewSegment = typeof paramsSegmentId === 'undefined';
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -75,12 +77,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(isNewSegment
       ? 'Новый сегмент'
-      : `${defaultTitle} #${segmentId}`));
+      : `${defaultTitle} #${segmentId || paramsSegmentId}`));
+  }, [dispatch, defaultTitle, isNewSegment, paramsSegmentId, segmentId]);
 
+  useEffect(() => {
     if (!isNewSegment) {
-      dispatch(fetchSegment(segmentId));
+      dispatch(fetchSegment(paramsSegmentId));
     }
-  }, [dispatch, defaultTitle, isNewSegment, segmentId]);
+  }, [dispatch, isNewSegment, paramsSegmentId]);
 
   const handleChangeAttribute = (attribute) => {
     console.log(attribute);
@@ -155,7 +159,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       .map(mapOrSegmentAttributes);
     try {
       await service.saveSegment({
-        ...(isNewSegment ? { [segmentProps.id]: segmentId } : {}),
+        ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
         [segmentProps.name]: fileName,
         [segmentProps.attributes]: segmentAttributes
           .map(mapAndSegmentAttributes),

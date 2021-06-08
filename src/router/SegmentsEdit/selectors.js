@@ -18,6 +18,10 @@ export const getSegment = createSelector(
   [getState],
   (state) => state.segment || {},
 );
+export const getSegmentId = createSelector(
+  [getSegment],
+  (segment) => segment.id || null,
+);
 export const getSegmentName = createSelector(
   [getSegment],
   (segment) => segment[segmentProps.name] || '',

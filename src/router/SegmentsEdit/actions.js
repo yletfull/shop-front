@@ -26,7 +26,7 @@ export const fetchSegment = (id) => async (dispatch) => {
     dispatch(updateSegment(response));
   } catch (error) {
     console.error(error);
-    dispatch(updateSegment([]));
+    dispatch(updateSegment({}));
   }
 };
 export const addSegmentAttribute = (values) => (dispatch, getState) => {

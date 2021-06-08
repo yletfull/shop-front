@@ -7,8 +7,13 @@ const fetchParams = function serviceFetchSegmentsAttributes() {
     .get(`${baseUrl}/attributes/`)
     .then((response) => response.data.data);
 };
-const fetchSegment = function serviceFetchSegment() {
-  return Promise.resolve([]);
+const fetchSegment = function serviceFetchSegment(id) {
+  if (typeof id === 'undefined') {
+    return Promise.reject(new Error('`id` not found'));
+  }
+  return api
+    .get(`${baseUrl}/segments/${id}/`)
+    .then((response) => response.data.data);
 };
 const saveSegment = function serviceSaveSegment(params) {
   return api
