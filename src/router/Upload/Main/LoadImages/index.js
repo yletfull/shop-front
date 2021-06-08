@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+/* eslint-disable react/no-array-index-key */
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import cx from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import TimesIcon from '@/icons/Times';
 import UploadIcon from '@/icons/Upload';
-import VkIcon from '@/icons/Vk';
-import TestImage from '@/images/TestImage.jpg';
-import PicturesLoadIcon from '@/icons/PicturesLoad';
-import ProcessButton from '@/components/ProcessButton';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
+import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
-import NavigationBar from '@/components/NavigationBar';
 import Indicator from '@/components/Indicator';
+import {
+  fetchImages, fetchDocuments, setUploadedImages, uploadImages,
+} from '@/store/upload/actions';
+import {
+  getDocuments, getImages, getParentDocument, getUploadedImages,
+} from '@/store/upload/selectors';
+import Header from './Header';
 import styles from './styles.module.scss';
+
 
 const selectorMocksOptions = [
   {
@@ -25,13 +31,30 @@ const selectorMocksOptions = [
   },
 ];
 
-const navigationBarParams = {
-  prev: ['Загрузка файла', 'Проверка на ошибки'],
-  current: 'Загрузка изображений',
-  next: ['Выгрузка на площадку'],
-};
+const LoadImagesTable = function LoadImagesTableScreen() {
+  const dispatch = useDispatch();
 
-const Upload = function UploadScreen() {
+  const fileInput = useRef(null);
+
+  const [isFetching, setIsFetching] = useState(false);
+  const [fileIsLoading, setFileIsLoading] = useState();
+
+  const images = useSelector(getImages);
+
+  const uploadedImages = useSelector(getUploadedImages);
+
+  const parentDocumentData = useSelector(getParentDocument);
+  const parentDocument = useRef(parentDocumentData);
+  useLayoutEffect(() => {
+    parentDocument.current = parentDocumentData;
+  }, [parentDocumentData]);
+
+  const documentsData = useSelector(getDocuments);
+  const documents = useRef(documentsData);
+  useLayoutEffect(() => {
+    documents.current = documentsData;
+  }, [documentsData]);
+
   const [filter, setFilter] = useState({
     num: '',
     title: '',
@@ -39,6 +62,48 @@ const Upload = function UploadScreen() {
     banner: '',
   });
 
+  const [imagesList, setImagesList] = useState([]);
+
+  useEffect(() => {
+    const getImagesFn = async () => {
+      if (parentDocument.current) {
+        setIsFetching(true);
+        await dispatch(fetchImages({
+          documentId: parentDocument.current.id,
+        }));
+        setIsFetching(false);
+      }
+    };
+    getImagesFn();
+
+    const getDocumentsFn = async () => {
+      await dispatch(fetchDocuments({
+        'filter[sequenceId][>]': '0',
+        'filter[objectId]': parentDocument.current.id,
+      }));
+      if (documents.current?.length) {
+        dispatch(setUploadedImages(documents.current));
+        return;
+      }
+      dispatch(setUploadedImages([]));
+    };
+    getDocumentsFn();
+  }, [dispatch, parentDocument]);
+
+  useEffect(() => {
+    if (uploadedImages.length) {
+      const list = images.map((image) => ({
+        ...image,
+        imageFile: uploadedImages
+          .find(
+            (uploadedImage) => uploadedImage.fileName === image.imageName
+          ),
+      }));
+      setImagesList(list);
+      return;
+    }
+    setImagesList(images);
+  }, [uploadedImages, images]);
 
   const handleNumInput = (e) => {
     const num = e.target.value;
@@ -76,178 +141,201 @@ const Upload = function UploadScreen() {
 
   const handleFilterSubmit = () => '';
 
+  const submitFile = async (formData) => {
+    await dispatch(uploadImages({ formData }));
+    await dispatch(fetchDocuments({
+      'filter[sequenceId][>]': '0',
+      'filter[objectId]': parentDocument.current.id,
+    }));
+    if (documents.current.length) {
+      dispatch(setUploadedImages(documents.current));
+    }
+    setFileIsLoading(false);
+  };
+  const handleFileChange = (e) => {
+    const data = new FormData();
+    data.append('file', e.target.files[0]);
+    data.append('filename', e.target.files[0].name);
+    submitFile(data);
+  };
+  const handleSelectFileButtonClick = (e) => {
+    const { filename } = e.target.dataset;
+    setFileIsLoading(filename);
+    fileInput.current.click();
+  };
+
+  if (isFetching) {
+    return <Spinner />;
+  }
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.headerWrapper}>
-        <NavigationBar
-          params={navigationBarParams}
-        />
-        <div className={styles.loadButtonsWrapper}>
-          <ProcessButton
-            icon={<PicturesLoadIcon />}
-            text={['Подгрузить', 'изображения']}
-            className={styles.loadButton}
-          />
-          <ProcessButton
-            icon={<VkIcon />}
-            text={['Выгрузить РК', 'во Вконтакт']}
-            className={styles.loadButton}
-          />
-        </div>
-      </div>
+    <div>
+      <Header />
+      <table>
+        <tbody>
+          <tr filter="">
+            <td>
+              <Input
+                value={filter.num}
+                onInput={handleNumInput}
+                fullwidth
+                placeholder="№ строки"
+              />
+            </td>
+            <td colSpan="2">
+              <Input
+                value={filter.title}
+                onInput={handleTitleInput}
+                fullwidth
+                placeholder="Title"
+              />
+            </td>
+            <td>
+              <Select
+                value={filter.adFormat}
+                options={selectorMocksOptions}
+                resetText="Не выбрано"
+                placeholder="Ad_format"
+                onChange={handleAdFormatChange}
+                className={styles.select}
+                fullwidth
+              />
+            </td>
+            <td colSpan="4">
+              <Select
+                value={filter.banner}
+                options={selectorMocksOptions}
+                onChange={handleBannerChange}
+                resetText="Не выбрано"
+                placeholder="Banner"
+                className={styles.select}
+                fullwidth
+              />
+            </td>
+            <td>
+              <Button
+                onClick={handleFilterSubmit}
+                className={styles.filterSubmit}
+              >
+                Найти
+              </Button>
+            </td>
+          </tr>
 
-      <div className={styles.contentWrapper}>
-        <form
-          action="/"
-          className={cx(styles.row, styles.rowFilter)}
-          onSubmit={handleFilterSubmit}
-        >
-          <span className={cx(styles.col, styles.colFilter, styles.colNum)}>
-            <Input
-              value={filter.num}
-              onInput={handleNumInput}
-              fullwidth
-              placeholder="№ строки"
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colTitle)}>
-            <Input
-              value={filter.title}
-              onInput={handleTitleInput}
-              fullwidth
-              placeholder="Title"
-            />
-          </span>
-          <span
-            className={cx(
-              styles.col,
-              styles.colFilter,
-              styles.colAdFormat
-            )}
-          >
-            <Select
-              value={filter.adFormat}
-              options={selectorMocksOptions}
-              resetText="Не выбрано"
-              placeholder="Ad_format"
-              onChange={handleAdFormatChange}
-              className={styles.select}
-              fullwidth
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colBanner)}>
-            <Select
-              value={filter.banner}
-              options={selectorMocksOptions}
-              onChange={handleBannerChange}
-              resetText="Не выбрано"
-              placeholder="Banner"
-              className={styles.select}
-              fullwidth
-            />
-          </span>
-          <span className={cx(styles.col, styles.colFilter, styles.colSubmit)}>
-            <Button
-              type="submit"
-              className={styles.filterSubmit}
-            >
-              Найти
-            </Button>
-          </span>
-        </form>
-
-        <div className={cx(styles.row, styles.rowHeader)}>
-          <span className={cx(styles.col, styles.colHeader, styles.colNum)}>
-            <b>
+          <tr header="">
+            <td>
+              Image name
+            </td>
+            <td>
               № строки
-            </b>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colTitle)}>
-            <b>
+            </td>
+            <td>
               Title
-            </b>
-          </span>
-          <span
-            className={cx(
-              styles.col,
-              styles.colHeader,
-              styles.colAdFormat
-            )}
-          >
-            <b>
+            </td>
+            <td>
               Ad_format
-            </b>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colBanner)}>
-            <span>
-              <b>
-                Banner
-              </b>
-            </span>
-            <span className={styles.colBannerIconsWrapper}>
-              <span>
-                <b>
-                  File
-                </b>
-              </span>
-              <span>
-                <TimesIcon
-                  className={cx('red', styles.tableTimesIcon)}
-                />
-              </span>
-              <span className={styles.loadIconEmptySpace} />
-            </span>
-          </span>
-          <span className={cx(styles.col, styles.colHeader, styles.colSubmit)}>
-            <b>
+            </td>
+            <td>
+              Banner
+            </td>
+            <td>
+              File
+            </td>
+            <td />
+            <td />
+            <td>
               Size
-            </b>
-          </span>
-        </div>
+            </td>
+          </tr>
 
-        <div className={cx(styles.row, styles.rowContent)}>
-          <span className={cx(styles.col, styles.colNum)}>
-            11111
-          </span>
-          <span className={cx(styles.col, styles.colTitle)}>
-            om01_353:: Подать руку помощи:: vk
-          </span>
-          <span className={cx(styles.col, styles.colAdFormat)}>
-            1
-          </span>
-          <span className={cx(styles.col, styles.colBanner)}>
-            <span>
-              480x480
-            </span>
-            <span className={styles.colBannerIconsWrapper}>
-              <span>
-                <img
-                  src={TestImage}
-                  className={cx(styles.icon, styles.tableFileIcon)}
-                  alt="upload"
-                />
-              </span>
-              <Button appearance="control">
-                <TimesIcon className={cx('red', styles.tableTimesIcon)} />
-              </Button>
-              <Button appearance="control">
-                <UploadIcon />
-              </Button>
-            </span>
-          </span>
-          <span className={cx(styles.col, styles.colSubmit)}>
-            480x480
+          {imagesList.length
+            ? imagesList.map((image, ind) => (
+              <tr
+                content=""
+                key={ind}
+              >
+                <td>
+                  {image.imageName || '-'}
+                </td>
+                <td>
+                  {image.rowIndex || '-'}
+                </td>
+                <td>
+                  {image.campaignName || '-'}
+                </td>
+                <td>
+                  {image.adFormat || '-'}
+                </td>
+                <td>
+                  {image.imageFile ? '400x400' : '-'}
+                </td>
+                <td>
+                  {image.imageFile
+                    && (
+                      <img
+                        src={`/api/v1/document/${image.imageFile.id}/raw`}
+                        className={cx(styles.icon, styles.tableFileIcon)}
+                        alt="upload"
+                      />
+                    )}
+                </td>
+                <td>
+                  {image.imageFile
+                    && (
+                      <Button
+                        appearance="control"
+                        className={styles.tdButton}
+                        disabled
+                      >
 
-            <Indicator
-              className={styles.indicator}
-              color="red"
-            />
-          </span>
-        </div>
+                        <TimesIcon className="red" />
+                      </Button>
+                    )}
+                </td>
+                <td>
+                  <Button
+                    appearance="control"
+                    disabled={fileIsLoading === image.imageName}
+                    data-filename={image.imageName}
+                    onClick={handleSelectFileButtonClick}
+                  >
+                    <UploadIcon />
+                  </Button>
+                </td>
+                <td>
+                  <div className={styles.indicatorWrapper}>
+                    {image.imageFile
+                      && (
+                        <span>
+                          480x480
+                        </span>
+                      )}
 
-      </div>
+                    <Indicator
+                      className={styles.indicator}
+                      color={image.imageFile ? 'green' : 'red'}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))
+            : (
+              <tr content="">
+                <td colSpan="9">
+                  Изображения не найдены
+                </td>
+              </tr>
+            )}
+        </tbody>
+      </table>
+      <input
+        type="file"
+        id="fileInput"
+        style={{ display: 'none' }}
+        ref={fileInput}
+        onChange={handleFileChange}
+      />
     </div>
   );
 };
 
-export default Upload;
+export default LoadImagesTable;

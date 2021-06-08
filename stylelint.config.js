@@ -8,5 +8,6 @@ module.exports = {
     'scss/at-mixin-named-arguments': null,
     'scss/at-function-named-arguments': null,
     'order/order': null,
+    'no-descending-specificity': null,
   },
 };

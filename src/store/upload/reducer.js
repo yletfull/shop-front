@@ -1,3 +1,4 @@
+
 import { createReducer } from '@reduxjs/toolkit';
 import { firstUploadStages } from '@/router/Upload/stages';
 
@@ -12,15 +13,26 @@ import {
   documentDetails,
   uploadedFiles,
   task,
-  selectList,
+  selectedList,
+  recentFile,
+  images,
+  uploadedImages,
+  uploadImageError,
+  parentDocument,
+  importedDocument,
+  recentFileIsLoading,
+  syncVkTask,
+  syncVkError,
+  downloadAllAdsButtonDisabled,
+  uploadButtonDisabled,
 } from './actions';
 
 const initialState = {
   stage: firstUploadStages.selectAccount,
   accounts: [],
-  selectAccount: '',
+  selectAccount: null,
   clients: [],
-  selectClient: '',
+  selectClient: null,
   queueList: [],
   documents: [],
   documentDetails: {},
@@ -41,10 +53,21 @@ const initialState = {
           '57578275-96fc-4525-a632-05b4fa00842d',
         ],
       },
-      selectList: '',
+      selectedList: null,
     },
   ],
   task: {},
+  recentFile: {},
+  recentFileIsLoading: false,
+  images: [],
+  uploadedImages: [],
+  uploadImageError: null,
+  parentDocument: {},
+  importedDocument: {},
+  syncVkTask: {},
+  syncVkError: null,
+  downloadAllAdsButtonDisabled: false,
+  uploadButtonDisabled: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -88,9 +111,53 @@ const reducer = createReducer(initialState, {
     ...state,
     task: action.payload,
   }),
-  [selectList]: (state, action) => ({
+  [selectedList]: (state, action) => ({
     ...state,
-    selectList: action.payload,
+    selectedList: action.payload,
+  }),
+  [recentFile]: (state, action) => ({
+    ...state,
+    recentFile: action.payload,
+  }),
+  [recentFileIsLoading]: (state, action) => ({
+    ...state,
+    recentFileIsLoading: action.payload,
+  }),
+  [images]: (state, action) => ({
+    ...state,
+    images: action.payload,
+  }),
+  [uploadedImages]: (state, action) => ({
+    ...state,
+    uploadedImages: action.payload,
+  }),
+  [uploadImageError]: (state, action) => ({
+    ...state,
+    uploadImageError: action.payload,
+  }),
+  [parentDocument]: (state, action) => ({
+    ...state,
+    parentDocument: action.payload,
+  }),
+  [importedDocument]: (state, action) => ({
+    ...state,
+    importedDocument: action.payload,
+  }),
+  [syncVkTask]: (state, action) => ({
+    ...state,
+    syncVkTask: action.payload,
+  }),
+  [syncVkError]: (state, action) => ({
+    ...state,
+    syncVkError: action.payload,
+  }),
+  [downloadAllAdsButtonDisabled]: (state, action) => ({
+    ...state,
+    downloadAllAdsButtonDisabled: action.payload,
+  }),
+  [uploadButtonDisabled]: (state, action) => ({
+    ...state,
+    uploadButtonDisabled: action.payload,
   }),
 });
 

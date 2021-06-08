@@ -11,8 +11,19 @@ export const queueList = createAction(`${NS}/queueList`);
 export const documents = createAction(`${NS}/documents`);
 export const documentDetails = createAction(`${NS}/documentDetails`);
 export const uploadedFiles = createAction(`${NS}/uploadedFiles`);
-export const selectList = createAction(`${NS}/selectList`);
+export const selectedList = createAction(`${NS}/selectedList`);
 export const task = createAction(`${NS}/task`);
+export const recentFile = createAction(`${NS}/recentFile`);
+export const recentFileIsLoading = createAction(`${NS}/recentFileIsLoading`);
+export const images = createAction(`${NS}/images`);
+export const uploadImageError = createAction(`${NS}/uploadImageError`);
+export const parentDocument = createAction(`${NS}/parentDocument`);
+export const uploadedImages = createAction(`${NS}/uploadedImages`);
+export const importedDocument = createAction(`${NS}/importedDocument`);
+export const syncVkTask = createAction(`${NS}/syncVkTask`);
+export const syncVkError = createAction(`${NS}/syncVkError`);
+export const downloadAllAdsButtonDisabled = createAction(`${NS}/downloadAllAdsButtonDisabled`);
+export const uploadButtonDisabled = createAction(`${NS}/uploadButtonDisabled`);
 
 export const setStage = (value) => (dispatch) => {
   dispatch(stage(value));
@@ -27,7 +38,6 @@ export const fetchAccounts = () => async (dispatch) => {
     dispatch(accounts(accountsList));
   } catch (err) {
     dispatch(accounts([]));
-    console.log(err);
   }
 };
 
@@ -42,7 +52,6 @@ export const fetchClients = () => async (dispatch, getState) => {
     dispatch(clients(data.data.data));
   } catch (err) {
     dispatch(clients([]));
-    console.log(err);
   }
 };
 
@@ -50,25 +59,24 @@ export const setClient = (clientId) => (dispatch) => {
   dispatch(selectClient(clientId));
 };
 
-export const fetchQueueList = () => async (dispatch, getState) => {
+export const fetchQueueList = (params) => async (dispatch, getState) => {
   try {
     const cabinetId = getState().upload.selectAccount;
     const clientId = getState().upload.selectClient;
-    const data = await service.fetchClientsList({ cabinetId, clientId });
+    const data = await service
+      .fetchQueueList({ cabinetId, clientId, params });
     dispatch(queueList(data.data.data));
   } catch (err) {
     dispatch(queueList([]));
-    console.log(err);
   }
 };
 
-export const fetchDocuments = () => async (dispatch) => {
+export const fetchDocuments = (params) => async (dispatch) => {
   try {
-    const data = await service.fetchDocuments();
+    const data = await service.fetchDocuments(params);
     dispatch(documents(data.data.data));
   } catch (err) {
     dispatch(documents([]));
-    console.log(err);
   }
 };
 
@@ -78,7 +86,6 @@ export const fetchDocumentDetails = (documentId) => async (dispatch) => {
     dispatch(documentDetails(data.data.data));
   } catch (err) {
     dispatch(documentDetails([]));
-    console.log(err);
   }
 };
 
@@ -89,28 +96,110 @@ export const setUploadedFiles = (files) => async (dispatch) => {
 export const uploadFiles = (files) => async (dispatch) => {
   try {
     const data = await service.uploadFiles({ files });
-    console.log(data);
     dispatch(uploadedFiles(data.data.data));
   } catch (err) {
     dispatch(uploadFiles([]));
-    console.log(err);
   }
 };
 
-export const setSelectList = (data) => (dispatch) => {
-  dispatch(selectList(data));
+export const uploadImages = ({ formData }) => async (dispatch, getState) => {
+  try {
+    await service.uploadImages({
+      documentId: getState().upload.documentDetails.id,
+      formData,
+    });
+  } catch (err) {
+    dispatch(uploadImageError(err));
+  }
 };
 
-export const acceptFile = () => async (dispatch, getState) => {
+export const setSelectedList = (data) => (dispatch) => {
+  dispatch(selectedList(data));
+};
+
+export const importDocument = () => async (dispatch, getState) => {
   try {
-    const data = await service.acceptFile({
-      documentId: getState().upload.documentDetails.id,
+    const data = await service.importDocument({
+      documentId: getState().upload.parentDocument.id,
       cabinetId: getState().upload.selectAccount,
       clientId: getState().upload.selectClient,
-      sheetNum: getState().upload.selectList,
+      sheetNum: getState().upload.selectedList,
     });
-    dispatch(task(data.data.data));
+    dispatch(importedDocument(data.data.data));
+    return data.data.data;
   } catch (err) {
-    dispatch(task([]));
+    dispatch(importedDocument({}));
   }
+};
+
+export const fetchTask = (taskId) => async (dispatch) => {
+  try {
+    const data = await service.getTask({ taskId });
+    dispatch(task(data.data.data));
+    return data.data.data;
+  } catch (err) {
+    dispatch(task({}));
+  }
+};
+
+export const fetchRecentFile = () => async (dispatch, getState) => {
+  try {
+    const data = await service.getRecentFile({
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+    });
+    dispatch(recentFile(data.data.data));
+  } catch (err) {
+    dispatch(recentFile([]));
+  }
+};
+
+export const setRecentFileIsLoading = (value) => (dispatch) => {
+  dispatch(recentFileIsLoading(value));
+};
+
+export const setParentDocument = (value) => (dispatch) => {
+  dispatch(parentDocument(value));
+};
+
+export const fetchImages = ({ documentId }) => async (dispatch, getState) => {
+  try {
+    const data = await service.getImages({
+      documentId,
+      sheetNum: getState().upload.selectedList,
+    });
+    dispatch(images(data.data.meta.images));
+  } catch (err) {
+    dispatch(images([]));
+  }
+};
+
+export const setUploadedImages = (data) => (dispatch) => {
+  dispatch(uploadedImages(data));
+};
+
+export const syncVk = () => async (dispatch, getState) => {
+  try {
+    const data = await service.syncVk({
+      cabinetId: getState().upload.selectAccount,
+      clientId: getState().upload.selectClient,
+    });
+    dispatch(syncVkTask(data.data.data));
+    return data.data.data;
+  } catch (err) {
+    dispatch(syncVkTask({}));
+    dispatch(syncVkError(err));
+  }
+};
+
+export const setSyncVkTask = (data) => (dispatch) => {
+  dispatch(syncVkTask(data));
+};
+
+export const setDownloadAllAdsButtonDisabled = (data) => (dispatch) => {
+  dispatch(downloadAllAdsButtonDisabled(data));
+};
+
+export const setUploadButtonDisabled = (data) => (dispatch) => {
+  dispatch(uploadButtonDisabled(data));
 };
