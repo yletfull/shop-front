@@ -4,7 +4,6 @@ import { Formik, Form, Field } from 'formik';
 import Button from '@/components/Button';
 import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
-// import DatasetCheckbox from './components/datasetCheckbox';
 
 const propTypes = {
   datasets: PropTypes.arrayOf(PropTypes.string),
@@ -33,6 +32,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
     >
       {({
         handleSubmit,
+        handleChange,
         values,
         dirty,
       }) => (
@@ -63,7 +63,14 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
               <tbody>
                 <tr className={styles.trHeader}>
                   <th className={styles.tdSelect}>
-                    <Field
+                    <input
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          // values.datasetsSelected = [];
+                          return handleChange(e);
+                        }
+                        return handleChange(e);
+                      }}
                       name="allDatasetsSelected"
                       type="checkbox"
                       disabled={values.picked === 'any'}
@@ -96,6 +103,8 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                         name="datasetsSelected"
                         value={d}
                         type="checkbox"
+                        checked={values.allDatasetsSelected
+                          || values.datasetsSelected.includes(d)}
                         disabled={values.picked === 'any'}
                       />
                       {d}
