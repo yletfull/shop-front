@@ -63,11 +63,11 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
           task = await dispatch(fetchTask(syncVkTask.current.id));
 
-          if (
-            task
+          const shouldCheck = task
             && Object.keys(task).length
             && (task.status === queueTasksStatuses.created
-              || task.status === queueTasksStatuses.inProgress)) {
+              || task.status === queueTasksStatuses.inProgress);
+          if (shouldCheck) {
             return check();
           }
 
