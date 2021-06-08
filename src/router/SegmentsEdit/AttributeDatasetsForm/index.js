@@ -6,14 +6,17 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   datasets: PropTypes.arrayOf(PropTypes.string),
+  onClose: PropTypes.func,
 };
 
 const defaultProps = {
   datasets: [],
+  onClose: () => {},
 };
 
 const AttributeDatasetsForm = function AttributeDatasetsForm({
   datasets,
+  onClose,
 }) {
   return (
     <div className={styles.attributeDatasetsForm}>
@@ -98,7 +101,10 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           </b>
         </div>
         <div className={styles.attributeDatasetsFormFooterButtons}>
-          <Button appearance="secondary">
+          <Button
+            appearance="secondary"
+            onClick={onClose}
+          >
             отменить
           </Button>
           <Button>

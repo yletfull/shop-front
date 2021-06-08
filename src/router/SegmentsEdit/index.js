@@ -33,7 +33,6 @@ import {
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
-import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
@@ -215,11 +214,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                         name={attribute?.title || attribute?.attributeName}
                         selected={attribute?.inDatasets || []}
                         datasets={attribute?.inDatasets || []}
-                      >
-                        <AttributeDatasetsForm
-                          datasets={attribute?.inDatasets || []}
-                        />
-                      </AttributeDatasets>
+                      />
                       <AttributeStatistics
                         data={attribute.statistics}
                       />

@@ -3,24 +3,22 @@ import PropTypes from 'prop-types';
 import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
+import AttributeDatasetsForm from '../AttributeDatasetsForm';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  children: PropTypes.node,
   datasets: PropTypes.arrayOf(PropTypes.string),
   name: PropTypes.string,
   selected: PropTypes.arrayOf(PropTypes.string),
 };
 
 const defaultProps = {
-  children: null,
   datasets: [],
   name: '',
   selected: [],
 };
 
 const AttributeDatasets = function AttributeDatasets({
-  children,
   datasets,
   name,
   selected,
@@ -57,7 +55,10 @@ const AttributeDatasets = function AttributeDatasets({
         )}
         onClose={handleCloseModal}
       >
-        {children}
+        <AttributeDatasetsForm
+          datasets={datasets}
+          onClose={handleCloseModal}
+        />
       </Modal>
     </div>
   );
