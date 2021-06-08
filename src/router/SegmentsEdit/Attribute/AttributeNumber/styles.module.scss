@@ -1,5 +1,15 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.attributeNumber {
+  &Message {
+    display: inline-block;
+    font-size: .75rem;
+    width: 100%;
+  }
+
+  &Row {
+    & + & {
+      padding-top: 1rem;
+    }
+  }
 }
