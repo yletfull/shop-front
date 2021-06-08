@@ -24,6 +24,7 @@ import {
   getParams,
   getSegmentAttributes,
   getSegmentId,
+  getSegmentName,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
@@ -61,6 +62,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
   const segmentId = useSelector(getSegmentId);
+  const segmentName = useSelector(getSegmentName);
 
   const [isShowParams, setIsShowParams] = useState(false);
 
@@ -277,6 +279,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h3>
 
         <SaveForm
+          isFetching={isFetchingSegment}
+          name={segmentName}
           onSubmit={handleSubmitSaveForm}
         />
       </div>
