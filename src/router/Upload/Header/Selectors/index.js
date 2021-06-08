@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Select from '@/components/Select';
 import Button from '@/components/Button';
+import commands from '@/constants/commands';
+import { queueTasksStatuses } from '@/constants/statuses';
 import ButtonLink from '@/components/ButtonLink';
 
 import {
@@ -113,17 +115,18 @@ const Header = function HeaderScreen() {
       await dispatch(fetchQueueList());
       let importTasks = [];
       if (queueList.current && queueList.current.length) {
-        importTasks = queueList.current.map((task) => task.command === 'sync-xlsx:vk' && task);
+        importTasks = queueList.current
+          .map((task) => task.command === commands.syncXlsxVk && task);
       }
       await dispatch(fetchRecentFile());
 
 
       if (importTasks.length > 0) {
         if (recentFile.current) {
-          if (importTasks[0].status === -1) {
+          if (importTasks[0].status === queueTasksStatuses.error) {
             return dispatch(setStage(globalStages.errorCheck));
           }
-          if (importTasks[0].status === 1) {
+          if (importTasks[0].status === queueTasksStatuses.inProgress) {
             return dispatch(setStage(finalUploadStages.fileIsLoading));
           }
           return dispatch(setStage(firstUploadStages.selectList));
