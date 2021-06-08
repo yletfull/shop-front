@@ -6,6 +6,7 @@ export const dndTypes = {
 
 export const attributeTypes = {
   date: 'DATE',
+  enum: 'ENUM',
   number: 'NUMERIC',
   segment: 'SEGMENT',
   string: 'STRING',

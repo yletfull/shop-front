@@ -4,6 +4,7 @@ import { useDrag } from 'react-dnd';
 import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
 import AttributeEnum from './AttributeEnum';
+import AttributeNumber from './AttributeNumber';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -25,6 +26,13 @@ const propTypes = {
   dragType: PropTypes.string.isRequired,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
+  types: PropTypes.shape({
+    date: PropTypes.string,
+    enum: PropTypes.string,
+    number: PropTypes.string,
+    segment: PropTypes.string,
+    string: PropTypes.string,
+  }).isRequired,
   onChange: PropTypes.func,
   onRemove: PropTypes.func,
 };
@@ -42,19 +50,16 @@ const Attribute = function Attribute({
   dragType,
   groupIndex,
   index,
+  types,
   onChange,
   onRemove,
 }) {
   const { attributeName: name, title, type } = data || {};
 
-  const types = {
-    enum: 'ENUM',
-    string: 'STRING',
-  };
-
   const attributes = {
-    [types.enum]: AttributeEnum,
-    [types.string]: AttributeEnum,
+    [types.enum || 'ENUM']: AttributeEnum,
+    [types.string || 'STRING']: AttributeEnum,
+    [types.number || 'NUMERIC']: AttributeNumber,
   };
 
   const TypedAttribute = type && attributes[type] ? attributes[type] : null;

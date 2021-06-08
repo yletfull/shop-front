@@ -8,7 +8,12 @@ import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Button from '@/components/Button';
-import { namespace as NS, dndTypes, segmentProps } from './constants';
+import {
+  namespace as NS,
+  dndTypes,
+  segmentProps,
+  attributeTypes,
+} from './constants';
 import reducer from './reducer';
 import {
   fetchParams,
@@ -198,6 +203,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   {group.map((attribute, attributeIndex) => (
                     <Attribute
                       key={`${groupKey}-${attribute.attributeName}`}
+                      types={attributeTypes}
                       groupIndex={groupIndex}
                       index={attributeIndex}
                       data={attribute}
