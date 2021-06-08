@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import { formatNumber } from '@/utils/format';
 import AttributeNumverInput from './AttributeNumberInput';
@@ -44,15 +45,26 @@ const AttributeNumber = function AttributeNumber({
     if (Number(min) < minValue) {
       errors.min = `Минимальное значение ниже допустимого: ${formatNumber(minValue)}`;
     }
+    if (Number(min) > maxValue) {
+      errors.min = `Минимальное значение выше допустимого: ${formatNumber(maxValue)}`;
+    }
     if (Number(max) > maxValue) {
       errors.max = `Максимальное значение выше допустимого: ${formatNumber(maxValue)}`;
+    }
+    if (Number(max) < minValue) {
+      errors.max = `Максимальное значение ниже допустимого: ${formatNumber(minValue)}`;
     }
     return errors;
   };
 
   return (
     <div className={styles.attributeNumber}>
-      <div className={styles.attributeNumberSection}>
+      <div
+        className={cx(
+          styles.attributeNumberSection,
+          styles.attributeNumberSection_form,
+        )}
+      >
         <Formik
           initialValues={initialFormValues}
           validate={validateFormValues}
@@ -69,6 +81,9 @@ const AttributeNumber = function AttributeNumber({
                 <div className={styles.attributeNumberRow}>
                   <Field
                     placeholder=""
+                    type="number"
+                    max={maxValue}
+                    min={minValue}
                     name={fieldNames.min}
                     component={AttributeNumverInput}
                     onBlur={handleBlurInput}
@@ -78,6 +93,9 @@ const AttributeNumber = function AttributeNumber({
                   &nbsp;
                   <Field
                     placeholder=""
+                    type="number"
+                    max={maxValue}
+                    min={minValue}
                     name={fieldNames.max}
                     component={AttributeNumverInput}
                     onBlur={handleBlurInput}

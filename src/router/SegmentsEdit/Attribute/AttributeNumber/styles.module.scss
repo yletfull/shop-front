@@ -1,6 +1,8 @@
 @import '@/theme/include.scss';
 
 .attributeNumber {
+  display: flex;
+
   &Message {
     display: inline-block;
     font-size: .75rem;
@@ -10,6 +12,15 @@
   &Row {
     & + & {
       padding-top: 1rem;
+    }
+  }
+
+  &Section {
+    align-items: stretch;
+    display: flex;
+
+    &_form {
+      width: 18rem;
     }
   }
 }

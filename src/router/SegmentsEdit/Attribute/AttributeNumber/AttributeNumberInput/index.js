@@ -35,7 +35,6 @@ const AttributeNumberInput = function AttributeNumberInput({
       <Input
         {...field}
         {...props}
-        type="number"
         onBlur={handleInputBlur}
         fullwidth
       />
