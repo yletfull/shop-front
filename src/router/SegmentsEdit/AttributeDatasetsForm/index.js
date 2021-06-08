@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import Button from '@/components/Button';
 import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
+// import DatasetCheckbox from './components/datasetCheckbox';
 
 const propTypes = {
   datasets: PropTypes.arrayOf(PropTypes.string),
@@ -15,6 +16,7 @@ const defaultProps = {
   onClose: () => {},
 };
 
+
 const AttributeDatasetsForm = function AttributeDatasetsForm({
   datasets,
   onClose,
@@ -22,8 +24,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
   return (
     <Formik
       initialValues={{
-        other: '',
-        choose: '',
+        picked: '',
         allDatasetsSelected: false,
         datasetsSelected: [],
       }}
@@ -31,31 +32,28 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
       onSubmit={(values) => console.log(values)}
     >
       {({
-        values,
-        handleChange,
-        handleBlur,
         handleSubmit,
+        values,
         dirty,
       }) => (
-        <Form className={styles.attributeDatasetsForm}>
+        <Form
+          onSubmit={handleSubmit}
+          className={styles.attributeDatasetsForm}
+        >
           <div className={styles.attributeDatasetsHeaderSelectors}>
             <label>
-              <input
-                name="datasets-radio"
+              <Field
+                name="picked"
                 type="radio"
-                value={values.other}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value="any"
               />
               Любой
             </label>
             <label>
-              <input
-                name="datasets-radio"
+              <Field
+                name="picked"
                 type="radio"
-                value={values.choose}
-                onChange={handleChange}
-                onBlur={handleBlur}
+                value="choose"
               />
               Выбрать из списка
             </label>
@@ -65,7 +63,11 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
               <tbody>
                 <tr className={styles.trHeader}>
                   <th className={styles.tdSelect}>
-                    <input type="checkbox" />
+                    <Field
+                      name="allDatasetsSelected"
+                      type="checkbox"
+                      disabled={values.picked === 'any'}
+                    />
                     Название
                   </th>
                   <th>
@@ -90,7 +92,12 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 {datasets.map((d) => (
                   <tr key={d}>
                     <td className={styles.tdSelect}>
-                      <input type="checkbox" />
+                      <Field
+                        name="datasetsSelected"
+                        value={d}
+                        type="checkbox"
+                        disabled={values.picked === 'any'}
+                      />
                       {d}
                     </td>
                     <td>
@@ -119,7 +126,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
               из
               {' '}
               <b>
-                0
+                {datasets.length}
               </b>
             </div>
             <div className={styles.attributeDatasetsFormFooterButtons}>
@@ -131,7 +138,6 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
               </Button>
               <Button
                 disabled={!dirty}
-                onClick={handleSubmit}
                 type="submit"
               >
                 выбрать
