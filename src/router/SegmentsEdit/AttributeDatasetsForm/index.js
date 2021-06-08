@@ -33,6 +33,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
       {({
         handleSubmit,
         handleChange,
+        setFieldValue,
         values,
         dirty,
       }) => (
@@ -66,7 +67,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                     <input
                       onChange={(e) => {
                         if (e.target.checked === true) {
-                          // values.datasetsSelected = [];
+                          setFieldValue('datasetsSelected', []);
                           return handleChange(e);
                         }
                         return handleChange(e);
