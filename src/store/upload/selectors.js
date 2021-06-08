@@ -1,69 +1,27 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { firstUploadStages } from '@/router/Upload/stages';
 import NS from './namespace';
 
 export const getState = (state) => state[NS] || {};
 
-export const getAccounts = createSelector(
-  [getState],
-  (state) => state.accounts,
-);
-export const getClients = createSelector(
-  [getState],
-  (state) => state.clients,
-);
-export const getSelectAccount = createSelector(
-  [getState],
-  (state) => state.selectAccount,
-);
-export const getSelectClient = createSelector(
-  [getState],
-  (state) => state.selectClient,
-);
-export const getQueueList = createSelector(
-  [getState],
-  (state) => state.queueList,
-);
-export const getRecentFile = createSelector(
-  [getState],
-  (state) => state.recentFile,
-);
-export const getRecentFileIsLoading = createSelector(
-  [getState],
-  (state) => state.recentFileIsLoading,
-);
-export const getDocumentDetails = createSelector(
-  [getState],
-  (state) => state.documentDetails,
-);
-export const getUploadedFiles = createSelector(
-  [getState],
-  (state) => state.uploadedFiles,
-);
-export const getDocuments = createSelector(
-  [getState],
-  (state) => state.documents,
-);
-export const getStage = createSelector(
-  [getState],
-  (state) => state.stage,
-);
-export const getSyncVkTask = createSelector(
-  [getState],
-  (state) => state.syncVkTask,
-);
-export const getSelectedList = createSelector(
-  [getState],
-  (state) => state.selectedList,
-);
-export const getParentDocument = createSelector(
-  [getState],
-  (state) => state.parentDocument,
-);
-export const getImages = createSelector(
-  [getState],
-  (state) => state.images,
-);
-export const getUploadedImages = createSelector(
-  [getState],
-  (state) => state.uploadedImages,
-);
+export const getAccounts = (state) => state[NS]?.accounts || [];
+export const getClients = (state) => state[NS]?.clients || [];
+export const getSelectAccount = (state) => state[NS]?.selectAccount || null;
+export const getSelectClient = (state) => state[NS]?.selectClient || null;
+export const getQueueList = (state) => state[NS]?.queueList || [];
+export const getRecentFile = (state) => state[NS]?.recentFile || {};
+
+export const getRecentFileIsLoading = (state) => state[NS]
+  ?.recentFileIsLoading || false;
+
+export const getDocumentDetails = (state) => state[NS]?.documentDetails || {};
+export const getUploadedFiles = (state) => state[NS]?.uploadedFiles || {};
+export const getDocuments = (state) => state[NS]?.documents || [];
+
+export const getStage = (state) => state[NS]
+  ?.stage || firstUploadStages.selectAccount;
+
+export const getSyncVkTask = (state) => state[NS]?.syncVkTask || {};
+export const getSelectedList = (state) => state[NS]?.selectedList || null;
+export const getParentDocument = (state) => state[NS]?.parentDocument || {};
+export const getImages = (state) => state[NS]?.images || [];
+export const getUploadedImages = (state) => state[NS]?.uploadedImages || [];
