@@ -9,10 +9,11 @@ import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Button from '@/components/Button';
 import {
+  attributeProps,
+  attributeTypes,
   namespace as NS,
   dndTypes,
   segmentProps,
-  attributeTypes,
 } from './constants';
 import reducer from './reducer';
 import {
@@ -22,6 +23,7 @@ import {
   insertSegmentAttribute,
   moveSegmentAttribute,
   removeSegmentAttribute,
+  updateSegmentAttribute,
 } from './actions';
 import {
   getIsFetchingParams,
@@ -135,6 +137,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       Number(attributeIndex),
     ]));
   };
+  const handleSubmitAttribute = (position, values) => {
+    dispatch(updateSegmentAttribute(position, values));
+  };
   const handleSubmitParams = ({ params: selectedParams }) => {
     setIsShowParams(false);
 
@@ -202,6 +207,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   {group.map((attribute, attributeIndex) => (
                     <Attribute
                       key={`${groupKey}-${attribute.attributeName}`}
+                      properties={attributeProps}
                       types={attributeTypes}
                       groupIndex={groupIndex}
                       index={attributeIndex}
@@ -209,6 +215,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       dragType={dndTypes.attribute}
                       onChange={handleChangeAttribute}
                       onRemove={handleRemoveAttribute}
+                      onSubmit={handleSubmitAttribute}
                     >
                       <AttributeDatasets
                         name={attribute?.title || attribute?.attributeName}

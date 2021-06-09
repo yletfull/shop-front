@@ -12,16 +12,21 @@ const propTypes = {
     maxValue: PropTypes.string,
     minValue: PropTypes.string,
   }),
+  properties: PropTypes.objectOf(PropTypes.string).isRequired,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
   data: {},
+  onSubmit: () => {},
 };
 
 const AttributeNumber = function AttributeNumber({
   children,
   data,
+  properties,
+  onSubmit,
 }) {
   const { maxValue, minValue } = data || {};
 
@@ -36,8 +41,15 @@ const AttributeNumber = function AttributeNumber({
   };
 
   const handleSubmitForm = (values, { setSubmitting }) => {
-    console.log('Submit:', values);
     setSubmitting(false);
+    const { max, min } = values || {};
+    if (typeof max === 'undefined' || typeof min === 'undefined') {
+      return;
+    }
+    onSubmit({
+      [properties.max]: max,
+      [properties.min]: min,
+    });
   };
   const validateFormValues = (values) => {
     const { [fieldNames.min]: min, [fieldNames.max]: max } = values;

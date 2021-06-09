@@ -129,3 +129,26 @@ export const insertSegmentAttribute = (position, source) => (
       ].filter((attrs) => attrs.length > 0),
     }));
   });
+export const updateSegmentAttribute = (position, values) => (
+  (dispatch, getState) => {
+    const attributes = getSegmentAttributes(getState());
+    const [groupIndex, attributeIndex] = position;
+    const attribute = attributes[groupIndex][attributeIndex];
+    if (!attribute) {
+      return;
+    }
+    dispatch(updateSegment({
+      [segmentProps.attributes]: [
+        ...attributes.slice(0, groupIndex),
+        [
+          ...attributes[groupIndex].slice(0, attributeIndex),
+          {
+            ...attribute,
+            ...values,
+          },
+          ...attributes[groupIndex].slice(attributeIndex + 1),
+        ],
+        ...attributes.slice(groupIndex + 1),
+      ],
+    }));
+  });

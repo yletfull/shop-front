@@ -26,6 +26,7 @@ const propTypes = {
   dragType: PropTypes.string.isRequired,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
+  properties: PropTypes.objectOf(PropTypes.string).isRequired,
   types: PropTypes.shape({
     date: PropTypes.string,
     enum: PropTypes.string,
@@ -35,6 +36,7 @@ const propTypes = {
   }).isRequired,
   onChange: PropTypes.func,
   onRemove: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
@@ -42,6 +44,7 @@ const defaultProps = {
   data: {},
   onChange: () => {},
   onRemove: () => {},
+  onSubmit: () => {},
 };
 
 const Attribute = function Attribute({
@@ -50,9 +53,11 @@ const Attribute = function Attribute({
   dragType,
   groupIndex,
   index,
+  properties,
   types,
   onChange,
   onRemove,
+  onSubmit,
 }) {
   const { attributeName: name, title, type } = data || {};
 
@@ -86,6 +91,9 @@ const Attribute = function Attribute({
     }
     onRemove([group, attributeIndex]);
   };
+  const handleSubmitAttribute = (values) => {
+    onSubmit([groupIndex, index], values);
+  };
 
   return (
     <div
@@ -116,7 +124,9 @@ const Attribute = function Attribute({
             <TypedAttribute
               data={data}
               className={styles.attribute}
+              properties={properties}
               onChange={handleChangeAttribute}
+              onSubmit={handleSubmitAttribute}
             >
               {children}
             </TypedAttribute>

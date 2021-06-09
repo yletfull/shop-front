@@ -4,6 +4,11 @@ export const dndTypes = {
   attribute: 'attribute',
 };
 
+export const attributeProps = {
+  max: 'max',
+  min: 'min',
+};
+
 export const attributeTypes = {
   date: 'DATE',
   enum: 'ENUM',
