@@ -13,9 +13,7 @@ const propTypes = {
     attributeName: PropTypes.string,
     maxValue: PropTypes.string,
     minValue: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-    })),
+    options: PropTypes.arrayOf(PropTypes.string),
     profileId: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,

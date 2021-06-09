@@ -1,44 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, FormSpy, Field } from 'react-final-form';
+import { Formik, Form, Field } from 'formik';
 import cx from 'classnames';
+import AttributeEnumCheckbox from './AttributeEnumCheckbox';
 import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
   data: PropTypes.shape({
-    options: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-    })),
+    options: PropTypes.arrayOf(PropTypes.string),
+    values: PropTypes.arrayOf(PropTypes.string),
   }),
-  onChange: PropTypes.func,
+  properties: PropTypes.objectOf(PropTypes.string).isRequired,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
   data: {},
-  onChange: () => {},
+  onSubmit: () => {},
 };
 
 const AttributeEnum = function AttributeEnum({
   children,
   data,
-  onChange,
+  properties,
+  onSubmit,
 }) {
-  const { options } = data || {};
+  const { options = [], values = [] } = data || {};
 
   const isVisibleOptions = options && Array.isArray(options);
 
-  const selected = isVisibleOptions
-    ? options.map(({ value }) => value)
-    : [];
-
-  const handleChangeFormFields = ({ values }) => {
-    if (values && values.options) {
-      onChange('options', values.options);
-    }
+  const initialFormValues = {
+    [properties.values]: values,
   };
-  const handleSubmitForm = () => {};
+
+  const handleSubmitForm = ({ values: formValues }, { setSubmitting }) => {
+    setSubmitting(false);
+    if (!formValues || !Array.isArray(formValues)) {
+      return;
+    }
+    onSubmit({ [properties.values]: formValues });
+  };
 
   return (
     <div className={styles.attributeEnum}>
@@ -49,29 +52,36 @@ const AttributeEnum = function AttributeEnum({
         )}
       >
         {isVisibleOptions && (
-          <Form onSubmit={handleSubmitForm}>
-            {({ handleSubmit }) => (
-              <form onSubmit={handleSubmit}>
-                {options.map(({ value }) => (
-                  <label
-                    key={value}
-                    className={styles.attributeEnumOption}
-                  >
-                    <Field
+          <Formik
+            initialValues={initialFormValues}
+            onSubmit={handleSubmitForm}
+          >
+            {({ submitForm }) => {
+              const handleChangeCheckbox = () => {
+                submitForm();
+              };
+              return (
+                <Form onSubmit={handleSubmitForm}>
+                  {options.map((value) => (
+                    <label
                       key={value}
-                      value={value}
-                      name="options"
-                      component="input"
-                      type="checkbox"
-                      checked={selected.includes(value)}
-                    />
-                    {value}
-                  </label>
-                ))}
-                <FormSpy onChange={handleChangeFormFields} />
-              </form>
-            )}
-          </Form>
+                      className={styles.attributeEnumOption}
+                    >
+                      <Field
+                        key={value}
+                        type="checkbox"
+                        name={properties.values}
+                        value={value}
+                        component={AttributeEnumCheckbox}
+                        onChange={handleChangeCheckbox}
+                      />
+                      {value}
+                    </label>
+                  ))}
+                </Form>
+              );
+            }}
+          </Formik>
         )}
       </div>
       <div className={styles.attributeEnumSection}>

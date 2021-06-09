@@ -7,6 +7,7 @@ export const dndTypes = {
 export const attributeProps = {
   max: 'max',
   min: 'min',
+  values: 'values',
 };
 
 export const attributeTypes = {
