@@ -33,7 +33,6 @@ export const addSegmentAttribute = (values) => (dispatch, getState) => {
   const attributes = getSegmentAttributes(getState());
   const mapAttribute = (attr) => {
     const initial = {
-      attributeId: null,
       equality: equalityTypes.any,
       negation: false,
       values: [],

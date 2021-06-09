@@ -152,13 +152,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleSubmitSaveForm = async ({ fileName }) => {
     const mapOrSegmentAttributes = (attr) => {
       const {
-        attributeId,
         datasetIds,
-        negation,
         equality: type,
+        id: attributeId,
+        negation,
         values,
       } = attr || {};
       return ({
+        attribute: attr,
         attributeId,
         datasetIds,
         negation,
