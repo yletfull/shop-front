@@ -45,7 +45,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       <Controls>
         <ControlsLink
           icon={(<IconPlus />)}
-          to="/"
+          to="/segments/edit"
         >
           Новый сегмент
         </ControlsLink>
