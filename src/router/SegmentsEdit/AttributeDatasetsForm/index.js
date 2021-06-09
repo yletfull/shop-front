@@ -20,8 +20,6 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
   datasets,
   onClose,
 }) {
-  const testDatasets = ['1', '2', '3'];
-
   const formik = useFormik({
     initialValues: {
       picked: 'choose',
@@ -35,7 +33,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
   const handleAllDatasetsSelectedChange = (e) => {
     const { checked } = e.target;
     if (checked) {
-      formik.setFieldValue('datasetsSelected', testDatasets.map((dataset) => dataset));
+      formik.setFieldValue('datasetsSelected', datasets.map((dataset) => dataset));
       formik.setFieldValue('allDatasetsSelected', true);
       return;
     }
@@ -84,7 +82,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                       type="checkbox"
                       disabled={formik.values.picked === 'any'}
                       checked={formik.values.allDatasetsSelected
-                && formik.values.picked !== 'any'}
+                       && formik.values.picked !== 'any'}
                     />
                     Название
                   </th>
@@ -99,7 +97,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                   </th>
                 </tr>
 
-                {(!testDatasets || !Array.isArray(datasets)) && (
+                {(!datasets || !Array.isArray(datasets)) && (
                 <tr>
                   <td colSpan="4">
                     Нет данных
@@ -107,19 +105,20 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 </tr>
                 )}
 
-                {testDatasets.map((d) => (
-                  <tr key={d}>
+                {datasets.map((dataset) => (
+                  <tr key={dataset}>
                     <td className={styles.tdSelect}>
                       <input
                         name="datasetsSelected"
-                        value={d}
+                        value={dataset}
                         type="checkbox"
-                        checked={formik.values.datasetsSelected.includes(d)
-                  && formik.values.picked !== 'any'}
+                        checked={formik.values.datasetsSelected
+                          .includes(dataset)
+                          && formik.values.picked !== 'any'}
                         disabled={formik.values.picked === 'any'}
                         onChange={formik.handleChange}
                       />
-                      {d}
+                      {dataset}
                     </td>
                     <td>
                       -
@@ -138,19 +137,22 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
         )}
 
       <div className={styles.attributeDatasetsFormFooter}>
-        <div className={styles.attributeDatasetsFormFooterCounter}>
-          Выбрано:
-          {' '}
-          <b>
-            {formik.values.datasetsSelected?.length}
-          </b>
-          {' '}
-          из
-          {' '}
-          <b>
-            {testDatasets.length}
-          </b>
-        </div>
+        {formik.values.picked === 'choose'
+          && (
+            <div className={styles.attributeDatasetsFormFooterCounter}>
+              Выбрано:
+              {' '}
+              <b>
+                {formik.values.datasetsSelected?.length}
+              </b>
+              {' '}
+              из
+              {' '}
+              <b>
+                {datasets.length}
+              </b>
+            </div>
+          )}
         <div className={styles.attributeDatasetsFormFooterButtons}>
           <Button
             appearance="secondary"
@@ -166,6 +168,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           </Button>
         </div>
       </div>
+
     </form>
   );
 };
