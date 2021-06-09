@@ -4,43 +4,65 @@ import { useDrag } from 'react-dnd';
 import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
 import AttributeEnum from './AttributeEnum';
+import AttributeNumber from './AttributeNumber';
 import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node,
+  data: PropTypes.shape({
+    attributeName: PropTypes.string,
+    maxValue: PropTypes.string,
+    minValue: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.string),
+    profileId: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    title: PropTypes.string,
+    type: PropTypes.string,
+  }),
   dragType: PropTypes.string.isRequired,
   groupIndex: PropTypes.number.isRequired,
-  name: PropTypes.string,
   index: PropTypes.number.isRequired,
-  title: PropTypes.string,
-  type: PropTypes.string,
+  properties: PropTypes.objectOf(PropTypes.string).isRequired,
+  types: PropTypes.shape({
+    date: PropTypes.string,
+    enum: PropTypes.string,
+    number: PropTypes.string,
+    segment: PropTypes.string,
+    string: PropTypes.string,
+  }).isRequired,
+  onChange: PropTypes.func,
   onRemove: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
-  name: '',
-  title: '',
-  type: '',
+  data: {},
+  onChange: () => {},
   onRemove: () => {},
+  onSubmit: () => {},
 };
 
 const Attribute = function Attribute({
   children,
+  data,
   dragType,
   groupIndex,
-  name,
   index,
-  title,
-  type,
+  properties,
+  types,
+  onChange,
   onRemove,
+  onSubmit,
 }) {
-  const types = {
-    enum: 'ENUM',
-  };
+  const { attributeName: name, title, type } = data || {};
 
   const attributes = {
-    [types.enum]: AttributeEnum,
+    [types.enum || 'ENUM']: AttributeEnum,
+    [types.string || 'STRING']: AttributeEnum,
+    [types.number || 'NUMERIC']: AttributeNumber,
   };
 
   const TypedAttribute = type && attributes[type] ? attributes[type] : null;
@@ -53,6 +75,12 @@ const Attribute = function Attribute({
     }),
   }), [dragType, groupIndex, index]);
 
+  const handleChangeAttribute = (key, values) => {
+    if (!key) {
+      return;
+    }
+    onChange({ ...data, [key]: values });
+  };
   const handleClickCloseAttribute = (e) => {
     const { index: attributeIndex, group } = e?.target?.dataset || {};
     if (typeof attributeIndex === 'undefined'
@@ -60,6 +88,9 @@ const Attribute = function Attribute({
       return;
     }
     onRemove([group, attributeIndex]);
+  };
+  const handleSubmitAttribute = (values) => {
+    onSubmit([groupIndex, index], values);
   };
 
   return (
@@ -81,16 +112,24 @@ const Attribute = function Attribute({
           </span>
         </div>
 
-        {!TypedAttribute && (
-          <span className={styles.attributeMessage}>
-            Неизвестный тип аттрибута
-          </span>
-        )}
-        {TypedAttribute && (
-          <TypedAttribute className={styles.attribute}>
-            {children}
-          </TypedAttribute>
-        )}
+        <div className={styles.attributeSection}>
+          {!TypedAttribute && (
+            <span className={styles.attributeMessage}>
+              Неизвестный тип аттрибута
+            </span>
+          )}
+          {TypedAttribute && (
+            <TypedAttribute
+              data={data}
+              className={styles.attribute}
+              properties={properties}
+              onChange={handleChangeAttribute}
+              onSubmit={handleSubmitAttribute}
+            >
+              {children}
+            </TypedAttribute>
+          )}
+        </div>
       </div>
 
       <div className={styles.attributeAside}>

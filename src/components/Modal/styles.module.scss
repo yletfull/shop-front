@@ -2,19 +2,18 @@
 
 .modal {
   background: $color-gray-lighter;
-  border-radius: .375rem;
-  box-shadow: 0 0 .5rem 0 rgba($color-gray, .25);
-  left: 0;
-  padding: .5rem;
+  border-radius: 1rem;
+  left: 50%;
+  padding: 1.5rem;
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
   &Close {
     @include button-reset();
 
     color: $color-gray-darkest;
     font-size: 1rem;
-    padding: 0 .125rem;
   }
 
   &Header {
@@ -28,5 +27,12 @@
 }
 
 .wrapper {
-  position: relative;
+  background: $color-gray-darkest;
+  background: rgba($color-black, .75);
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
 }

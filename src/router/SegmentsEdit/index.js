@@ -8,29 +8,34 @@ import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Button from '@/components/Button';
-import { namespace as NS, dndTypes } from './constants';
+import {
+  attributeProps,
+  attributeTypes,
+  namespace as NS,
+  dndTypes,
+  segmentProps,
+} from './constants';
 import reducer from './reducer';
 import {
   fetchParams,
   fetchSegment,
-  addSegmentParam,
+  addSegmentAttribute,
   insertSegmentAttribute,
   moveSegmentAttribute,
   removeSegmentAttribute,
+  updateSegmentAttribute,
 } from './actions';
 import {
   getIsFetchingParams,
   getIsFetchingSegment,
   getParams,
-  getSegment,
+  getSegmentAttributes,
+  getSegmentId,
+  getSegmentName,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
-import AttributeDatasetsForm from './AttributeDatasetsForm';
-import AttributeDateRange from './AttributeDateRange';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
-import AttributeOptions from './AttributeOptions';
-import AttributePeriod from './AttributePeriod';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
 import AttributesGroup from './AttributesGroup';
@@ -39,6 +44,7 @@ import Params from './Params';
 import ParamsForm from './ParamsForm';
 import SaveForm from './SaveForm';
 import Statistics from './Statistics';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -54,17 +60,19 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const dispatch = useDispatch();
 
-  const { id: segmentId } = useParams();
+  const { id: paramsSegmentId } = useParams();
 
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
-  const segmentStructure = useSelector(getSegment);
+  const segmentAttributes = useSelector(getSegmentAttributes);
+  const segmentId = useSelector(getSegmentId);
+  const segmentName = useSelector(getSegmentName);
 
   const [isShowParams, setIsShowParams] = useState(false);
 
-  const isNewSegment = typeof segmentId === 'undefined';
+  const isNewSegment = typeof paramsSegmentId === 'undefined';
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -77,15 +85,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(isNewSegment
       ? 'Новый сегмент'
-      : `${defaultTitle} #${segmentId}`));
+      : `${defaultTitle} #${segmentId || paramsSegmentId}`));
+  }, [dispatch, defaultTitle, isNewSegment, paramsSegmentId, segmentId]);
 
+  useEffect(() => {
     if (!isNewSegment) {
-      dispatch(fetchSegment(segmentId));
+      dispatch(fetchSegment(paramsSegmentId));
     }
-  }, [dispatch, defaultTitle, isNewSegment, segmentId]);
+  }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const handleChangeAttributeOptions = (value) => {
-    console.log(value);
+  const handleChangeAttribute = (attribute) => {
+    console.log(attribute);
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -127,6 +137,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       Number(attributeIndex),
     ]));
   };
+  const handleSubmitAttribute = (position, values) => {
+    dispatch(updateSegmentAttribute(position, values));
+  };
   const handleSubmitParams = ({ params: selectedParams }) => {
     setIsShowParams(false);
 
@@ -134,7 +147,38 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       return;
     }
 
-    dispatch(addSegmentParam(selectedParams));
+    dispatch(addSegmentAttribute(selectedParams));
+  };
+  const handleSubmitSaveForm = async ({ fileName }) => {
+    const mapOrSegmentAttributes = (attr) => {
+      const {
+        datasetIds,
+        equality: type,
+        id: attributeId,
+        negation,
+        values,
+      } = attr || {};
+      return ({
+        attribute: attr,
+        attributeId,
+        datasetIds,
+        negation,
+        type,
+        values,
+      });
+    };
+    const mapAndSegmentAttributes = (andAttributes) => andAttributes
+      .map(mapOrSegmentAttributes);
+    try {
+      await service.saveSegment({
+        ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
+        [segmentProps.name]: fileName,
+        [segmentProps.attributes]: segmentAttributes
+          .map(mapAndSegmentAttributes),
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const statistic = {};
@@ -145,7 +189,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <DndProvider backend={HTML5Backend}>
           <AttributesConstructor isFetching={isFetchingSegment}>
             <AttributesLabels
-              isVisible={segmentStructure.length > 0}
+              isVisible={segmentAttributes.length > 0}
               labels={['Датасеты', 'Телефонов', 'E-mail']}
             />
             <AttributeDropPlaceholder
@@ -153,7 +197,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
               position="top"
               onDrop={handleDropAttributeInPlaceholder('top')}
             />
-            {segmentStructure.map((group, groupIndex) => {
+            {segmentAttributes.map((group, groupIndex) => {
               const groupKey = generateKeyByIndex('group', groupIndex);
               return (
                 <AttributesGroup
@@ -164,43 +208,21 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   {group.map((attribute, attributeIndex) => (
                     <Attribute
                       key={`${groupKey}-${attribute.attributeName}`}
+                      properties={attributeProps}
+                      types={attributeTypes}
                       groupIndex={groupIndex}
                       index={attributeIndex}
-                      name={attribute.attributeName}
-                      title={attribute.title}
-                      type={attribute.type}
+                      data={attribute}
                       dragType={dndTypes.attribute}
+                      onChange={handleChangeAttribute}
                       onRemove={handleRemoveAttribute}
+                      onSubmit={handleSubmitAttribute}
                     >
-                      <AttributeOptions
-                        data={attribute.options}
-                        selected={[]}
-                        onChange={handleChangeAttributeOptions}
+                      <AttributeDatasets
+                        name={attribute?.title || attribute?.attributeName}
+                        selected={attribute?.inDatasets || []}
+                        datasets={attribute?.inDatasets || []}
                       />
-                      <AttributePeriod
-                        from={attribute.from}
-                        to={attribute.to}
-                        dateRange={(
-                          <AttributeDateRange
-                            from={attribute.from}
-                            to={attribute.to}
-                            datasets={attribute.availableDatasetsDates}
-                          />
-                        )}
-                      >
-                        <AttributeDatasets data={attribute.inDatasets}>
-                          <AttributeDatasetsForm
-                            data={attribute.inDatasets}
-                            dateRange={(
-                              <AttributeDateRange
-                                from={attribute.from}
-                                to={attribute.to}
-                                datasets={attribute.availableDatasetsDates}
-                              />
-                            )}
-                          />
-                        </AttributeDatasets>
-                      </AttributePeriod>
                       <AttributeStatistics
                         data={attribute.statistics}
                       />
@@ -265,7 +287,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Сохранение сегмента
         </h3>
 
-        <SaveForm />
+        <SaveForm
+          isFetching={isFetchingSegment}
+          name={segmentName}
+          onSubmit={handleSubmitSaveForm}
+        />
       </div>
     </div>
   );

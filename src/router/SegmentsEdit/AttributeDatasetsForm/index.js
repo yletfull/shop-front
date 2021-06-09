@@ -1,69 +1,162 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field } from 'react-final-form';
+import { Formik, Form, Field } from 'formik';
 import Button from '@/components/Button';
+import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
-  dateRange: PropTypes.node,
-  selected: PropTypes.arrayOf(PropTypes.string),
+  datasets: PropTypes.arrayOf(PropTypes.string),
+  onClose: PropTypes.func,
 };
 
 const defaultProps = {
-  data: [],
-  dateRange: null,
-  selected: [],
+  datasets: [],
+  onClose: () => {},
 };
 
+
 const AttributeDatasetsForm = function AttributeDatasetsForm({
-  data,
-  dateRange,
-  selected,
+  datasets,
+  onClose,
 }) {
-  const handleClickSelectAllButton = () => {};
-  const handleSubmitForm = () => {};
-
   return (
-    <div className={styles.attributeDatasetsForm}>
-      {dateRange}
-      <Form onSubmit={handleSubmitForm}>
-        {({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <div className={styles.attributeDatasetsFormSection}>
-              <span>
-                Выбрано
-                &nbsp;
-                {selected.length}
-              </span>
+    <Formik
+      initialValues={{
+        picked: '',
+        allDatasetsSelected: false,
+        datasetsSelected: [],
+      }}
+      validateOnBlur
+      onSubmit={(values) => console.log(values)}
+    >
+      {({
+        handleSubmit,
+        handleChange,
+        setFieldValue,
+        values,
+        dirty,
+      }) => (
+        <Form
+          onSubmit={handleSubmit}
+          className={styles.attributeDatasetsForm}
+        >
+          <div className={styles.attributeDatasetsHeaderSelectors}>
+            <label>
+              <Field
+                name="picked"
+                type="radio"
+                value="any"
+              />
+              Любой
+            </label>
+            <label>
+              <Field
+                name="picked"
+                type="radio"
+                value="choose"
+              />
+              Выбрать из списка
+            </label>
+          </div>
+          <div className={styles.attributeDatasetsFormTableWrapper}>
+            <table className={styles.attributeDatasetsFormTable}>
+              <tbody>
+                <tr className={styles.trHeader}>
+                  <th className={styles.tdSelect}>
+                    <input
+                      onChange={(e) => {
+                        if (e.target.checked === true) {
+                          setFieldValue('datasetsSelected', []);
+                          return handleChange(e);
+                        }
+                        return handleChange(e);
+                      }}
+                      name="allDatasetsSelected"
+                      type="checkbox"
+                      disabled={values.picked === 'any'}
+                    />
+                    Название
+                  </th>
+                  <th>
+                    Дата загрузки
+                  </th>
+                  <th>
+                    Телефонов
+                  </th>
+                  <th>
+                    E-mail
+                  </th>
+                </tr>
 
+                {(!datasets || !Array.isArray(datasets)) && (
+                <tr>
+                  <td colSpan="4">
+                    Нет данных
+                  </td>
+                </tr>
+                )}
+
+                {datasets.map((d) => (
+                  <tr key={d}>
+                    <td className={styles.tdSelect}>
+                      <Field
+                        name="datasetsSelected"
+                        value={d}
+                        type="checkbox"
+                        checked={values.allDatasetsSelected
+                          || values.datasetsSelected.includes(d)}
+                        disabled={values.picked === 'any'}
+                      />
+                      {d}
+                    </td>
+                    <td>
+                      -
+                    </td>
+                    <td>
+                      {formatNumber(0)}
+                    </td>
+                    <td>
+                      {formatNumber(0)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className={styles.attributeDatasetsFormFooter}>
+            <div className={styles.attributeDatasetsFormFooterCounter}>
+              Выбрано:
+              {' '}
+              <b>
+                0
+              </b>
+              {' '}
+              из
+              {' '}
+              <b>
+                {datasets.length}
+              </b>
+            </div>
+            <div className={styles.attributeDatasetsFormFooterButtons}>
               <Button
-                onClick={handleClickSelectAllButton}
-                disabled
+                appearance="secondary"
+                onClick={onClose}
               >
-                Выбрать все
+                отменить
+              </Button>
+              <Button
+                disabled={!dirty}
+                type="submit"
+              >
+                выбрать
               </Button>
             </div>
-
-            {data.map((d) => (
-              <label
-                key={d}
-                className={styles.attributeDatasetsFormLabel}
-              >
-                <Field
-                  name="datasets"
-                  component="input"
-                  type="checkbox"
-                  value={d}
-                  checked
-                />
-                {d}
-              </label>
-            ))}
-          </form>
-        )}
-      </Form>
-    </div>
+          </div>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

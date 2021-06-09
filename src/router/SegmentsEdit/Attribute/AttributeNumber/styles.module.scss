@@ -1,12 +1,18 @@
 @import '@/theme/include.scss';
 
-.attributeEnum {
+.attributeNumber {
   display: flex;
 
-  &Option {
-    display: block;
+  &Message {
+    display: inline-block;
     font-size: .75rem;
-    line-height: 1.25rem;
+    width: 100%;
+  }
+
+  &Row {
+    & + & {
+      padding-top: 1rem;
+    }
   }
 
   &Section {
@@ -14,8 +20,6 @@
     display: flex;
 
     &_form {
-      max-height: 10rem;
-      overflow: auto;
       width: 18rem;
     }
   }

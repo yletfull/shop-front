@@ -13,9 +13,7 @@ const propTypes = {
     attributes: PropTypes.arrayOf(PropTypes.shape({
       attributeName: PropTypes.string,
       profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      options: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.string,
-      })),
+      options: PropTypes.arrayOf(PropTypes.string),
       title: PropTypes.string,
       type: PropTypes.string,
     })),

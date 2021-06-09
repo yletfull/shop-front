@@ -8,6 +8,7 @@ import IconSearch from '@/icons/Search';
 import Pagination from '@/components/PagePagination';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
+import { fetchSegments } from './actions';
 import { getIsFetchingData, getData } from './selectors';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
@@ -40,12 +41,16 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     console.log(value);
   };
 
+  useEffect(() => {
+    dispatch(fetchSegments());
+  }, [dispatch]);
+
   return (
     <div className={styles.segmentsList}>
       <Controls>
         <ControlsLink
           icon={(<IconPlus />)}
-          to="/"
+          to="/segments/edit"
         >
           Новый сегмент
         </ControlsLink>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
@@ -129,7 +129,9 @@ const TableView = function TableView({ data, onFilter }) {
         {data.map((row) => (
           <tr key={row.id}>
             <td>
-              {row.id}
+              <Link to={`/segments/edit/${row.id}`}>
+                {row.id}
+              </Link>
             </td>
             <td>
               {row.name}

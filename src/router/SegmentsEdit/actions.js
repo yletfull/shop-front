@@ -1,6 +1,11 @@
 import { createAction } from '@reduxjs/toolkit';
-import { namespace as NS } from './constants';
-import { getSegment } from './selectors';
+import {
+  attributeProps,
+  equalityTypes,
+  namespace as NS,
+  segmentProps,
+} from './constants';
+import { getSegmentAttributes } from './selectors';
 import service from './service';
 
 export const requestParams = createAction(`${NS}/params/request`);
@@ -23,20 +28,51 @@ export const fetchSegment = (id) => async (dispatch) => {
   dispatch(requestSegment());
   try {
     const response = await service.fetchSegment(id);
-    dispatch(updateSegment(response));
+    const {
+      [segmentProps.attributes]: segmentAttributes,
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName,
+    } = response || {};
+    const mapAttributes = ({
+      attribute,
+      [attributeProps.datasetIds]: attributeDatasetIds,
+      [attributeProps.values]: attributeValues,
+    }) => ({
+      ...attribute,
+      [attributeProps.datasetIds]: attributeDatasetIds || [],
+      [attributeProps.values]: attributeValues || [],
+    });
+    const mapAttributesGroup = (group) => group.map(mapAttributes);
+    dispatch(updateSegment({
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName || '',
+      [segmentProps.attributes]: segmentAttributes
+        .map(mapAttributesGroup),
+    }));
   } catch (error) {
     console.error(error);
-    dispatch(updateSegment([]));
+    dispatch(updateSegment({}));
   }
 };
-export const addSegmentParam = (params) => (dispatch, getState) => {
-  const segment = getSegment(getState());
-  dispatch(updateSegment(segment.concat(params.map((p) => [p]))));
+export const addSegmentAttribute = (values) => (dispatch, getState) => {
+  const attributes = getSegmentAttributes(getState());
+  const mapAttribute = (attr) => {
+    const initial = {
+      equality: equalityTypes.any,
+      negation: false,
+      values: [],
+      datasetIds: [],
+    };
+    return ([{ ...initial, ...attr }]);
+  };
+  dispatch(updateSegment({
+    [segmentProps.attributes]: attributes.concat(values.map(mapAttribute)),
+  }));
 };
 export const removeSegmentAttribute = (position) => (dispatch, getState) => {
-  const segment = getSegment(getState());
+  const attributes = getSegmentAttributes(getState());
   const [groupIndex, attributeIndex] = position;
-  const attribute = segment[groupIndex];
+  const attribute = attributes[groupIndex];
   if (!attribute) {
     return;
   }
@@ -44,11 +80,13 @@ export const removeSegmentAttribute = (position) => (dispatch, getState) => {
     ...attribute.slice(0, attributeIndex),
     ...attribute.slice(attributeIndex + 1),
   ];
-  dispatch(updateSegment([
-    ...segment.slice(0, groupIndex),
-    newAttribute,
-    ...segment.slice(groupIndex + 1),
-  ].filter((a) => a.length > 0)));
+  dispatch(updateSegment({
+    [segmentProps.attributes]: [
+      ...attributes.slice(0, groupIndex),
+      newAttribute,
+      ...attributes.slice(groupIndex + 1),
+    ].filter((a) => a.length > 0),
+  }));
 };
 export const moveSegmentAttribute = (source, target) => (
   (dispatch, getState) => {
@@ -61,28 +99,30 @@ export const moveSegmentAttribute = (source, target) => (
     ].some((index) => typeof index === 'undefined')) {
       return;
     }
-    const segment = getSegment(getState());
-    dispatch(updateSegment(segment
-      .reduce((acc, attributes, index) => {
-        if (index === sourceGroupIndex) {
-          const newSourceAttributes = [
-            ...attributes.slice(0, sourceAttributeIndex),
-            ...attributes.slice(sourceAttributeIndex + 1),
-          ];
-          return [...acc, newSourceAttributes];
-        }
+    const attributes = getSegmentAttributes(getState());
+    dispatch(updateSegment({
+      [segmentProps.attributes]: attributes
+        .reduce((acc, attrs, index) => {
+          if (index === sourceGroupIndex) {
+            const newSourceAttributes = [
+              ...attrs.slice(0, sourceAttributeIndex),
+              ...attrs.slice(sourceAttributeIndex + 1),
+            ];
+            return [...acc, newSourceAttributes];
+          }
 
-        if (index === targetGroupIndex) {
-          const newTargetAttributes = [
-            ...attributes,
-            segment[sourceGroupIndex][sourceAttributeIndex],
-          ];
-          return [...acc, newTargetAttributes];
-        }
+          if (index === targetGroupIndex) {
+            const newTargetAttributes = [
+              ...attrs,
+              attributes[sourceGroupIndex][sourceAttributeIndex],
+            ];
+            return [...acc, newTargetAttributes];
+          }
 
-        return [...acc, attributes];
-      }, [])
-      .filter((attributes) => attributes.length > 0)));
+          return [...acc, attrs];
+        }, [])
+        .filter((attrs) => attrs.length > 0),
+    }));
   });
 export const insertSegmentAttribute = (position, source) => (
   (dispatch, getState) => {
@@ -93,21 +133,46 @@ export const insertSegmentAttribute = (position, source) => (
       || typeof sourceAttributeIndex === 'undefined') {
       return;
     }
-    const segment = getSegment(getState());
-    const sourceAttribute = segment[sourceGroupIndex][sourceAttributeIndex];
+    const attributes = getSegmentAttributes(getState());
+    const sourceAttribute = attributes[sourceGroupIndex][sourceAttributeIndex];
     const newSourceAttributes = [
-      ...segment[sourceGroupIndex].slice(0, sourceAttributeIndex),
-      ...segment[sourceGroupIndex].slice(sourceAttributeIndex + 1),
+      ...attributes[sourceGroupIndex].slice(0, sourceAttributeIndex),
+      ...attributes[sourceGroupIndex].slice(sourceAttributeIndex + 1),
     ];
-    dispatch(updateSegment([
-      ...(position === 'top'
-        ? [[sourceAttribute]]
-        : []),
-      ...segment.slice(0, sourceGroupIndex),
-      newSourceAttributes,
-      ...segment.slice(sourceGroupIndex + 1),
-      ...(position === 'bottom'
-        ? [[sourceAttribute]]
-        : []),
-    ].filter((attributes) => attributes.length > 0)));
+    dispatch(updateSegment({
+      [segmentProps.attributes]: [
+        ...(position === 'top'
+          ? [[sourceAttribute]]
+          : []),
+        ...attributes.slice(0, sourceGroupIndex),
+        newSourceAttributes,
+        ...attributes.slice(sourceGroupIndex + 1),
+        ...(position === 'bottom'
+          ? [[sourceAttribute]]
+          : []),
+      ].filter((attrs) => attrs.length > 0),
+    }));
+  });
+export const updateSegmentAttribute = (position, values) => (
+  (dispatch, getState) => {
+    const attributes = getSegmentAttributes(getState());
+    const [groupIndex, attributeIndex] = position;
+    const attribute = attributes[groupIndex][attributeIndex];
+    if (!attribute) {
+      return;
+    }
+    dispatch(updateSegment({
+      [segmentProps.attributes]: [
+        ...attributes.slice(0, groupIndex),
+        [
+          ...attributes[groupIndex].slice(0, attributeIndex),
+          {
+            ...attribute,
+            ...values,
+          },
+          ...attributes[groupIndex].slice(attributeIndex + 1),
+        ],
+        ...attributes.slice(groupIndex + 1),
+      ],
+    }));
   });
