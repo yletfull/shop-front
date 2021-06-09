@@ -34,16 +34,25 @@ const AttributeDatasets = function AttributeDatasets({
 
   return (
     <div className={styles.attributeDatasets}>
-      <Button
-        appearance="control"
-        onClick={handleClickShowModalButton}
-      >
-        {formatNumber(selected.length)}
-        &nbsp;
-        из
-        &nbsp;
-        {formatNumber(datasets.length)}
-      </Button>
+      {(Array.isArray(datasets) && datasets.length)
+        ? (
+          <Button
+            appearance="control"
+            onClick={handleClickShowModalButton}
+          >
+            {formatNumber(selected.length)}
+            &nbsp;
+            из
+            &nbsp;
+            {formatNumber(datasets.length)}
+          </Button>
+        )
+        : (
+          <span className={styles.attributeDatasetsEmptyText}>
+            Нет доступных датасетов
+          </span>
+        )}
+
 
       <Modal
         isVisible={isShowModal}
