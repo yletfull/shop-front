@@ -24,7 +24,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
 
   const formik = useFormik({
     initialValues: {
-      picked: '',
+      picked: 'choose',
       allDatasetsSelected: false,
       datasetsSelected: [],
     },
@@ -36,9 +36,11 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
     const { checked } = e.target;
     if (checked) {
       formik.setFieldValue('datasetsSelected', testDatasets.map((dataset) => dataset));
+      formik.setFieldValue('allDatasetsSelected', true);
       return;
     }
     formik.setFieldValue('datasetsSelected', []);
+    formik.setFieldValue('allDatasetsSelected', false);
   };
 
   return (
@@ -53,6 +55,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
             name="picked"
             type="radio"
             value="any"
+            checked={formik.values.picked === 'any'}
             onChange={formik.handleChange}
           />
           Любой
@@ -62,70 +65,77 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
             name="picked"
             type="radio"
             value="choose"
+            checked={formik.values.picked === 'choose'}
             onChange={formik.handleChange}
           />
           Выбрать из списка
         </label>
       </div>
-      <div className={styles.attributeDatasetsFormTableWrapper}>
-        <table className={styles.attributeDatasetsFormTable}>
-          <tbody>
-            <tr className={styles.trHeader}>
-              <th className={styles.tdSelect}>
-                <input
-                  onChange={handleAllDatasetsSelectedChange}
-                  name="allDatasetsSelected"
-                  type="checkbox"
-                  disabled={formik.values.picked === 'any'}
-                />
-                Название
-              </th>
-              <th>
-                Дата загрузки
-              </th>
-              <th>
-                Телефонов
-              </th>
-              <th>
-                E-mail
-              </th>
-            </tr>
+      {formik.values.picked === 'choose'
+        && (
+          <div className={styles.attributeDatasetsFormTableWrapper}>
+            <table className={styles.attributeDatasetsFormTable}>
+              <tbody>
+                <tr className={styles.trHeader}>
+                  <th className={styles.tdSelect}>
+                    <input
+                      onChange={handleAllDatasetsSelectedChange}
+                      name="allDatasetsSelected"
+                      type="checkbox"
+                      disabled={formik.values.picked === 'any'}
+                      checked={formik.values.allDatasetsSelected
+                && formik.values.picked !== 'any'}
+                    />
+                    Название
+                  </th>
+                  <th>
+                    Дата загрузки
+                  </th>
+                  <th>
+                    Телефонов
+                  </th>
+                  <th>
+                    E-mail
+                  </th>
+                </tr>
 
-            {(!testDatasets || !Array.isArray(datasets)) && (
-            <tr>
-              <td colSpan="4">
-                Нет данных
-              </td>
-            </tr>
-            )}
+                {(!testDatasets || !Array.isArray(datasets)) && (
+                <tr>
+                  <td colSpan="4">
+                    Нет данных
+                  </td>
+                </tr>
+                )}
 
-            {testDatasets.map((d) => (
-              <tr key={d}>
-                <td className={styles.tdSelect}>
-                  <input
-                    name="datasetsSelected"
-                    value={d}
-                    type="checkbox"
-                    checked={formik.values.datasetsSelected.includes(d)}
-                    disabled={formik.values.picked === 'any'}
-                    onChange={formik.handleChange}
-                  />
-                  {d}
-                </td>
-                <td>
-                  -
-                </td>
-                <td>
-                  {formatNumber(0)}
-                </td>
-                <td>
-                  {formatNumber(0)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                {testDatasets.map((d) => (
+                  <tr key={d}>
+                    <td className={styles.tdSelect}>
+                      <input
+                        name="datasetsSelected"
+                        value={d}
+                        type="checkbox"
+                        checked={formik.values.datasetsSelected.includes(d)
+                  && formik.values.picked !== 'any'}
+                        disabled={formik.values.picked === 'any'}
+                        onChange={formik.handleChange}
+                      />
+                      {d}
+                    </td>
+                    <td>
+                      -
+                    </td>
+                    <td>
+                      {formatNumber(0)}
+                    </td>
+                    <td>
+                      {formatNumber(0)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
       <div className={styles.attributeDatasetsFormFooter}>
         <div className={styles.attributeDatasetsFormFooterCounter}>
