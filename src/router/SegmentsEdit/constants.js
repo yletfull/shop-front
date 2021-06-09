@@ -8,6 +8,7 @@ export const attributeProps = {
   max: 'max',
   min: 'min',
   values: 'values',
+  datasetIds: 'datasetIds',
 };
 
 export const attributeTypes = {
@@ -26,7 +27,7 @@ export const equalityTypes = {
 };
 
 export const segmentProps = {
+  attributes: 'conditions',
   id: 'id',
   name: 'title',
-  attributes: 'conditions',
 };

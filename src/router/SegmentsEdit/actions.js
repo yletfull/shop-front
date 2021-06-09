@@ -1,5 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
-import { namespace as NS, segmentProps, equalityTypes } from './constants';
+import {
+  attributeProps,
+  equalityTypes,
+  namespace as NS,
+  segmentProps,
+} from './constants';
 import { getSegmentAttributes } from './selectors';
 import service from './service';
 
@@ -23,7 +28,27 @@ export const fetchSegment = (id) => async (dispatch) => {
   dispatch(requestSegment());
   try {
     const response = await service.fetchSegment(id);
-    dispatch(updateSegment(response));
+    const {
+      [segmentProps.attributes]: segmentAttributes,
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName,
+    } = response || {};
+    const mapAttributes = ({
+      attribute,
+      [attributeProps.datasetIds]: attributeDatasetIds,
+      [attributeProps.values]: attributeValues,
+    }) => ({
+      ...attribute,
+      [attributeProps.datasetIds]: attributeDatasetIds || [],
+      [attributeProps.values]: attributeValues || [],
+    });
+    const mapAttributesGroup = (group) => group.map(mapAttributes);
+    dispatch(updateSegment({
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName || '',
+      [segmentProps.attributes]: segmentAttributes
+        .map(mapAttributesGroup),
+    }));
   } catch (error) {
     console.error(error);
     dispatch(updateSegment({}));
