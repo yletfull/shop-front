@@ -35,6 +35,7 @@ import {
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
+import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
@@ -219,10 +220,15 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       onSubmit={handleSubmitAttribute}
                     >
                       <AttributeDatasets
-                        name={attribute?.title || attribute?.attributeName}
-                        selected={attribute?.inDatasets || []}
-                        datasets={attribute?.inDatasets || []}
-                      />
+                        name={attribute?.[attributeProps.title]
+                          || attribute?.[attributeProps.name]}
+                        selected={attribute?.[attributeProps.datasetsIds] || []}
+                        datasets={attribute?.[attributeProps.datasets] || []}
+                      >
+                        <AttributeDatasetsForm
+                          datasets={attribute?.[attributeProps.datasets] || []}
+                        />
+                      </AttributeDatasets>
                       <AttributeStatistics
                         data={attribute.statistics}
                       />

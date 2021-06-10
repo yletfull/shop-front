@@ -7,7 +7,10 @@ export const dndTypes = {
 export const attributeProps = {
   max: 'max',
   min: 'min',
+  name: 'attributeName',
+  title: 'title',
   values: 'values',
+  datasets: 'datasets',
   datasetIds: 'datasetIds',
 };
 

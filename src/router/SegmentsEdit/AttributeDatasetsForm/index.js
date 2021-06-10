@@ -6,7 +6,13 @@ import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  datasets: PropTypes.arrayOf(PropTypes.string),
+  datasets: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    name: PropTypes.string,
+  })),
   onClose: PropTypes.func,
 };
 
@@ -14,7 +20,6 @@ const defaultProps = {
   datasets: [],
   onClose: () => {},
 };
-
 
 const AttributeDatasetsForm = function AttributeDatasetsForm({
   datasets,
@@ -41,8 +46,13 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
     formik.setFieldValue('allDatasetsSelected', false);
   };
 
-  return (
+  if (1) {
+    return (
+      <div />
+    );
+  }
 
+  return (
     <form
       onSubmit={formik.handleSubmit}
       className={styles.attributeDatasetsForm}
@@ -69,6 +79,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           Выбрать из списка
         </label>
       </div>
+
       {formik.values.picked === 'choose'
         && (
           <div className={styles.attributeDatasetsFormTableWrapper}>
@@ -168,7 +179,6 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           </Button>
         </div>
       </div>
-
     </form>
   );
 };
