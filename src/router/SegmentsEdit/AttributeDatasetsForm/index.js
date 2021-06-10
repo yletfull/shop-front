@@ -84,7 +84,6 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           const { checked, value } = e?.target || {};
           const [lastUnchecked] = (list.length === (datasetIds.length - 1)
             && datasetIds.filter((d) => !list.includes(d))) || [];
-          console.log(lastUnchecked, datasetIds, list, checked, value);
           setFieldValue('all', checked && lastUnchecked && lastUnchecked === value);
         };
         return (
