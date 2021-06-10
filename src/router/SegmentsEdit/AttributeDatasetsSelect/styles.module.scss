@@ -1,0 +1,15 @@
+@import '@/theme/include.scss';
+
+.attributeDatasetsSelect {
+  min-width: 37.5rem;
+
+  &Section {
+    padding: .5rem 0;
+  }
+
+  &Label {
+    display: block;
+    font-size: .75rem;
+    text-align: left;
+  }
+}

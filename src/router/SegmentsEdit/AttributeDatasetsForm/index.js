@@ -1,101 +1,108 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useFormik } from 'formik';
+import { Formik, Form, Field } from 'formik';
+import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
+import Checkbox from '@/components/Checkbox';
 import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  attributeIndex: PropTypes.number.isRequired,
+  groupIndex: PropTypes.number.isRequired,
   datasets: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([
-      PropTypes.string,
       PropTypes.number,
+      PropTypes.string,
     ]),
     name: PropTypes.string,
   })),
+  selected: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ])),
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   datasets: [],
+  selected: [],
   onClose: () => {},
+  onSubmit: () => {},
 };
 
 const AttributeDatasetsForm = function AttributeDatasetsForm({
+  attributeIndex,
+  groupIndex,
   datasets,
+  selected,
   onClose,
+  onSubmit,
 }) {
-  const formik = useFormik({
-    initialValues: {
-      picked: 'choose',
-      allDatasetsSelected: false,
-      datasetsSelected: [],
-    },
-    validateOnBlur: true,
-    onSubmit: (values) => console.log(values),
-  });
+  const datasetIds = datasets.map(({ id }) => String(id));
+  const isAllSelected = Array.isArray(datasets)
+    && Array.isArray(selected)
+    && datasets.length === selected.length;
 
-  const handleAllDatasetsSelectedChange = (e) => {
-    const { checked } = e.target;
-    if (checked) {
-      formik.setFieldValue('datasetsSelected', datasets.map((dataset) => dataset));
-      formik.setFieldValue('allDatasetsSelected', true);
-      return;
-    }
-    formik.setFieldValue('datasetsSelected', []);
-    formik.setFieldValue('allDatasetsSelected', false);
+  const initialFormValues = {
+    all: isAllSelected,
+    list: isAllSelected ? datasetIds : (selected || []),
   };
 
-  if (1) {
-    return (
-      <div />
-    );
-  }
+  const handleCloseForm = () => {
+    onClose();
+  };
+  const handleSubmitForm = (values) => {
+    const { list } = values || {};
+    if (!list || !Array.isArray(list)) {
+      return;
+    }
+    onSubmit([groupIndex, attributeIndex], { datasetIds: list });
+    onClose();
+  };
 
   return (
-    <form
-      onSubmit={formik.handleSubmit}
-      className={styles.attributeDatasetsForm}
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={handleSubmitForm}
     >
-      <div className={styles.attributeDatasetsHeaderSelectors}>
-        <label>
-          <input
-            name="picked"
-            type="radio"
-            value="any"
-            checked={formik.values.picked === 'any'}
-            onChange={formik.handleChange}
-          />
-          Любой
-        </label>
-        <label>
-          <input
-            name="picked"
-            type="radio"
-            value="choose"
-            checked={formik.values.picked === 'choose'}
-            onChange={formik.handleChange}
-          />
-          Выбрать из списка
-        </label>
-      </div>
-
-      {formik.values.picked === 'choose'
-        && (
-          <div className={styles.attributeDatasetsFormTableWrapper}>
+      {({ values, setFieldValue }) => {
+        const getCheckedStatus = (value) => {
+          const { list } = values || {};
+          if (!list || !Array.isArray(list)) {
+            return false;
+          }
+          return list.includes(String(value));
+        };
+        const handleChangeSelectAll = (e) => {
+          const { checked } = e?.target || {};
+          setFieldValue('list', checked ? datasetIds : []);
+        };
+        const handleChangeDatasetCheckbox = (e) => {
+          const { list } = values || {};
+          const { checked, value } = e?.target || {};
+          const [lastUnchecked] = (list.length === (datasetIds.length - 1)
+            && datasetIds.filter((d) => !list.includes(d))) || [];
+          console.log(lastUnchecked, datasetIds, list, checked, value);
+          setFieldValue('all', checked && lastUnchecked && lastUnchecked === value);
+        };
+        return (
+          <Form>
             <table className={styles.attributeDatasetsFormTable}>
               <tbody>
                 <tr className={styles.trHeader}>
                   <th className={styles.tdSelect}>
-                    <input
-                      onChange={handleAllDatasetsSelectedChange}
-                      name="allDatasetsSelected"
-                      type="checkbox"
-                      disabled={formik.values.picked === 'any'}
-                      checked={formik.values.allDatasetsSelected
-                       && formik.values.picked !== 'any'}
-                    />
-                    Название
+                    <label>
+                      <Field
+                        name="all"
+                        value="true"
+                        checked={values.all}
+                        component={withFormikField(Checkbox)}
+                        onChange={handleChangeSelectAll}
+                      />
+                      Название
+                    </label>
                   </th>
                   <th>
                     Дата загрузки
@@ -117,19 +124,18 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 )}
 
                 {datasets.map((dataset) => (
-                  <tr key={dataset}>
+                  <tr key={dataset.id}>
                     <td className={styles.tdSelect}>
-                      <input
-                        name="datasetsSelected"
-                        value={dataset}
-                        type="checkbox"
-                        checked={formik.values.datasetsSelected
-                          .includes(dataset)
-                          && formik.values.picked !== 'any'}
-                        disabled={formik.values.picked === 'any'}
-                        onChange={formik.handleChange}
-                      />
-                      {dataset}
+                      <label>
+                        <Field
+                          name="list"
+                          value={dataset.id}
+                          checked={getCheckedStatus(dataset.id)}
+                          component={withFormikField(Checkbox)}
+                          onChange={handleChangeDatasetCheckbox}
+                        />
+                        {dataset.name}
+                      </label>
                     </td>
                     <td>
                       -
@@ -144,42 +150,39 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
 
-      <div className={styles.attributeDatasetsFormFooter}>
-        {formik.values.picked === 'choose'
-          && (
-            <div className={styles.attributeDatasetsFormFooterCounter}>
-              Выбрано:
-              {' '}
-              <b>
-                {formik.values.datasetsSelected?.length}
-              </b>
-              {' '}
-              из
-              {' '}
-              <b>
-                {datasets.length}
-              </b>
+            <div className={styles.attributeDatasetsFormFooter}>
+              <div className={styles.attributeDatasetsFormFooterCounter}>
+                Выбрано:
+                {' '}
+                <b>
+                  {values?.list?.length}
+                </b>
+                {' '}
+                из
+                {' '}
+                <b>
+                  {datasets.length}
+                </b>
+              </div>
+              <div className={styles.attributeDatasetsFormFooterButtons}>
+                <Button
+                  appearance="secondary"
+                  onClick={handleCloseForm}
+                >
+                  отменить
+                </Button>
+                <Button
+                  type="submit"
+                >
+                  выбрать
+                </Button>
+              </div>
             </div>
-          )}
-        <div className={styles.attributeDatasetsFormFooterButtons}>
-          <Button
-            appearance="secondary"
-            onClick={onClose}
-          >
-            отменить
-          </Button>
-          <Button
-            disabled={!formik.dirty}
-            type="submit"
-          >
-            выбрать
-          </Button>
-        </div>
-      </div>
-    </form>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

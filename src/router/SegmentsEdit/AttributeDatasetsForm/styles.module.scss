@@ -33,24 +33,6 @@
   }
 }
 
-.attributeDatasetsHeaderSelectors {
-  align-items: flex-start;
-  display: flex;
-  flex-direction: column;
-  font-size: .75rem;
-  margin: 1rem 0 1.5rem -.313rem;
-
-  & > label {
-    align-items: center;
-    display: flex;
-    margin-top: .5em;
-
-    & > * {
-      margin-top: 0;
-    }
-  }
-}
-
 .trHeader {
   border-bottom: solid 1px $color-gray;
 }
