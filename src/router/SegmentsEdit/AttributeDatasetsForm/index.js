@@ -1,82 +1,107 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
+import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
+import Checkbox from '@/components/Checkbox';
 import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  datasets: PropTypes.arrayOf(PropTypes.string),
+  attributeIndex: PropTypes.number.isRequired,
+  groupIndex: PropTypes.number.isRequired,
+  datasets: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]),
+    name: PropTypes.string,
+  })),
+  selected: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ])),
   onClose: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   datasets: [],
+  selected: [],
   onClose: () => {},
+  onSubmit: () => {},
 };
 
-
 const AttributeDatasetsForm = function AttributeDatasetsForm({
+  attributeIndex,
+  groupIndex,
   datasets,
+  selected,
   onClose,
+  onSubmit,
 }) {
+  const datasetIds = datasets.map(({ id }) => String(id));
+  const isAllSelected = Array.isArray(datasets)
+    && Array.isArray(selected)
+    && datasets.length === selected.length;
+
+  const initialFormValues = {
+    all: isAllSelected,
+    list: isAllSelected ? datasetIds : (selected || []),
+  };
+
+  const handleCloseForm = () => {
+    onClose();
+  };
+  const handleSubmitForm = (values) => {
+    const { list } = values || {};
+    if (!list || !Array.isArray(list)) {
+      return;
+    }
+    onSubmit([groupIndex, attributeIndex], { datasetIds: list });
+    onClose();
+  };
+
   return (
     <Formik
-      initialValues={{
-        picked: '',
-        allDatasetsSelected: false,
-        datasetsSelected: [],
-      }}
-      validateOnBlur
-      onSubmit={(values) => console.log(values)}
+      initialValues={initialFormValues}
+      onSubmit={handleSubmitForm}
     >
-      {({
-        handleSubmit,
-        handleChange,
-        setFieldValue,
-        values,
-        dirty,
-      }) => (
-        <Form
-          onSubmit={handleSubmit}
-          className={styles.attributeDatasetsForm}
-        >
-          <div className={styles.attributeDatasetsHeaderSelectors}>
-            <label>
-              <Field
-                name="picked"
-                type="radio"
-                value="any"
-              />
-              Любой
-            </label>
-            <label>
-              <Field
-                name="picked"
-                type="radio"
-                value="choose"
-              />
-              Выбрать из списка
-            </label>
-          </div>
-          <div className={styles.attributeDatasetsFormTableWrapper}>
+      {({ values, setFieldValue }) => {
+        const getCheckedStatus = (value) => {
+          const { list } = values || {};
+          if (!list || !Array.isArray(list)) {
+            return false;
+          }
+          return list.includes(String(value));
+        };
+        const handleChangeSelectAll = (e) => {
+          const { checked } = e?.target || {};
+          setFieldValue('list', checked ? datasetIds : []);
+        };
+        const handleChangeDatasetCheckbox = (e) => {
+          const { list } = values || {};
+          const { checked, value } = e?.target || {};
+          const [lastUnchecked] = (list.length === (datasetIds.length - 1)
+            && datasetIds.filter((d) => !list.includes(d))) || [];
+          setFieldValue('all', checked && lastUnchecked && lastUnchecked === value);
+        };
+        return (
+          <Form>
             <table className={styles.attributeDatasetsFormTable}>
               <tbody>
                 <tr className={styles.trHeader}>
                   <th className={styles.tdSelect}>
-                    <input
-                      onChange={(e) => {
-                        if (e.target.checked === true) {
-                          setFieldValue('datasetsSelected', []);
-                          return handleChange(e);
-                        }
-                        return handleChange(e);
-                      }}
-                      name="allDatasetsSelected"
-                      type="checkbox"
-                      disabled={values.picked === 'any'}
-                    />
-                    Название
+                    <label>
+                      <Field
+                        name="all"
+                        value="true"
+                        checked={values.all}
+                        component={withFormikField(Checkbox)}
+                        onChange={handleChangeSelectAll}
+                      />
+                      Название
+                    </label>
                   </th>
                   <th>
                     Дата загрузки
@@ -97,18 +122,19 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 </tr>
                 )}
 
-                {datasets.map((d) => (
-                  <tr key={d}>
+                {datasets.map((dataset) => (
+                  <tr key={dataset.id}>
                     <td className={styles.tdSelect}>
-                      <Field
-                        name="datasetsSelected"
-                        value={d}
-                        type="checkbox"
-                        checked={values.allDatasetsSelected
-                          || values.datasetsSelected.includes(d)}
-                        disabled={values.picked === 'any'}
-                      />
-                      {d}
+                      <label>
+                        <Field
+                          name="list"
+                          value={dataset.id}
+                          checked={getCheckedStatus(dataset.id)}
+                          component={withFormikField(Checkbox)}
+                          onChange={handleChangeDatasetCheckbox}
+                        />
+                        {dataset.name}
+                      </label>
                     </td>
                     <td>
                       -
@@ -123,39 +149,38 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 ))}
               </tbody>
             </table>
-          </div>
 
-          <div className={styles.attributeDatasetsFormFooter}>
-            <div className={styles.attributeDatasetsFormFooterCounter}>
-              Выбрано:
-              {' '}
-              <b>
-                0
-              </b>
-              {' '}
-              из
-              {' '}
-              <b>
-                {datasets.length}
-              </b>
+            <div className={styles.attributeDatasetsFormFooter}>
+              <div className={styles.attributeDatasetsFormFooterCounter}>
+                Выбрано:
+                {' '}
+                <b>
+                  {values?.list?.length}
+                </b>
+                {' '}
+                из
+                {' '}
+                <b>
+                  {datasets.length}
+                </b>
+              </div>
+              <div className={styles.attributeDatasetsFormFooterButtons}>
+                <Button
+                  appearance="secondary"
+                  onClick={handleCloseForm}
+                >
+                  отменить
+                </Button>
+                <Button
+                  type="submit"
+                >
+                  выбрать
+                </Button>
+              </div>
             </div>
-            <div className={styles.attributeDatasetsFormFooterButtons}>
-              <Button
-                appearance="secondary"
-                onClick={onClose}
-              >
-                отменить
-              </Button>
-              <Button
-                disabled={!dirty}
-                type="submit"
-              >
-                выбрать
-              </Button>
-            </div>
-          </div>
-        </Form>
-      )}
+          </Form>
+        );
+      }}
     </Formik>
   );
 };

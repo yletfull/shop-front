@@ -35,6 +35,8 @@ import {
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
+import AttributeDatasetsForm from './AttributeDatasetsForm';
+import AttributeDatasetsSelect from './AttributeDatasetsSelect';
 import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
@@ -205,29 +207,50 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   accept={dndTypes.attribute}
                   onDrop={handleDropAttribute(groupIndex)}
                 >
-                  {group.map((attribute, attributeIndex) => (
-                    <Attribute
-                      key={`${groupKey}-${attribute.attributeName}`}
-                      properties={attributeProps}
-                      types={attributeTypes}
-                      groupIndex={groupIndex}
-                      index={attributeIndex}
-                      data={attribute}
-                      dragType={dndTypes.attribute}
-                      onChange={handleChangeAttribute}
-                      onRemove={handleRemoveAttribute}
-                      onSubmit={handleSubmitAttribute}
-                    >
-                      <AttributeDatasets
-                        name={attribute?.title || attribute?.attributeName}
-                        selected={attribute?.inDatasets || []}
-                        datasets={attribute?.inDatasets || []}
-                      />
-                      <AttributeStatistics
-                        data={attribute.statistics}
-                      />
-                    </Attribute>
-                  ))}
+                  {group.map((attribute, attributeIndex) => {
+                    const {
+                      [attributeProps.datasets]: datasets,
+                      [attributeProps.datasetIds]: datasetIds,
+                      [attributeProps.name]: name,
+                      [attributeProps.title]: title,
+                    } = attribute || {};
+                    return (
+                      <Attribute
+                        key={`${groupKey}-${attribute.attributeName}`}
+                        properties={attributeProps}
+                        types={attributeTypes}
+                        groupIndex={groupIndex}
+                        index={attributeIndex}
+                        data={attribute}
+                        dragType={dndTypes.attribute}
+                        onChange={handleChangeAttribute}
+                        onRemove={handleRemoveAttribute}
+                        onSubmit={handleSubmitAttribute}
+                      >
+                        <AttributeDatasets
+                          name={title || name}
+                          selected={datasetIds || []}
+                          datasets={datasets || []}
+                        >
+                          <AttributeDatasetsSelect
+                            datasets={datasets || []}
+                            selected={datasetIds || []}
+                          >
+                            <AttributeDatasetsForm
+                              groupIndex={groupIndex}
+                              attributeIndex={attributeIndex}
+                              datasets={datasets || []}
+                              selected={datasetIds || []}
+                              onSubmit={handleSubmitAttribute}
+                            />
+                          </AttributeDatasetsSelect>
+                        </AttributeDatasets>
+                        <AttributeStatistics
+                          data={attribute.statistics}
+                        />
+                      </Attribute>
+                    );
+                  })}
                 </AttributesGroup>
               );
             })}

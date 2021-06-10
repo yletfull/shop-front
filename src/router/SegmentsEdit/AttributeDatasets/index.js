@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
+import React, { Children, cloneElement, useState } from 'react';
 import PropTypes from 'prop-types';
 import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
-import AttributeDatasetsForm from '../AttributeDatasetsForm';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  datasets: PropTypes.arrayOf(PropTypes.string),
+  children: PropTypes.node,
+  datasets: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    name: PropTypes.string,
+  })),
   name: PropTypes.string,
   selected: PropTypes.arrayOf(PropTypes.string),
 };
 
 const defaultProps = {
+  children: null,
   datasets: [],
   name: '',
   selected: [],
 };
 
 const AttributeDatasets = function AttributeDatasets({
+  children,
   datasets,
   name,
   selected,
@@ -34,16 +42,24 @@ const AttributeDatasets = function AttributeDatasets({
 
   return (
     <div className={styles.attributeDatasets}>
-      <Button
-        appearance="control"
-        onClick={handleClickShowModalButton}
-      >
-        {formatNumber(selected.length)}
-        &nbsp;
-        из
-        &nbsp;
-        {formatNumber(datasets.length)}
-      </Button>
+      {(Array.isArray(datasets) && datasets.length)
+        ? (
+          <Button
+            appearance="control"
+            onClick={handleClickShowModalButton}
+          >
+            {formatNumber(selected.length)}
+            &nbsp;
+            из
+            &nbsp;
+            {formatNumber(datasets.length)}
+          </Button>
+        )
+        : (
+          <span className={styles.attributeDatasetsEmptyText}>
+            Нет доступных датасетов
+          </span>
+        )}
 
       <Modal
         isVisible={isShowModal}
@@ -55,10 +71,9 @@ const AttributeDatasets = function AttributeDatasets({
         )}
         onClose={handleCloseModal}
       >
-        <AttributeDatasetsForm
-          datasets={datasets}
-          onClose={handleCloseModal}
-        />
+        {Children.map(children, (child) => cloneElement(child, {
+          onClose: handleCloseModal,
+        }))}
       </Modal>
     </div>
   );
