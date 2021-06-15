@@ -61,7 +61,16 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
     if (!params) {
       return;
     }
-    onSubmit(params);
+    const reduceAttributeGroups = (acc, group) => ([
+      ...acc,
+      ...group?.attributes || [],
+    ]);
+    const filterAttributes = ({ attributeName }) => attributeName
+      && params.includes(attributeName);
+    const selectedAttributes = data
+      .reduce(reduceAttributeGroups, [])
+      .filter(filterAttributes);
+    onSubmit(selectedAttributes);
   };
 
   const FormikCheckbox = withFormikField(Checkbox);

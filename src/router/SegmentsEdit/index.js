@@ -144,11 +144,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
-
     if (!selectedParams) {
       return;
     }
-
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
