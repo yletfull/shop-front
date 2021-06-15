@@ -65,8 +65,7 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
       ...acc,
       ...group?.attributes || [],
     ]);
-    const filterAttributes = ({ attributeName }) => attributeName
-      && params.includes(attributeName);
+    const filterAttributes = ({ id }) => id && params.includes(String(id));
     const selectedAttributes = data
       .reduce(reduceAttributeGroups, [])
       .filter(filterAttributes);
@@ -120,13 +119,13 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
                   </span>
                   {attributes.map((attribute) => (
                     <label
-                      key={attribute.attributeName}
+                      key={attribute.id}
                       className={styles.paramsSectionLabel}
                     >
                       <Field
                         component={FormikCheckbox}
                         name="params"
-                        value={attribute.attributeName}
+                        value={attribute.id}
                       />
                       {attribute.title || attribute.attributeName}
                     </label>
