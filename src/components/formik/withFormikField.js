@@ -10,10 +10,7 @@ const defaultProps = {
 };
 
 const wrappedPropTypes = {
-  field: PropTypes.shape({
-    onBlur: PropTypes.func,
-    onChange: PropTypes.func,
-  }),
+  field: PropTypes.objectOf(PropTypes.any),
 };
 
 const wrappedDefaultProps = {
