@@ -266,6 +266,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           form={(
             <ParamsForm
               data={params}
+              onCancel={handleCloseParamsForm}
               onSubmit={handleSubmitParams}
             />
           )}

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { Formik, Form, Field } from 'formik';
 import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
@@ -18,15 +17,21 @@ const propTypes = {
       type: PropTypes.string,
     })),
   })),
+  onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
+  onCancel: () => {},
   onSubmit: () => {},
 };
 
-const ParamsForm = function ParamsForm({ data, onSubmit }) {
+const ParamsForm = function ParamsForm({
+  data,
+  onCancel,
+  onSubmit,
+}) {
   const initialFormValues = {
     all: false,
     search: '',
@@ -55,6 +60,9 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
       return [...acc, { group, attributes: filteredAttributes }];
     };
     return data.reduce(reduceGroups, []);
+  };
+  const handleClickCancelButton = () => {
+    onCancel();
   };
   const handleSubmitForm = (values) => {
     const { params } = values || {};
@@ -92,20 +100,6 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
                 component={FormikInput}
                 fullwidth
               />
-
-              <label
-                className={cx(
-                  styles.paramsLabel,
-                  styles.paramsLabelSelectAll,
-                )}
-              >
-                <Field
-                  name="all"
-                  component={FormikCheckbox}
-                  disabled
-                />
-                Выбрать все
-              </label>
             </div>
 
             <div className={styles.paramsMain}>
@@ -135,11 +129,30 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
             </div>
 
             <div className={styles.paramsFooter}>
-              <Button
-                type="submit"
-              >
-                Выбрать
-              </Button>
+              <div className={styles.paramsFooterSection}>
+                <span className={styles.paramsFooterLabel}>
+                  Выбрано:
+                  <span className={styles.paramsFooterCount}>
+                    {values?.params?.length || 0}
+                  </span>
+                </span>
+              </div>
+              <div className={styles.paramsFooterSection}>
+                <Button
+                  appearance="secondary"
+                  className={styles.paramsFooterButton}
+                  onClick={handleClickCancelButton}
+                >
+                  отменить
+                </Button>
+                <Button
+                  type="submit"
+                  className={styles.paramsFooterButton}
+                >
+                  добавить
+                </Button>
+              </div>
+              <div className={styles.paramsFooterSection} />
             </div>
           </Form>
         );

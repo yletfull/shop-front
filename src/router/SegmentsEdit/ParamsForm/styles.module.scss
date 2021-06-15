@@ -1,24 +1,42 @@
 @import '@/theme/include.scss';
 
 .params {
-  &Header {
-    border-bottom: thin solid $color-gray;
-    padding-bottom: .5rem;
-  }
+  &Footer {
+    align-items: center;
+    display: flex;
+    width: 100%;
 
-  &Label {
-    font-size: .75rem;
+    &Button {
+      margin: 0 .75rem;
+      padding: 0 1.5rem;
+    }
 
-    &SelectAll {
-      display: block;
-      padding-top: .5rem;
+    &Count {
+      font-weight: bold;
+      padding-left: .5rem;
+    }
+
+    &Label {
+      font-size: .75rem;
+      line-height: 1.5rem;
+    }
+
+    &Section {
+      flex-grow: 1;
+      padding: .5rem 0;
     }
   }
 
+  &Header {
+    padding-top: 1rem;
+  }
+
   &Main {
-    max-height: 10rem;
+    margin: 1rem 0;
+    max-height: 17rem;
+    min-width: 32rem;
     overflow-y: auto;
-    padding: 1rem 0;
+    padding: .5rem 0;
   }
 
   &Section {
@@ -27,10 +45,18 @@
     &Label,
     &Name {
       display: block;
+      font-size: .75rem;
+      line-height: 1.5rem;
+    }
+
+    &Label {
+      color: $color-black;
+      cursor: pointer;
+      padding-left: 1rem;
     }
 
     &Name {
-      font-weight: bold;
+      color: $color-gray-darker;
     }
   }
 }
