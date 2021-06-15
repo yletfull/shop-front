@@ -142,7 +142,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
   };
-  const handleSubmitParams = ({ params: selectedParams }) => {
+  const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
 
     if (!selectedParams) {

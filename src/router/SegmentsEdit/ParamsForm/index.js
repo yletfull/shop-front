@@ -57,10 +57,11 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
     return data.reduce(reduceGroups, []);
   };
   const handleSubmitForm = (values) => {
-    console.log(values);
-    if (0) {
-      onSubmit(values);
+    const { params } = values || {};
+    if (!params) {
+      return;
     }
+    onSubmit(params);
   };
 
   const FormikCheckbox = withFormikField(Checkbox);
@@ -114,8 +115,9 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
                       className={styles.paramsSectionLabel}
                     >
                       <Field
-                        name="params"
                         component={FormikCheckbox}
+                        name="params"
+                        value={attribute.attributeName}
                       />
                       {attribute.title || attribute.attributeName}
                     </label>
