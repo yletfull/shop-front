@@ -64,7 +64,10 @@ const TableView = function TableView({ data, onFilter }) {
           <td data-purpose="filter">
             <span className={styles.tableViewCell}>
               <Input
-                className={styles.tableViewInput}
+                className={cx(
+                  styles.tableViewInput,
+                  styles.tableViewInput_min,
+                )}
                 placeholder="ID"
                 type="text"
                 value={searchId}
@@ -74,7 +77,7 @@ const TableView = function TableView({ data, onFilter }) {
             </span>
           </td>
           <td
-            colSpan="8"
+            colSpan="7"
             data-purpose="filter"
           >
             <span className={styles.tableViewCell}>
@@ -112,35 +115,37 @@ const TableView = function TableView({ data, onFilter }) {
             Телефонов
           </th>
           <th>
-            Скачать файлы для площадок
+            Файлы
+          </th>
+          <th>
+            Доступны новые идентиф.
           </th>
           <th>
             Версий
           </th>
           <th>
-            Последняя версия от
+            Посл. версия
           </th>
-          <th>
-            Доступны новые идентификаторы
-          </th>
-          <th aria-label="Пересчитать" />
         </tr>
 
         {data.map((row) => (
           <tr key={row.id}>
             <td>
-              <Link to={`/segments/edit/${row.id}`}>
-                {row.id}
+              {row.id}
+            </td>
+            <td>
+              <Link
+                title={row.title}
+                to={`/segments/edit/${row.id}`}
+              >
+                {row.title}
               </Link>
             </td>
             <td>
-              {row.name}
+              {row.emailsCount ? formatNumber(row.emailsCount) : '-'}
             </td>
             <td>
-              {formatNumber(row.emailsCount)}
-            </td>
-            <td>
-              {formatNumber(row.phonesCount)}
+              {row.phonesCount ? formatNumber(row.phonesCount) : '-'}
             </td>
             <td>
               {row.download}
@@ -153,9 +158,6 @@ const TableView = function TableView({ data, onFilter }) {
             </td>
             <td>
               {row.newIdentificators}
-            </td>
-            <td>
-              Пересчитать
             </td>
           </tr>
         ))}
