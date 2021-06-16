@@ -96,8 +96,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const handleChangeAttribute = (attribute) => {
-    console.log(attribute);
+  const handleChangeAttribute = (position, attribute) => {
+    const [groupIndex, attributeIndex] = position;
+    if (typeof attributeIndex === 'undefined'
+      || typeof groupIndex === 'undefined') {
+      return;
+    }
+    dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -276,7 +281,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
             type="button"
             onClick={handleClickShowParams}
           >
-            + ещё параметр
+            + добавить параметр
           </Button>
         </Params>
       </div>

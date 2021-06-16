@@ -26,6 +26,13 @@
     @include button-reset();
   }
 
+  &Equality {
+    height: inherit;
+    margin: 0 .5rem;
+    padding-bottom: .25rem;
+    padding-top: .25rem;
+  }
+
   &Main {
     align-items: inherit;
     display: inherit;

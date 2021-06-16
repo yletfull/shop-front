@@ -12,6 +12,7 @@ export const attributeProps = {
   values: 'values',
   datasets: 'datasets',
   datasetIds: 'datasetIds',
+  negation: 'negation',
 };
 
 export const attributeTypes = {
