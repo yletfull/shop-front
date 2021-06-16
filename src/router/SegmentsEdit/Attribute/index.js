@@ -24,6 +24,7 @@ const propTypes = {
     type: PropTypes.string,
   }),
   dragType: PropTypes.string.isRequired,
+  equalityTypes: PropTypes.objectOf(PropTypes.string).isRequired,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -51,6 +52,7 @@ const Attribute = function Attribute({
   children,
   data,
   dragType,
+  equalityTypes,
   groupIndex,
   index,
   properties,
@@ -139,6 +141,7 @@ const Attribute = function Attribute({
               data={data}
               className={styles.attribute}
               properties={properties}
+              equalityTypes={equalityTypes}
               onChange={handleChangeAttribute}
               onSubmit={handleSubmitAttribute}
             >

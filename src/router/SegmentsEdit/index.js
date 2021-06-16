@@ -11,6 +11,7 @@ import Button from '@/components/Button';
 import {
   attributeProps,
   attributeTypes,
+  equalityTypes,
   namespace as NS,
   dndTypes,
   segmentProps,
@@ -222,6 +223,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                         key={`${groupKey}-${attribute.attributeName}`}
                         properties={attributeProps}
                         types={attributeTypes}
+                        equalityTypes={equalityTypes}
                         groupIndex={groupIndex}
                         index={attributeIndex}
                         data={attribute}
