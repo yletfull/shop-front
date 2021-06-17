@@ -3,6 +3,7 @@ import { segmentProps } from './constants';
 import {
   requestParams,
   requestSegment,
+  resetSegment,
   updateParams,
   updateSegment,
 } from './actions';
@@ -41,5 +42,9 @@ export default createReducer(initialState, {
       ...state.segment,
       ...action.payload || {},
     },
+  }),
+  [resetSegment]: (state) => ({
+    ...state,
+    segment: initialSegment,
   }),
 });
