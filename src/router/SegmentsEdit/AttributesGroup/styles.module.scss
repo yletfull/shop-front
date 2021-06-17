@@ -10,12 +10,17 @@
     margin-top: 2rem;
 
     &::before {
-      color: $color-primary;
+      color: $color-pink;
       content: 'И';
       font-size: .75rem;
       left: 10rem;
       position: absolute;
       top: -1.325rem;
     }
+  }
+
+  &_over {
+    background-color: $color-primary;
+    background-color: rgba($color-primary, .5);
   }
 }

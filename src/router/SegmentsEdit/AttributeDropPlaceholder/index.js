@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -33,11 +34,12 @@ const AttributeDropPlaceholder = function AttributeDropPlaceholder({
   return (
     <div
       ref={dropRef}
-      className={styles.attributeDropPlaceholder}
+      className={cx(
+        styles.attributeDropPlaceholder,
+        (canDrop ? styles.attributeDropPlaceholder_droppable : ''),
+        (isOver ? styles.attributeDropPlaceholder_over : ''),
+      )}
       style={{
-        background: canDrop ? 'yellow' : 'transparent',
-        border: isOver ? 'thin solid green' : '',
-        height: canDrop ? '1rem' : 0,
         bottom: position === 'top' ? '100%' : 'unset',
         top: position === 'bottom' ? '100%' : 'unset',
       }}

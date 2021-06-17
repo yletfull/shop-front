@@ -8,13 +8,26 @@
   & + & {
     margin-top: 2rem;
 
-    &::before {
+    &::after {
+      background: $color-gray;
       color: $color-pink;
       content: 'ИЛИ';
+      display: block;
       font-size: .75rem;
       left: 9rem;
+      padding: 0 .25rem;
       position: absolute;
       top: -1.325rem;
+    }
+
+    &::before {
+      border-top: thin solid $color-gray-darker;
+      content: '';
+      display: block;
+      left: .5rem;
+      position: absolute;
+      right: .5rem;
+      top: -1rem;
     }
   }
 

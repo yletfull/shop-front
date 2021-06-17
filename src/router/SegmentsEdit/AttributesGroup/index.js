@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrop } from 'react-dnd';
+import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -30,10 +31,10 @@ const AttributesGroup = function AttributesGroup({
   return (
     <div
       ref={dropRef}
-      className={styles.attributesGroup}
-      style={{
-        border: isOver ? 'thin solid #000' : '',
-      }}
+      className={cx(
+        styles.attributesGroup,
+        (isOver ? styles.attributesGroup_over : ''),
+      )}
     >
       {children}
     </div>
