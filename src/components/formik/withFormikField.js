@@ -10,46 +10,22 @@ const defaultProps = {
 };
 
 const wrappedPropTypes = {
-  field: PropTypes.shape({
-    onBlur: PropTypes.func,
-    onChange: PropTypes.func,
-  }),
-  onBlur: PropTypes.func,
-  onChange: PropTypes.func,
+  field: PropTypes.objectOf(PropTypes.any),
 };
 
 const wrappedDefaultProps = {
   field: {},
-  onBlur: () => {},
-  onChange: () => {},
 };
 
 const withFormikField = function withFormikField(Component) {
   const WrappedwithFormikField = function WrappedwithFormikField({
     field,
-    onBlur,
-    onChange,
     ...props
   }) {
-    const handleFieldBlur = (e) => {
-      if (typeof field?.onBlur === 'function') {
-        field.onBlur(e);
-      }
-      onBlur(e);
-    };
-    const handleFieldChange = (e) => {
-      if (typeof field?.onChange === 'function') {
-        field.onChange(e);
-      }
-      onChange(e);
-    };
-
     return (
       <Component
         {...field}
         {...props}
-        onBlur={handleFieldBlur}
-        onChange={handleFieldChange}
       />
     );
   };

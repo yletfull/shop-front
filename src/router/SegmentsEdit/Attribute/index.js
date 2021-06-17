@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDrag } from 'react-dnd';
+import Button from '@/components/Button';
 import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
 import AttributeEnum from './AttributeEnum';
@@ -11,6 +12,7 @@ const propTypes = {
   children: PropTypes.node,
   data: PropTypes.shape({
     attributeName: PropTypes.string,
+    negation: PropTypes.bool,
     maxValue: PropTypes.string,
     minValue: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.string),
@@ -22,6 +24,7 @@ const propTypes = {
     type: PropTypes.string,
   }),
   dragType: PropTypes.string.isRequired,
+  equalityTypes: PropTypes.objectOf(PropTypes.string).isRequired,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -49,6 +52,7 @@ const Attribute = function Attribute({
   children,
   data,
   dragType,
+  equalityTypes,
   groupIndex,
   index,
   properties,
@@ -57,7 +61,7 @@ const Attribute = function Attribute({
   onRemove,
   onSubmit,
 }) {
-  const { attributeName: name, title, type } = data || {};
+  const { attributeName: name, negation, title, type } = data || {};
 
   const attributes = {
     [types.enum || 'ENUM']: AttributeEnum,
@@ -80,6 +84,10 @@ const Attribute = function Attribute({
       return;
     }
     onChange({ ...data, [key]: values });
+  };
+  const handleClickChangeEquality = () => {
+    const key = properties.negation || 'negation';
+    onChange([groupIndex, index], { ...data, [key]: !negation });
   };
   const handleClickCloseAttribute = (e) => {
     const { index: attributeIndex, group } = e?.target?.dataset || {};
@@ -113,6 +121,16 @@ const Attribute = function Attribute({
         </div>
 
         <div className={styles.attributeSection}>
+          <Button
+            appearance="control"
+            className={styles.attributeEquality}
+            onClick={handleClickChangeEquality}
+          >
+            {negation ? '≠' : '='}
+          </Button>
+        </div>
+
+        <div className={styles.attributeSection}>
           {!TypedAttribute && (
             <span className={styles.attributeMessage}>
               Неизвестный тип аттрибута
@@ -123,6 +141,7 @@ const Attribute = function Attribute({
               data={data}
               className={styles.attribute}
               properties={properties}
+              equalityTypes={equalityTypes}
               onChange={handleChangeAttribute}
               onSubmit={handleSubmitAttribute}
             >

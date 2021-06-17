@@ -11,6 +11,7 @@ const propTypes = {
     options: PropTypes.arrayOf(PropTypes.string),
     values: PropTypes.arrayOf(PropTypes.string),
   }),
+  equalityTypes: PropTypes.objectOf(PropTypes.string).isRequired,
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
   onSubmit: PropTypes.func,
 };
@@ -24,6 +25,7 @@ const defaultProps = {
 const AttributeEnum = function AttributeEnum({
   children,
   data,
+  equalityTypes,
   properties,
   onSubmit,
 }) {
@@ -40,7 +42,13 @@ const AttributeEnum = function AttributeEnum({
     if (!formValues || !Array.isArray(formValues)) {
       return;
     }
-    onSubmit({ [properties.values]: formValues });
+    const equality = formValues.length > 0
+      ? equalityTypes.equal
+      : equalityTypes.any;
+    onSubmit({
+      [properties.equality]: equality,
+      [properties.values]: formValues,
+    });
   };
 
   return (

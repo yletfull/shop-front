@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { Form, FormSpy, Field } from 'react-final-form';
-import { useDebounce } from '@/hooks';
+import { Formik, Form, Field } from 'formik';
+import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
+import Checkbox from '@/components/Checkbox';
 import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
@@ -12,41 +12,42 @@ const propTypes = {
     group: PropTypes.string,
     attributes: PropTypes.arrayOf(PropTypes.shape({
       attributeName: PropTypes.string,
-      profileId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       options: PropTypes.arrayOf(PropTypes.string),
       title: PropTypes.string,
       type: PropTypes.string,
     })),
   })),
+  onCancel: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
+  onCancel: () => {},
   onSubmit: () => {},
 };
 
-const ParamsForm = function ParamsForm({ data, onSubmit }) {
-  const searchRef = useRef(null);
+const ParamsForm = function ParamsForm({
+  data,
+  onCancel,
+  onSubmit,
+}) {
+  const initialFormValues = {
+    all: false,
+    search: '',
+    params: [],
+  };
 
-  const [searchPhrase, setSearchPhrase] = useState('');
-  const [filteredParams, setFilteredParams] = useState(data);
-
-  const delayedSearchRequest = useDebounce(searchPhrase, 300);
-
-  useEffect(() => {
-    if (searchRef.current) {
-      searchRef.current.focus();
+  const filterParamsOptions = (search) => {
+    if (typeof search === 'undefined') {
+      return data;
     }
-  }, []);
-
-  useEffect(() => {
     const filterAttributes = (attribute) => {
       const searched = attribute.title || attribute.attributeName;
       if (!searched) {
         return false;
       }
-      return searched.includes(delayedSearchRequest);
+      return searched.includes(search);
     };
     const reduceGroups = (acc, { group, attributes }) => {
       if (!attributes && !Array.isArray(attributes)) {
@@ -58,93 +59,105 @@ const ParamsForm = function ParamsForm({ data, onSubmit }) {
       }
       return [...acc, { group, attributes: filteredAttributes }];
     };
-    setFilteredParams(data.reduce(reduceGroups, []));
-  }, [data, delayedSearchRequest]);
-
-  const handleChangeFormValues = ({ values }) => {
-    const { search } = values || {};
-    if (typeof search === 'undefined') {
+    return data.reduce(reduceGroups, []);
+  };
+  const handleClickCancelButton = () => {
+    onCancel();
+  };
+  const handleSubmitForm = (values) => {
+    const { params } = values || {};
+    if (!params) {
       return;
     }
-    setSearchPhrase(search);
+    const reduceAttributeGroups = (acc, group) => ([
+      ...acc,
+      ...group?.attributes || [],
+    ]);
+    const filterAttributes = ({ id }) => id && params.includes(String(id));
+    const selectedAttributes = data
+      .reduce(reduceAttributeGroups, [])
+      .filter(filterAttributes);
+    onSubmit(selectedAttributes);
   };
-  const handleSubmitParams = (formValues) => {
-    onSubmit(formValues);
-  };
+
+  const FormikCheckbox = withFormikField(Checkbox);
+  const FormikInput = withFormikField(Input);
 
   return (
-    <Form onSubmit={handleSubmitParams}>
-      {({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <FormSpy
-            subscriptions={{ search: true }}
-            onChange={handleChangeFormValues}
-          />
-
-          <div className={styles.paramsHeader}>
-            <Field name="search">
-              {({ input }) => (
-                <Input
-                  ref={searchRef}
-                  name={input.name}
-                  value={input.value}
-                  onChange={input.onChange}
-                  placeholder="Найти"
-                  fullwidth
-                />
-              )}
-            </Field>
-            <label
-              className={cx(
-                styles.paramsLabel,
-                styles.paramsLabelSelectAll,
-              )}
-            >
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={handleSubmitForm}
+    >
+      {({ values }) => {
+        const { search } = values || {};
+        const options = filterParamsOptions(search);
+        return (
+          <Form>
+            <div className={styles.paramsHeader}>
               <Field
-                name="all"
-                component="input"
-                type="checkbox"
-                disabled
+                name="search"
+                placeholder="Найти"
+                component={FormikInput}
+                fullwidth
               />
-              Выбрать все
-            </label>
-          </div>
-          <div className={styles.paramsMain}>
-            {filteredParams.map(({ group, attributes }) => (
-              <div
-                key={group}
-                className={styles.paramsSection}
-              >
-                <span className={styles.paramsSectionName}>
-                  {group}
+            </div>
+
+            <div className={styles.paramsMain}>
+              {options.map(({ group, attributes }) => (
+                <div
+                  key={group}
+                  className={styles.paramsSection}
+                >
+                  <span className={styles.paramsSectionName}>
+                    {group}
+                  </span>
+                  {attributes.map((attribute) => (
+                    <label
+                      key={attribute.id}
+                      className={styles.paramsSectionLabel}
+                    >
+                      <Field
+                        component={FormikCheckbox}
+                        name="params"
+                        value={attribute.id}
+                      />
+                      {attribute.title || attribute.attributeName}
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            <div className={styles.paramsFooter}>
+              <div className={styles.paramsFooterSection}>
+                <span className={styles.paramsFooterLabel}>
+                  Выбрано:
+                  <span className={styles.paramsFooterCount}>
+                    {values?.params?.length || 0}
+                  </span>
                 </span>
-                {attributes.map((attribute) => (
-                  <label
-                    key={attribute.attributeName}
-                    className={styles.paramsSectionLabel}
-                  >
-                    <Field
-                      name="params"
-                      component="input"
-                      type="checkbox"
-                      value={attribute}
-                    />
-                    {attribute.title || attribute.attributeName}
-                  </label>
-                ))}
               </div>
-            ))}
-          </div>
-          <div className={styles.paramsFooter}>
-            <Button
-              type="submit"
-            >
-              Выбрать
-            </Button>
-          </div>
-        </form>
-      )}
-    </Form>
+              <div className={styles.paramsFooterSection}>
+                <Button
+                  appearance="secondary"
+                  className={styles.paramsFooterButton}
+                  onClick={handleClickCancelButton}
+                >
+                  отменить
+                </Button>
+                <Button
+                  type="submit"
+                  className={styles.paramsFooterButton}
+                >
+                  добавить
+                </Button>
+              </div>
+              <div className={styles.paramsFooterSection} />
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

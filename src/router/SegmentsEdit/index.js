@@ -11,6 +11,7 @@ import Button from '@/components/Button';
 import {
   attributeProps,
   attributeTypes,
+  equalityTypes,
   namespace as NS,
   dndTypes,
   segmentProps,
@@ -96,8 +97,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const handleChangeAttribute = (attribute) => {
-    console.log(attribute);
+  const handleChangeAttribute = (position, attribute) => {
+    const [groupIndex, attributeIndex] = position;
+    if (typeof attributeIndex === 'undefined'
+      || typeof groupIndex === 'undefined') {
+      return;
+    }
+    dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -142,13 +148,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
   };
-  const handleSubmitParams = ({ params: selectedParams }) => {
+  const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
-
     if (!selectedParams) {
       return;
     }
-
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
@@ -219,6 +223,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                         key={`${groupKey}-${attribute.attributeName}`}
                         properties={attributeProps}
                         types={attributeTypes}
+                        equalityTypes={equalityTypes}
                         groupIndex={groupIndex}
                         index={attributeIndex}
                         data={attribute}
@@ -268,6 +273,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           form={(
             <ParamsForm
               data={params}
+              onCancel={handleCloseParamsForm}
               onSubmit={handleSubmitParams}
             />
           )}
@@ -277,7 +283,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
             type="button"
             onClick={handleClickShowParams}
           >
-            + ещё параметр
+            + добавить параметр
           </Button>
         </Params>
       </div>

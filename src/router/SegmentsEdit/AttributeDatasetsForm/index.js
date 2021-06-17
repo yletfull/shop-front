@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { withFormikField } from '@/components/formik';
+import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
-import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -40,14 +40,11 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
   onClose,
   onSubmit,
 }) {
-  const datasetIds = datasets.map(({ id }) => String(id));
-  const isAllSelected = Array.isArray(datasets)
-    && Array.isArray(selected)
-    && datasets.length === selected.length;
+  const datasetIds = datasets
+    .map(({ id }) => String(id));
 
   const initialFormValues = {
-    all: isAllSelected,
-    list: isAllSelected ? datasetIds : (selected || []),
+    list: selected || [],
   };
 
   const handleCloseForm = () => {
@@ -62,14 +59,19 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
     onClose();
   };
 
+  const FormikCheckbox = withFormikField(Checkbox);
+
   return (
     <Formik
       initialValues={initialFormValues}
       onSubmit={handleSubmitForm}
     >
-      {({ values, setFieldValue }) => {
+      {({ setFieldValue, values }) => {
+        const { list } = values || {};
+
+        const isSelectedAllDatasets = datasetIds.length === list.length;
+
         const getCheckedStatus = (value) => {
-          const { list } = values || {};
           if (!list || !Array.isArray(list)) {
             return false;
           }
@@ -79,13 +81,7 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
           const { checked } = e?.target || {};
           setFieldValue('list', checked ? datasetIds : []);
         };
-        const handleChangeDatasetCheckbox = (e) => {
-          const { list } = values || {};
-          const { checked, value } = e?.target || {};
-          const [lastUnchecked] = (list.length === (datasetIds.length - 1)
-            && datasetIds.filter((d) => !list.includes(d))) || [];
-          setFieldValue('all', checked && lastUnchecked && lastUnchecked === value);
-        };
+
         return (
           <Form>
             <table className={styles.attributeDatasetsFormTable}>
@@ -93,11 +89,8 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                 <tr className={styles.trHeader}>
                   <th className={styles.tdSelect}>
                     <label>
-                      <Field
-                        name="all"
-                        value="true"
-                        checked={values.all}
-                        component={withFormikField(Checkbox)}
+                      <Checkbox
+                        checked={isSelectedAllDatasets}
                         onChange={handleChangeSelectAll}
                       />
                       Название
@@ -128,10 +121,9 @@ const AttributeDatasetsForm = function AttributeDatasetsForm({
                       <label>
                         <Field
                           name="list"
-                          value={dataset.id}
                           checked={getCheckedStatus(dataset.id)}
-                          component={withFormikField(Checkbox)}
-                          onChange={handleChangeDatasetCheckbox}
+                          value={String(dataset.id)}
+                          component={FormikCheckbox}
                         />
                         {dataset.name}
                       </label>
