@@ -65,8 +65,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
           const shouldCheck = task
             && Object.keys(task).length
-            && (task.status === queueTasksStatuses.created
-              || task.status === queueTasksStatuses.inProgress);
+            && (task?.status === queueTasksStatuses.created
+              || task?.status === queueTasksStatuses.inProgress);
           if (shouldCheck) {
             return check();
           }
@@ -76,7 +76,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           setIsSyncInProcess(false);
           dispatch(setUploadButtonDisabled(false));
 
-          if (task && Object.keys(task).length && task.status === 2) {
+          if (task && Object.keys(task).length && task?.status === 2) {
             dispatch(setDownloadAllAdsButtonDisabled(false));
             return;
           }
@@ -93,8 +93,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   };
 
   useEffect(() => {
-    if (queueList[0].status === queueTasksStatuses.created
-       || queueList[0].status === queueTasksStatuses.inProgress) {
+    if (queueList[0]?.status === queueTasksStatuses.created
+       || queueList[0]?.status === queueTasksStatuses.inProgress) {
       sync();
     }
   }, [queueList]);
