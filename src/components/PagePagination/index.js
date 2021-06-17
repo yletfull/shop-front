@@ -55,7 +55,13 @@ const PagePagination = function PagePagination({
     let isVisibleRightDelimiter = false;
     const half = Math.floor(numberOfVisiblePages / 2);
 
-    if (page <= half) {
+    if (page >= numberOfVisiblePages) {
+      pages = [
+        ...[...Array(numberOfVisiblePages - 1).keys()]
+          .map((i) => i + 1),
+        numberOfPages,
+      ];
+    } else if (page < half) {
       isVisibleRightDelimiter = true;
       pages = [
         ...[...Array(numberOfVisiblePages - 1).keys()]
@@ -70,7 +76,7 @@ const PagePagination = function PagePagination({
           .map((i) => i + 1)
           .map((i) => i + (numberOfPages - numberOfVisiblePages) + 1),
       ];
-    } else {
+    } else if (numberOfVisiblePages > 3) {
       isVisibleLeftDelimiter = true;
       isVisibleRightDelimiter = true;
       pages = [
@@ -116,7 +122,7 @@ const PagePagination = function PagePagination({
     if (!pageNumber || pageNumber === String(page)) {
       return;
     }
-    onChangePage(pageNumber);
+    onChangePage(Number(pageNumber));
   };
 
   console.log(count, countOptions, onChangeCount);

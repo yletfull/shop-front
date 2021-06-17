@@ -1,9 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { requestData, updateData } from './actions';
+import {
+  requestData,
+  updateData,
+  updateMeta,
+} from './actions';
 
 const initialState = {
   isFetching: false,
   data: [],
+  meta: {},
 };
 
 export default createReducer(initialState, {
@@ -15,5 +20,9 @@ export default createReducer(initialState, {
     ...state,
     isFetching: false,
     data: action.payload || [],
+  }),
+  [updateMeta]: (state, action) => ({
+    ...state,
+    meta: action.payload || {},
   }),
 });

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { useHistory, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
@@ -9,32 +9,34 @@ import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  queryParams: PropTypes.shape({
+    searchId: PropTypes.string,
+    searchName: PropTypes.string,
+  }).isRequired,
   data: PropTypes.arrayOf(PropTypes.string),
-  onFilter: PropTypes.func,
+  onSubmitFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
-  onFilter: () => {},
+  onSubmitFilter: () => {},
 };
 
-const TableView = function TableView({ data, onFilter }) {
-  const queryParams = {
-    searchId: 'id',
-    searchName: 'name',
-  };
-
-  const history = useHistory();
+const TableView = function TableView({
+  queryParams,
+  data,
+  onSubmitFilter,
+}) {
   const query = useQuery();
 
   const [
     searchId,
     setSearchId,
-  ] = useState(query.get(queryParams.searchId) || '');
+  ] = useState(query.get(queryParams?.searchId) || '');
   const [
     searchName,
     setSearchName,
-  ] = useState(query.get(queryParams.searchName) || '');
+  ] = useState(query.get(queryParams?.searchName) || '');
 
   const handleChangeSearchId = (e) => {
     const { value } = e?.target || {};
@@ -51,10 +53,7 @@ const TableView = function TableView({ data, onFilter }) {
     setSearchName(value);
   };
   const handleClickSearchButton = () => {
-    query.set(queryParams.searchId, searchId);
-    query.set(queryParams.searchName, searchName);
-    history.push({ search: query.toString() });
-    onFilter();
+    onSubmitFilter({ searchId, searchName });
   };
 
   return (

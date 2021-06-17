@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useQuery } from '@/hooks';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
@@ -8,8 +10,14 @@ import IconSearch from '@/icons/Search';
 import Pagination from '@/components/PagePagination';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
-import { fetchSegments } from './actions';
-import { getIsFetchingData, getData } from './selectors';
+import {
+  fetchSegments,
+} from './actions';
+import {
+  getData,
+  getPagination,
+  getIsFetchingData,
+} from './selectors';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
@@ -24,10 +32,27 @@ const defaultProps = {
 };
 
 const SegmentsList = function SegmentsList({ defaultTitle }) {
+  const queryParams = useMemo(() => ({
+    searchId: 'id',
+    searchName: 'name',
+    page: 'page',
+  }), []);
+
   const dispatch = useDispatch();
+
+  const history = useHistory();
+  const query = useQuery();
 
   const isFetching = useSelector(getIsFetchingData);
   const tableData = useSelector(getData);
+  const pagination = useSelector(getPagination);
+
+  const isShowPagination = pagination.totalPages > 1;
+
+  const [
+    queryCurrentPage,
+    setQueryCurrentPage,
+  ] = useState(query.get(queryParams.page) || 1);
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -38,11 +63,20 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   }, [dispatch, defaultTitle]);
 
   useEffect(() => {
-    dispatch(fetchSegments());
-  }, [dispatch]);
+    dispatch(fetchSegments({
+      currentPage: queryCurrentPage,
+    }));
+  }, [dispatch, queryCurrentPage]);
 
-  const handleChangePage = (value) => {
-    console.log(value);
+  const handleChangePage = (page) => {
+    setQueryCurrentPage(page);
+    query.set(queryParams.page, String(page));
+    history.push({ search: query.toString() });
+  };
+  const handleSubmitTableFilterForm = ({ searchId, searchName }) => {
+    query.set(queryParams.searchId, String(searchId));
+    query.set(queryParams.searchName, String(searchName));
+    history.push({ search: query.toString() });
   };
 
   return (
@@ -64,16 +98,20 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
 
       <TableView
         isFetching={isFetching}
+        queryParams={queryParams}
         data={tableData}
+        onSubmitFilter={handleSubmitTableFilterForm}
       />
 
-      <Pagination
-        page={9}
-        numberOfPages={100}
-        numberOfVisiblePages={9}
-        isDisabled={isFetching}
-        onChangePage={handleChangePage}
-      />
+      {!isShowPagination && (
+        <Pagination
+          page={pagination.currentPage}
+          numberOfPages={pagination.totalPages + 1}
+          numberOfVisiblePages={Math.min(5, pagination.totalPages + 1)}
+          isDisabled={isFetching}
+          onChangePage={handleChangePage}
+        />
+      )}
     </div>
   );
 };
