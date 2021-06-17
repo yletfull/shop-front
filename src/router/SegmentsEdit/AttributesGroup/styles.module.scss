@@ -18,4 +18,9 @@
       top: -1.325rem;
     }
   }
+
+  &_over {
+    background-color: $color-primary;
+    background-color: rgba($color-primary, .5);
+  }
 }
