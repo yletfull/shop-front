@@ -13,7 +13,7 @@
   white-space: nowrap;
 
   &:not(:last-of-type)::after {
-    content: '🠖';
+    content: '>';
     margin: 0 .5rem;
   }
 }
