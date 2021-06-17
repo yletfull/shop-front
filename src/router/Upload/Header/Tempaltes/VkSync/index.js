@@ -4,35 +4,37 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
+import { queueTasksStatuses } from '@/constants/statuses';
 import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
-import { syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled } from '@/store/upload/actions';
+import {
+  syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled,
+} from '@/store/upload/actions';
 import { formatDate } from '@/utils/format';
+import {
+  getQueueList, getSelectAccount, getSelectClient, getSyncVkTask,
+} from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 
 
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
 
-  const queueList = useSelector((state) => state.upload?.queueList);
+  const queueList = useSelector(getQueueList);
 
-  const selectAccountData = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
+  const selectAccountData = useSelector(getSelectAccount) || '';
   const selectAccount = useRef(selectAccountData);
   useLayoutEffect(() => {
     selectAccount.current = selectAccountData;
   }, [selectAccountData]);
 
-  const selectClientData = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
+  const selectClientData = useSelector(getSelectClient) || '';
   const selectClient = useRef(selectClientData);
   useLayoutEffect(() => {
     selectClient.current = selectClientData;
   }, [selectClientData]);
 
-  const syncVkTaskData = useSelector((state) => state.upload?.syncVkTask);
+  const syncVkTaskData = useSelector(getSyncVkTask);
   const syncVkTask = useRef(syncVkTaskData);
   useLayoutEffect(() => {
     syncVkTask.current = syncVkTaskData;
@@ -61,10 +63,11 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
           task = await dispatch(fetchTask(syncVkTask.current.id));
 
-          if (
-            task
+          const shouldCheck = task
             && Object.keys(task).length
-            && (task.status === 0 || task.status === 1)) {
+            && (task.status === queueTasksStatuses.created
+              || task.status === queueTasksStatuses.inProgress);
+          if (shouldCheck) {
             return check();
           }
 
@@ -90,7 +93,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   };
 
   useEffect(() => {
-    if (queueList[0].status === 0 || queueList[0].status === 1) {
+    if (queueList[0].status === queueTasksStatuses.created
+       || queueList[0].status === queueTasksStatuses.inProgress) {
       sync();
     }
   }, [queueList]);

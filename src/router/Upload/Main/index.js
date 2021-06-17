@@ -2,6 +2,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { getStage } from '@/store/upload/selectors';
 import { globalStages } from '../stages';
 import FirstUploadPage from './FirstUpload';
 import ErrorsCheckPage from './ErrorsCheck';
@@ -10,7 +11,7 @@ import FinalUploadPage from './FinalUpload';
 import styles from './styles.module.scss';
 
 const Upload = function UploadScreen() {
-  const stage = useSelector((state) => state.upload.stage);
+  const stage = useSelector(getStage);
 
   const renderStagesSwitch = () => {
     switch (stage) {

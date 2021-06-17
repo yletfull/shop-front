@@ -4,15 +4,13 @@ import { useSelector } from 'react-redux';
 import ProcessButtonLink from '@/components/ProcessButtonLink';
 import HeaderTemplate from '@/components/HeaderTemplate';
 import IconDownload from '@/icons/Download';
+import { getSelectAccount, getSelectClient } from '@/store/upload/selectors';
+
 import styles from './styles.module.scss';
 
 const AllAdsTemplate = function AllAdsTemplateScreen() {
-  const selectAccount = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
-  const selectClient = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
+  const selectAccount = useSelector(getSelectAccount) || '';
+  const selectClient = useSelector(getSelectClient) || '';
   const uploadButtonDisabled = useSelector(
     (state) => state.upload?.downloadAllAdsButtonDisabled
   ) ?? true;

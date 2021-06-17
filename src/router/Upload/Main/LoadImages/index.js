@@ -10,7 +10,12 @@ import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import Indicator from '@/components/Indicator';
-import { fetchImages, fetchDocuments, setUploadedImages, uploadImages } from '@/store/upload/actions';
+import {
+  fetchImages, fetchDocuments, setUploadedImages, uploadImages,
+} from '@/store/upload/actions';
+import {
+  getDocuments, getImages, getParentDocument, getUploadedImages,
+} from '@/store/upload/selectors';
 import Header from './Header';
 import styles from './styles.module.scss';
 
@@ -34,21 +39,17 @@ const LoadImagesTable = function LoadImagesTableScreen() {
   const [isFetching, setIsFetching] = useState(false);
   const [fileIsLoading, setFileIsLoading] = useState();
 
-  const images = useSelector((state) => state.upload?.images);
+  const images = useSelector(getImages);
 
-  const uploadedImages = useSelector(
-    (state) => state.upload?.uploadedImages
-  );
+  const uploadedImages = useSelector(getUploadedImages);
 
-  const parentDocumentData = useSelector(
-    (state) => state.upload?.parentDocument
-  );
+  const parentDocumentData = useSelector(getParentDocument);
   const parentDocument = useRef(parentDocumentData);
   useLayoutEffect(() => {
     parentDocument.current = parentDocumentData;
   }, [parentDocumentData]);
 
-  const documentsData = useSelector((state) => state.upload?.documents);
+  const documentsData = useSelector(getDocuments);
   const documents = useRef(documentsData);
   useLayoutEffect(() => {
     documents.current = documentsData;

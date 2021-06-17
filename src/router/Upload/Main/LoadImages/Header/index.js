@@ -6,6 +6,7 @@ import PicturesLoadIcon from '@/icons/PicturesLoad';
 import ProcessButton from '@/components/ProcessButton';
 import NavigationBar from '@/components/NavigationBar';
 import { uploadImages, fetchDocuments, setUploadedImages, setStage } from '@/store/upload/actions';
+import { getDocuments, getParentDocument } from '@/store/upload/selectors';
 import { globalStages } from '../../../stages';
 import styles from './styles.module.scss';
 
@@ -22,15 +23,13 @@ const LoadImagesHeader = function LoadImagesHeaderScreen() {
 
   const [fileIsLoading, setFileIsLoading] = useState(false);
 
-  const documentsData = useSelector((state) => state.upload?.documents);
+  const documentsData = useSelector(getDocuments);
   const documents = useRef(documentsData);
   useLayoutEffect(() => {
     documents.current = documentsData;
   }, [documentsData]);
 
-  const parentDocumentData = useSelector(
-    (state) => state.upload?.parentDocument
-  );
+  const parentDocumentData = useSelector(getParentDocument);
   const parentDocument = useRef(parentDocumentData);
   useLayoutEffect(() => {
     parentDocument.current = parentDocumentData;

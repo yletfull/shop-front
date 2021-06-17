@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Select from '@/components/Select';
 import Button from '@/components/Button';
+import commands from '@/constants/commands';
+import { queueTasksStatuses } from '@/constants/statuses';
 import ButtonLink from '@/components/ButtonLink';
 
 import {
@@ -11,7 +13,13 @@ import {
   setAccount, setClient, setStage,
   fetchRecentFile,
 } from '@/store/upload/actions';
-import { finalUploadStages, firstUploadStages, globalStages } from '../../stages';
+import {
+  getAccounts, getClients, getQueueList,
+  getRecentFile, getSelectAccount, getSelectClient,
+} from '@/store/upload/selectors';
+import {
+  finalUploadStages, firstUploadStages, globalStages,
+} from '../../stages';
 import styles from './styles.module.scss';
 
 
@@ -23,33 +31,21 @@ const Header = function HeaderScreen() {
   const [changeAccountButtonShow, setChangeAccountButtonShow] = useState(true);
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(true);
 
-  const accounts = useSelector(
-    (state) => state.upload?.accounts
-  );
+  const accounts = useSelector(getAccounts);
 
-  const clients = useSelector(
-    (state) => state.upload?.clients
-  );
+  const clients = useSelector(getClients);
 
-  const selectAccount = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
+  const selectAccount = useSelector(getSelectAccount) || '';
 
-  const selectClient = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
+  const selectClient = useSelector(getSelectClient) || '';
 
-  const queueListData = useSelector(
-    (state) => state.upload?.queueList
-  );
+  const queueListData = useSelector(getQueueList);
   const queueList = useRef(queueListData);
   useLayoutEffect(() => {
     queueList.current = queueListData;
   }, [queueListData]);
 
-  const recentFileData = useSelector(
-    (state) => state.upload?.recentFile
-  );
+  const recentFileData = useSelector(getRecentFile);
   const recentFile = useRef(recentFileData);
   useLayoutEffect(() => {
     recentFile.current = recentFileData;
@@ -97,15 +93,11 @@ const Header = function HeaderScreen() {
     }
   }, [dispatch, clients]);
 
-  useEffect(() => (async () => {
-    if (selectAccount && selectClient) {
-      setAcceptButtonDisabled(false);
-    } else {
-      setAcceptButtonDisabled(true);
-    }
+  useEffect(() => {
+    setAcceptButtonDisabled(!selectAccount || !selectClient);
     dispatch(setStage(firstUploadStages.selectAccount));
     setChangeAccountButtonShow(false);
-  })(), [dispatch, selectAccount, selectClient]);
+  }, [dispatch, selectAccount, selectClient]);
 
   useEffect(() => (async () => {
     if (!selectAccount) {
@@ -126,16 +118,20 @@ const Header = function HeaderScreen() {
       setAccountSelectDisabled(true);
 
       await dispatch(fetchQueueList());
-      const importTasks = queueList.current.map((task) => task.command === 'sync-xlsx:vk' && task);
+      let importTasks = [];
+      if (queueList.current && queueList.current.length) {
+        importTasks = queueList.current
+          .map((task) => task.command === commands.syncXlsxVk && task);
+      }
       await dispatch(fetchRecentFile());
 
 
       if (importTasks.length > 0) {
         if (recentFile.current) {
-          if (importTasks[0].status === -1) {
+          if (importTasks[0].status === queueTasksStatuses.error) {
             return dispatch(setStage(globalStages.errorCheck));
           }
-          if (importTasks[0].status === 1) {
+          if (importTasks[0].status === queueTasksStatuses.inProgress) {
             return dispatch(setStage(finalUploadStages.fileIsLoading));
           }
           return dispatch(setStage(firstUploadStages.selectList));
