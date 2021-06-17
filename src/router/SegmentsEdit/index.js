@@ -20,6 +20,7 @@ import reducer from './reducer';
 import {
   fetchParams,
   fetchSegment,
+  resetSegment,
   addSegmentAttribute,
   insertSegmentAttribute,
   moveSegmentAttribute,
@@ -95,6 +96,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     if (!isNewSegment) {
       dispatch(fetchSegment(paramsSegmentId));
     }
+    return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
   const handleChangeAttribute = (position, attribute) => {

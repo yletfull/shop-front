@@ -13,6 +13,7 @@ export const updateParams = createAction(`${NS}/params/update`);
 
 export const requestSegment = createAction(`${NS}/segment/request`);
 export const updateSegment = createAction(`${NS}/segment/update`);
+export const resetSegment = createAction(`${NS}/segment/reset`);
 
 export const fetchParams = () => async (dispatch) => {
   dispatch(requestParams());
