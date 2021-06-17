@@ -86,13 +86,17 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           icon={(<IconPlus />)}
           to="/segments/edit"
         >
-          Новый сегмент
+          Новый
+          <br />
+          сегмент
         </ControlsLink>
         <ControlsLink
           icon={(<IconSearch />)}
           to="/"
         >
-          Найти пользователя
+          Найти
+          <br />
+          пользователя
         </ControlsLink>
       </Controls>
 
