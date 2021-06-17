@@ -10,8 +10,7 @@ import TemplatesBlock from './Tempaltes';
 const Header = function HeaderScreen() {
   const stage = useSelector(getStage);
 
-  const firstStages = (stage === firstUploadStages.selectAccount)
-    || (stage === firstUploadStages.filseIsNotLoaded);
+  const firstStages = (stage === firstUploadStages.selectAccount);
 
 
   return (
