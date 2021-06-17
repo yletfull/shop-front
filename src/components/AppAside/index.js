@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import IconCrop from '@/icons/Crop';
 import IconLogo from '@/icons/Logo';
 import IconUsers from '@/icons/Users';
 import IconLogout from '@/icons/Logout';
@@ -18,6 +19,11 @@ const AppAside = function AppAside() {
   };
 
   const menuItemsList = [
+    {
+      title: titles.segments,
+      to: patchs.segments,
+      icon: <IconCrop />,
+    },
     {
       title: titles.upload,
       to: patchs.upload,
