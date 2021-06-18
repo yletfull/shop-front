@@ -1,6 +1,6 @@
 import api from '@/api';
 
-const baseUrl = 'api/v1/external/api/v1';
+const baseUrl = 'api/v1/external/ctor/api/v1';
 
 const fetchParams = function serviceFetchSegmentsAttributes() {
   return api
