@@ -2,11 +2,13 @@ import React, { useMemo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
 import { useQuery } from '@/hooks';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
+import Modal from '@/components/Modal';
 import Pagination from '@/components/PagePagination';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
@@ -54,6 +56,8 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     setQueryCurrentPage,
   ] = useState(query.get(queryParams.page) || 1);
 
+  const [downloadedSegment, setDownloadedSegment] = useState(null);
+
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
@@ -72,6 +76,15 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     setQueryCurrentPage(page);
     query.set(queryParams.page, String(page));
     history.push({ search: query.toString() });
+  };
+  const handleClickDownload = ({ id, title, type }) => {
+    if (!id || !type) {
+      return;
+    }
+    setDownloadedSegment({ id, type, title });
+  };
+  const handleCloseDownloadForm = () => {
+    setDownloadedSegment(null);
   };
   const handleSubmitTableFilterForm = ({ searchId, searchName }) => {
     query.set(queryParams.searchId, String(searchId));
@@ -104,6 +117,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
         isFetching={isFetching}
         queryParams={queryParams}
         data={tableData}
+        onClickDownload={handleClickDownload}
         onSubmitFilter={handleSubmitTableFilterForm}
       />
 
@@ -116,6 +130,24 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           onChangePage={handleChangePage}
         />
       )}
+
+      <Modal
+        header={(
+          <span>
+            Сохранение файлов для
+            {' '}
+            {downloadedSegment?.type.toUpperCase() || ''}
+          </span>
+        )}
+        isVisible={Boolean(downloadedSegment)}
+        onClose={handleCloseDownloadForm}
+      >
+        <DownloadFilesForm
+          id={downloadedSegment?.id}
+          name={downloadedSegment?.name}
+          onClose={handleCloseDownloadForm}
+        />
+      </Modal>
     </div>
   );
 };

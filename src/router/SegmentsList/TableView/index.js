@@ -16,12 +16,14 @@ const propTypes = {
   }).isRequired,
   data: PropTypes.arrayOf(PropTypes.string),
   isFetching: PropTypes.bool,
+  onClickDownload: PropTypes.func,
   onSubmitFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
   isFetching: false,
+  onClickDownload: () => {},
   onSubmitFilter: () => {},
 };
 
@@ -29,6 +31,7 @@ const TableView = function TableView({
   queryParams,
   data,
   isFetching,
+  onClickDownload,
   onSubmitFilter,
 }) {
   const query = useQuery();
@@ -55,6 +58,13 @@ const TableView = function TableView({
       return;
     }
     setSearchName(value);
+  };
+  const handleClickDownloadButton = (e) => {
+    const { id, title, type } = e?.target?.dataset || {};
+    if (!id || !type) {
+      return;
+    }
+    onClickDownload({ id, title, type });
   };
   const handleClickSearchButton = () => {
     onSubmitFilter({ searchId, searchName });
@@ -159,7 +169,31 @@ const TableView = function TableView({
               {row.phonesCount ? formatNumber(row.phonesCount) : '-'}
             </td>
             <td>
-              {row.download}
+              <Button
+                appearance="control"
+                data-id={row.id}
+                data-title={row.title}
+                data-type="vk"
+                onClick={handleClickDownloadButton}
+              >
+                <span className={styles.tableViewDownloadLabel}>
+                  VK
+                </span>
+              </Button>
+              &nbsp;
+              &nbsp;
+              &nbsp;
+              <Button
+                appearance="control"
+                data-id={row.id}
+                data-title={row.title}
+                data-type="fb"
+                onClick={handleClickDownloadButton}
+              >
+                <span className={styles.tableViewDownloadLabel}>
+                  FB
+                </span>
+              </Button>
             </td>
             <td>
               {row.version}
