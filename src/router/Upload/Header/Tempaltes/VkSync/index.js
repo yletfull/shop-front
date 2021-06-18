@@ -45,13 +45,6 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   const [taksData, setTaskData] = useState({});
 
   const sync = async () => {
-    setSyncError(false);
-    setIsSyncInProcess(true);
-    dispatch(setDownloadAllAdsButtonDisabled(true));
-    dispatch(setUploadButtonDisabled(true));
-
-    await dispatch(syncVk());
-
     if (syncVkTask.current && Object.keys(syncVkTask.current).length) {
       let task = await dispatch(fetchTask(syncVkTask.current.id));
       (function check() {
@@ -100,6 +93,17 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   }, [queueList]);
 
   const handleSyncButtonClick = async () => {
+    if (isSyncInProcess) {
+      return;
+    }
+
+    setSyncError(false);
+    setIsSyncInProcess(true);
+    dispatch(setDownloadAllAdsButtonDisabled(true));
+    dispatch(setUploadButtonDisabled(true));
+
+    await dispatch(syncVk());
+
     sync();
   };
 
