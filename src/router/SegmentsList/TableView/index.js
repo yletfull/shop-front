@@ -6,6 +6,7 @@ import { useQuery } from '@/hooks';
 import { formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Spinner from '@/components/Spinner';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -14,17 +15,20 @@ const propTypes = {
     searchName: PropTypes.string,
   }).isRequired,
   data: PropTypes.arrayOf(PropTypes.string),
+  isFetching: PropTypes.bool,
   onSubmitFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
+  isFetching: false,
   onSubmitFilter: () => {},
 };
 
 const TableView = function TableView({
   queryParams,
   data,
+  isFetching,
   onSubmitFilter,
 }) {
   const query = useQuery();
@@ -126,6 +130,14 @@ const TableView = function TableView({
             Посл. версия
           </th>
         </tr>
+
+        {isFetching && (
+          <tr>
+            <td colSpan="8">
+              <Spinner />
+            </td>
+          </tr>
+        )}
 
         {data.map((row) => (
           <tr key={row.id}>
