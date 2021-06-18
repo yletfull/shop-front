@@ -30,7 +30,7 @@ const DownloadFilesForm = function DownloadFilesForm({
     id,
     name,
     sources: [],
-    samples: 0;
+    samples: 0,
     count: 0,
   };
 
