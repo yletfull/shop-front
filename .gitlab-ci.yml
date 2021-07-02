@@ -57,6 +57,18 @@ build:
     paths:
       - dist/*
 
+build_storybook:
+  stage: build
+  only:
+    - develop
+  script:
+    - yarn install --cache-folder .yarn
+    - yarn build-storybook
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - dist/*
+
 dockerize:
   image: docker:latest
   cache: {}

@@ -40,7 +40,7 @@ const NavigationBar = function NavigationBar(props) {
         <span className={styles.currentText}>
           {params.current}
         </span>
-        <Indicator color="red" />
+        <Indicator color={params.finally ? 'green' : 'red'} />
       </div>
       {(params.next.length > 0) && params.next.map(
         (el, nextId) => (

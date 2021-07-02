@@ -1,18 +1,27 @@
 
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Select from '@/components/Select';
 import Button from '@/components/Button';
+import commands from '@/constants/commands';
+import { queueTasksStatuses } from '@/constants/statuses';
 import ButtonLink from '@/components/ButtonLink';
 
-import { firstUploadStages, globalStages } from '../../stages';
 import {
-  fetchAccounts, fetchClients,
-  fetchTasks,
+  fetchAccounts, fetchClients, fetchQueueList,
   setAccount, setClient, setStage,
-} from '../../../../store/upload/actions';
+  fetchRecentFile,
+} from '@/store/upload/actions';
+import {
+  getAccounts, getClients, getQueueList,
+  getRecentFile, getSelectAccount, getSelectClient,
+} from '@/store/upload/selectors';
+import {
+  finalUploadStages, firstUploadStages, globalStages,
+} from '../../stages';
 import styles from './styles.module.scss';
+
 
 const Header = function HeaderScreen() {
   const dispatch = useDispatch();
@@ -22,27 +31,25 @@ const Header = function HeaderScreen() {
   const [changeAccountButtonShow, setChangeAccountButtonShow] = useState(true);
   const [acceptButtonDisabled, setAcceptButtonDisabled] = useState(true);
 
-  const accountsData = useSelector(
-    (state) => state.upload?.accounts || []
-  );
-  const accounts = useMemo(() => accountsData, [accountsData]);
-  const clientsData = useSelector(
-    (state) => state.upload?.clients || []
-  );
-  const clients = useMemo(() => clientsData, [clientsData]);
-  const selectAccount = useSelector(
-    (state) => state.upload?.selectAccount
-  ) || '';
-  const selectClient = useSelector(
-    (state) => state.upload?.selectClient
-  ) || '';
-  const tasksArray = useSelector(
-    (state) => state.upload?.tasks
-  );
-  const tasks = useRef(tasksArray);
+  const accounts = useSelector(getAccounts);
+
+  const clients = useSelector(getClients);
+
+  const selectAccount = useSelector(getSelectAccount) || '';
+
+  const selectClient = useSelector(getSelectClient) || '';
+
+  const queueListData = useSelector(getQueueList);
+  const queueList = useRef(queueListData);
   useLayoutEffect(() => {
-    tasks.current = tasksArray;
-  }, [tasksArray]);
+    queueList.current = queueListData;
+  }, [queueListData]);
+
+  const recentFileData = useSelector(getRecentFile);
+  const recentFile = useRef(recentFileData);
+  useLayoutEffect(() => {
+    recentFile.current = recentFileData;
+  }, [recentFileData]);
 
   const accountsSelectorOptions = () => {
     if (Object.values(accounts).length > 0) {
@@ -80,24 +87,17 @@ const Header = function HeaderScreen() {
     dispatch(setClient(''));
   };
 
-  const hanldeAcceptButtonClick = async () => {
-    if (selectClient && selectAccount) {
-      setChangeAccountButtonShow(true);
-      setClientSelectDisabled(true);
-      setAccountSelectDisabled(true);
-
-      await dispatch(fetchTasks());
-      if (tasks.current.length > 0) {
-        if (tasks.current[tasks.current.length - 1].status === 1) {
-          dispatch(setStage(firstUploadStages.selectList));
-        } else {
-          dispatch(setStage(globalStages.errorCheck));
-        }
-      } else {
-        dispatch(setStage(firstUploadStages.filseIsNotLoaded));
-      }
+  useEffect(() => {
+    if (clients.length) {
+      setClientSelectDisabled(false);
     }
-  };
+  }, [dispatch, clients]);
+
+  useEffect(() => {
+    setAcceptButtonDisabled(!selectAccount || !selectClient);
+    dispatch(setStage(firstUploadStages.selectAccount));
+    setChangeAccountButtonShow(false);
+  }, [dispatch, selectAccount, selectClient]);
 
   useEffect(() => (async () => {
     if (!selectAccount) {
@@ -111,21 +111,36 @@ const Header = function HeaderScreen() {
     setClientSelectDisabled(true);
   })(), [dispatch, selectAccount]);
 
-  useEffect(() => {
-    if (clients.length) {
-      setClientSelectDisabled(false);
-    }
-  }, [dispatch, clients]);
+  const hanldeAcceptButtonClick = async () => {
+    if (selectClient && selectAccount) {
+      setChangeAccountButtonShow(true);
+      setClientSelectDisabled(true);
+      setAccountSelectDisabled(true);
 
-  useEffect(() => (async () => {
-    if (selectAccount && selectClient) {
-      setAcceptButtonDisabled(false);
-    } else {
-      setAcceptButtonDisabled(true);
+      await dispatch(fetchQueueList());
+      let importTasks = [];
+      if (queueList.current && queueList.current.length) {
+        importTasks = queueList.current
+          .map((task) => task.command === commands.syncXlsxVk && task);
+      }
+      await dispatch(fetchRecentFile());
+
+
+      if (importTasks.length > 0) {
+        if (recentFile.current) {
+          if (importTasks[0].status === queueTasksStatuses.error) {
+            return dispatch(setStage(globalStages.errorCheck));
+          }
+          if (importTasks[0].status === queueTasksStatuses.inProgress) {
+            return dispatch(setStage(finalUploadStages.fileIsLoading));
+          }
+          return dispatch(setStage(firstUploadStages.selectList));
+        }
+        return;
+      }
+      dispatch(setStage(firstUploadStages.filseIsNotLoaded));
     }
-    dispatch(setStage(firstUploadStages.selectAccount));
-    setChangeAccountButtonShow(false);
-  })(), [dispatch, selectAccount, selectClient]);
+  };
 
   return (
     <div className={styles.topWrapper}>
@@ -190,7 +205,7 @@ const Header = function HeaderScreen() {
         style={{ fontSize: '14px' }}
         className={styles.downloadExcelModel}
         appearance="control"
-        to={`/api/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
+        to="/api/v1/import/template"
         target="_blank"
         download
       >

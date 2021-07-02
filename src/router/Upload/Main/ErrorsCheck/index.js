@@ -1,9 +1,14 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import WarningIcon from '@/icons/Warning';
 import NavigationBar from '@/components/NavigationBar';
+import Button from '@/components/Button';
+import { getQueueList } from '@/store/upload/selectors';
 import styles from './styles.module.scss';
+import ErrorListPopup from './components/ErrorListPopup';
 
 const navigationBarParams = {
   prev: ['Загрузка файла'],
@@ -12,6 +17,17 @@ const navigationBarParams = {
 };
 
 const Upload = function UploadScreen() {
+  const queueList = useSelector(getQueueList);
+
+  const [errorListPopupIsOpen, setErrorListPopupIsOpen] = useState(false);
+
+  const handleErrorListPopupOpen = () => {
+    setErrorListPopupIsOpen(true);
+  };
+  const handleErrorListPopupClose = () => {
+    setErrorListPopupIsOpen(false);
+  };
+
   return (
     <div className={styles.wrapper}>
       <NavigationBar
@@ -20,15 +36,38 @@ const Upload = function UploadScreen() {
       <div className={styles.contentWrapper}>
         <WarningIcon className={styles.icon} />
         <div className={styles.titleWrapper}>
-          <p>
-            Файл содержит ошибки.
-          </p>
-          <p>
-            Вы можете скачать файл с отмеченными ошибками
+          <div className={styles.textWrapper}>
+            Файл содержит
+            <Button
+              appearance="control"
+              className={styles.errorListPopupOpenButton}
+              onClick={handleErrorListPopupOpen}
+            >
+              Ошибки
+            </Button>
+            .
+          </div>
+          <span>
+            Вы можете скачать
+            <Link
+              to={`/api/v1/document/${queueList[0].data.documentId}/raw`}
+              target="_blank"
+            >
+              {' '}
+              файл
+              {' '}
+            </Link>
+            с отмеченными ошибками
             для их исправления и повторной загрузки
-          </p>
+          </span>
         </div>
       </div>
+      {errorListPopupIsOpen && (
+        <ErrorListPopup
+          onClose={handleErrorListPopupClose}
+          error={queueList[0].data.errorMessage}
+        />
+      )}
     </div>
   );
 };
