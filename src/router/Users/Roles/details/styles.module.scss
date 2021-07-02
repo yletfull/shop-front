@@ -1,17 +1,22 @@
 @import '@/theme/include.scss';
 
-.tagsWrapper {
+.headerWrapper {
+  align-items: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.removeRoleButton {
-  color: $color-red-darkest;
-  height: 100%;
-  margin-left: .5rem;
-  padding: 0;
+.editAbilitiesButton {
+  margin-left: .65rem;
 }
 
-.addRoleButton {
-  margin-left: .5rem;
+.addAbility {
+  &Button {
+    margin-left: .5rem;
+  }
+}
+
+.removeAbilityButtonTd {
+  text-align: right;
 }

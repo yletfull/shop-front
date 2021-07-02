@@ -3,7 +3,7 @@ import Details from './details';
 
 export const patchs = {
   rolesTable: '/users/roles',
-  details: '/users/roles/:roleId/details',
+  details: '/users/roles/:roleName/details',
 };
 
 export const titles = {

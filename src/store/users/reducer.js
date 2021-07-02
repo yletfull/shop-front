@@ -1,6 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import {
+  createUserError,
   list,
   listError,
   allRoles,
@@ -10,9 +11,16 @@ import {
   userRoles,
   rolesDetails,
   rolesDetailsError,
+  userSetRoleError,
+  rolesAbilities,
+  allRoleAbilities,
+  allRoleAbilitiesError,
+  editRoleError,
+  createRoleError,
 } from './actions';
 
 const initialState = {
+  createUserError: '',
   list: [],
   listError: '',
   roles: [],
@@ -22,9 +30,19 @@ const initialState = {
   userRoles: {},
   rolesDetails: {},
   rolesDetailsError: '',
+  userSetRoleError: '',
+  rolesAbilities: '',
+  allRoleAbilities: [],
+  allRoleAbilitiesError: '',
+  editRoleError: '',
+  createRoleError: '',
 };
 
 const reducer = createReducer(initialState, {
+  [createUserError]: (state, action) => ({
+    ...state,
+    createUserError: action.payload,
+  }),
   [list]: (state, action) => ({
     ...state,
     list: action.payload,
@@ -60,6 +78,30 @@ const reducer = createReducer(initialState, {
   [rolesDetailsError]: (state, action) => ({
     ...state,
     rolesDetailsError: action.payload,
+  }),
+  [userSetRoleError]: (state, action) => ({
+    ...state,
+    rolesDetailsError: action.payload,
+  }),
+  [rolesAbilities]: (state, action) => ({
+    ...state,
+    rolesAbilities: action.payload,
+  }),
+  [allRoleAbilities]: (state, action) => ({
+    ...state,
+    allRoleAbilities: action.payload,
+  }),
+  [allRoleAbilitiesError]: (state, action) => ({
+    ...state,
+    allRoleAbilitiesError: action.payload,
+  }),
+  [editRoleError]: (state, action) => ({
+    ...state,
+    editRoleError: action.payload,
+  }),
+  [createRoleError]: (state, action) => ({
+    ...state,
+    createRoleError: action.payload,
   }),
 });
 
