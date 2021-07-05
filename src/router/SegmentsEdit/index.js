@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -76,8 +76,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
 
+  const downloadLinkRef = useRef(null);
+
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
+  const [
+    isRequestedDownloadSegment,
+    setIsRequestedDownloadSegment,
+  ] = useState(false);
 
   const isNewSegment = typeof paramsSegmentId === 'undefined';
 
@@ -101,6 +107,26 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
+
+  const mapOrSegmentAttributes = (attr) => {
+    const {
+      datasetIds,
+      equality: type,
+      id: attributeId,
+      negation,
+      values,
+    } = attr || {};
+    return ({
+      attribute: attr,
+      attributeId,
+      datasetIds,
+      negation,
+      type,
+      values,
+    });
+  };
+  const mapAndSegmentAttributes = (andAttributes) => andAttributes
+    .map(mapOrSegmentAttributes);
 
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;
@@ -165,7 +191,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
-      sources,
+      sources: entityTypes,
       count: splitFilesCount,
       name: fileName,
       samples: sampleRowsSize,
@@ -174,28 +200,38 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       type: adsPlatform,
     } = downloadedSegment;
 
-    if (!fileName || !sources || !Array.isArray(sources)) {
+    if (!fileName || !entityTypes || !Array.isArray(entityTypes)) {
       return;
     }
 
-    const request = isNewSegment && !segmentId
-      ? service.downloadSegmentByMeta
-      : service.downloadSegmentById;
-
-    const requestParams = {
-      adsPlatform,
-      fileName,
-      sampleRowsSize,
-      splitFilesCount,
-      entityTypes: sources.join(),
-    };
+    setIsRequestedDownloadSegment(true);
 
     try {
-      const response = await request(requestParams, segmentId);
-      console.log(response);
+      const url = await service.getSegmentDownloadLink(segmentId, {
+        adsPlatform,
+        fileName,
+        sampleRowsSize,
+        splitFilesCount,
+        entityTypes,
+        segment: {
+          [segmentProps.attributes]: segmentAttributes
+            .map(mapAndSegmentAttributes),
+        },
+      });
+      if (!url) {
+        return;
+      }
+      const { current: linkNode } = downloadLinkRef || {};
+      linkNode.download = fileName;
+      linkNode.href = url;
+      linkNode.click();
+
+      setDownloadedSegment(null);
     } catch (error) {
       console.error(error);
     }
+
+    setIsRequestedDownloadSegment(false);
   };
   const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
@@ -205,25 +241,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
-    const mapOrSegmentAttributes = (attr) => {
-      const {
-        datasetIds,
-        equality: type,
-        id: attributeId,
-        negation,
-        values,
-      } = attr || {};
-      return ({
-        attribute: attr,
-        attributeId,
-        datasetIds,
-        negation,
-        type,
-        values,
-      });
-    };
-    const mapAndSegmentAttributes = (andAttributes) => andAttributes
-      .map(mapOrSegmentAttributes);
     try {
       await service.saveSegment({
         ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
@@ -238,6 +255,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const statistic = {};
 
+  /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
       <div className={styles.segmentsEditMain}>
@@ -395,13 +413,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       >
         <DownloadFilesForm
           id={downloadedSegment?.id}
+          isDisabled={isRequestedDownloadSegment}
           name={downloadedSegment?.name}
           onClose={handleCloseDownloadForm}
           onSubmit={handleSubmitDownloadForm}
         />
+        <a ref={downloadLinkRef} />
       </Modal>
     </div>
   );
+  /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
 };
 
 SegmentsEdit.propTypes = propTypes;

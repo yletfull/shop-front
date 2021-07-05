@@ -21,22 +21,37 @@ const saveSegment = function serviceSaveSegment(params) {
     .then((response) => response.data.data);
 };
 
-const downloadSegmentById = function serviceDownloadSegmentById(params, id) {
-  if (!id) {
-    return;
-  }
-  return api
-    .get(`${baseUrl}/segments/${id}/export/`, { params });
-};
-const downloadSegmentByMeta = function serviceDownloadSegmentByMeta(params) {
-  return api
-    .post(`${baseUrl}/segments/export/`, params);
+const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
+  id,
+  data,
+) {
+  const url = id
+    ? `${baseUrl}/segments/${id}/export/`
+    : `${baseUrl}/segments/export/`;
+  const params = Object.keys(data).reduce((acc, key) => {
+    if (key === 'segment') {
+      return acc;
+    }
+    if (Array.isArray(data[key])) {
+      return ({ ...acc, [key]: data[key].join() });
+    }
+    return ({ ...acc, [key]: data[key] });
+  }, {});
+  return api({
+    data: !id ? data : {},
+    params: id ? params : {},
+    url,
+    method: id ? 'get' : 'post',
+    responseType: 'blob',
+  })
+    .then((response) => window
+      .URL
+      .createObjectURL(new Blob([response.data], { type: 'application/zip' })));
 };
 
 export default {
-  downloadSegmentById,
-  downloadSegmentByMeta,
   fetchParams,
   fetchSegment,
+  getSegmentDownloadLink,
   saveSegment,
 };
