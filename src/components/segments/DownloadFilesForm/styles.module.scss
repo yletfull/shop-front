@@ -1,5 +1,37 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.downloadFilesForm {
+  font-size: .75rem;
+  line-height: 1.25rem;
+
+  &Button {
+    & + & {
+      margin-left: .75rem;
+    }
+  }
+
+  &Checkbox {
+    margin-right: 1.25rem;
+  }
+
+  &Input {
+    width: 25rem;
+
+    &[type='number'] {
+      margin-right: .5rem;
+      width: 4rem;
+    }
+  }
+
+  &Label {
+    color: $color-gray-darker;
+    display: inline-block;
+    width: 10rem;
+  }
+
+  &Row {
+    & + & {
+      padding-top: .25rem;
+    }
+  }
 }

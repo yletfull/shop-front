@@ -69,24 +69,25 @@ const DownloadFilesForm = function DownloadFilesForm({
         console.log(values);
         return (
           <Form className={styles.downloadFilesForm}>
-            <div>
-              <span>
+            <div className={styles.downloadFilesFormRow}>
+              <span className={styles.downloadFilesFormLabel}>
                 Название
               </span>
               <span>
                 <Field
                   name="name"
                   component={FormikInput}
+                  className={styles.downloadFilesFormInput}
                 />
               </span>
             </div>
 
-            <div>
-              <span>
+            <div className={styles.downloadFilesFormRow}>
+              <span className={styles.downloadFilesFormLabel}>
                 Идентификаторы
               </span>
               <span>
-                <label>
+                <label className={styles.downloadFilesFormCheckbox}>
                   <Field
                     name="sources"
                     value={sources.phones}
@@ -94,7 +95,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   />
                   Телефоны
                 </label>
-                <label>
+                <label className={styles.downloadFilesFormCheckbox}>
                   <Field
                     name="sources"
                     value={sources.emails}
@@ -105,12 +106,12 @@ const DownloadFilesForm = function DownloadFilesForm({
               </span>
             </div>
 
-            <div>
-              <span>
+            <div className={styles.downloadFilesFormRow}>
+              <span className={styles.downloadFilesFormLabel}>
                 Семплировать
               </span>
               <span>
-                <label>
+                <label className={styles.downloadFilesFormCheckbox}>
                   <Checkbox
                     onClick={handleClickSetSample}
                   />
@@ -122,17 +123,18 @@ const DownloadFilesForm = function DownloadFilesForm({
                   min="0"
                   disabled={!isSetSample}
                   component={FormikInput}
+                  className={styles.downloadFilesFormInput}
                 />
                 идентификаторов из
               </span>
             </div>
 
-            <div>
-              <span>
+            <div className={styles.downloadFilesFormRow}>
+              <span className={styles.downloadFilesFormLabel}>
                 Разбить файл
               </span>
               <span>
-                <label>
+                <label className={styles.downloadFilesFormCheckbox}>
                   <Checkbox
                     onClick={handleClickSetCount}
                   />
@@ -144,19 +146,24 @@ const DownloadFilesForm = function DownloadFilesForm({
                   min="0"
                   disabled={!isSetCount}
                   component={FormikInput}
+                  className={styles.downloadFilesFormInput}
                 />
                 частей
               </span>
             </div>
 
-            <div>
+            <div className={styles.downloadFilesFormRow}>
               <Button
                 appearance="secondary"
+                className={styles.downloadFilesFormButton}
                 onClick={handleClickCancelButton}
               >
                 отменить
               </Button>
-              <Button type="submit">
+              <Button
+                type="submit"
+                className={styles.downloadFilesFormButton}
+              >
                 сохранить
               </Button>
             </div>
