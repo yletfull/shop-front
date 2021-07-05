@@ -174,7 +174,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       type: adsPlatform,
     } = downloadedSegment;
 
-    if (!id || !fileName || !sources || !Array.isArray(sources)) {
+    if (!fileName || !sources || !Array.isArray(sources)) {
       return;
     }
 
@@ -182,17 +182,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       ? service.downloadSegmentByMeta
       : service.downloadSegmentById;
 
-    const params = {
+    const requestParams = {
       adsPlatform,
       fileName,
       sampleRowsSize,
       splitFilesCount,
       entityTypes: sources.join(),
-      segment: 
     };
 
     try {
-      const response = await request(params, segmentId);
+      const response = await request(requestParams, segmentId);
+      console.log(response);
     } catch (error) {
       console.error(error);
     }
