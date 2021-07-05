@@ -70,7 +70,7 @@ const DownloadFilesForm = function DownloadFilesForm({
       onSubmit={handleSubmitForm}
     >
       {({ values }) => {
-        console.log(values);
+        const { sources: selectedSources } = values;
         return (
           <Form className={styles.downloadFilesForm}>
             <div className={styles.downloadFilesFormRow}>
@@ -96,6 +96,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   <Field
                     name="sources"
                     value={sources.phones}
+                    checked={selectedSources.includes(sources.phones)}
                     component={FormikCheckbox}
                     disabled={isDisabled}
                   />
@@ -105,6 +106,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   <Field
                     name="sources"
                     value={sources.emails}
+                    checked={selectedSources.includes(sources.emails)}
                     component={FormikCheckbox}
                     disabled={isDisabled}
                   />
