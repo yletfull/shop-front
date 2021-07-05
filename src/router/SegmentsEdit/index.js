@@ -382,6 +382,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           >
             VK
           </Button>
+          <Button
+            appearance="control"
+            data-type="FACEBOOK"
+            onClick={handleClickDownloadButton}
+          >
+            FB
+          </Button>
         </div>
 
         <h3
