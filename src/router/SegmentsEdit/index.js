@@ -7,7 +7,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
 import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 import {
   attributeProps,
   attributeTypes,
@@ -74,6 +76,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
 
+  const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
 
   const isNewSegment = typeof paramsSegmentId === 'undefined';
@@ -107,8 +110,18 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
+  const handleClickDownloadButton = (e) => {
+    const { type } = e?.target?.dataset || {};
+    if (!type) {
+      return;
+    }
+    setDownloadedSegment({ type });
+  };
   const handleClickShowParams = () => {
     setIsShowParams(true);
+  };
+  const handleCloseDownloadForm = () => {
+    setDownloadedSegment(null);
   };
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
@@ -149,6 +162,40 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
+  };
+  const handleSubmitDownloadForm = async (values) => {
+    const {
+      sources,
+      count: splitFilesCount,
+      name: fileName,
+      samples: sampleRowsSize,
+    } = values;
+    const {
+      type: adsPlatform,
+    } = downloadedSegment;
+
+    if (!id || !fileName || !sources || !Array.isArray(sources)) {
+      return;
+    }
+
+    const request = isNewSegment && !segmentId
+      ? service.downloadSegmentByMeta
+      : service.downloadSegmentById;
+
+    const params = {
+      adsPlatform,
+      fileName,
+      sampleRowsSize,
+      splitFilesCount,
+      entityTypes: sources.join(),
+      segment: 
+    };
+
+    try {
+      const response = await request(params, segmentId);
+    } catch (error) {
+      console.error(error);
+    }
   };
   const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
@@ -309,6 +356,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Файлы для площадок
         </h3>
 
+        <div>
+          <Button
+            appearance="control"
+            data-type="VK"
+            onClick={handleClickDownloadButton}
+          >
+            VK
+          </Button>
+        </div>
+
         <h3
           className={cx(
             styles.segmentsEditTitle,
@@ -324,6 +381,25 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           onSubmit={handleSubmitSaveForm}
         />
       </div>
+
+      <Modal
+        header={(
+          <span>
+            Сохранение файлов для
+            {' '}
+            {downloadedSegment?.type.toUpperCase() || ''}
+          </span>
+        )}
+        isVisible={Boolean(downloadedSegment)}
+        onClose={handleCloseDownloadForm}
+      >
+        <DownloadFilesForm
+          id={downloadedSegment?.id}
+          name={downloadedSegment?.name}
+          onClose={handleCloseDownloadForm}
+          onSubmit={handleSubmitDownloadForm}
+        />
+      </Modal>
     </div>
   );
 };

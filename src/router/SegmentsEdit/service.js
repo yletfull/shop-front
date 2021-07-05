@@ -21,7 +21,21 @@ const saveSegment = function serviceSaveSegment(params) {
     .then((response) => response.data.data);
 };
 
+const downloadSegmentById = function serviceDownloadSegmentById(params, id) {
+  if (!id) {
+    return;
+  }
+  return api
+    .get(`${baseUrl}/segments/${id}/export/`, { params });
+};
+const downloadSegmentByMeta = function serviceDownloadSegmentByMeta(params) {
+  return api
+    .post(`${baseUrl}/segments/export/`, params);
+};
+
 export default {
+  downloadSegmentById,
+  downloadSegmentByMeta,
   fetchParams,
   fetchSegment,
   saveSegment,
