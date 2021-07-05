@@ -99,19 +99,20 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       type: adsPlatform,
     } = downloadedSegment;
 
-    if (!id) {
+    if (!id || !fileName || !sources || !Array.isArray(sources)) {
       return;
     }
 
+    const params = {
+      adsPlatform,
+      fileName,
+      sampleRowsSize,
+      splitFilesCount,
+      entityTypes: sources.join(),
+    };
+
     try {
-      const response = await service.downloadSegmentFile({
-        adsPlatform,
-        fileName,
-        sampleRowsSize,
-        splitFilesCount,
-        entityTypes: sources,
-        segment: { id },
-      });
+      const response = await service.downloadSegmentFile(id, params);
       console.log(response);
     } catch (error) {
       console.error(error);
