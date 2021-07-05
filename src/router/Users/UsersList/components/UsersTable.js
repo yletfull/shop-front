@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,6 +6,7 @@ import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
 import Button from '@/components/Button';
 import { getUsersList } from '@/store/users/selectors';
+import IconPlus from '@/icons/Plus';
 import styles from './styles.module.scss';
 import AddUserPopup from './AddUserPopup';
 
@@ -41,14 +41,12 @@ const userTable = function UsersScreen() {
   return (
     <div>
       <div className={styles.headerWrapper}>
-        <p>
-          Список ролей
-        </p>
         <Button
           className={styles.editAbilitiesButton}
           appearance="control"
           onClick={handleAddUserOpenPopup}
         >
+          <IconPlus />
           <span>
             Добавить пользователя
           </span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -7,7 +7,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
 import Button from '@/components/Button';
+import Modal from '@/components/Modal';
 import {
   attributeProps,
   attributeTypes,
@@ -74,7 +76,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
 
+  const downloadLinkRef = useRef(null);
+
+  const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
+  const [
+    isRequestedDownloadSegment,
+    setIsRequestedDownloadSegment,
+  ] = useState(false);
 
   const isNewSegment = typeof paramsSegmentId === 'undefined';
 
@@ -99,6 +108,26 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
+  const mapOrSegmentAttributes = (attr) => {
+    const {
+      datasetIds,
+      equality: type,
+      id: attributeId,
+      negation,
+      values,
+    } = attr || {};
+    return ({
+      attribute: attr,
+      attributeId,
+      datasetIds,
+      negation,
+      type,
+      values,
+    });
+  };
+  const mapAndSegmentAttributes = (andAttributes) => andAttributes
+    .map(mapOrSegmentAttributes);
+
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;
     if (typeof attributeIndex === 'undefined'
@@ -107,8 +136,18 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
+  const handleClickDownloadButton = (e) => {
+    const { type } = e?.target?.dataset || {};
+    if (!type) {
+      return;
+    }
+    setDownloadedSegment({ type });
+  };
   const handleClickShowParams = () => {
     setIsShowParams(true);
+  };
+  const handleCloseDownloadForm = () => {
+    setDownloadedSegment(null);
   };
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
@@ -150,6 +189,50 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
   };
+  const handleSubmitDownloadForm = async (values) => {
+    const {
+      sources: entityTypes,
+      count: splitFilesCount,
+      name: fileName,
+      samples: sampleRowsSize,
+    } = values;
+    const {
+      type: adsPlatform,
+    } = downloadedSegment;
+
+    if (!fileName || !entityTypes || !Array.isArray(entityTypes)) {
+      return;
+    }
+
+    setIsRequestedDownloadSegment(true);
+
+    try {
+      const url = await service.getSegmentDownloadLink(segmentId, {
+        adsPlatform,
+        fileName,
+        sampleRowsSize,
+        splitFilesCount,
+        entityTypes,
+        segment: {
+          [segmentProps.attributes]: segmentAttributes
+            .map(mapAndSegmentAttributes),
+        },
+      });
+      if (!url) {
+        return;
+      }
+      const { current: linkNode } = downloadLinkRef || {};
+      linkNode.download = fileName;
+      linkNode.href = url;
+      linkNode.click();
+
+      setDownloadedSegment(null);
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsRequestedDownloadSegment(false);
+  };
   const handleSubmitParams = (selectedParams) => {
     setIsShowParams(false);
     if (!selectedParams) {
@@ -158,25 +241,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
-    const mapOrSegmentAttributes = (attr) => {
-      const {
-        datasetIds,
-        equality: type,
-        id: attributeId,
-        negation,
-        values,
-      } = attr || {};
-      return ({
-        attribute: attr,
-        attributeId,
-        datasetIds,
-        negation,
-        type,
-        values,
-      });
-    };
-    const mapAndSegmentAttributes = (andAttributes) => andAttributes
-      .map(mapOrSegmentAttributes);
     try {
       await service.saveSegment({
         ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
@@ -191,6 +255,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const statistic = {};
 
+  /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
       <div className={styles.segmentsEditMain}>
@@ -309,6 +374,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Файлы для площадок
         </h3>
 
+        <div>
+          <Button
+            appearance="control"
+            data-type="VK"
+            onClick={handleClickDownloadButton}
+          >
+            VK
+          </Button>
+        </div>
+
         <h3
           className={cx(
             styles.segmentsEditTitle,
@@ -324,8 +399,30 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           onSubmit={handleSubmitSaveForm}
         />
       </div>
+
+      <Modal
+        header={(
+          <span>
+            Сохранение файлов для
+            {' '}
+            {downloadedSegment?.type.toUpperCase() || ''}
+          </span>
+        )}
+        isVisible={Boolean(downloadedSegment)}
+        onClose={handleCloseDownloadForm}
+      >
+        <DownloadFilesForm
+          id={downloadedSegment?.id}
+          isDisabled={isRequestedDownloadSegment}
+          name={downloadedSegment?.name}
+          onClose={handleCloseDownloadForm}
+          onSubmit={handleSubmitDownloadForm}
+        />
+        <a ref={downloadLinkRef} />
+      </Modal>
     </div>
   );
+  /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
 };
 
 SegmentsEdit.propTypes = propTypes;

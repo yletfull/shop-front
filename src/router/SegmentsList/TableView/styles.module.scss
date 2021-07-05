@@ -8,6 +8,13 @@
     width: 100%;
   }
 
+  &Download {
+    &Label {
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+  }
+
   &Input {
     &_grow {
       flex-grow: 1;

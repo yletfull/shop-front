@@ -92,6 +92,7 @@ const Details = function RolesDetailsScreen() {
     await dispatch(fetchUserRoles({ userId }));
     setRemoveRoleButtonDisabled(false);
     setAddRoleButtonDisabled(false);
+    setSelectedRole('');
   };
 
   const handleRemoveRoleButtonClick = async (e) => {
