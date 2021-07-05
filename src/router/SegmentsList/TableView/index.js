@@ -34,6 +34,11 @@ const TableView = function TableView({
   onClickDownload,
   onSubmitFilter,
 }) {
+  const downloadPlatforms = {
+    vk: 'VK',
+    fb: 'FACEBOOK',
+  };
+
   const query = useQuery();
 
   const [
@@ -173,7 +178,7 @@ const TableView = function TableView({
                 appearance="control"
                 data-id={row.id}
                 data-title={row.title}
-                data-type="vk"
+                data-type={downloadPlatforms.vk}
                 onClick={handleClickDownloadButton}
               >
                 <span className={styles.tableViewDownloadLabel}>
@@ -187,7 +192,7 @@ const TableView = function TableView({
                 appearance="control"
                 data-id={row.id}
                 data-title={row.title}
-                data-type="fb"
+                data-type={downloadPlatforms.fb}
                 onClick={handleClickDownloadButton}
               >
                 <span className={styles.tableViewDownloadLabel}>

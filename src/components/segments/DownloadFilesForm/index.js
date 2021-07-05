@@ -26,6 +26,11 @@ const DownloadFilesForm = function DownloadFilesForm({
   onClose,
   onSubmit,
 }) {
+  const sources = {
+    phones: 'PHONE',
+    emails: 'EMAIL',
+  };
+
   const initialFormValues = {
     id,
     name,
@@ -48,8 +53,8 @@ const DownloadFilesForm = function DownloadFilesForm({
     const { checked } = e?.target || {};
     setIsSetSample(checked);
   };
-  const handleSubmitForm = () => {
-    onSubmit();
+  const handleSubmitForm = (values) => {
+    onSubmit(values);
   };
 
   const FormikCheckbox = withFormikField(Checkbox);
@@ -84,7 +89,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                 <label>
                   <Field
                     name="sources"
-                    value="phones"
+                    value={sources.phones}
                     component={FormikCheckbox}
                   />
                   Телефоны
@@ -92,7 +97,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                 <label>
                   <Field
                     name="sources"
-                    value="emails"
+                    value={sources.emails}
                     component={FormikCheckbox}
                   />
                   E-mail
@@ -151,7 +156,7 @@ const DownloadFilesForm = function DownloadFilesForm({
               >
                 отменить
               </Button>
-              <Button type="button">
+              <Button type="submit">
                 сохранить
               </Button>
             </div>

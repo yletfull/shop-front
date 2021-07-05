@@ -23,6 +23,7 @@ import {
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -86,6 +87,36 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const handleCloseDownloadForm = () => {
     setDownloadedSegment(null);
   };
+  const handleSubmitDownloadForm = async (values) => {
+    const {
+      id,
+      sources,
+      count: splitFilesCount,
+      name: fileName,
+      samples: sampleRowsSize,
+    } = values;
+    const {
+      type: adsPlatform,
+    } = downloadedSegment;
+
+    if (!id) {
+      return;
+    }
+
+    try {
+      const response = await service.downloadSegmentFile({
+        adsPlatform,
+        fileName,
+        sampleRowsSize,
+        splitFilesCount,
+        entityTypes: sources,
+        segment: { id },
+      });
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   const handleSubmitTableFilterForm = ({ searchId, searchName }) => {
     query.set(queryParams.searchId, String(searchId));
     query.set(queryParams.searchName, String(searchName));
@@ -146,6 +177,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           id={downloadedSegment?.id}
           name={downloadedSegment?.name}
           onClose={handleCloseDownloadForm}
+          onSubmit={handleSubmitDownloadForm}
         />
       </Modal>
     </div>
