@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -46,6 +46,8 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const history = useHistory();
   const query = useQuery();
 
+  const downloadLinkRef = useRef(null);
+
   const isFetching = useSelector(getIsFetchingData);
   const tableData = useSelector(getData);
   const pagination = useSelector(getPagination);
@@ -58,6 +60,10 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   ] = useState(query.get(queryParams.page) || 1);
 
   const [downloadedSegment, setDownloadedSegment] = useState(null);
+  const [
+    isRequestedDownloadSegment,
+    setIsRequestedDownloadSegment,
+  ] = useState(false);
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -111,12 +117,24 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       entityTypes: sources.join(),
     };
 
+    setIsRequestedDownloadSegment(true);
+
     try {
-      const response = await service.downloadSegmentFile(id, params);
-      console.log(response);
+      const url = await service.getSegmentDownloadLink(id, params);
+      if (!url) {
+        return;
+      }
+      const { current: linkNode } = downloadLinkRef || {};
+      linkNode.download = fileName;
+      linkNode.href = url;
+      linkNode.click();
+
+      setDownloadedSegment(null);
     } catch (error) {
       console.error(error);
     }
+
+    setIsRequestedDownloadSegment(false);
   };
   const handleSubmitTableFilterForm = ({ searchId, searchName }) => {
     query.set(queryParams.searchId, String(searchId));
@@ -124,6 +142,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     history.push({ search: query.toString() });
   };
 
+  /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsList}>
       <Controls>
@@ -177,12 +196,15 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
         <DownloadFilesForm
           id={downloadedSegment?.id}
           name={downloadedSegment?.name}
+          isDisabled={isRequestedDownloadSegment}
           onClose={handleCloseDownloadForm}
           onSubmit={handleSubmitDownloadForm}
         />
+        <a ref={downloadLinkRef} />
       </Modal>
     </div>
   );
+  /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
 };
 
 SegmentsList.propTypes = propTypes;

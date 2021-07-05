@@ -5,16 +5,19 @@ import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
 import Checkbox from '@/components/Checkbox';
 import Input from '@/components/Input';
+import Spinner from '@/components/Spinner';
 import styles from './styles.module.scss';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool,
   name: PropTypes.string,
   onClose: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
+  isDisabled: false,
   name: '',
   onClose: () => {},
   onSubmit: () => {},
@@ -22,6 +25,7 @@ const defaultProps = {
 
 const DownloadFilesForm = function DownloadFilesForm({
   id,
+  isDisabled,
   name,
   onClose,
   onSubmit,
@@ -78,6 +82,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   name="name"
                   component={FormikInput}
                   className={styles.downloadFilesFormInput}
+                  disabled={isDisabled}
                 />
               </span>
             </div>
@@ -92,6 +97,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                     name="sources"
                     value={sources.phones}
                     component={FormikCheckbox}
+                    disabled={isDisabled}
                   />
                   Телефоны
                 </label>
@@ -100,6 +106,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                     name="sources"
                     value={sources.emails}
                     component={FormikCheckbox}
+                    disabled={isDisabled}
                   />
                   E-mail
                 </label>
@@ -114,6 +121,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                 <label className={styles.downloadFilesFormCheckbox}>
                   <Checkbox
                     onClick={handleClickSetSample}
+                    disabled={isDisabled}
                   />
                   Да
                 </label>
@@ -121,7 +129,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   name="samples"
                   type="number"
                   min="0"
-                  disabled={!isSetSample}
+                  disabled={!isSetSample || isDisabled}
                   component={FormikInput}
                   className={styles.downloadFilesFormInput}
                 />
@@ -136,6 +144,7 @@ const DownloadFilesForm = function DownloadFilesForm({
               <span>
                 <label className={styles.downloadFilesFormCheckbox}>
                   <Checkbox
+                    disabled={isDisabled}
                     onClick={handleClickSetCount}
                   />
                   Да
@@ -144,7 +153,7 @@ const DownloadFilesForm = function DownloadFilesForm({
                   name="count"
                   type="number"
                   min="0"
-                  disabled={!isSetCount}
+                  disabled={!isSetCount || isDisabled}
                   component={FormikInput}
                   className={styles.downloadFilesFormInput}
                 />
@@ -156,6 +165,7 @@ const DownloadFilesForm = function DownloadFilesForm({
               <Button
                 appearance="secondary"
                 className={styles.downloadFilesFormButton}
+                disabled={isDisabled}
                 onClick={handleClickCancelButton}
               >
                 отменить
@@ -163,8 +173,11 @@ const DownloadFilesForm = function DownloadFilesForm({
               <Button
                 type="submit"
                 className={styles.downloadFilesFormButton}
+                disabled={isDisabled}
               >
-                сохранить
+                {isDisabled
+                  ? (<Spinner />)
+                  : 'сохранить'}
               </Button>
             </div>
           </Form>
