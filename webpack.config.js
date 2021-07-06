@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const CopyPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const DotenvPlugin = require('dotenv-webpack');
 
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -11,6 +12,9 @@ const publicPath = '/';
 
 module.exports = {
   resolve: {
+    fallback: {
+      path: require.resolve('path-browserify'),
+    },
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
@@ -21,8 +25,8 @@ module.exports = {
   output: {
     path: path.resolve('dist'),
     publicPath,
-    filename: isDevelopment ? '[name].js' : '[name].[hash].js',
-    chunkFilename: isDevelopment ? '[id].js' : '[id].[hash].js',
+    filename: isDevelopment ? '[name].js' : '[name].[contenthash].js',
+    chunkFilename: isDevelopment ? '[id].js' : '[id].[contenthash].js',
   },
   module: {
     rules: [
@@ -31,16 +35,6 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           { loader: 'babel-loader' },
-          { loader: 'eslint-loader' },
-        ],
-      },
-
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
         ],
       },
 
@@ -76,43 +70,46 @@ module.exports = {
 
       {
         test: /\.(png|jpg|svg)$/i,
-        use: [
-          'file-loader',
-        ],
+        type: 'asset',
       },
     ],
   },
   plugins: [
     new DotenvPlugin(),
+    new ESLintPlugin(),
     new StyleLintPlugin({
       files: 'src/**/*.scss',
     }),
-    // new CopyPlugin({
-    //   patterns: [
-    //     {
-    //       from: 'public',
-    //       globOptions: {
-    //         ignore: ['index.html', 'index.*.html'],
-    //       },
-    //     },
-    //   ],
-    // }),
+    new CopyPlugin({
+      patterns: [
+        {
+          context: 'public',
+          from: '**/*',
+          globOptions: {
+            ignore: ['index.html', 'index.*.html'],
+          },
+        },
+      ],
+    }),
     new webpack.DefinePlugin({
       'process.env.BASE_URL': JSON.stringify(publicPath),
     }),
     new MiniCssExtractPlugin({
-      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css',
+      filename: isDevelopment ? '[name].css' : '[name].[contenthash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[contenthash].css',
     }),
     new HtmlWebPackPlugin({
-      template: './public/index.html',
+      template: './index.html',
     }),
   ],
   devServer: {
     port: process.env.PORT || 8080,
     host: '0.0.0.0',
     historyApiFallback: true,
-    overlay: true,
+    overlay: {
+      warnings: false,
+      errors: true,
+    },
     hot: true,
     proxy: {
       '/api': {
