@@ -1,5 +1,10 @@
 @import '@/theme/include.scss';
 
 .segmentsList {
-  display: block;
+  &Error {
+    color: $color-red-darkest;
+    display: inline-block;
+    font-size: .75rem;
+    padding: 1rem 0 0;
+  }
 }
