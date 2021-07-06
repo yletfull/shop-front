@@ -16,7 +16,7 @@ import {
   fetchSegments,
 } from './actions';
 import {
-  getData,
+  getTableData,
   getPagination,
   getIsFetchingData,
 } from './selectors';
@@ -49,7 +49,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const downloadLinkRef = useRef(null);
 
   const isFetching = useSelector(getIsFetchingData);
-  const tableData = useSelector(getData);
+  const tableData = useSelector(getTableData);
   const pagination = useSelector(getPagination);
 
   const isShowPagination = pagination.totalPages > 1;

@@ -15,6 +15,20 @@
     }
   }
 
+  &Entities {
+    color: $color-black;
+    display: inline-block;
+    font-size: .75rem;
+
+    & + & {
+      padding-left: .5rem;
+    }
+
+    &Label {
+      color: $color-gray-darker;
+    }
+  }
+
   &Input {
     &_grow {
       flex-grow: 1;

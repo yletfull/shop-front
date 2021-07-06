@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@/hooks';
-import { formatNumber } from '@/utils/format';
+import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
+import {
+  segmentDownloadPlatforms,
+  mapSegmentEntityTypes,
+} from '../constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -14,7 +18,18 @@ const propTypes = {
     searchId: PropTypes.string,
     searchName: PropTypes.string,
   }).isRequired,
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    title: PropTypes.string,
+    totalEmailsCount: PropTypes.number,
+    totalPhonesCount: PropTypes.number,
+    newEntityTypeTotals: PropTypes.arrayOf(PropTypes.shape({
+      entityType: PropTypes.string,
+      total: PropTypes.number,
+    })),
+    versionCount: PropTypes.number,
+    lastVersionDate: PropTypes.string,
+  })),
   isFetching: PropTypes.bool,
   onClickDownload: PropTypes.func,
   onSubmitFilter: PropTypes.func,
@@ -34,11 +49,6 @@ const TableView = function TableView({
   onClickDownload,
   onSubmitFilter,
 }) {
-  const downloadPlatforms = {
-    vk: 'VK',
-    fb: 'FACEBOOK',
-  };
-
   const query = useQuery();
 
   const [
@@ -168,17 +178,17 @@ const TableView = function TableView({
               </Link>
             </td>
             <td>
-              {row.emailsCount ? formatNumber(row.emailsCount) : '-'}
+              {row.totalEmailsCount ? formatNumber(row.totalEmailsCount) : '-'}
             </td>
             <td>
-              {row.phonesCount ? formatNumber(row.phonesCount) : '-'}
+              {row.totalPhonesCount ? formatNumber(row.totalPhonesCount) : '-'}
             </td>
             <td>
               <Button
                 appearance="control"
                 data-id={row.id}
                 data-title={row.title}
-                data-type={downloadPlatforms.vk}
+                data-type={segmentDownloadPlatforms.vk}
                 onClick={handleClickDownloadButton}
               >
                 <span className={styles.tableViewDownloadLabel}>
@@ -192,7 +202,7 @@ const TableView = function TableView({
                 appearance="control"
                 data-id={row.id}
                 data-title={row.title}
-                data-type={downloadPlatforms.fb}
+                data-type={segmentDownloadPlatforms.fb}
                 onClick={handleClickDownloadButton}
               >
                 <span className={styles.tableViewDownloadLabel}>
@@ -201,13 +211,26 @@ const TableView = function TableView({
               </Button>
             </td>
             <td>
-              {row.version}
+              {row.newEntityTypeTotals
+                && Array.isArray(row.newEntityTypeTotals)
+                && row.newEntityTypeTotals.map(({ entityType, total }) => (
+                  <span
+                    key={entityType}
+                    className={styles.tableViewEntities}
+                  >
+                    <span className={styles.tableViewEntitiesLabel}>
+                      {`${mapSegmentEntityTypes[entityType] || entityType}: `}
+                    </span>
+                    {total > 0 ? '+' : ''}
+                    {formatNumber(total)}
+                  </span>
+                ))}
             </td>
             <td>
-              {row.versionDate}
+              {formatNumber(row.versionCount)}
             </td>
-            <td>
-              {row.newIdentificators}
+            <td align="right">
+              {formatDate(row.lastVersionDate)}
             </td>
           </tr>
         ))}
