@@ -1,3 +1,12 @@
 {
-  "presets": ["@babel/preset-env", "react-app"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "loose": true,
+        "shippedProposals": true
+      }
+    ],
+    "react-app"
+  ]
 }
