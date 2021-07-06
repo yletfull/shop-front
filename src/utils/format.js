@@ -4,7 +4,7 @@ export const formatDate = (value, format = 'DD.MM.YYYY') => {
   if (dayjs(value).isValid()) {
     return dayjs(value).format(format);
   }
-  return '';
+  return value;
 };
 
 export const formatNumber = (value) => Number(value).toLocaleString('ru-RU');

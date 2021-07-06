@@ -16,7 +16,7 @@ import {
   fetchSegments,
 } from './actions';
 import {
-  getData,
+  getTableData,
   getPagination,
   getIsFetchingData,
 } from './selectors';
@@ -49,7 +49,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const downloadLinkRef = useRef(null);
 
   const isFetching = useSelector(getIsFetchingData);
-  const tableData = useSelector(getData);
+  const tableData = useSelector(getTableData);
   const pagination = useSelector(getPagination);
 
   const isShowPagination = pagination.totalPages > 1;
@@ -59,6 +59,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     setQueryCurrentPage,
   ] = useState(query.get(queryParams.page) || 1);
 
+  const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [
     isRequestedDownloadSegment,
@@ -130,7 +131,11 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       linkNode.click();
 
       setDownloadedSegment(null);
+      setDownloadError(null);
     } catch (error) {
+      if (error.response) {
+        setDownloadError(error.response);
+      }
       console.error(error);
     }
 
@@ -201,6 +206,14 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           onSubmit={handleSubmitDownloadForm}
         />
         <a ref={downloadLinkRef} />
+        {downloadError && (
+          <span className={styles.segmentsListError}>
+            При экспорте файла возникла ошибка
+            {downloadError.status && (
+              ` (код ошибки: ${downloadError.status})`
+            )}
+          </span>
+        )}
       </Modal>
     </div>
   );
