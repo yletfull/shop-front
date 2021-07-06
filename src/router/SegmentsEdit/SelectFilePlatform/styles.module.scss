@@ -1,0 +1,13 @@
+@import '@/theme/include.scss';
+
+.selectFilePlatform {
+  &Button {
+    color: $color-primary-darkest;
+    white-space: pre;
+  }
+
+  &Icon {
+    font-size: .75rem;
+    margin-right: .35rem;
+  }
+}

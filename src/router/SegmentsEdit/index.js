@@ -48,6 +48,7 @@ import AttributesGroup from './AttributesGroup';
 import AttributesLabels from './AttributesLabels';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
+import SelectFilePlatform from './SelectFilePlatform';
 import SaveForm from './SaveForm';
 import Statistics from './Statistics';
 import service from './service';
@@ -136,12 +137,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
-  const handleClickDownloadButton = (e) => {
-    const { type } = e?.target?.dataset || {};
-    if (!type) {
-      return;
-    }
-    setDownloadedSegment({ type });
+  const handleSelectDownloadFile = (platform) => {
+    setDownloadedSegment({ type: platform });
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -374,22 +371,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Файлы для площадок
         </h3>
 
-        <div>
-          <Button
-            appearance="control"
-            data-type="VK"
-            onClick={handleClickDownloadButton}
-          >
-            VK
-          </Button>
-          <Button
-            appearance="control"
-            data-type="FACEBOOK"
-            onClick={handleClickDownloadButton}
-          >
-            FB
-          </Button>
-        </div>
+        <SelectFilePlatform
+          platforms={[
+            { label: 'VK', value: 'VK' },
+            { label: 'FB', value: 'FACEBOOK' },
+          ]}
+          onSelect={handleSelectDownloadFile}
+        />
 
         <h3
           className={cx(
