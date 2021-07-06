@@ -12,7 +12,7 @@
     "serve": "NODE_ENV=development webpack serve --config webpack.config.js --mode development --progress --profile",
     "build": "NODE_ENV=production webpack --config webpack.config.js --mode production --progress --profile",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public -o dist/__storybook"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
@@ -73,17 +73,5 @@
     "webpack": "^5.42.1",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2"
-  },
-  "eslintConfig": {
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
-    ]
   }
 }
