@@ -82,6 +82,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
+  const [isSegmentChanged, setIsSegmentChanged] = useState(false);
   const [
     isRequestedDownloadSegment,
     setIsRequestedDownloadSegment,
@@ -136,6 +137,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       || typeof groupIndex === 'undefined') {
       return;
     }
+    setIsSegmentChanged(true);
     dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
   const handleSelectDownloadFile = (platform) => {
@@ -145,6 +147,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsShowParams(true);
   };
   const handleCloseDownloadForm = () => {
+    setDownloadError(null);
     setDownloadedSegment(null);
   };
   const handleCloseParamsForm = () => {
@@ -157,6 +160,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       || sourceGroupIndex === targetGroupIndex) {
       return;
     }
+    setIsSegmentChanged(true);
     dispatch(moveSegmentAttribute(
       [sourceGroupIndex, sourceAttributeIndex],
       [targetGroupIndex, 0],
@@ -168,6 +172,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       || typeof sourceAttributeIndex === 'undefined') {
       return;
     }
+    setIsSegmentChanged(true);
     dispatch(insertSegmentAttribute(
       position,
       [sourceGroupIndex, sourceAttributeIndex],
@@ -179,6 +184,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       || typeof groupIndex === 'undefined') {
       return;
     }
+    setIsSegmentChanged(true);
     dispatch(removeSegmentAttribute([
       Number(groupIndex),
       Number(attributeIndex),
@@ -205,17 +211,20 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsRequestedDownloadSegment(true);
 
     try {
-      const url = await service.getSegmentDownloadLink(segmentId, {
-        adsPlatform,
-        fileName,
-        sampleRowsSize,
-        splitFilesCount,
-        entityTypes,
-        segment: {
-          [segmentProps.attributes]: segmentAttributes
-            .map(mapAndSegmentAttributes),
+      const url = await service.getSegmentDownloadLink(
+        isSegmentChanged ? null : segmentId,
+        {
+          adsPlatform,
+          fileName,
+          sampleRowsSize,
+          splitFilesCount,
+          entityTypes,
+          segment: {
+            [segmentProps.attributes]: segmentAttributes
+              .map(mapAndSegmentAttributes),
+          },
         },
-      });
+      );
       if (!url) {
         return;
       }
@@ -240,6 +249,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     if (!selectedParams) {
       return;
     }
+    setIsSegmentChanged(true);
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
