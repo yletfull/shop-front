@@ -55,7 +55,7 @@ const getSegmentStatistics = function serviceGetSegmentStatistics({
 }) {
   const url = id
     ? `${baseUrl}/segments/${id}/stats/`
-    : '${baseUrl}/segments/stats/';
+    : `${baseUrl}/segments/stats/`;
   return api({
     url,
     method: id ? 'get' : 'post',
