@@ -4,6 +4,8 @@ export const namespace = 'segments';
 export const segmentDownloadPlatforms = {
   vk: 'VK',
   fb: 'FACEBOOK',
+  mail: 'MAIL_RU',
+  yandex: 'YANDEX',
 };
 
 export const segmentEntityTypes = {

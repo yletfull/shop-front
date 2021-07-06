@@ -390,6 +390,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           platforms={[
             { label: 'VK', value: 'VK' },
             { label: 'FB', value: 'FACEBOOK' },
+            { label: 'MailRu', value: 'MAIL_RU' },
+            { label: 'Яндекс', value: 'YANDEX' },
           ]}
           onSelect={handleSelectDownloadFile}
         />

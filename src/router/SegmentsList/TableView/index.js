@@ -184,31 +184,25 @@ const TableView = function TableView({
               {row.totalPhonesCount ? formatNumber(row.totalPhonesCount) : '-'}
             </td>
             <td>
-              <Button
-                appearance="control"
-                data-id={row.id}
-                data-title={row.title}
-                data-type={segmentDownloadPlatforms.vk}
-                onClick={handleClickDownloadButton}
-              >
-                <span className={styles.tableViewDownloadLabel}>
-                  VK
-                </span>
-              </Button>
-              &nbsp;
-              &nbsp;
-              &nbsp;
-              <Button
-                appearance="control"
-                data-id={row.id}
-                data-title={row.title}
-                data-type={segmentDownloadPlatforms.fb}
-                onClick={handleClickDownloadButton}
-              >
-                <span className={styles.tableViewDownloadLabel}>
-                  FB
-                </span>
-              </Button>
+              {[
+                { label: 'VK', value: segmentDownloadPlatforms.vk },
+                { label: 'FB', value: segmentDownloadPlatforms.fb },
+                { label: 'MailRu', value: segmentDownloadPlatforms.mail },
+                { label: 'Яндекс', value: segmentDownloadPlatforms.yandex },
+              ].map(({ label, value }) => (
+                <Button
+                  key={value}
+                  appearance="control"
+                  data-id={row.id}
+                  data-title={row.title}
+                  data-type={value}
+                  onClick={handleClickDownloadButton}
+                >
+                  <span className={styles.tableViewDownloadLabel}>
+                    {label}
+                  </span>
+                </Button>
+              ))}
             </td>
             <td>
               {row.newEntityTypeTotals
