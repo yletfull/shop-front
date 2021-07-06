@@ -9,6 +9,13 @@
     width: 18rem;
   }
 
+  &Error {
+    color: $color-red-darkest;
+    display: inline-block;
+    font-size: .75rem;
+    padding: 1rem 0 0;
+  }
+
   &Main {
     flex-grow: 1;
   }

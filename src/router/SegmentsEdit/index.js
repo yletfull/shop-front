@@ -79,6 +79,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const downloadLinkRef = useRef(null);
 
+  const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
   const [
@@ -224,7 +225,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       linkNode.click();
 
       setDownloadedSegment(null);
+      setDownloadError(null);
     } catch (error) {
+      if (error.response) {
+        setDownloadError(error.response);
+      }
       console.error(error);
     }
 
@@ -414,6 +419,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           onSubmit={handleSubmitDownloadForm}
         />
         <a ref={downloadLinkRef} />
+        {downloadError && (
+          <span className={styles.segmentsEditError}>
+            При экспорте файла возникла ошибка
+            {downloadError.status && (
+              ` (код ошибки: ${downloadError.status})`
+            )}
+          </span>
+        )}
       </Modal>
     </div>
   );
