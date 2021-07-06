@@ -48,6 +48,7 @@ import AttributesGroup from './AttributesGroup';
 import AttributesLabels from './AttributesLabels';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
+import SelectFilePlatform from './SelectFilePlatform';
 import SaveForm from './SaveForm';
 import Statistics from './Statistics';
 import service from './service';
@@ -78,6 +79,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const downloadLinkRef = useRef(null);
 
+  const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
   const [
@@ -136,12 +138,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
   };
-  const handleClickDownloadButton = (e) => {
-    const { type } = e?.target?.dataset || {};
-    if (!type) {
-      return;
-    }
-    setDownloadedSegment({ type });
+  const handleSelectDownloadFile = (platform) => {
+    setDownloadedSegment({ type: platform });
   };
   const handleClickShowParams = () => {
     setIsShowParams(true);
@@ -227,7 +225,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       linkNode.click();
 
       setDownloadedSegment(null);
+      setDownloadError(null);
     } catch (error) {
+      if (error.response) {
+        setDownloadError(error.response);
+      }
       console.error(error);
     }
 
@@ -374,22 +376,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Файлы для площадок
         </h3>
 
-        <div>
-          <Button
-            appearance="control"
-            data-type="VK"
-            onClick={handleClickDownloadButton}
-          >
-            VK
-          </Button>
-          <Button
-            appearance="control"
-            data-type="FACEBOOK"
-            onClick={handleClickDownloadButton}
-          >
-            FB
-          </Button>
-        </div>
+        <SelectFilePlatform
+          platforms={[
+            { label: 'VK', value: 'VK' },
+            { label: 'FB', value: 'FACEBOOK' },
+          ]}
+          onSelect={handleSelectDownloadFile}
+        />
 
         <h3
           className={cx(
@@ -426,6 +419,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           onSubmit={handleSubmitDownloadForm}
         />
         <a ref={downloadLinkRef} />
+        {downloadError && (
+          <span className={styles.segmentsEditError}>
+            При экспорте файла возникла ошибка
+            {downloadError.status && (
+              ` (код ошибки: ${downloadError.status})`
+            )}
+          </span>
+        )}
       </Modal>
     </div>
   );
