@@ -26,10 +26,14 @@ import {
   addSegmentAttribute,
   insertSegmentAttribute,
   moveSegmentAttribute,
+  prepareAttributesStatistics,
   removeSegmentAttribute,
+  requestAttributeStatistics,
+  updateAttributeStatistics,
   updateSegmentAttribute,
 } from './actions';
 import {
+  // getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
   getParams,
@@ -130,6 +134,43 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const mapAndSegmentAttributes = (andAttributes) => andAttributes
     .map(mapOrSegmentAttributes);
+
+  useEffect(() => {
+    const fetchAttributesStatistics = async () => {
+      await Promise.all(segmentAttributes
+        .map((andAttribute, andIndex) => Promise.all(andAttribute
+          .map(async (orAttribute, orIndex) => {
+            const attribute = mapOrSegmentAttributes(orAttribute);
+            const position = [andIndex, orIndex];
+            dispatch(requestAttributeStatistics(position));
+            try {
+              const statistics = await service.fetchSegmentStatistics({
+                id: null,
+                attributes: {
+                  conditions: [[attribute]],
+                  title: orAttribute.attributeName || orAttribute.id,
+                },
+              });
+              console.log(statistics);
+              dispatch(updateAttributeStatistics(
+                position,
+                {
+                  emails: 0,
+                  phones: 0,
+                },
+              ));
+            } catch (error) {
+              dispatch(updateAttributeStatistics(
+                position,
+                { error: error.response },
+              ));
+              console.error(error);
+            }
+          }))));
+    };
+    dispatch(prepareAttributesStatistics());
+    fetchAttributesStatistics();
+  }, [dispatch, segmentAttributes]);
 
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;

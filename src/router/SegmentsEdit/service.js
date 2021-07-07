@@ -49,7 +49,7 @@ const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
       .createObjectURL(new Blob([response.data], { type: 'application/zip' })));
 };
 
-const getSegmentStatistics = function serviceGetSegmentStatistics({
+const fetchSegmentStatistics = function serviceGetSegmentStatistics({
   id,
   attributes,
 }) {
@@ -67,7 +67,7 @@ const getSegmentStatistics = function serviceGetSegmentStatistics({
 export default {
   fetchParams,
   fetchSegment,
+  fetchSegmentStatistics,
   getSegmentDownloadLink,
-  getSegmentStatistics,
   saveSegment,
 };

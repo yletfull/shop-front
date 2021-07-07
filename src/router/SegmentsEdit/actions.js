@@ -5,7 +5,10 @@ import {
   namespace as NS,
   segmentProps,
 } from './constants';
-import { getSegmentAttributes } from './selectors';
+import {
+  getAttributesStatistics,
+  getSegmentAttributes,
+} from './selectors';
 import service from './service';
 
 export const requestParams = createAction(`${NS}/params/request`);
@@ -14,6 +17,8 @@ export const updateParams = createAction(`${NS}/params/update`);
 export const requestSegment = createAction(`${NS}/segment/request`);
 export const updateSegment = createAction(`${NS}/segment/update`);
 export const resetSegment = createAction(`${NS}/segment/reset`);
+
+export const updateStatistics = createAction(`${NS}/segment/statistics`);
 
 export const fetchParams = () => async (dispatch) => {
   dispatch(requestParams());
@@ -36,12 +41,16 @@ export const fetchSegment = (id) => async (dispatch) => {
     } = response || {};
     const mapAttributes = ({
       attribute,
+      type: attributeEquality,
       [attributeProps.datasetIds]: attributeDatasetIds,
       [attributeProps.values]: attributeValues,
+      [attributeProps.negation]: attributeNegation,
     }) => ({
       ...attribute,
       [attributeProps.datasetIds]: attributeDatasetIds || [],
       [attributeProps.values]: attributeValues || [],
+      [attributeProps.negation]: attributeNegation || false,
+      [attributeProps.equality]: attributeEquality || equalityTypes.any,
     });
     const mapAttributesGroup = (group) => group.map(mapAttributes);
     dispatch(updateSegment({
@@ -177,3 +186,77 @@ export const updateSegmentAttribute = (position, values) => (
       ],
     }));
   });
+
+export const requestSegmentStatistics = () => (dispatch) => {
+  dispatch(updateStatistics({
+    segment: {
+      isFetching: true,
+      emails: null,
+      phones: null,
+    },
+  }));
+};
+export const updateSegmentStatistics = (values) => (dispatch) => {
+  const { emails, phones } = values || {};
+  if (typeof emails === 'undefined' && typeof phones === 'undefined') {
+    return;
+  }
+  const segment = { emails, phones, isFetching: false };
+  dispatch(updateStatistics({ segment }));
+};
+export const requestAttributeStatistics = (position) => (
+  (dispatch, getState) => {
+    if (position.length < 2) {
+      return;
+    }
+    const [groupIndex, attributeIndex] = position || [];
+    const attributesStatistics = getAttributesStatistics(getState());
+    const attributes = [
+      ...attributesStatistics.slice(0, groupIndex),
+      [
+        ...attributesStatistics[groupIndex].slice(0, attributeIndex),
+        {
+          isFetching: true,
+          emails: null,
+          phones: null,
+        },
+        ...attributesStatistics[groupIndex].slice(attributeIndex + 1),
+      ],
+      ...attributesStatistics.slice(groupIndex + 1),
+    ];
+    dispatch(updateStatistics({ attributes }));
+  });
+export const updateAttributeStatistics = (position, values) => (
+  (dispatch, getState) => {
+    const { emails = null, phones = null, error = null } = values || {};
+    const attributesStatistics = getAttributesStatistics(getState());
+    const [groupIndex, attributeIndex] = position;
+    const attributes = [
+      ...attributesStatistics.slice(0, groupIndex),
+      [
+        ...attributesStatistics[groupIndex].slice(0, attributeIndex),
+        {
+          emails,
+          error,
+          phones,
+          isFetching: false,
+        },
+        ...attributesStatistics[groupIndex].slice(attributeIndex + 1),
+      ],
+      ...attributesStatistics.slice(groupIndex + 1),
+    ];
+    dispatch(updateStatistics({ attributes }));
+  });
+export const prepareAttributesStatistics = () => (dispatch, getState) => {
+  const attributes = getSegmentAttributes(getState());
+  dispatch(updateStatistics({
+    attributes: attributes
+      .map((andAttribute) => andAttribute
+        .map(() => ({
+          isFetching: false,
+          emails: null,
+          phones: null,
+          errors: null,
+        }))),
+  }));
+};
