@@ -126,7 +126,9 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           Последняя синхронизация
         </span>
         <span className={styles.value}>
-          {formatDate(taksData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')}
+          {taksData?.finishedAt
+            ? formatDate(taksData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')
+            : '-'}
         </span>
       </div>
 
