@@ -16,6 +16,7 @@ import {
   equalityTypes,
   namespace as NS,
   dndTypes,
+  mapEntityTypes,
   segmentProps,
 } from './constants';
 import reducer from './reducer';
@@ -33,7 +34,7 @@ import {
   updateSegmentAttribute,
 } from './actions';
 import {
-  // getAttributesStatistics,
+  getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
   getParams,
@@ -76,6 +77,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
+  const attributesStatistics = useSelector(getAttributesStatistics);
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
   const segmentId = useSelector(getSegmentId);
@@ -151,13 +153,18 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   title: orAttribute.attributeName || orAttribute.id,
                 },
               });
-              console.log(statistics);
               dispatch(updateAttributeStatistics(
                 position,
-                {
-                  emails: 0,
-                  phones: 0,
-                },
+                statistics.reduce((acc, cur) => {
+                  const { entityType, total } = cur || {};
+                  if (!entityType) {
+                    return acc;
+                  }
+                  return ({
+                    ...acc,
+                    [mapEntityTypes[entityType]]: total || 0,
+                  });
+                }, {}),
               ));
             } catch (error) {
               dispatch(updateAttributeStatistics(
@@ -338,6 +345,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       [attributeProps.name]: name,
                       [attributeProps.title]: title,
                     } = attribute || {};
+                    const getStatistics = (position) => {
+                      const [gIndex, aIndex] = position || [];
+                      if (typeof gIndex === 'undefined'
+                        || typeof aIndex === 'undefined') {
+                        return null;
+                      }
+                      return attributesStatistics[gIndex]?.[aIndex] || null;
+                    };
                     return (
                       <Attribute
                         key={`${groupKey}-${attribute.attributeName}`}
@@ -371,7 +386,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                           </AttributeDatasetsSelect>
                         </AttributeDatasets>
                         <AttributeStatistics
-                          data={attribute.statistics}
+                          data={getStatistics([groupIndex, attributeIndex])}
                         />
                       </Attribute>
                     );

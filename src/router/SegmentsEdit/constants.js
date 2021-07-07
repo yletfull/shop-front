@@ -31,6 +31,16 @@ export const equalityTypes = {
   less: 'LESS',
 };
 
+export const entityTypes = {
+  phones: 'PHONE',
+  emails: 'EMAIL',
+};
+
+export const mapEntityTypes = {
+  [entityTypes.phones]: 'phones',
+  [entityTypes.emails]: 'emails',
+};
+
 export const segmentProps = {
   attributes: 'conditions',
   id: 'id',
