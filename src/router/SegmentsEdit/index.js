@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import cx from 'classnames';
@@ -28,14 +28,23 @@ import {
   moveSegmentAttribute,
   removeSegmentAttribute,
   updateSegmentAttribute,
+  fetchSegmentStatistics,
+  fetchAttributesStatistics,
+  saveSegment,
 } from './actions';
 import {
+  formatSegmentAttributesListForRequest,
+} from './helpers';
+import {
+  getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
+  getIsSubmittingSegment,
   getParams,
   getSegmentAttributes,
   getSegmentId,
   getSegmentName,
+  getSegmentStatistics,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
@@ -67,15 +76,19 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const dispatch = useDispatch();
 
+  const history = useHistory();
   const { id: paramsSegmentId } = useParams();
 
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
+  const attributesStatistics = useSelector(getAttributesStatistics);
   const isFetchingSegment = useSelector(getIsFetchingSegment);
+  const isSubmittingSegment = useSelector(getIsSubmittingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
+  const segmentStatistics = useSelector(getSegmentStatistics);
 
   const downloadLinkRef = useRef(null);
 
@@ -111,25 +124,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const mapOrSegmentAttributes = (attr) => {
-    const {
-      datasetIds,
-      equality: type,
-      id: attributeId,
-      negation,
-      values,
-    } = attr || {};
-    return ({
-      attribute: attr,
-      attributeId,
-      datasetIds,
-      negation,
-      type,
-      values,
-    });
-  };
-  const mapAndSegmentAttributes = (andAttributes) => andAttributes
-    .map(mapOrSegmentAttributes);
+  useEffect(() => {
+    dispatch(fetchAttributesStatistics(segmentAttributes));
+  }, [dispatch, segmentAttributes]);
+
+  useEffect(() => {
+    dispatch(fetchSegmentStatistics({
+      title: segmentName || '',
+      attributes: segmentAttributes || [],
+    }));
+  }, [dispatch, segmentName, segmentAttributes]);
 
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;
@@ -210,6 +214,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(true);
 
+    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
     try {
       const url = await service.getSegmentDownloadLink(
         isSegmentChanged ? null : segmentId,
@@ -219,10 +224,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           sampleRowsSize,
           splitFilesCount,
           entityTypes,
-          segment: {
-            [segmentProps.attributes]: segmentAttributes
-              .map(mapAndSegmentAttributes),
-          },
+          segment: { [segmentProps.attributes]: attributes },
         },
       );
       if (!url) {
@@ -252,20 +254,17 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsSegmentChanged(true);
     dispatch(addSegmentAttribute(selectedParams));
   };
-  const handleSubmitSaveForm = async ({ fileName }) => {
-    try {
-      await service.saveSegment({
-        ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
-        [segmentProps.name]: fileName,
-        [segmentProps.attributes]: segmentAttributes
-          .map(mapAndSegmentAttributes),
-      });
-    } catch (error) {
-      console.error(error);
+  const handleSubmitSaveForm = ({ fileName }) => {
+    if (!fileName) {
+      return;
     }
+    const onSuccessCallback = () => history.push('/segments');
+    dispatch(saveSegment({
+      attributes: segmentAttributes,
+      id: isNewSegment ? paramsSegmentId : null,
+      title: fileName,
+    }, onSuccessCallback));
   };
-
-  const statistic = {};
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
@@ -297,6 +296,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                       [attributeProps.name]: name,
                       [attributeProps.title]: title,
                     } = attribute || {};
+                    const getStatistics = (position) => {
+                      const [gIndex, aIndex] = position || [];
+                      if (typeof gIndex === 'undefined'
+                        || typeof aIndex === 'undefined') {
+                        return null;
+                      }
+                      return attributesStatistics[gIndex]?.[aIndex] || null;
+                    };
                     return (
                       <Attribute
                         key={`${groupKey}-${attribute.attributeName}`}
@@ -330,7 +337,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                           </AttributeDatasetsSelect>
                         </AttributeDatasets>
                         <AttributeStatistics
-                          data={attribute.statistics}
+                          data={getStatistics([groupIndex, attributeIndex])}
                         />
                       </Attribute>
                     );
@@ -373,8 +380,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h2>
 
         <Statistics
-          emailsCount={statistic.emails}
-          phonesCount={statistic.phones}
+          emailsCount={segmentStatistics.emails}
+          phonesCount={segmentStatistics.phones}
         />
 
         <h3
@@ -406,7 +413,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h3>
 
         <SaveForm
-          isFetching={isFetchingSegment}
+          isDisabled={isFetchingSegment || isSubmittingSegment}
           name={segmentName}
           onSubmit={handleSubmitSaveForm}
         />

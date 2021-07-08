@@ -5,19 +5,19 @@ import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  isFetching: PropTypes.bool,
+  isDisabled: PropTypes.bool,
   name: PropTypes.string,
   onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
-  isFetching: false,
+  isDisabled: false,
   name: '',
   onSubmit: () => {},
 };
 
 const SaveForm = function SaveForm({
-  isFetching,
+  isDisabled,
   name,
   onSubmit,
 }) {
@@ -49,7 +49,7 @@ const SaveForm = function SaveForm({
         className={styles.saveFormInput}
         placeholder="Укажите название"
         value={fileName}
-        disabled={isFetching}
+        disabled={isDisabled}
         onChange={handleChangeFileName}
         fullwidth
       />
@@ -57,7 +57,7 @@ const SaveForm = function SaveForm({
         className={styles.saveFormButton}
         appearance="control"
         type="submit"
-        disabled={isFetching}
+        disabled={isDisabled}
       >
         сохранить
       </Button>

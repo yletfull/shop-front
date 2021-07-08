@@ -6,6 +6,8 @@ import {
   resetSegment,
   updateParams,
   updateSegment,
+  updateStatistics,
+  submitSegment,
 } from './actions';
 
 const initialSegment = {
@@ -14,11 +16,23 @@ const initialSegment = {
   [segmentProps.attributes]: [],
 };
 
+const initialStatistics = {
+  segment: {
+    isFetching: false,
+    emails: null,
+    phones: null,
+    error: null,
+  },
+  attributes: null,
+};
+
 const initialState = {
   isFetchingParams: false,
   isFetchingSegment: false,
+  isSubmittingSegment: false,
   params: [],
   segment: initialSegment,
+  statistics: initialStatistics,
 };
 
 export default createReducer(initialState, {
@@ -46,5 +60,16 @@ export default createReducer(initialState, {
   [resetSegment]: (state) => ({
     ...state,
     segment: initialSegment,
+  }),
+  [updateStatistics]: (state, action) => ({
+    ...state,
+    statistics: {
+      ...state.statistics,
+      ...action.payload || {},
+    },
+  }),
+  [submitSegment]: (state, action) => ({
+    ...state,
+    isSubmittingSegment: Boolean(action.payload),
   }),
 });

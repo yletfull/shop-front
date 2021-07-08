@@ -5,10 +5,14 @@ export const getIsFetchingParams = (state) => (
   state[NS]?.isFetchingParams || false);
 export const getIsFetchingSegment = (state) => (
   state[NS]?.isFetchingSegment || false);
+export const getIsSubmittingSegment = (state) => (
+  state[NS]?.isSubmittingSegment || false);
 export const getParams = (state) => (
   state[NS]?.params || []);
 export const getSegment = (state) => (
   state[NS]?.segment || {});
+export const getStatistics = (state) => (
+  state[NS]?.statistics || {});
 
 export const getSegmentId = createSelector(
   [getSegment],
@@ -27,4 +31,12 @@ export const getSegmentAttributes = createSelector(
     }
     return [];
   },
+);
+export const getSegmentStatistics = createSelector(
+  [getStatistics],
+  (statistics) => statistics.segment || {},
+);
+export const getAttributesStatistics = createSelector(
+  [getStatistics],
+  (statistics) => statistics.attributes || [],
 );

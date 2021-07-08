@@ -1,6 +1,18 @@
 @import '@/theme/include.scss';
 
 .attributeStatistics {
+  display: flex;
   font-size: .75rem;
   padding: 0 .5rem;
+  width: 13rem;
+
+  &Spinner {
+    text-align: center;
+    width: 100%;
+  }
+
+  &Value {
+    display: block;
+    flex-grow: 1;
+  }
 }
