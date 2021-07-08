@@ -5,12 +5,15 @@ import {
   equalityTypes,
   namespace as NS,
   segmentProps,
-  mapEntityTypes,
 } from './constants';
 import {
   getAttributesStatistics,
   getSegmentAttributes,
 } from './selectors';
+import {
+  formatSegmentAttributesForRequest,
+  formatStatisticEtities,
+} from './helpers';
 import service from './service';
 
 export const requestParams = createAction(`${NS}/params/request`);
@@ -192,9 +195,8 @@ export const updateSegmentAttribute = (position, values) => (
 export const requestSegmentStatistics = () => (dispatch) => {
   dispatch(updateStatistics({
     segment: {
+      ...initialStatisticEntities,
       isFetching: true,
-      emails: null,
-      phones: null,
     },
   }));
 };
@@ -263,30 +265,22 @@ export const prepareAttributesStatistics = () => (dispatch, getState) => {
   }));
 };
 
-export const reduceStatisticsEntities = (acc, cur) => {
-  const { entityType, total } = cur || {};
-  if (!entityType) {
-    return acc;
-  }
-  return ({ ...acc, [mapEntityTypes[entityType]]: total || 0 });
-};
-
 export const fetchSegmentStatistics = (segment) => async (dispatch) => {
-  const { title, conditions } = segment || {};
+  const { title, attributes } = segment || {};
   if (!title
-    || !conditions
-    || !Array.isArray(conditions)
-    || conditions.length === 0) {
+    || !attributes
+    || !Array.isArray(attributes)
+    || attributes.length === 0) {
     dispatch(updateSegmentStatistics(initialStatisticEntities));
     return;
   }
+  dispatch(requestSegmentStatistics());
   try {
     const response = await service.fetchSegmentStatistics({
       title,
-      conditions,
+      conditions: formatSegmentAttributesForRequest(attributes),
     });
-    const statistics = response.reduce(reduceStatisticsEntities, {});
-    dispatch(updateSegmentStatistics(statistics));
+    dispatch(updateSegmentStatistics(formatStatisticEtities(response)));
   } catch (error) {
     const { response } = error || {};
     if (response) {

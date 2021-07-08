@@ -180,35 +180,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   }, [dispatch, segmentAttributes]);
 
   useEffect(() => {
-    const mapOrAttributes = (attr) => {
-      const {
-        datasetIds,
-        equality: type,
-        id: attributeId,
-        negation,
-        values,
-      } = attr || {};
-      return ({
-        attribute: attr,
-        attributeId,
-        datasetIds,
-        negation,
-        type,
-        values,
-      });
-    };
-    const mapAndAttributes = (andAttributes) => andAttributes
-      .map(mapOrAttributes);
-
     dispatch(fetchSegmentStatistics({
       title: segmentName || '',
-      conditions: segmentAttributes.map(mapAndAttributes),
+      attributes: segmentAttributes || [],
     }));
-  }, [
-    dispatch,
-    segmentName,
-    segmentAttributes,
-  ]);
+  }, [dispatch, segmentName, segmentAttributes]);
 
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;
