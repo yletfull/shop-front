@@ -5,15 +5,23 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   className: PropTypes.string,
+  type: PropTypes.oneOf([
+    'default',
+    'header',
+    'footer',
+    'summary',
+  ]),
   children: PropTypes.node,
 };
 const defaultProps = {
   className: '',
+  type: 'default',
   children: null,
 };
 
 const TableRow = function TableRow({
   className,
+  type,
   children,
 }) {
   return (
@@ -21,6 +29,7 @@ const TableRow = function TableRow({
       className={cx(
         className,
         styles.row,
+        styles[`row_type-${type}`],
       )}
     >
       {children}

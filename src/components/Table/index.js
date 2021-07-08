@@ -3,18 +3,30 @@ import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  header: PropTypes.node,
   children: PropTypes.node,
 };
 const defaultProps = {
+  header: null,
   children: null,
 };
 
-const Table = function Table({ children }) {
+const Table = function Table({
+  header,
+  children,
+  ...props
+}) {
   return (
     <div className={styles.wrapper}>
       <table
         className={styles.table}
+        {...props}
       >
+        {Boolean(header) && (
+          <thead>
+            {header}
+          </thead>
+        )}
         <tbody>
           {children}
         </tbody>
