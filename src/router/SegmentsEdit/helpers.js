@@ -2,7 +2,7 @@ import {
   mapEntityTypes,
 } from './constants';
 
-export const formatStatisticEtities = (entities) => {
+export const formatStatisticEntities = (entities) => {
   const reduceStatisticsEntities = (acc, cur) => {
     const { entityType, total } = cur || {};
     if (!entityType) {
@@ -16,27 +16,25 @@ export const formatStatisticEtities = (entities) => {
   return entities.reduce(reduceStatisticsEntities, {});
 };
 
-export const formatSegmentAttributesForRequest = (attributes) => {
-  const mapOrSegmentAttributes = (attr) => {
-    const {
-      datasetIds,
-      equality: type,
-      id: attributeId,
-      negation,
-      values,
-    } = attr || {};
-    return ({
-      attribute: attr,
-      attributeId,
-      datasetIds,
-      negation,
-      type,
-      values,
-    });
-  };
+export const formatSegmentAttributeForRequest = (attribute) => {
+  const {
+    datasetIds,
+    equality: type,
+    id: attributeId,
+    negation,
+    values,
+  } = attribute || {};
+  return ({
+    attribute,
+    attributeId,
+    datasetIds,
+    negation,
+    type,
+    values,
+  });
+};
+export const formatSegmentAttributesListForRequest = (attributes) => {
   const mapAndSegmentAttributes = (andAttributes) => andAttributes
-    .map(mapOrSegmentAttributes);
+    .map(formatSegmentAttributeForRequest);
   return attributes.map(mapAndSegmentAttributes);
 };
-
-export const temp = 0;

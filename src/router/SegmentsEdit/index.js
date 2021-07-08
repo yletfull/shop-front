@@ -16,7 +16,6 @@ import {
   equalityTypes,
   namespace as NS,
   dndTypes,
-  mapEntityTypes,
   segmentProps,
 } from './constants';
 import reducer from './reducer';
@@ -29,10 +28,9 @@ import {
   moveSegmentAttribute,
   prepareAttributesStatistics,
   removeSegmentAttribute,
-  requestAttributeStatistics,
-  updateAttributeStatistics,
   updateSegmentAttribute,
   fetchSegmentStatistics,
+  fetchAttributesStatistics,
 } from './actions';
 import {
   getAttributesStatistics,
@@ -141,42 +139,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     .map(mapOrSegmentAttributes);
 
   useEffect(() => {
-    const fetchAttributesStatistics = async () => {
-      await Promise.all(segmentAttributes
-        .map((andAttribute, andIndex) => Promise.all(andAttribute
-          .map(async (orAttribute, orIndex) => {
-            const attribute = mapOrSegmentAttributes(orAttribute);
-            const position = [andIndex, orIndex];
-            dispatch(requestAttributeStatistics(position));
-            try {
-              const statistics = await service.fetchSegmentStatistics({
-                conditions: [[attribute]],
-                title: orAttribute.attributeName || orAttribute.id,
-              });
-              dispatch(updateAttributeStatistics(
-                position,
-                statistics.reduce((acc, cur) => {
-                  const { entityType, total } = cur || {};
-                  if (!entityType) {
-                    return acc;
-                  }
-                  return ({
-                    ...acc,
-                    [mapEntityTypes[entityType]]: total || 0,
-                  });
-                }, {}),
-              ));
-            } catch (error) {
-              dispatch(updateAttributeStatistics(
-                position,
-                { error: error.response },
-              ));
-              console.error(error);
-            }
-          }))));
-    };
     dispatch(prepareAttributesStatistics());
-    fetchAttributesStatistics();
+    dispatch(fetchAttributesStatistics(segmentAttributes));
   }, [dispatch, segmentAttributes]);
 
   useEffect(() => {

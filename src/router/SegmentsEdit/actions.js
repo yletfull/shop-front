@@ -11,8 +11,9 @@ import {
   getSegmentAttributes,
 } from './selectors';
 import {
-  formatSegmentAttributesForRequest,
-  formatStatisticEtities,
+  formatSegmentAttributeForRequest,
+  formatSegmentAttributesListForRequest,
+  formatStatisticEntities,
 } from './helpers';
 import service from './service';
 
@@ -265,6 +266,36 @@ export const prepareAttributesStatistics = () => (dispatch, getState) => {
   }));
 };
 
+export const fetchAttributesStatistics = (attributes) => (dispatch) => {
+  if (!Array.isArray(attributes)) {
+    return;
+  }
+  return Promise.all(attributes
+    .map((andAttribute, andIndex) => Promise.all(andAttribute
+      .map(async (orAttribute, orIndex) => {
+        const attribute = formatSegmentAttributeForRequest(orAttribute);
+        const position = [andIndex, orIndex];
+        dispatch(requestAttributeStatistics(position));
+        try {
+          const response = await service.fetchSegmentStatistics({
+            conditions: [[attribute]],
+            title: orAttribute.attributeName || orAttribute.id,
+          });
+          dispatch(updateAttributeStatistics(
+            position,
+            formatStatisticEntities(response),
+          ));
+        } catch (error) {
+          if (error.response) {
+            dispatch(updateAttributeStatistics(
+              position,
+              { error: error.response },
+            ));
+          }
+          console.error(error);
+        }
+      }))));
+};
 export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   const { title, attributes } = segment || {};
   if (!title
@@ -278,9 +309,9 @@ export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   try {
     const response = await service.fetchSegmentStatistics({
       title,
-      conditions: formatSegmentAttributesForRequest(attributes),
+      conditions: formatSegmentAttributesListForRequest(attributes),
     });
-    dispatch(updateSegmentStatistics(formatStatisticEtities(response)));
+    dispatch(updateSegmentStatistics(formatStatisticEntities(response)));
   } catch (error) {
     const { response } = error || {};
     if (response) {
