@@ -26,7 +26,6 @@ import {
   addSegmentAttribute,
   insertSegmentAttribute,
   moveSegmentAttribute,
-  prepareAttributesStatistics,
   removeSegmentAttribute,
   updateSegmentAttribute,
   fetchSegmentStatistics,
@@ -139,7 +138,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     .map(mapOrSegmentAttributes);
 
   useEffect(() => {
-    dispatch(prepareAttributesStatistics());
     dispatch(fetchAttributesStatistics(segmentAttributes));
   }, [dispatch, segmentAttributes]);
 

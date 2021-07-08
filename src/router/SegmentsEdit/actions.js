@@ -252,17 +252,15 @@ export const updateAttributeStatistics = (position, values) => (
     ];
     dispatch(updateStatistics({ attributes }));
   });
-export const prepareAttributesStatistics = () => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
+
+export const clearAttributesStatistics = (attributes) => (dispatch) => {
+  if (!Array.isArray(attributes)) {
+    return;
+  }
   dispatch(updateStatistics({
     attributes: attributes
       .map((andAttribute) => andAttribute
-        .map(() => ({
-          isFetching: false,
-          emails: null,
-          phones: null,
-          errors: null,
-        }))),
+        .map(() => initialStatisticEntities)),
   }));
 };
 
@@ -270,6 +268,7 @@ export const fetchAttributesStatistics = (attributes) => (dispatch) => {
   if (!Array.isArray(attributes)) {
     return;
   }
+  dispatch(clearAttributesStatistics(attributes));
   return Promise.all(attributes
     .map((andAttribute, andIndex) => Promise.all(andAttribute
       .map(async (orAttribute, orIndex) => {
