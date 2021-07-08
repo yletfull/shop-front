@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import cx from 'classnames';
@@ -30,6 +30,7 @@ import {
   updateSegmentAttribute,
   fetchSegmentStatistics,
   fetchAttributesStatistics,
+  saveSegment,
 } from './actions';
 import {
   formatSegmentAttributesListForRequest,
@@ -38,6 +39,7 @@ import {
   getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
+  getIsSubmittingSegment,
   getParams,
   getSegmentAttributes,
   getSegmentId,
@@ -74,6 +76,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const dispatch = useDispatch();
 
+  const history = useHistory();
   const { id: paramsSegmentId } = useParams();
 
   const isFetchingParams = useSelector(getIsFetchingParams);
@@ -81,6 +84,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const attributesStatistics = useSelector(getAttributesStatistics);
   const isFetchingSegment = useSelector(getIsFetchingSegment);
+  const isSubmittingSegment = useSelector(getIsSubmittingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
@@ -250,17 +254,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsSegmentChanged(true);
     dispatch(addSegmentAttribute(selectedParams));
   };
-  const handleSubmitSaveForm = async ({ fileName }) => {
-    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
-    try {
-      await service.saveSegment({
-        ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
-        [segmentProps.name]: fileName,
-        [segmentProps.attributes]: attributes,
-      });
-    } catch (error) {
-      console.error(error);
+  const handleSubmitSaveForm = ({ fileName }) => {
+    if (!fileName) {
+      return;
     }
+    const onSuccessCallback = () => history.push('/segments');
+    dispatch(saveSegment({
+      attributes: segmentAttributes,
+      id: isNewSegment ? paramsSegmentId : null,
+      title: fileName,
+    }, onSuccessCallback));
   };
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
@@ -410,7 +413,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h3>
 
         <SaveForm
-          isFetching={isFetchingSegment}
+          isDisabled={isFetchingSegment || isSubmittingSegment}
           name={segmentName}
           onSubmit={handleSubmitSaveForm}
         />

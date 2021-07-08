@@ -26,6 +26,8 @@ export const resetSegment = createAction(`${NS}/segment/reset`);
 
 export const updateStatistics = createAction(`${NS}/segment/statistics`);
 
+export const submitSegment = createAction(`${NS}/segment/submit`);
+
 export const fetchParams = () => async (dispatch) => {
   dispatch(requestParams());
   try {
@@ -319,6 +321,32 @@ export const fetchSegmentStatistics = (segment) => async (dispatch) => {
         error: response,
       }));
     }
+    console.error(error);
+  }
+};
+
+export const saveSegment = (segment, callback) => async (dispatch) => {
+  const { attributes, id, title } = segment || {};
+  if (!title
+    || !attributes
+    || !Array.isArray(attributes)
+    || attributes.length === 0) {
+    return;
+  }
+  const formattedAttributes = formatSegmentAttributesListForRequest(attributes);
+  dispatch(submitSegment(true));
+  try {
+    const response = await service.saveSegment({
+      [segmentProps.id]: id,
+      [segmentProps.name]: title,
+      [segmentProps.attributes]: formattedAttributes,
+    });
+    dispatch(submitSegment(false));
+    if (response.status === 201 && typeof callback === 'function') {
+      callback();
+    }
+  } catch (error) {
+    dispatch(submitSegment(false));
     console.error(error);
   }
 };

@@ -5,6 +5,8 @@ export const getIsFetchingParams = (state) => (
   state[NS]?.isFetchingParams || false);
 export const getIsFetchingSegment = (state) => (
   state[NS]?.isFetchingSegment || false);
+export const getIsSubmittingSegment = (state) => (
+  state[NS]?.isSubmittingSegment || false);
 export const getParams = (state) => (
   state[NS]?.params || []);
 export const getSegment = (state) => (

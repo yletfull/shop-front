@@ -15,10 +15,9 @@ const fetchSegment = function serviceFetchSegment(id) {
     .get(`${baseUrl}/segments/${id}/`)
     .then((response) => response.data.data);
 };
-const saveSegment = function serviceSaveSegment(params) {
+const saveSegment = function serviceSaveSegment(data) {
   return api
-    .post(`${baseUrl}/segments/`, params)
-    .then((response) => response.data.data);
+    .post(`${baseUrl}/segments/`, data);
 };
 
 const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
