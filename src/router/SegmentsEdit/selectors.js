@@ -30,7 +30,6 @@ export const getSegmentAttributes = createSelector(
     return [];
   },
 );
-
 export const getSegmentStatistics = createSelector(
   [getStatistics],
   (statistics) => statistics.segment || {},

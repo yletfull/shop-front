@@ -32,6 +32,7 @@ import {
   requestAttributeStatistics,
   updateAttributeStatistics,
   updateSegmentAttribute,
+  fetchSegmentStatistics,
 } from './actions';
 import {
   getAttributesStatistics,
@@ -41,6 +42,7 @@ import {
   getSegmentAttributes,
   getSegmentId,
   getSegmentName,
+  getSegmentStatistics,
 } from './selectors';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
@@ -82,6 +84,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const segmentAttributes = useSelector(getSegmentAttributes);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
+  const segmentStatistics = useSelector(getSegmentStatistics);
 
   const downloadLinkRef = useRef(null);
 
@@ -178,6 +181,40 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(prepareAttributesStatistics());
     fetchAttributesStatistics();
   }, [dispatch, segmentAttributes]);
+
+  useEffect(() => {
+    const mapOrAttributes = (attr) => {
+      const {
+        datasetIds,
+        equality: type,
+        id: attributeId,
+        negation,
+        values,
+      } = attr || {};
+      return ({
+        attribute: attr,
+        attributeId,
+        datasetIds,
+        negation,
+        type,
+        values,
+      });
+    };
+    const mapAndAttributes = (andAttributes) => andAttributes
+      .map(mapOrAttributes);
+
+    dispatch(fetchSegmentStatistics({
+      ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
+      title: segmentName || '',
+      conditions: segmentAttributes.map(mapAndAttributes),
+    }));
+  }, [
+    dispatch,
+    segmentName,
+    segmentAttributes,
+    isNewSegment,
+    paramsSegmentId,
+  ]);
 
   const handleChangeAttribute = (position, attribute) => {
     const [groupIndex, attributeIndex] = position;
@@ -313,8 +350,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   };
 
-  const statistic = {};
-
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
@@ -429,8 +464,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h2>
 
         <Statistics
-          emailsCount={statistic.emails}
-          phonesCount={statistic.phones}
+          emailsCount={segmentStatistics.emails}
+          phonesCount={segmentStatistics.phones}
         />
 
         <h3

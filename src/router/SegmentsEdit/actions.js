@@ -4,6 +4,7 @@ import {
   equalityTypes,
   namespace as NS,
   segmentProps,
+  mapEntityTypes,
 } from './constants';
 import {
   getAttributesStatistics,
@@ -259,4 +260,30 @@ export const prepareAttributesStatistics = () => (dispatch, getState) => {
           errors: null,
         }))),
   }));
+};
+
+export const fetchSegmentStatistics = (segment) => async (dispatch) => {
+  const { id, title, conditions } = segment || {};
+  try {
+    const response = await service.fetchSegmentStatistics({
+      id,
+      attributes: {
+        title,
+        conditions,
+      },
+    });
+    console.log('Segment Statistics', response);
+    dispatch(updateSegmentStatistics(response.reduce((acc, cur) => {
+      const { entityType, total } = cur || {};
+      if (!entityType) {
+        return acc;
+      }
+      return ({
+        ...acc,
+        [mapEntityTypes[entityType]]: total || 0,
+      });
+    }, {})));
+  } catch (error) {
+    console.error(error);
+  }
 };
