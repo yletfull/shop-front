@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 import {
+  initialStatisticEntities,
   attributeProps,
   equalityTypes,
   namespace as NS,
@@ -198,11 +199,11 @@ export const requestSegmentStatistics = () => (dispatch) => {
   }));
 };
 export const updateSegmentStatistics = (values) => (dispatch) => {
-  const { emails, phones } = values || {};
+  const { emails, error, phones } = values || {};
   if (typeof emails === 'undefined' && typeof phones === 'undefined') {
     return;
   }
-  const segment = { emails, phones, isFetching: false };
+  const segment = { emails, error, phones, isFetching: false };
   dispatch(updateStatistics({ segment }));
 };
 export const requestAttributeStatistics = (position) => (
@@ -262,28 +263,38 @@ export const prepareAttributesStatistics = () => (dispatch, getState) => {
   }));
 };
 
+export const reduceStatisticsEntities = (acc, cur) => {
+  const { entityType, total } = cur || {};
+  if (!entityType) {
+    return acc;
+  }
+  return ({ ...acc, [mapEntityTypes[entityType]]: total || 0 });
+};
+
 export const fetchSegmentStatistics = (segment) => async (dispatch) => {
-  const { id, title, conditions } = segment || {};
+  const { title, conditions } = segment || {};
+  if (!title
+    || !conditions
+    || !Array.isArray(conditions)
+    || conditions.length === 0) {
+    dispatch(updateSegmentStatistics(initialStatisticEntities));
+    return;
+  }
   try {
     const response = await service.fetchSegmentStatistics({
-      id,
-      attributes: {
-        title,
-        conditions,
-      },
+      title,
+      conditions,
     });
-    console.log('Segment Statistics', response);
-    dispatch(updateSegmentStatistics(response.reduce((acc, cur) => {
-      const { entityType, total } = cur || {};
-      if (!entityType) {
-        return acc;
-      }
-      return ({
-        ...acc,
-        [mapEntityTypes[entityType]]: total || 0,
-      });
-    }, {})));
+    const statistics = response.reduce(reduceStatisticsEntities, {});
+    dispatch(updateSegmentStatistics(statistics));
   } catch (error) {
+    const { response } = error || {};
+    if (response) {
+      dispatch(updateSegmentStatistics({
+        ...initialStatisticEntities,
+        error: response,
+      }));
+    }
     console.error(error);
   }
 };

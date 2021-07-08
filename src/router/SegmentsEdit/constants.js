@@ -46,3 +46,10 @@ export const segmentProps = {
   id: 'id',
   name: 'title',
 };
+
+export const initialStatisticEntities = {
+  isFetching: false,
+  emails: null,
+  error: null,
+  phones: null,
+};

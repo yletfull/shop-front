@@ -150,11 +150,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
             dispatch(requestAttributeStatistics(position));
             try {
               const statistics = await service.fetchSegmentStatistics({
-                id: null,
-                attributes: {
-                  conditions: [[attribute]],
-                  title: orAttribute.attributeName || orAttribute.id,
-                },
+                conditions: [[attribute]],
+                title: orAttribute.attributeName || orAttribute.id,
               });
               dispatch(updateAttributeStatistics(
                 position,
@@ -204,7 +201,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
       .map(mapOrAttributes);
 
     dispatch(fetchSegmentStatistics({
-      ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
       title: segmentName || '',
       conditions: segmentAttributes.map(mapAndAttributes),
     }));
@@ -212,8 +208,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch,
     segmentName,
     segmentAttributes,
-    isNewSegment,
-    paramsSegmentId,
   ]);
 
   const handleChangeAttribute = (position, attribute) => {

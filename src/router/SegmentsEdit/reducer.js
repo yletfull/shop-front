@@ -20,6 +20,7 @@ const initialStatistics = {
     isFetching: false,
     emails: null,
     phones: null,
+    error: null,
   },
   attributes: null,
 };
