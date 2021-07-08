@@ -32,6 +32,9 @@ import {
   fetchAttributesStatistics,
 } from './actions';
 import {
+  formatSegmentAttributesListForRequest,
+} from './helpers';
+import {
   getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
@@ -116,26 +119,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
-
-  const mapOrSegmentAttributes = (attr) => {
-    const {
-      datasetIds,
-      equality: type,
-      id: attributeId,
-      negation,
-      values,
-    } = attr || {};
-    return ({
-      attribute: attr,
-      attributeId,
-      datasetIds,
-      negation,
-      type,
-      values,
-    });
-  };
-  const mapAndSegmentAttributes = (andAttributes) => andAttributes
-    .map(mapOrSegmentAttributes);
 
   useEffect(() => {
     dispatch(fetchAttributesStatistics(segmentAttributes));
@@ -227,6 +210,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(true);
 
+    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
     try {
       const url = await service.getSegmentDownloadLink(
         isSegmentChanged ? null : segmentId,
@@ -236,10 +220,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           sampleRowsSize,
           splitFilesCount,
           entityTypes,
-          segment: {
-            [segmentProps.attributes]: segmentAttributes
-              .map(mapAndSegmentAttributes),
-          },
+          segment: { [segmentProps.attributes]: attributes },
         },
       );
       if (!url) {
@@ -270,12 +251,12 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(addSegmentAttribute(selectedParams));
   };
   const handleSubmitSaveForm = async ({ fileName }) => {
+    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
     try {
       await service.saveSegment({
         ...(isNewSegment ? { [segmentProps.id]: paramsSegmentId } : {}),
         [segmentProps.name]: fileName,
-        [segmentProps.attributes]: segmentAttributes
-          .map(mapAndSegmentAttributes),
+        [segmentProps.attributes]: attributes,
       });
     } catch (error) {
       console.error(error);
