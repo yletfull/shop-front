@@ -1,0 +1,46 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background: $color-gray-darkest;
+  background: rgba($color-black, .75);
+  bottom: 0;
+  left: 0;
+  padding: 4rem 2rem 2rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.modal {
+  background: $color-gray-lighter;
+  border-radius: 1rem;
+  margin: 0 auto;
+  max-width: 100%;
+  padding: 1.5rem;
+
+  &CloseButton {
+    @include button-reset();
+
+    color: $color-primary;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    margin-left: 1rem;
+    padding: 0 .25rem;
+    position: relative;
+    top: .25em;
+  }
+
+  &Header {
+    align-items: baseline;
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+
+    &Title {
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+  }
+}
