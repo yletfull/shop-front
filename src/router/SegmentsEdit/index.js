@@ -380,8 +380,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h2>
 
         <Statistics
+          isFetching={segmentStatistics.isFetching}
           emailsCount={segmentStatistics.emails}
           phonesCount={segmentStatistics.phones}
+          error={segmentStatistics.error}
         />
 
         <h3
