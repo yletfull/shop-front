@@ -52,8 +52,6 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const tableData = useSelector(getTableData);
   const pagination = useSelector(getPagination);
 
-  const isShowPagination = pagination.totalPages > 1;
-
   const [
     queryCurrentPage,
     setQueryCurrentPage,
@@ -177,15 +175,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
         onSubmitFilter={handleSubmitTableFilterForm}
       />
 
-      {!isShowPagination && (
-        <Pagination
-          page={pagination.currentPage}
-          numberOfPages={pagination.totalPages + 1}
-          numberOfVisiblePages={Math.min(5, pagination.totalPages + 1)}
-          isDisabled={isFetching}
-          onChangePage={handleChangePage}
-        />
-      )}
+      <Pagination
+        page={pagination.currentPage}
+        numberOfPages={pagination.totalPages || 1}
+        numberOfVisiblePages={Math.min(5, pagination.totalPages || 1)}
+        isDisabled={isFetching}
+        onChangePage={handleChangePage}
+      />
 
       <Modal
         header={(
