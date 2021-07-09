@@ -47,8 +47,7 @@ const AttributeNumber = function AttributeNumber({
       return;
     }
     onSubmit({
-      [properties.max]: max,
-      [properties.min]: min,
+      [properties.values]: [min, max],
     });
   };
   const validateFormValues = (values) => {
