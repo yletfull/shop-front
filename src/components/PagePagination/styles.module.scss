@@ -1,6 +1,8 @@
 @import '@/theme/include.scss';
 
 .pagination {
+  padding-top: 2rem;
+
   &Button {
     @include button-reset();
 
