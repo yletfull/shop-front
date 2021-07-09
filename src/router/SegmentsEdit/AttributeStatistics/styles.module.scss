@@ -2,9 +2,9 @@
 
 .attributeStatistics {
   display: flex;
+  flex-grow: 1;
   font-size: .75rem;
   padding: 0 .5rem;
-  width: 13rem;
 
   &Spinner {
     text-align: center;
@@ -13,6 +13,10 @@
 
   &Value {
     display: block;
+    flex-basis: 0;
     flex-grow: 1;
+    flex-shrink: 0;
+    padding: 0 1rem;
+    text-align: right;
   }
 }

@@ -62,6 +62,12 @@
     pointer-events: none;
   }
 
+  &Section {
+    &:last-child {
+      flex-grow: 1;
+    }
+  }
+
   &Title {
     display: inline-block;
     font-size: .75rem;
