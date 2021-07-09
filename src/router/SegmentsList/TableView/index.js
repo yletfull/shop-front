@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { Formik, Form, Field } from 'formik';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
+import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import {
   segmentDownloadPlatforms,
@@ -17,6 +20,8 @@ const propTypes = {
   queryParams: PropTypes.shape({
     searchId: PropTypes.string,
     searchName: PropTypes.string,
+    searchNewEntities: PropTypes.string,
+    searchVersion: PropTypes.string,
   }).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -51,29 +56,13 @@ const TableView = function TableView({
 }) {
   const query = useQuery();
 
-  const [
-    searchId,
-    setSearchId,
-  ] = useState(query.get(queryParams?.searchId) || '');
-  const [
-    searchName,
-    setSearchName,
-  ] = useState(query.get(queryParams?.searchName) || '');
+  const initialFormValues = {
+    id: query.get(queryParams?.searchId) || '',
+    name: query.get(queryParams?.searchName) || '',
+    newEntities: query.get(queryParams?.searchNewEntities) || '',
+    version: query.get(queryParams?.searchVersion) || '',
+  };
 
-  const handleChangeSearchId = (e) => {
-    const { value } = e?.target || {};
-    if (typeof value === 'undefined') {
-      return;
-    }
-    setSearchId(value);
-  };
-  const handleChangeSearchName = (e) => {
-    const { value } = e?.target || {};
-    if (typeof value === 'undefined') {
-      return;
-    }
-    setSearchName(value);
-  };
   const handleClickDownloadButton = (e) => {
     const { id, title, type } = e?.target?.dataset || {};
     if (!id || !type) {
@@ -81,155 +70,208 @@ const TableView = function TableView({
     }
     onClickDownload({ id, title, type });
   };
-  const handleClickSearchButton = () => {
-    onSubmitFilter({ searchId, searchName });
+  const handleSubmitForm = (values) => {
+    const {
+      id: searchId,
+      name: searchName,
+      newEntities: searchNewEntities,
+      version: searchVersion,
+    } = values || {};
+    onSubmitFilter({
+      searchId,
+      searchName,
+      searchNewEntities,
+      searchVersion,
+    });
   };
 
+  const FormikInput = withFormikField(Input);
+  const FormikSelect = withFormikField(Select);
+
   return (
-    <table className={styles.tableView}>
-      <tbody>
-        <tr>
-          <td data-purpose="filter">
-            <span className={styles.tableViewCell}>
-              <Input
-                className={cx(
-                  styles.tableViewInput,
-                  styles.tableViewInput_min,
-                )}
-                placeholder="ID"
-                type="text"
-                value={searchId}
-                fullwidth
-                onChange={handleChangeSearchId}
-              />
-            </span>
-          </td>
-          <td
-            colSpan="7"
-            data-purpose="filter"
-          >
-            <span className={styles.tableViewCell}>
-              <Input
-                className={cx(
-                  styles.tableViewInput,
-                  styles.tableViewInput_grow
-                )}
-                placeholder="Название"
-                type="text"
-                value={searchName}
-                onChange={handleChangeSearchName}
-              />
-              <Button
-                type="button"
-                onClick={handleClickSearchButton}
-              >
-                Найти
-              </Button>
-            </span>
-          </td>
-        </tr>
-
-        <tr>
-          <th>
-            ID
-          </th>
-          <th>
-            Название
-          </th>
-          <th>
-            E-mail
-          </th>
-          <th>
-            Телефонов
-          </th>
-          <th>
-            Файлы
-          </th>
-          <th>
-            Доступны новые идентиф.
-          </th>
-          <th>
-            Версий
-          </th>
-          <th>
-            Посл. версия
-          </th>
-        </tr>
-
-        {isFetching && (
-          <tr>
-            <td colSpan="8">
-              <Spinner />
-            </td>
-          </tr>
-        )}
-
-        {data.map((row) => (
-          <tr key={row.id}>
-            <td>
-              {row.id}
-            </td>
-            <td>
-              <Link
-                title={row.title}
-                to={`/segments/edit/${row.id}`}
-              >
-                {row.title}
-              </Link>
-            </td>
-            <td>
-              {row.totalEmailsCount ? formatNumber(row.totalEmailsCount) : '-'}
-            </td>
-            <td>
-              {row.totalPhonesCount ? formatNumber(row.totalPhonesCount) : '-'}
-            </td>
-            <td>
-              {[
-                { label: 'VK', value: segmentDownloadPlatforms.vk },
-                { label: 'FB', value: segmentDownloadPlatforms.fb },
-                { label: 'MailRu', value: segmentDownloadPlatforms.mail },
-                { label: 'Яндекс', value: segmentDownloadPlatforms.yandex },
-              ].map(({ label, value }) => (
-                <Button
-                  key={value}
-                  appearance="control"
-                  data-id={row.id}
-                  data-title={row.title}
-                  data-type={value}
-                  onClick={handleClickDownloadButton}
-                >
-                  <span className={styles.tableViewDownloadLabel}>
-                    {label}
-                  </span>
-                </Button>
-              ))}
-            </td>
-            <td>
-              {row.newEntityTypeTotals
-                && Array.isArray(row.newEntityTypeTotals)
-                && row.newEntityTypeTotals.map(({ entityType, total }) => (
-                  <span
-                    key={entityType}
-                    className={styles.tableViewEntities}
-                  >
-                    <span className={styles.tableViewEntitiesLabel}>
-                      {`${mapSegmentEntityTypes[entityType] || entityType}: `}
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={handleSubmitForm}
+    >
+      {({ values }) => {
+        const { newEntities } = values || {};
+        return (
+          <Form>
+            <table className={styles.tableView}>
+              <tbody>
+                <tr>
+                  <td data-purpose="filter">
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="id"
+                        placeholder="ID"
+                        className={cx(
+                          styles.tableViewInput,
+                          styles.tableViewInput_min,
+                        )}
+                        component={FormikInput}
+                        fullwidth
+                      />
                     </span>
-                    {total > 0 ? '+' : ''}
-                    {formatNumber(total)}
-                  </span>
+                  </td>
+                  <td
+                    colSpan="4"
+                    data-purpose="filter"
+                  >
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="name"
+                        placeholder="Название"
+                        className={styles.tableViewInput}
+                        component={FormikInput}
+                        fullwidth
+                      />
+                    </span>
+                  </td>
+                  <td data-purpose="filter">
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="newEntities"
+                        placeholder="Доступны новые идентиф."
+                        resetText="Сбросить"
+                        value={newEntities}
+                        options={[
+                          { text: 'Да', value: 1 },
+                          { text: 'Нет', value: 0 },
+                        ]}
+                        className={styles.tableViewInput}
+                        component={FormikSelect}
+                        fullwidth
+                      />
+                    </span>
+                  </td>
+                  <td
+                    colSpan="2"
+                    data-purpose="filter"
+                  >
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="version"
+                        placeholder="Версий"
+                        className={cx(
+                          styles.tableViewInput,
+                          styles.tableViewInput_grow
+                        )}
+                        component={FormikInput}
+                      />
+                      <Button type="submit">
+                        Найти
+                      </Button>
+                    </span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>
+                    ID
+                  </th>
+                  <th>
+                    Название
+                  </th>
+                  <th>
+                    E-mail
+                  </th>
+                  <th>
+                    Телефонов
+                  </th>
+                  <th>
+                    Файлы
+                  </th>
+                  <th>
+                    Доступны новые идентиф.
+                  </th>
+                  <th>
+                    Версий
+                  </th>
+                  <th>
+                    Посл. версия
+                  </th>
+                </tr>
+
+                {isFetching && (
+                  <tr>
+                    <td colSpan="8">
+                      <Spinner />
+                    </td>
+                  </tr>
+                )}
+
+                {data.map((row) => (
+                  <tr key={row.id}>
+                    <td>
+                      {row.id}
+                    </td>
+                    <td>
+                      <Link
+                        title={row.title}
+                        to={`/segments/edit/${row.id}`}
+                      >
+                        {row.title}
+                      </Link>
+                    </td>
+                    <td>
+                      {row.totalEmailsCount ? formatNumber(row.totalEmailsCount) : '-'}
+                    </td>
+                    <td>
+                      {row.totalPhonesCount ? formatNumber(row.totalPhonesCount) : '-'}
+                    </td>
+                    <td>
+                      {[
+                        { label: 'VK', value: segmentDownloadPlatforms.vk },
+                        { label: 'FB', value: segmentDownloadPlatforms.fb },
+                        { label: 'MailRu', value: segmentDownloadPlatforms.mail },
+                        { label: 'Яндекс', value: segmentDownloadPlatforms.yandex },
+                      ].map(({ label, value }) => (
+                        <Button
+                          key={value}
+                          appearance="control"
+                          data-id={row.id}
+                          data-title={row.title}
+                          data-type={value}
+                          onClick={handleClickDownloadButton}
+                        >
+                          <span className={styles.tableViewDownloadLabel}>
+                            {label}
+                          </span>
+                        </Button>
+                      ))}
+                    </td>
+                    <td>
+                      {row.newEntityTypeTotals
+                        && Array.isArray(row.newEntityTypeTotals)
+                        && row.newEntityTypeTotals
+                          .map(({ entityType, total }) => (
+                            <span
+                              key={entityType}
+                              className={styles.tableViewEntities}
+                            >
+                              <span className={styles.tableViewEntitiesLabel}>
+                                {`${mapSegmentEntityTypes[entityType] || entityType}: `}
+                              </span>
+                              {total > 0 ? '+' : ''}
+                              {formatNumber(total)}
+                            </span>
+                          ))}
+                    </td>
+                    <td>
+                      {formatNumber(row.versionCount)}
+                    </td>
+                    <td align="right">
+                      {formatDate(row.lastVersionDate)}
+                    </td>
+                  </tr>
                 ))}
-            </td>
-            <td>
-              {formatNumber(row.versionCount)}
-            </td>
-            <td align="right">
-              {formatDate(row.lastVersionDate)}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+              </tbody>
+            </table>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -10,7 +10,10 @@ import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Modal from '@/components/Modal';
 import Pagination from '@/components/PagePagination';
-import { namespace as NS } from './constants';
+import {
+  namespace as NS,
+  queryParams,
+} from './constants';
 import reducer from './reducer';
 import {
   fetchSegments,
@@ -35,12 +38,6 @@ const defaultProps = {
 };
 
 const SegmentsList = function SegmentsList({ defaultTitle }) {
-  const queryParams = useMemo(() => ({
-    searchId: 'id',
-    searchName: 'name',
-    page: 'page',
-  }), []);
-
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -51,6 +48,11 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const isFetching = useSelector(getIsFetchingData);
   const tableData = useSelector(getTableData);
   const pagination = useSelector(getPagination);
+
+  const querySearchName = query.get(queryParams.searchName) || '';
+  const querySearchId = query.get(queryParams.searchId) || '';
+  const querySearchNewEntities = query.get(queryParams.searchNewEntities) || '';
+  const querySearchVersion = query.get(queryParams.searchVersion) || '';
 
   const [
     queryCurrentPage,
@@ -75,8 +77,20 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   useEffect(() => {
     dispatch(fetchSegments({
       currentPage: queryCurrentPage,
+      id: querySearchId,
+      title: querySearchName,
+      isNewEntityAvailable: querySearchNewEntities,
+      versionCountFrom: querySearchVersion,
+      versionCountTo: querySearchVersion,
     }));
-  }, [dispatch, queryCurrentPage]);
+  }, [
+    dispatch,
+    queryCurrentPage,
+    querySearchId,
+    querySearchName,
+    querySearchNewEntities,
+    querySearchVersion,
+  ]);
 
   const handleChangePage = (page) => {
     setQueryCurrentPage(page);
@@ -139,9 +153,16 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(false);
   };
-  const handleSubmitTableFilterForm = ({ searchId, searchName }) => {
-    query.set(queryParams.searchId, String(searchId));
-    query.set(queryParams.searchName, String(searchName));
+  const handleSubmitTableFilterForm = ({
+    searchId,
+    searchName,
+    searchNewEntities,
+    searchVersion,
+  }) => {
+    query.set(queryParams.searchId, String(searchId || ''));
+    query.set(queryParams.searchName, String(searchName || ''));
+    query.set(queryParams.searchNewEntities, String(searchNewEntities || ''));
+    query.set(queryParams.searchVersion, String(searchVersion || ''));
     history.push({ search: query.toString() });
   };
 

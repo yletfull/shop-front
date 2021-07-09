@@ -16,3 +16,11 @@ export const mapSegmentEntityTypes = {
   [segmentEntityTypes.emails]: 'E-mail',
   [segmentEntityTypes.phones]: 'Телеф.',
 };
+
+export const queryParams = {
+  searchId: 'id',
+  searchName: 'title',
+  searchNewEntities: 'isNewEntityAvailable',
+  searchVersion: 'versionCount',
+  page: 'page',
+};

@@ -19,9 +19,13 @@
     align-items: stretch;
     display: flex;
 
-    &:last-child {
+    &:first-child {
       flex-grow: 1;
-      justify-content: space-between;
+    }
+
+    &:last-child {
+      flex-shrink: 0;
+      width: 24.5rem;
     }
 
     &_form {

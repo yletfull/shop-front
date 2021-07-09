@@ -8,6 +8,8 @@ export const updateData = createAction(`${NS}/updateData`);
 export const updateMeta = createAction(`${NS}/updateMeta`);
 
 export const fetchSegments = (params) => async (dispatch) => {
+  dispatch(updateData([]));
+  dispatch(updateMeta({}));
   dispatch(requestData());
   try {
     const response = await service.fetchSegments(params);
