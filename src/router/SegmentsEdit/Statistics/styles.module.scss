@@ -17,4 +17,9 @@
       font-weight: bold;
     }
   }
+
+  &Error {
+    color: $color-red-darker;
+    font-weight: normal;
+  }
 }
