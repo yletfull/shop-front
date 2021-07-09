@@ -23,9 +23,11 @@ const TableRow = function TableRow({
   className,
   type,
   children,
+  ...props
 }) {
   return (
     <tr
+      {...props}
       className={cx(
         className,
         styles.row,
