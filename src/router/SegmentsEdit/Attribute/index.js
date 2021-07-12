@@ -4,6 +4,7 @@ import { useDrag } from 'react-dnd';
 import Button from '@/components/Button';
 import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
+import AttributeDate from './AttributeDate';
 import AttributeEnum from './AttributeEnum';
 import AttributeNumber from './AttributeNumber';
 import styles from './styles.module.scss';
@@ -64,6 +65,7 @@ const Attribute = function Attribute({
   const { attributeName: name, negation, title, type } = data || {};
 
   const attributes = {
+    [types.date || 'DATE']: AttributeDate,
     [types.enum || 'ENUM']: AttributeEnum,
     [types.string || 'STRING']: AttributeEnum,
     [types.number || 'NUMERIC']: AttributeNumber,
