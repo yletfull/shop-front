@@ -9,6 +9,7 @@ import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import {
   syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled,
+  fetchDashboard,
 } from '@/store/upload/actions';
 import { formatDate } from '@/utils/format';
 import {
@@ -19,6 +20,9 @@ import styles from './styles.module.scss';
 
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchDashboard());
+  }, [dispatch]);
 
   const queueList = useSelector(getQueueList);
 
@@ -42,7 +46,6 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
 
   const [isSyncInProcess, setIsSyncInProcess] = useState(false);
   const [syncError, setSyncError] = useState(false);
-  const [taksData, setTaskData] = useState({});
 
   const sync = async () => {
     if (syncVkTask.current && Object.keys(syncVkTask.current).length) {
@@ -64,7 +67,6 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
             return check();
           }
 
-          setTaskData(task);
           clearTimeout(check);
           setIsSyncInProcess(false);
           dispatch(setUploadButtonDisabled(false));
@@ -126,8 +128,8 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           Последняя синхронизация
         </span>
         <span className={styles.value}>
-          {taksData?.finishedAt
-            ? formatDate(taksData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')
+          {syncVkTaskData?.finishedAt
+            ? formatDate(syncVkTaskData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')
             : '-'}
         </span>
       </div>
