@@ -1,6 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
 import NS from './namespace';
 import service from './service';
+import {
+  getSelectAccount,
+  getSelectClient,
+} from './selectors';
 
 export const stage = createAction(`${NS}/setStage`);
 export const accounts = createAction(`${NS}/accounts`);
@@ -202,4 +206,19 @@ export const setDownloadAllAdsButtonDisabled = (data) => (dispatch) => {
 
 export const setUploadButtonDisabled = (data) => (dispatch) => {
   dispatch(uploadButtonDisabled(data));
+};
+
+export const dashboard = createAction(`${NS}/dashboard`);
+export const fetchDashboard = () => async (dispatch, getState) => {
+  const state = getState();
+  const cabinetId = getSelectAccount(state);
+  const clientId = getSelectClient(state);
+
+  try {
+    const data = await service.getDashboard({ cabinetId, clientId });
+
+    dispatch(dashboard(data));
+  } catch (error) {
+    console.error(error);
+  }
 };
