@@ -191,6 +191,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
+    dispatch(fetchAttributeStatistics(position));
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
