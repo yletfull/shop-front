@@ -23,7 +23,7 @@ export const getStage = (state) => state[NS]
 export const getSyncVkTask = (state) => (
   state[NS]?.syncVkTask?.command
     ? state[NS]?.syncVkTask
-    : { finishedAt: state[NS]?.dashboard?.syncTime }
+    : state[NS]?.dashboard?.fullSyncTask?.data || {}
 );
 export const getSelectedList = (state) => state[NS]?.selectedList || null;
 export const getParentDocument = (state) => state[NS]?.parentDocument || {};
