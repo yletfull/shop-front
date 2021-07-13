@@ -75,4 +75,14 @@
     padding: 0 .5rem;
     width: 10rem;
   }
+
+  &Profile {
+    color: $color-gray-darker;
+    font-size: .625rem;
+    overflow: hidden;
+    padding: 0 .5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 10rem;
+  }
 }

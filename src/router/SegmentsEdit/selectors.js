@@ -40,3 +40,19 @@ export const getAttributesStatistics = createSelector(
   [getStatistics],
   (statistics) => statistics.attributes || [],
 );
+export const getMapProfileTitle = createSelector(
+  [getParams],
+  (attributes) => attributes.reduce((acc, group) => {
+    try {
+      const [{ profileId }] = group.attributes;
+
+      return {
+        ...acc,
+        [profileId]: group.group,
+      };
+    } catch (error) {
+      console.error(error);
+      return acc;
+    }
+  }, {}),
+);

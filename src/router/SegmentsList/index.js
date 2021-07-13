@@ -161,7 +161,10 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   }) => {
     query.set(queryParams.searchId, String(searchId || ''));
     query.set(queryParams.searchName, String(searchName || ''));
-    query.set(queryParams.searchNewEntities, String(searchNewEntities || ''));
+    query.set(
+      queryParams.searchNewEntities,
+      String(['0', '1'].includes(searchNewEntities) ? searchNewEntities : ''),
+    );
     query.set(queryParams.searchVersion, String(searchVersion || ''));
     history.push({ search: query.toString() });
   };
