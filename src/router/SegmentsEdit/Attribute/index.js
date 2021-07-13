@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import Button from '@/components/Button';
 import IconArrows from '@/icons/ArrowsLight';
 import IconTimes from '@/icons/TimesLight';
+import { getMapProfileTitle } from '../selectors';
 import AttributeDate from './AttributeDate';
 import AttributeEnum from './AttributeEnum';
 import AttributeNumber from './AttributeNumber';
@@ -62,6 +64,8 @@ const Attribute = function Attribute({
   onRemove,
   onSubmit,
 }) {
+  const mapProfileTitle = useSelector(getMapProfileTitle);
+
   const { attributeName: name, negation, title, type } = data || {};
 
   const attributes = {
@@ -120,6 +124,14 @@ const Attribute = function Attribute({
           <span className={styles.attributeTitle}>
             {title || name}
           </span>
+          {Boolean(mapProfileTitle && mapProfileTitle[data.profileId]) && (
+            <div
+              className={styles.attributeProfile}
+              title={mapProfileTitle[data.profileId]}
+            >
+              {mapProfileTitle[data.profileId]}
+            </div>
+          )}
         </div>
 
         <div className={styles.attributeSection}>
