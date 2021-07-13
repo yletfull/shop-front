@@ -48,11 +48,8 @@ const AttributeDatasets = function AttributeDatasets({
             appearance="control"
             onClick={handleClickShowModalButton}
           >
-            {formatNumber(selected.length)}
-            &nbsp;
-            из
-            &nbsp;
-            {formatNumber(datasets.length)}
+            {selected.length === 0 && ('любой')}
+            {selected.length > 0 && `${formatNumber(selected.length)} из ${formatNumber(datasets.length)}`}
           </Button>
         )
         : (
