@@ -29,7 +29,7 @@ import {
   removeSegmentAttribute,
   updateSegmentAttribute,
   fetchSegmentStatistics,
-  fetchAttributesStatistics,
+  fetchAttributeStatistics,
   saveSegment,
 } from './actions';
 import {
@@ -125,24 +125,19 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
   useEffect(() => {
-    dispatch(fetchAttributesStatistics(segmentAttributes));
-  }, [dispatch, segmentAttributes]);
-
-  useEffect(() => {
     dispatch(fetchSegmentStatistics({
       title: segmentName || '',
       attributes: segmentAttributes || [],
     }));
   }, [dispatch, segmentName, segmentAttributes]);
 
-  const handleChangeAttribute = (position, attribute) => {
-    const [groupIndex, attributeIndex] = position;
-    if (typeof attributeIndex === 'undefined'
-      || typeof groupIndex === 'undefined') {
+  const handleChangeAttribute = (position, values) => {
+    if (!position || !Array.isArray(position) || position.length < 2) {
       return;
     }
     setIsSegmentChanged(true);
-    dispatch(updateSegmentAttribute([groupIndex, attributeIndex], attribute));
+    dispatch(updateSegmentAttribute(position, values));
+    dispatch(fetchAttributeStatistics(position));
   };
   const handleSelectDownloadFile = (platform) => {
     setDownloadedSegment({ type: platform });
@@ -316,7 +311,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                         dragType={dndTypes.attribute}
                         onChange={handleChangeAttribute}
                         onRemove={handleRemoveAttribute}
-                        onSubmit={handleSubmitAttribute}
                       >
                         <AttributeDatasets
                           name={title || name}
