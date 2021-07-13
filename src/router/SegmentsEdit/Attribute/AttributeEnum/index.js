@@ -13,13 +13,13 @@ const propTypes = {
   }),
   equalityTypes: PropTypes.objectOf(PropTypes.string).isRequired,
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
-  onSubmit: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
   data: {},
-  onSubmit: () => {},
+  onChange: () => {},
 };
 
 const AttributeEnum = function AttributeEnum({
@@ -27,7 +27,7 @@ const AttributeEnum = function AttributeEnum({
   data,
   equalityTypes,
   properties,
-  onSubmit,
+  onChange,
 }) {
   const { options = [], values = [] } = data || {};
 
@@ -45,7 +45,7 @@ const AttributeEnum = function AttributeEnum({
     const equality = formValues.length > 0
       ? equalityTypes.equal
       : equalityTypes.any;
-    onSubmit({
+    onChange({
       [properties.equality]: equality,
       [properties.values]: formValues,
     });
@@ -69,7 +69,7 @@ const AttributeEnum = function AttributeEnum({
                 submitForm();
               };
               return (
-                <Form onSubmit={handleSubmitForm}>
+                <Form>
                   {options.map((value) => (
                     <label
                       key={value}

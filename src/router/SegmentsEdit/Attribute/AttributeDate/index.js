@@ -14,19 +14,19 @@ const propTypes = {
     values: PropTypes.arrayOf(PropTypes.string),
   }),
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
-  onSubmit: PropTypes.func,
+  onChange: PropTypes.func,
 };
 const defaultProps = {
   children: null,
   data: {},
-  onSubmit: () => {},
+  onChange: () => {},
 };
 
 const AttributeDate = function AttributeDate({
   children,
   data,
   properties,
-  onSubmit,
+  onChange,
 }) {
   const fieldNames = {
     maxDate: 'maxDate',
@@ -46,7 +46,7 @@ const AttributeDate = function AttributeDate({
     if (!selectedMaxDate && !selectedMinDate) {
       return;
     }
-    onSubmit({
+    onChange({
       [properties.values]: [
         selectedMinDate || '',
         selectedMaxDate || '',

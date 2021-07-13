@@ -40,7 +40,6 @@ const propTypes = {
   }).isRequired,
   onChange: PropTypes.func,
   onRemove: PropTypes.func,
-  onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
@@ -48,7 +47,6 @@ const defaultProps = {
   data: {},
   onChange: () => {},
   onRemove: () => {},
-  onSubmit: () => {},
 };
 
 const Attribute = function Attribute({
@@ -62,7 +60,6 @@ const Attribute = function Attribute({
   types,
   onChange,
   onRemove,
-  onSubmit,
 }) {
   const mapProfileTitle = useSelector(getMapProfileTitle);
 
@@ -85,11 +82,8 @@ const Attribute = function Attribute({
     }),
   }), [dragType, groupIndex, index]);
 
-  const handleChangeAttribute = (key, values) => {
-    if (!key) {
-      return;
-    }
-    onChange({ ...data, [key]: values });
+  const handleChangeAttribute = (values) => {
+    onChange([groupIndex, index], values);
   };
   const handleClickChangeEquality = () => {
     const key = properties.negation || 'negation';
@@ -102,9 +96,6 @@ const Attribute = function Attribute({
       return;
     }
     onRemove([group, attributeIndex]);
-  };
-  const handleSubmitAttribute = (values) => {
-    onSubmit([groupIndex, index], values);
   };
 
   return (
@@ -157,7 +148,6 @@ const Attribute = function Attribute({
               properties={properties}
               equalityTypes={equalityTypes}
               onChange={handleChangeAttribute}
-              onSubmit={handleSubmitAttribute}
             >
               {children}
             </TypedAttribute>

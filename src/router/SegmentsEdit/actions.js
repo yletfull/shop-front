@@ -38,74 +38,7 @@ export const fetchParams = () => async (dispatch) => {
     dispatch(updateParams([]));
   }
 };
-export const fetchSegment = (id) => async (dispatch) => {
-  dispatch(requestSegment());
-  try {
-    const response = await service.fetchSegment(id);
-    const {
-      [segmentProps.attributes]: segmentAttributes,
-      [segmentProps.id]: segmentId,
-      [segmentProps.name]: segmentName,
-    } = response || {};
-    const mapAttributes = ({
-      attribute,
-      type: attributeEquality,
-      [attributeProps.datasetIds]: attributeDatasetIds,
-      [attributeProps.values]: attributeValues,
-      [attributeProps.negation]: attributeNegation,
-    }) => ({
-      ...attribute,
-      [attributeProps.datasetIds]: attributeDatasetIds || [],
-      [attributeProps.values]: attributeValues || [],
-      [attributeProps.negation]: attributeNegation || false,
-      [attributeProps.equality]: attributeEquality || equalityTypes.any,
-    });
-    const mapAttributesGroup = (group) => group.map(mapAttributes);
-    dispatch(updateSegment({
-      [segmentProps.id]: segmentId,
-      [segmentProps.name]: segmentName || '',
-      [segmentProps.attributes]: segmentAttributes
-        .map(mapAttributesGroup),
-    }));
-  } catch (error) {
-    console.error(error);
-    dispatch(updateSegment({}));
-  }
-};
-export const addSegmentAttribute = (values) => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
-  const mapAttribute = (attr) => {
-    const initial = {
-      equality: equalityTypes.any,
-      negation: false,
-      values: [],
-      datasetIds: [],
-    };
-    return ([{ ...initial, ...attr }]);
-  };
-  dispatch(updateSegment({
-    [segmentProps.attributes]: attributes.concat(values.map(mapAttribute)),
-  }));
-};
-export const removeSegmentAttribute = (position) => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
-  const [groupIndex, attributeIndex] = position;
-  const attribute = attributes[groupIndex];
-  if (!attribute) {
-    return;
-  }
-  const newAttribute = [
-    ...attribute.slice(0, attributeIndex),
-    ...attribute.slice(attributeIndex + 1),
-  ];
-  dispatch(updateSegment({
-    [segmentProps.attributes]: [
-      ...attributes.slice(0, groupIndex),
-      newAttribute,
-      ...attributes.slice(groupIndex + 1),
-    ].filter((a) => a.length > 0),
-  }));
-};
+
 export const moveSegmentAttribute = (source, target) => (
   (dispatch, getState) => {
     const [sourceGroupIndex, sourceAttributeIndex] = source || [];
@@ -211,54 +144,14 @@ export const updateSegmentStatistics = (values) => (dispatch) => {
   const segment = { emails, error, phones, isFetching: false };
   dispatch(updateStatistics({ segment }));
 };
-export const requestAttributeStatistics = (position) => (
-  (dispatch, getState) => {
-    if (position.length < 2) {
-      return;
-    }
-    const [groupIndex, attributeIndex] = position || [];
-    const attributesStatistics = getAttributesStatistics(getState());
-    const attributes = [
-      ...attributesStatistics.slice(0, groupIndex),
-      [
-        ...attributesStatistics[groupIndex].slice(0, attributeIndex),
-        {
-          isFetching: true,
-          emails: null,
-          phones: null,
-        },
-        ...attributesStatistics[groupIndex].slice(attributeIndex + 1),
-      ],
-      ...attributesStatistics.slice(groupIndex + 1),
-    ];
-    dispatch(updateStatistics({ attributes }));
-  });
-export const updateAttributeStatistics = (position, values) => (
-  (dispatch, getState) => {
-    const { emails = null, phones = null, error = null } = values || {};
-    const attributesStatistics = getAttributesStatistics(getState());
-    const [groupIndex, attributeIndex] = position;
-    const attributes = [
-      ...attributesStatistics.slice(0, groupIndex),
-      [
-        ...attributesStatistics[groupIndex].slice(0, attributeIndex),
-        {
-          emails,
-          error,
-          phones,
-          isFetching: false,
-        },
-        ...attributesStatistics[groupIndex].slice(attributeIndex + 1),
-      ],
-      ...attributesStatistics.slice(groupIndex + 1),
-    ];
-    dispatch(updateStatistics({ attributes }));
-  });
 
-export const clearAttributesStatistics = (attributes) => (dispatch) => {
+export const initAttributesStatistics = () => (dispatch, getState) => {
+  const attributes = getSegmentAttributes(getState());
+
   if (!Array.isArray(attributes)) {
     return;
   }
+
   dispatch(updateStatistics({
     attributes: attributes
       .map((andAttribute) => andAttribute
@@ -266,37 +159,30 @@ export const clearAttributesStatistics = (attributes) => (dispatch) => {
   }));
 };
 
-export const fetchAttributesStatistics = (attributes) => (dispatch) => {
-  if (!Array.isArray(attributes)) {
+export const clearAttributeStatistics = (position) => (dispatch, getState) => {
+  const statistics = getAttributesStatistics(getState());
+
+  if (!statistics
+    || !position
+    || !Array.isArray(position)
+    || position.length < 2) {
     return;
   }
-  dispatch(clearAttributesStatistics(attributes));
-  return Promise.all(attributes
-    .map((andAttribute, andIndex) => Promise.all(andAttribute
-      .map(async (orAttribute, orIndex) => {
-        const attribute = formatSegmentAttributeForRequest(orAttribute);
-        const position = [andIndex, orIndex];
-        dispatch(requestAttributeStatistics(position));
-        try {
-          const response = await service.fetchSegmentStatistics({
-            conditions: [[attribute]],
-            title: orAttribute.attributeName || orAttribute.id,
-          });
-          dispatch(updateAttributeStatistics(
-            position,
-            formatStatisticEntities(response),
-          ));
-        } catch (error) {
-          if (error.response) {
-            dispatch(updateAttributeStatistics(
-              position,
-              { error: error.response },
-            ));
+
+  const [groupIndex, attributeIndex] = position;
+
+  dispatch(updateStatistics({
+    attributes: statistics
+      .map((andStatistics, andIndex) => andStatistics
+        .map((orStatistics, orIndex) => {
+          if (andIndex === groupIndex && orIndex === attributeIndex) {
+            return initialStatisticEntities;
           }
-          console.error(error);
-        }
-      }))));
+          return orStatistics;
+        })),
+  }));
 };
+
 export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   const { title, attributes } = segment || {};
   if (!title
@@ -325,6 +211,239 @@ export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   }
 };
 
+export const requestAttributeStatistics = (position) => (
+  (dispatch, getState) => {
+    const statistics = getAttributesStatistics(getState());
+
+    if (!statistics
+      || !position
+      || !Array.isArray(position)
+      || position.length < 2) {
+      return;
+    }
+
+    const [groupIndex, attributeIndex] = position;
+
+    dispatch(updateStatistics({
+      attributes: statistics
+        .map((andStatistics, andIndex) => andStatistics
+          .map((orStatistics, orIndex) => {
+            if (andIndex === groupIndex && orIndex === attributeIndex) {
+              return ({
+                ...initialStatisticEntities,
+                isFetching: true,
+              });
+            }
+            return orStatistics;
+          })),
+    }));
+  });
+
+export const updateAttributeStatistics = (position, values) => (
+  (dispatch, getState) => {
+    const attributes = getSegmentAttributes(getState());
+    const statistics = getAttributesStatistics(getState());
+
+    if (!attributes
+      || !statistics
+      || !position
+      || !Array.isArray(position)
+      || position.length < 2) {
+      return;
+    }
+
+    const [groupIndex, attributeIndex] = position;
+
+    dispatch(updateStatistics({
+      attributes: attributes
+        .map((andAttribute, andIndex) => andAttribute
+          .map((orAttribute, orIndex) => {
+            if (andIndex === groupIndex && orIndex === attributeIndex) {
+              return ({
+                ...initialStatisticEntities,
+                ...values,
+                isFetching: false,
+              });
+            }
+            return statistics[andIndex]?.[orIndex] || initialStatisticEntities;
+          })),
+    }));
+  });
+
+export const fetchSegmentAttributesStatistics = (value) => (
+  async (dispatch, getState) => {
+    let attributes = value || [];
+
+    if (!value) {
+      attributes = getSegmentAttributes(getState());
+    }
+
+    try {
+      await Promise.all(attributes
+        .map((andAttribute, andIndex) => Promise.all(andAttribute
+          .map(async (orAttribute, orIndex) => {
+            const attribute = formatSegmentAttributeForRequest(orAttribute);
+            const position = [andIndex, orIndex];
+            dispatch(requestAttributeStatistics(position));
+            try {
+              const response = await service.fetchSegmentStatistics({
+                conditions: [[attribute]],
+                title: orAttribute.attributeName || orAttribute.id,
+              });
+              dispatch(updateAttributeStatistics(
+                position,
+                formatStatisticEntities(response),
+              ));
+            } catch (error) {
+              if (error.response) {
+                dispatch(updateAttributeStatistics(
+                  position,
+                  { error: error.response },
+                ));
+              }
+              console.error(error);
+            }
+          }))));
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+export const fetchAttributeStatistics = (position) => (
+  async (dispatch, getState) => {
+    const attributes = getSegmentAttributes(getState());
+
+    if (!position || !Array.isArray(position) || position.length < 2) {
+      return;
+    }
+
+    dispatch(clearAttributeStatistics(position));
+    dispatch(requestAttributeStatistics(position));
+
+    const [groupIndex, attributeIndex] = position;
+
+    const attribute = attributes[groupIndex][attributeIndex];
+
+    if (!attribute) {
+      return;
+    }
+
+    try {
+      const response = await service.fetchSegmentStatistics({
+        conditions: [[formatSegmentAttributeForRequest(attribute)]],
+        title: attribute.attributeName || attribute.id,
+      });
+      dispatch(updateAttributeStatistics(
+        position,
+        formatStatisticEntities(response),
+      ));
+    } catch (error) {
+      if (error.response) {
+        dispatch(updateAttributeStatistics(
+          position,
+          { error: error.response },
+        ));
+      }
+      console.error(error);
+    }
+  });
+
+export const removeAttributeStatistics = (position) => (
+  (dispatch, getState) => {
+    const statistics = getAttributesStatistics(getState());
+    const [groupIndex, attributeIndex] = position || {};
+
+    const newStatistics = [
+      ...statistics.slice(0, groupIndex),
+      [
+        ...statistics[groupIndex].slice(0, attributeIndex),
+        ...statistics[groupIndex].slice(attributeIndex + 1),
+      ],
+      ...statistics.slice(groupIndex + 1),
+    ].filter((group) => group.length > 0);
+
+    dispatch(updateStatistics({ attributes: newStatistics }));
+  });
+
+export const moveAttributeStatistics = (source, target) => (
+  (dispatch, getState) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
+    const [targetGroupIndex, targetAttributeIndex = 0] = target || [];
+    if ([
+      sourceGroupIndex,
+      targetGroupIndex,
+      targetAttributeIndex,
+    ].some((index) => typeof index === 'undefined')) {
+      return;
+    }
+    const statistics = getAttributesStatistics(getState());
+    dispatch(updateStatistics({
+      attributes: statistics
+        .reduce((acc, stats, index) => {
+          if (index === sourceGroupIndex) {
+            const newSourceAttributes = [
+              ...stats.slice(0, sourceAttributeIndex),
+              ...stats.slice(sourceAttributeIndex + 1),
+            ];
+            return [...acc, newSourceAttributes];
+          }
+
+          if (index === targetGroupIndex) {
+            const newTargetAttributes = [
+              ...stats,
+              statistics[sourceGroupIndex][sourceAttributeIndex],
+            ];
+            return [...acc, newTargetAttributes];
+          }
+
+          return [...acc, stats];
+        }, [])
+        .filter((stats) => stats.length > 0),
+    }));
+  });
+
+export const addSegmentAttribute = (values) => (dispatch, getState) => {
+  const attributes = getSegmentAttributes(getState());
+  const mapAttribute = (attr) => {
+    const initial = {
+      equality: equalityTypes.any,
+      negation: false,
+      values: [],
+      datasetIds: [],
+    };
+    return ([{ ...initial, ...attr }]);
+  };
+  const newAttributes = values.map(mapAttribute);
+  dispatch(updateSegment({
+    [segmentProps.attributes]: attributes.concat(newAttributes),
+  }));
+  dispatch(initAttributesStatistics());
+  newAttributes.forEach((_, index) => {
+    dispatch(fetchAttributeStatistics([attributes.length + index, 0]));
+  });
+};
+
+export const removeSegmentAttribute = (position) => (dispatch, getState) => {
+  const attributes = getSegmentAttributes(getState());
+  const [groupIndex, attributeIndex] = position;
+  const attribute = attributes[groupIndex];
+  if (!attribute) {
+    return;
+  }
+  const newAttribute = [
+    ...attribute.slice(0, attributeIndex),
+    ...attribute.slice(attributeIndex + 1),
+  ];
+  dispatch(updateSegment({
+    [segmentProps.attributes]: [
+      ...attributes.slice(0, groupIndex),
+      newAttribute,
+      ...attributes.slice(groupIndex + 1),
+    ].filter((a) => a.length > 0),
+  }));
+  dispatch(removeAttributeStatistics(position));
+};
+
 export const saveSegment = (segment, callback) => async (dispatch) => {
   const { attributes, id, title } = segment || {};
   if (!title
@@ -349,4 +468,41 @@ export const saveSegment = (segment, callback) => async (dispatch) => {
     dispatch(submitSegment(false));
     console.error(error);
   }
+};
+
+export const fetchSegment = (id) => async (dispatch) => {
+  dispatch(requestSegment());
+  try {
+    const response = await service.fetchSegment(id);
+    const {
+      [segmentProps.attributes]: segmentAttributes,
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName,
+    } = response || {};
+    const mapAttributes = ({
+      attribute,
+      type: attributeEquality,
+      [attributeProps.datasetIds]: attributeDatasetIds,
+      [attributeProps.values]: attributeValues,
+      [attributeProps.negation]: attributeNegation,
+    }) => ({
+      ...attribute,
+      [attributeProps.datasetIds]: attributeDatasetIds || [],
+      [attributeProps.values]: attributeValues || [],
+      [attributeProps.negation]: attributeNegation || false,
+      [attributeProps.equality]: attributeEquality || equalityTypes.any,
+    });
+    const mapAttributesGroup = (group) => group.map(mapAttributes);
+    dispatch(updateSegment({
+      [segmentProps.id]: segmentId,
+      [segmentProps.name]: segmentName || '',
+      [segmentProps.attributes]: segmentAttributes
+        .map(mapAttributesGroup),
+    }));
+  } catch (error) {
+    console.error(error);
+    dispatch(updateSegment({}));
+  }
+  dispatch(initAttributesStatistics());
+  dispatch(fetchSegmentAttributesStatistics());
 };

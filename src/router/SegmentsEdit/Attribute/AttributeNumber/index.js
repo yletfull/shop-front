@@ -13,20 +13,20 @@ const propTypes = {
     minValue: PropTypes.string,
   }),
   properties: PropTypes.objectOf(PropTypes.string).isRequired,
-  onSubmit: PropTypes.func,
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
   children: null,
   data: {},
-  onSubmit: () => {},
+  onChange: () => {},
 };
 
 const AttributeNumber = function AttributeNumber({
   children,
   data,
   properties,
-  onSubmit,
+  onChange,
 }) {
   const { maxValue, minValue } = data || {};
 
@@ -40,21 +40,16 @@ const AttributeNumber = function AttributeNumber({
     max: maxValue,
   };
 
-  const handleSubmitForm = (values, { setSubmitting }) => {
-    setSubmitting(false);
-    const { max, min } = values || {};
-    if (typeof max === 'undefined' || typeof min === 'undefined') {
-      return;
-    }
-    onSubmit({
-      [properties.values]: [min, max],
-    });
-  };
-  const validateFormValues = (values) => {
-    const { [fieldNames.min]: min, [fieldNames.max]: max } = values;
+  const validate = (values) => {
     const errors = {};
+
+    const { max, min } = values || {};
+
     if (Number(min) < minValue) {
       errors.min = `Минимальное значение ниже допустимого: ${formatNumber(minValue)}`;
+    }
+    if (Number(max) < minValue) {
+      errors.max = `Максимальное значение ниже допустимого: ${formatNumber(minValue)}`;
     }
     if (Number(min) > maxValue) {
       errors.min = `Минимальное значение выше допустимого: ${formatNumber(maxValue)}`;
@@ -62,10 +57,18 @@ const AttributeNumber = function AttributeNumber({
     if (Number(max) > maxValue) {
       errors.max = `Максимальное значение выше допустимого: ${formatNumber(maxValue)}`;
     }
-    if (Number(max) < minValue) {
-      errors.max = `Максимальное значение ниже допустимого: ${formatNumber(minValue)}`;
-    }
+
     return errors;
+  };
+
+  const handleSubmitForm = (values) => {
+    const { max, min } = values || {};
+    if (typeof max === 'undefined' || typeof min === 'undefined') {
+      return;
+    }
+    onChange({
+      [properties.values]: [min, max],
+    });
   };
 
   return (
@@ -78,14 +81,19 @@ const AttributeNumber = function AttributeNumber({
       >
         <Formik
           initialValues={initialFormValues}
-          validate={validateFormValues}
+          validate={validate}
           onSubmit={handleSubmitForm}
         >
-          {({ errors, submitForm }) => {
+          {({ errors, setFieldValue, submitForm, validateForm }) => {
             const errorMessages = Object.values(errors)
               .map((message) => message);
-            const handleBlurInput = () => {
-              submitForm();
+            const handleChangeInput = (e) => {
+              const { name, value } = e?.target || {};
+              if (!name) {
+                return;
+              }
+              setFieldValue(name, value || '');
+              validateForm().then(submitForm);
             };
             return (
               <Form>
@@ -97,7 +105,7 @@ const AttributeNumber = function AttributeNumber({
                     min={minValue}
                     name={fieldNames.min}
                     component={AttributeNumverInput}
-                    onBlur={handleBlurInput}
+                    onChange={handleChangeInput}
                   />
                   &nbsp;
                   -
@@ -109,7 +117,7 @@ const AttributeNumber = function AttributeNumber({
                     min={minValue}
                     name={fieldNames.max}
                     component={AttributeNumverInput}
-                    onBlur={handleBlurInput}
+                    onChange={handleChangeInput}
                   />
                 </div>
 
