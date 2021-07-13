@@ -39,42 +39,6 @@ export const fetchParams = () => async (dispatch) => {
   }
 };
 
-export const moveSegmentAttribute = (source, target) => (
-  (dispatch, getState) => {
-    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
-    const [targetGroupIndex, targetAttributeIndex = 0] = target || [];
-    if ([
-      sourceGroupIndex,
-      targetGroupIndex,
-      targetAttributeIndex,
-    ].some((index) => typeof index === 'undefined')) {
-      return;
-    }
-    const attributes = getSegmentAttributes(getState());
-    dispatch(updateSegment({
-      [segmentProps.attributes]: attributes
-        .reduce((acc, attrs, index) => {
-          if (index === sourceGroupIndex) {
-            const newSourceAttributes = [
-              ...attrs.slice(0, sourceAttributeIndex),
-              ...attrs.slice(sourceAttributeIndex + 1),
-            ];
-            return [...acc, newSourceAttributes];
-          }
-
-          if (index === targetGroupIndex) {
-            const newTargetAttributes = [
-              ...attrs,
-              attributes[sourceGroupIndex][sourceAttributeIndex],
-            ];
-            return [...acc, newTargetAttributes];
-          }
-
-          return [...acc, attrs];
-        }, [])
-        .filter((attrs) => attrs.length > 0),
-    }));
-  });
 export const insertSegmentAttribute = (position, source) => (
   (dispatch, getState) => {
     const [sourceGroupIndex, sourceAttributeIndex] = source || [];
@@ -399,6 +363,44 @@ export const moveAttributeStatistics = (source, target) => (
         }, [])
         .filter((stats) => stats.length > 0),
     }));
+  });
+
+export const moveSegmentAttribute = (source, target) => (
+  (dispatch, getState) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
+    const [targetGroupIndex, targetAttributeIndex = 0] = target || [];
+    if ([
+      sourceGroupIndex,
+      targetGroupIndex,
+      targetAttributeIndex,
+    ].some((index) => typeof index === 'undefined')) {
+      return;
+    }
+    const attributes = getSegmentAttributes(getState());
+    dispatch(updateSegment({
+      [segmentProps.attributes]: attributes
+        .reduce((acc, attrs, index) => {
+          if (index === sourceGroupIndex) {
+            const newSourceAttributes = [
+              ...attrs.slice(0, sourceAttributeIndex),
+              ...attrs.slice(sourceAttributeIndex + 1),
+            ];
+            return [...acc, newSourceAttributes];
+          }
+
+          if (index === targetGroupIndex) {
+            const newTargetAttributes = [
+              ...attrs,
+              attributes[sourceGroupIndex][sourceAttributeIndex],
+            ];
+            return [...acc, newTargetAttributes];
+          }
+
+          return [...acc, attrs];
+        }, [])
+        .filter((attrs) => attrs.length > 0),
+    }));
+    dispatch(moveAttributeStatistics(source, target));
   });
 
 export const addSegmentAttribute = (values) => (dispatch, getState) => {
