@@ -1,0 +1,62 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  &_scrollable {
+    overflow: auto;
+  }
+}
+
+.table {
+  border-collapse: collapse;
+  border-color: inherit;
+  border-spacing: 0;
+  font-size: .825rem;
+  width: 100%;
+}
+
+.cell {
+  border-bottom: thin dashed $color-gray-lighter;
+  line-height: 1.25;
+  padding: .75rem;
+  vertical-align: baseline;
+
+  &:first-child {
+    border-radius: .5rem 0 0 .5rem;
+  }
+
+  &:last-child {
+    border-radius: 0 .5rem .5rem 0;
+  }
+
+  &_align {
+    &-left {
+      text-align: left;
+    }
+
+    &-center {
+      text-align: center;
+    }
+
+    &-right {
+      text-align: right;
+    }
+  }
+
+  &_nowrap {
+    white-space: nowrap;
+  }
+}
+
+.row {
+  &_type {
+    &-header {
+      font-weight: bold;
+
+      & .cell {
+        background-color: $color-gray;
+        border-bottom: 0;
+        vertical-align: bottom;
+      }
+    }
+  }
+}
