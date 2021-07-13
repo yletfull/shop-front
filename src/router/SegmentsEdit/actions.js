@@ -185,8 +185,7 @@ export const clearAttributeStatistics = (position) => (dispatch, getState) => {
 
 export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   const { title, attributes } = segment || {};
-  if (!title
-    || !attributes
+  if (!attributes
     || !Array.isArray(attributes)
     || attributes.length === 0) {
     dispatch(updateSegmentStatistics(initialStatisticEntities));
@@ -195,7 +194,7 @@ export const fetchSegmentStatistics = (segment) => async (dispatch) => {
   dispatch(requestSegmentStatistics());
   try {
     const response = await service.fetchSegmentStatistics({
-      title,
+      title: title || 'temporary',
       conditions: formatSegmentAttributesListForRequest(attributes),
     });
     dispatch(updateSegmentStatistics(formatStatisticEntities(response)));
