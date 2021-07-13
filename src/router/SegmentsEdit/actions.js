@@ -39,6 +39,36 @@ export const fetchParams = () => async (dispatch) => {
   }
 };
 
+export const insertAttributeStatistics = (position, source) => (
+  (dispatch, getState) => {
+    const [sourceGroupIndex, sourceAttributeIndex] = source || [];
+    if (!position
+      || !['top', 'bottom'].includes(position)
+      || typeof sourceGroupIndex === 'undefined'
+      || typeof sourceAttributeIndex === 'undefined') {
+      return;
+    }
+    const statistics = getAttributesStatistics(getState());
+    const sourceStatistics = statistics[sourceGroupIndex][sourceAttributeIndex];
+    const newSourceStatistics = [
+      ...statistics[sourceGroupIndex].slice(0, sourceAttributeIndex),
+      ...statistics[sourceGroupIndex].slice(sourceAttributeIndex + 1),
+    ];
+    dispatch(updateStatistics({
+      attributes: [
+        ...(position === 'top'
+          ? [[sourceStatistics]]
+          : []),
+        ...statistics.slice(0, sourceGroupIndex),
+        newSourceStatistics,
+        ...statistics.slice(sourceGroupIndex + 1),
+        ...(position === 'bottom'
+          ? [[sourceStatistics]]
+          : []),
+      ].filter((stats) => stats.length > 0),
+    }));
+  });
+
 export const insertSegmentAttribute = (position, source) => (
   (dispatch, getState) => {
     const [sourceGroupIndex, sourceAttributeIndex] = source || [];
@@ -67,7 +97,9 @@ export const insertSegmentAttribute = (position, source) => (
           : []),
       ].filter((attrs) => attrs.length > 0),
     }));
+    dispatch(insertAttributeStatistics(position, source));
   });
+
 export const updateSegmentAttribute = (position, values) => (
   (dispatch, getState) => {
     const attributes = getSegmentAttributes(getState());
