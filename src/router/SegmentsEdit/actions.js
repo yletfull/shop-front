@@ -142,7 +142,9 @@ export const updateSegmentStatistics = (values) => (dispatch) => {
 };
 
 export const initAttributesStatistics = () => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
+  const state = getState();
+  const statistics = getAttributesStatistics(state);
+  const attributes = getSegmentAttributes(state);
 
   if (!Array.isArray(attributes)) {
     return;
@@ -150,8 +152,9 @@ export const initAttributesStatistics = () => (dispatch, getState) => {
 
   dispatch(updateStatistics({
     attributes: attributes
-      .map((andAttribute) => andAttribute
-        .map(() => initialStatisticEntities)),
+      .map((andAttribute, andIndex) => andAttribute
+        .map((_, orIndex) => statistics[andIndex]?.[orIndex]
+          || initialStatisticEntities)),
   }));
 };
 
