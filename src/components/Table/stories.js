@@ -1,6 +1,7 @@
 import React from 'react';
 import IconChevronDown from '@/icons/ChevronDown';
 import NumberGrowth from '@/components/NumberGrowth';
+import styles from './styles.module.scss';
 import Table, { TableRow, TableCell } from './index';
 
 export default {
@@ -235,6 +236,7 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
+              className={styles.diff}
               value={total.inWorkDiff}
               formatter={formatter}
             />
@@ -250,6 +252,7 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
+              className={styles.diff}
               value={total.activeDiff}
               formatter={formatter}
             />
@@ -265,6 +268,7 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
+              className={styles.diff}
               value={total.pausedDiff}
               formatter={formatter}
             />
@@ -280,6 +284,7 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
+              className={styles.diff}
               value={total.finishedDiff}
               formatter={formatter}
             />
@@ -295,6 +300,7 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
+              className={styles.diff}
               value={total.totalDiff}
               formatter={formatter}
             />

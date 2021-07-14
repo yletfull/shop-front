@@ -49,13 +49,26 @@
 
 .row {
   &_type {
-    &-header {
+    &-header,
+    &-summary {
       font-weight: bold;
 
       & .cell {
         background-color: $color-gray;
         border-bottom: 0;
         vertical-align: bottom;
+      }
+    }
+
+    &-header {
+      & .cell {
+        background-color: $color-gray;
+      }
+    }
+
+    &-summary {
+      & .cell {
+        background-color: $color-gray-lighter;
       }
     }
   }
