@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
-import Button from '../Button';
 import Select from '../Select';
 import { generateNumbers } from './utils';
 import styles from './styles.module.scss';
@@ -72,24 +71,25 @@ const Pagination = function Pagination({
       ])}
     >
       <nav className={styles.navigation}>
-        <Button
+        <button
+          type="button"
           className={cx([
             styles.arrow,
             { [styles.disabled]: currentPage <= 1 },
           ])}
-          appearance="control"
           disabled={currentPage <= 1}
           onClick={createPageSelectHandler(currentPage - 1)}
         >
           <IconChevronLeft />
-        </Button>
+        </button>
 
         <div className={styles.numbers}>
           {pageNumbers.map((pageNumber) => {
             const isDisabled = typeof pageNumber === 'string' || pageNumber === currentPage;
 
             return (
-              <Button
+              <button
+                type="button"
                 key={pageNumber}
                 appearance="control"
                 className={cx([
@@ -100,29 +100,24 @@ const Pagination = function Pagination({
                 onClick={createPageSelectHandler(pageNumber)}
               >
                 {pageNumber}
-              </Button>
+              </button>
             );
           })}
         </div>
 
-        <Button
+        <button
+          type="button"
           className={cx([
             styles.arrow,
-            { [styles.disabled]: currentPage >= pagesTotal },
+            { [styles.arrow_disabled]: currentPage >= pagesTotal },
           ])}
-          appearance="control"
           disabled={currentPage >= pagesTotal}
           onClick={createPageSelectHandler(currentPage + 1)}
         >
           <IconChevronRight />
-        </Button>
+        </button>
       </nav>
-
       {children}
-
-      {count}
-      {options.length}
-      {countOptions.length}
       {(count && options.length > 0) && (
         <div>
           <span>
