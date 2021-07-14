@@ -3,7 +3,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import IconCrop from '@/icons/Crop';
 import IconLogo from '@/icons/Logo';
-import IconUsers from '@/icons/Users';
 import IconLogout from '@/icons/Logout';
 import IconUpload from '@/icons/Upload';
 import MenuItem from '@/components/MenuItem';
@@ -28,11 +27,6 @@ const AppAside = function AppAside() {
       title: titles.upload,
       to: patchs.upload,
       icon: <IconUpload />,
-    },
-    {
-      title: titles.users,
-      to: patchs.users,
-      icon: <IconUsers />,
     },
   ];
 

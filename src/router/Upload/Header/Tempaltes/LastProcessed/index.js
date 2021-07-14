@@ -18,7 +18,13 @@ import styles from './styles.module.scss';
 
 
 const getHeaderTemplateContent = (data) => [
-  { title: 'Последняя загрузка во ВК', value: formatDate(data.createdAt, 'DD.MM.YYYY HH:mm:ss'), id: 0 },
+  {
+    title: 'Последняя загрузка во ВК',
+    value: data?.createdAt
+      ? formatDate(data.createdAt, 'DD.MM.YYYY HH:mm:ss')
+      : '-',
+    id: 0,
+  },
   { title: 'Всего РК', value: data.data?.total, id: 1 },
   { title: 'Новых РК', value: data.data?.new, id: 2 },
   { title: 'Ошибок', value: data.data?.incorrect, valueColor: 'red', id: 3 },

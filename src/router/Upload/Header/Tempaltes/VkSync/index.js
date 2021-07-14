@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-
+import React, { useEffect, useLayoutEffect, useRef, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ProcessButton from '@/components/ProcessButton';
 import HeaderTemplate from '@/components/HeaderTemplate';
@@ -9,18 +7,21 @@ import SyncAltIcon from '@/icons/SyncAlt';
 import Spinner from '@/components/Spinner';
 import {
   syncVk, fetchTask, setDownloadAllAdsButtonDisabled, setUploadButtonDisabled,
+  fetchDashboard,
+  syncVkTask,
 } from '@/store/upload/actions';
 import { formatDate } from '@/utils/format';
 import {
-  getQueueList, getSelectAccount, getSelectClient, getSyncVkTask,
+  getSelectAccount, getSelectClient, getSyncVkTask,
 } from '@/store/upload/selectors';
 import styles from './styles.module.scss';
 
 
 const VkSyncTemplate = function VkSyncTemplateScreen() {
   const dispatch = useDispatch();
-
-  const queueList = useSelector(getQueueList);
+  useEffect(() => {
+    dispatch(fetchDashboard());
+  }, [dispatch]);
 
   const selectAccountData = useSelector(getSelectAccount) || '';
   const selectAccount = useRef(selectAccountData);
@@ -35,18 +36,13 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
   }, [selectClientData]);
 
   const syncVkTaskData = useSelector(getSyncVkTask);
-  const syncVkTask = useRef(syncVkTaskData);
-  useLayoutEffect(() => {
-    syncVkTask.current = syncVkTaskData;
-  });
 
   const [isSyncInProcess, setIsSyncInProcess] = useState(false);
   const [syncError, setSyncError] = useState(false);
-  const [taksData, setTaskData] = useState({});
 
-  const sync = async () => {
-    if (syncVkTask.current && Object.keys(syncVkTask.current).length) {
-      let task = await dispatch(fetchTask(syncVkTask.current.id));
+  const sync = useCallback(async () => {
+    if (syncVkTaskData && Object.keys(syncVkTaskData).length) {
+      let task = await dispatch(fetchTask(syncVkTaskData.id));
       (function check() {
         return setTimeout(async () => {
           if (!selectAccount.current || !selectClient.current) {
@@ -54,7 +50,7 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
             return;
           }
 
-          task = await dispatch(fetchTask(syncVkTask.current.id));
+          task = await dispatch(fetchTask(syncVkTaskData.id));
 
           const shouldCheck = task
             && Object.keys(task).length
@@ -64,12 +60,12 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
             return check();
           }
 
-          setTaskData(task);
           clearTimeout(check);
           setIsSyncInProcess(false);
           dispatch(setUploadButtonDisabled(false));
 
           if (task && Object.keys(task).length && task?.status === 2) {
+            dispatch(syncVkTask(task));
             dispatch(setDownloadAllAdsButtonDisabled(false));
             return;
           }
@@ -83,14 +79,19 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
     dispatch(setUploadButtonDisabled(false));
     setIsSyncInProcess(false);
     setSyncError(true);
-  };
+  }, [syncVkTaskData, dispatch]);
 
   useEffect(() => {
-    if (queueList[0]?.status === queueTasksStatuses.created
-       || queueList[0]?.status === queueTasksStatuses.inProgress) {
+    if (isSyncInProcess) {
+      return;
+    }
+
+    if (syncVkTaskData?.status === queueTasksStatuses.created
+       || syncVkTaskData?.status === queueTasksStatuses.inProgress) {
+      setIsSyncInProcess(true);
       sync();
     }
-  }, [queueList]);
+  }, [syncVkTaskData, sync, isSyncInProcess]);
 
   const handleSyncButtonClick = async () => {
     if (isSyncInProcess) {
@@ -119,16 +120,24 @@ const VkSyncTemplate = function VkSyncTemplateScreen() {
           />
         )
         : <Spinner />}
-      <div
-        className={styles.textWrapper}
-      >
-        <span>
-          Последняя синхронизация
-        </span>
-        <span className={styles.value}>
-          {formatDate(taksData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')}
-        </span>
-      </div>
+      {isSyncInProcess
+        ? (
+          <div className={styles.textWrapper}>
+            Синхронизация в процессе
+          </div>
+        )
+        : (
+          <div className={styles.textWrapper}>
+            <span>
+              Последняя синхронизация
+            </span>
+            <span className={styles.value}>
+              {syncVkTaskData?.finishedAt
+                ? formatDate(syncVkTaskData?.finishedAt, 'DD.MM.YYYY HH:mm:ss')
+                : '-'}
+            </span>
+          </div>
+        )}
 
 
       {syncError && (
