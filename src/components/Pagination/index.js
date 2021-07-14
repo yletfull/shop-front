@@ -5,36 +5,8 @@ import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
 import Button from '../Button';
 import Select from '../Select';
-
+import { generateNumbers } from './utils';
 import styles from './styles.module.scss';
-
-const generateNumbers = (current, last, delta = 2) => {
-  const left = current - delta;
-  const right = current + delta + 1;
-  const range = [];
-  const rangeWithDots = [];
-  let l;
-
-  for (let i = 1; i <= last; i += 1) {
-    if (i === 1 || i === last || (i >= left && i < right)) {
-      range.push(i);
-    }
-  }
-
-  range.forEach((item) => {
-    if (l) {
-      if (item - l === 2) {
-        rangeWithDots.push(l + 1);
-      } else if (item - l !== 1) {
-        rangeWithDots.push('…');
-      }
-    }
-    rangeWithDots.push(item);
-    l = item;
-  });
-
-  return rangeWithDots;
-};
 
 const propTypes = {
   pagesTotal: PropTypes.number.isRequired,
