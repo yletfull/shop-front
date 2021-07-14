@@ -6,11 +6,11 @@ import { setHeader } from '@/store/ui/actions';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
 import {
-  fetchData,
+  fetchAudiencesList,
 } from './actions';
 import {
-  getIsFetchingData,
-  getData,
+  getFormattedAudienceList,
+  getIsFetchingAudiencesList,
 } from './selectors';
 import TableView from './TableView';
 import styles from './styles.module.scss';
@@ -26,15 +26,15 @@ const defaultProps = {
 const AudiencesList = function AudiencesList({ defaultTitle }) {
   const dispatch = useDispatch();
 
-  const isFetching = useSelector(getIsFetchingData);
-  const tableData = useSelector(getData);
+  const isFetching = useSelector(getIsFetchingAudiencesList);
+  const tableData = useSelector(getFormattedAudienceList);
 
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
 
   useEffect(() => {
-    dispatch(fetchData());
+    dispatch(fetchAudiencesList());
   }, [dispatch]);
 
   useEffect(() => {

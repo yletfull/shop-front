@@ -1,12 +1,43 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { namespace as NS } from './constants';
+import {
+  entityTypes,
+  namespace as NS,
+} from './constants';
 
-export const getState = (state) => state[NS] || {};
-export const getIsFetchingData = createSelector(
-  [getState],
-  (state) => state.isFetching,
-);
-export const getData = createSelector(
-  [getState],
-  (state) => state.data,
+export const getAudiencesList = (state) => (
+  state[NS]?.audiencesList || []);
+export const getAudiencesMeta = (state) => (
+  state[NS]?.audiencesMeta || {});
+export const getIsFetchingAudiencesList = (state) => (
+  state[NS]?.isFetchingAudiencesList);
+
+export const getFormattedAudienceList = createSelector(
+  [getAudiencesList],
+  (list) => {
+    const mapEntityTotals = (entities) => {
+      if (!entities || !Array.isArray(entities)) {
+        return ([]);
+      }
+      return entities.reduce((acc, { entityType, total }) => {
+        const mapEntities = {
+          [entityTypes.emails]: 'emals',
+          [entityTypes.phones]: 'phones',
+        };
+        if (!entityType) {
+          return acc;
+        }
+        return ({
+          ...acc,
+          [mapEntities[entityType] || entityType]: total,
+        });
+      }, {});
+    };
+
+    return list
+      .map((item) => ({
+        key: `${item.title}-${item.loadedAt}`,
+        ...item,
+        ...mapEntityTotals(item.entityTypeTotals),
+      }));
+  },
 );

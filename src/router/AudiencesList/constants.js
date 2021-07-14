@@ -1,2 +1,6 @@
-/* eslint-disable import/prefer-default-export */
 export const namespace = 'audiencesList';
+
+export const entityTypes = {
+  emails: 'EMAIL',
+  phones: 'PHONE',
+};

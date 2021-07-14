@@ -10,7 +10,13 @@ import Spinner from '@/components/Spinner';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    loadedAt: PropTypes.string,
+    local: PropTypes.bool,
+    title: PropTypes.string,
+    emails: PropTypes.number,
+    phones: PropTypes.number,
+  })),
   isFetching: PropTypes.bool,
   onFilter: PropTypes.func,
 };
@@ -133,19 +139,19 @@ const TableView = function TableView({
         </tr>
         <tr>
           <th>
-            Дата загрузки
-          </th>
-          <th>
             Название
           </th>
           <th>
-            Тип
+            Телефонов
           </th>
           <th>
             E-mail
           </th>
           <th>
-            Телефонов
+            Тип
+          </th>
+          <th>
+            Дата загрузки
           </th>
         </tr>
 
@@ -160,19 +166,19 @@ const TableView = function TableView({
         {!isFetching && Array.isArray(data) && data.map((row) => (
           <tr key={row.key}>
             <td>
-              {formatDate(row.date)}
+              {row.title}
             </td>
             <td>
-              {row.name}
+              {row.emails ? formatNumber(row.emails) : '-'}
             </td>
             <td>
-              {row.type}
+              {row.phones ? formatNumber(row.phones) : '-'}
             </td>
             <td>
-              {formatNumber(row.emailsCount)}
+              {row.local ? 'Локальная' : 'Глобальная'}
             </td>
             <td>
-              {formatNumber(row.phonesCount)}
+              {formatDate(row.loadedAt)}
             </td>
           </tr>
         ))}

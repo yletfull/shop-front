@@ -1,19 +1,27 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { requestData, updateData } from './actions';
+import {
+  requestAudiencesList,
+  updateAudiencesList,
+} from './actions';
 
 const initialState = {
-  isFetching: false,
-  data: [],
+  isFetchingAudiencesList: false,
+  audiencesList: [],
+  audiencesMeta: {},
 };
 
 export default createReducer(initialState, {
-  [requestData]: (state) => ({
+  [requestAudiencesList]: (state) => ({
     ...state,
-    isFetching: true,
+    isFetchingAudiencesList: true,
   }),
-  [updateData]: (state, action) => ({
-    ...state,
-    isFetching: false,
-    data: action.payload || [],
-  }),
+  [updateAudiencesList]: (state, action) => {
+    const { data, meta } = action?.payload || {};
+    return ({
+      ...state,
+      isFetchingAudiencesList: false,
+      audiencesList: data || [],
+      audiencesMeta: meta || {},
+    });
+  },
 });
