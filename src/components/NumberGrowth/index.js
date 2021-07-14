@@ -45,7 +45,8 @@ const NumberGrowth = function NumberGrowth({
         isNegative ? styles.negative : styles.positive,
       )}
     >
-      {`${sign}${formatter(value)}`}
+      {sign}
+      {formatter(value)}
     </span>
   );
 };
