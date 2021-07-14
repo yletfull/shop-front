@@ -92,6 +92,7 @@ export default [
     title: titles.segmentsUser,
   },
   {
+    exact: true,
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,

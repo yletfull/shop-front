@@ -1,5 +1,21 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.commonInfo {
+  display: flex;
+
+  &Column {
+    flex-grow: 1;
+  }
+
+  &Table {
+    & td {
+      &:first-child {
+        color: $color-gray-darker;
+      }
+
+      &:last-child {
+        text-align: right;
+      }
+    }
+  }
 }

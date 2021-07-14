@@ -1,12 +1,19 @@
 import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import Spinner from '@/components/Spinner';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
-import { getIsFetchingData, getData } from './selectors';
+import {
+  fetchAudienceDetails,
+} from './actions';
+import {
+  getIsFetchingAudienceDetails,
+  getAudienceDetails,
+} from './selectors';
 import CommonInfo from './CommonInfo';
 import Comparison from './Comparison';
 import styles from './styles.module.scss';
@@ -22,8 +29,10 @@ const defaultProps = {
 const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const dispatch = useDispatch();
 
-  const isFetching = useSelector(getIsFetchingData);
-  const data = useSelector(getData);
+  const { id: audienceId } = useParams();
+
+  const isFetchingAudienceDetails = useSelector(getIsFetchingAudienceDetails);
+  const audienceDetails = useSelector(getAudienceDetails);
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -33,21 +42,25 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
+  useEffect(() => {
+    dispatch(fetchAudienceDetails(audienceId));
+  }, [dispatch, audienceId]);
+
   return (
     <div className={styles.audienceDetails}>
-      {isFetching && (
+      {isFetchingAudienceDetails && (
         <Spinner />
       )}
 
-      {!isFetching && (
+      {!isFetchingAudienceDetails && (
         <Fragment>
-          <CommonInfo data={data} />
+          <CommonInfo data={audienceDetails} />
 
           <h2>
             Сравнение с глобальной аудиторией
           </h2>
 
-          <Comparison data={data} />
+          <Comparison data={audienceDetails} />
         </Fragment>
       )}
     </div>
