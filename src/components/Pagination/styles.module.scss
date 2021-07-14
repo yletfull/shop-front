@@ -1,0 +1,60 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  display: flex;
+  font-size: .875rem;
+  justify-content: space-between;
+  padding: 2em 0;
+  user-select: none;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+}
+
+.select {
+  margin: 0 0 0 1em;
+}
+
+.numbers {
+  margin: 0 1em;
+}
+
+.arrow {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  padding: 1em;
+
+  &_disabled {
+    &,
+    &:disabled,
+    &:hover,
+    &:focus {
+      color: $color-gray;
+      cursor: default;
+    }
+  }
+}
+
+.number {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: bold;
+  padding: 1em;
+  text-decoration: none;
+
+  &_disabled {
+    &,
+    &:disabled,
+    &:hover,
+    &:focus {
+      color: $color-black;
+      cursor: default;
+    }
+  }
+}
