@@ -1,41 +1,48 @@
 @import '@/theme/include.scss';
 
-$u-spinner-animation-time: .6s !default;
-$u-spinner-circle-line-width: 2px !default;
-$u-spinner-circle-size: 2em !default;
-$u-spinner-circle-size_inline: 1em !default;
-$u-spinner-padding: 2 * 1em !default;
+.spinner {
+  animation: spinner-animation .6s linear infinite;
+  background-color: transparent;
+  border: .125rem solid currentColor;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  height: 1em;
+  width: 1em;
+}
 
-.u-spinner {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  padding: $u-spinner-padding;
+.inline {
+  font-size: 1em;
 
-  &_inline {
-    display: inline-flex;
-    padding: 0;
-  }
-
-  &__circle {
-    animation: u-spinner-keyframes $u-spinner-animation-time linear infinite;
-    background-color: transparent;
-    border: $u-spinner-circle-line-width solid #f4f4f5;
-    border-bottom-color: $color-primary;
-    border-radius: 50%;
-    border-top-color: $color-primary;
-    height: $u-spinner-circle-size;
-    width: $u-spinner-circle-size;
-
-    &_inline {
-      box-sizing: border-box;
-      height: $u-spinner-circle-size_inline;
-      width: $u-spinner-circle-size_inline;
-    }
+  & > .spinner {
+    vertical-align: -.125em;
   }
 }
 
-@keyframes u-spinner-keyframes {
+.block,
+.overlay {
+  display: flex;
+  font-size: 2em;
+  height: 100%;
+  padding: 1rem;
+  width: 100%;
+
+  & > .spinner {
+    margin: auto;
+  }
+}
+
+.overlay {
+  background-color: rgba($color-black, .5);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+@keyframes spinner-animation {
   from {
     transform: rotate(0deg);
   }
