@@ -47,10 +47,12 @@ const TableView = function TableView({
   };
 
   const handleSubmitForm = (values) => {
-    console.log(values);
-    if (0) {
-      onFilter(values);
+    const { name: title, type } = values || {};
+    const params = { title };
+    if ([0, 1].map(String).includes(type)) {
+      params.isLocal = Boolean(Number(type));
     }
+    onFilter(params);
   };
 
   const FormikInput = withFormikField(Input);
@@ -71,7 +73,7 @@ const TableView = function TableView({
                   data-purpose="filter"
                 >
                   <Field
-                    name="title"
+                    name="name"
                     placeholder="Название"
                     className={styles.tableViewInput}
                     component={FormikInput}
@@ -94,8 +96,12 @@ const TableView = function TableView({
                         { text: 'Локальная', value: 1 },
                       ]}
                       component={FormikSelect}
+                      fullwidth
                     />
-                    <Button type="submit">
+                    <Button
+                      type="submit"
+                      className={styles.tableViewButton}
+                    >
                       Найти
                     </Button>
                   </span>

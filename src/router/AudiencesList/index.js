@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { injectReducer } from '@/store';
@@ -29,23 +29,32 @@ const AudiencesList = function AudiencesList({ defaultTitle }) {
   const isFetching = useSelector(getIsFetchingAudiencesList);
   const tableData = useSelector(getFormattedAudienceList);
 
+  const [filterParams, setFilterParams] = useState({});
+
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAudiencesList());
-  }, [dispatch]);
+    dispatch(fetchAudiencesList({
+      ...filterParams,
+    }));
+  }, [dispatch, filterParams]);
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
+
+  const handleFilterTable = (values) => {
+    setFilterParams(values || {});
+  };
 
   return (
     <div className={styles.audienceList}>
       <TableView
         data={tableData}
         isFetching={isFetching}
+        onFilter={handleFilterTable}
       />
     </div>
   );

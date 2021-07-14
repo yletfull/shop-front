@@ -3,15 +3,14 @@
 .tableView {
   @include table();
 
+  &Button {
+    margin-left: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
   &Cell {
     display: flex;
     width: 100%;
-  }
-
-  &Input {
-    &_grow {
-      flex-grow: 1;
-      margin-right: 1rem;
-    }
   }
 }

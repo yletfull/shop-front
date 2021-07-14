@@ -5,10 +5,10 @@ import service from './service';
 export const requestAudiencesList = createAction(`${NS}/request`);
 export const updateAudiencesList = createAction(`${NS}/update`);
 
-export const fetchAudiencesList = () => async (dispatch) => {
+export const fetchAudiencesList = (params) => async (dispatch) => {
   dispatch(requestAudiencesList());
   try {
-    const response = await service.fetchAudiencesList();
+    const response = await service.fetchAudiencesList(params);
     dispatch(updateAudiencesList(response));
   } catch (error) {
     console.error(error);
