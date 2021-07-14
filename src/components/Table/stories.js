@@ -222,12 +222,15 @@ export const Statistics = (args) => {
       footer={(
         <TableRow type="summary">
           <TableCell />
-          <TableCell>
+          <TableCell
+            className={styles.bold}
+          >
             {total.title}
           </TableCell>
           <TableCell
             align="right"
             nowrap
+            className={styles.bold}
           >
             {total.inWork}
           </TableCell>
@@ -236,7 +239,6 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
-              className={styles.diff}
               value={total.inWorkDiff}
               formatter={formatter}
             />
@@ -244,6 +246,7 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
+            className={styles.bold}
           >
             {total.active}
           </TableCell>
@@ -252,7 +255,6 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
-              className={styles.diff}
               value={total.activeDiff}
               formatter={formatter}
             />
@@ -260,6 +262,7 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
+            className={styles.bold}
           >
             {total.paused}
           </TableCell>
@@ -268,7 +271,6 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
-              className={styles.diff}
               value={total.pausedDiff}
               formatter={formatter}
             />
@@ -276,6 +278,7 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
+            className={styles.bold}
           >
             {total.finished}
           </TableCell>
@@ -284,7 +287,6 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
-              className={styles.diff}
               value={total.finishedDiff}
               formatter={formatter}
             />
@@ -292,6 +294,7 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
+            className={styles.bold}
           >
             {total.total}
           </TableCell>
@@ -300,7 +303,6 @@ export const Statistics = (args) => {
             nowrap
           >
             <NumberGrowth
-              className={styles.diff}
               value={total.totalDiff}
               formatter={formatter}
             />

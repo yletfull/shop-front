@@ -49,8 +49,7 @@
 
 .row {
   &_type {
-    &-header,
-    &-summary {
+    &-header {
       font-weight: bold;
 
       & .cell {
@@ -60,15 +59,14 @@
       }
     }
 
-    &-header {
-      & .cell {
-        background-color: $color-gray;
-      }
-    }
-
     &-summary {
       & .cell {
         background-color: $color-gray-lighter;
+        border-bottom: 0;
+
+        &.bold {
+          font-weight: bold;
+        }
       }
     }
   }
