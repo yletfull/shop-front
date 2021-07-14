@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
@@ -46,6 +46,7 @@ import {
   getSegmentName,
   getSegmentStatistics,
 } from './selectors';
+import LogicOperator from './components/LogicOperator';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
@@ -280,64 +281,76 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
             {segmentAttributes.map((group, groupIndex) => {
               const groupKey = generateKeyByIndex('group', groupIndex);
               return (
-                <AttributesGroup
-                  key={groupKey}
-                  accept={dndTypes.attribute}
-                  onDrop={handleDropAttribute(groupIndex)}
-                >
-                  {group.map((attribute, attributeIndex) => {
-                    const {
-                      [attributeProps.datasets]: datasets,
-                      [attributeProps.datasetIds]: datasetIds,
-                      [attributeProps.name]: name,
-                      [attributeProps.title]: title,
-                    } = attribute || {};
-                    const getStatistics = (position) => {
-                      const [gIndex, aIndex] = position || [];
-                      if (typeof gIndex === 'undefined'
-                        || typeof aIndex === 'undefined') {
-                        return null;
-                      }
-                      return attributesStatistics[gIndex]?.[aIndex] || null;
-                    };
-                    return (
-                      <Attribute
-                        key={`${groupKey}-${attribute.attributeName}`}
-                        properties={attributeProps}
-                        types={attributeTypes}
-                        equalityTypes={equalityTypes}
-                        groupIndex={groupIndex}
-                        index={attributeIndex}
-                        data={attribute}
-                        dragType={dndTypes.attribute}
-                        onChange={handleChangeAttribute}
-                        onRemove={handleRemoveAttribute}
-                      >
-                        <AttributeDatasets
-                          name={title || name}
-                          selected={datasetIds || []}
-                          datasets={datasets || []}
+                <Fragment key={groupKey}>
+                  {(groupIndex > 0) && (
+                    <LogicOperator type="and" />
+                  )}
+
+                  <AttributesGroup
+                    accept={dndTypes.attribute}
+                    onDrop={handleDropAttribute(groupIndex)}
+                  >
+                    {group.map((attribute, attributeIndex) => {
+                      const {
+                        [attributeProps.datasets]: datasets,
+                        [attributeProps.datasetIds]: datasetIds,
+                        [attributeProps.name]: name,
+                        [attributeProps.title]: title,
+                      } = attribute || {};
+                      const getStatistics = (position) => {
+                        const [gIndex, aIndex] = position || [];
+                        if (typeof gIndex === 'undefined'
+                          || typeof aIndex === 'undefined') {
+                          return null;
+                        }
+                        return attributesStatistics[gIndex]?.[aIndex] || null;
+                      };
+                      return (
+                        <Fragment
+                          key={`${groupKey}-${attribute.attributeName}`}
                         >
-                          <AttributeDatasetsSelect
-                            datasets={datasets || []}
-                            selected={datasetIds || []}
+                          {(attributeIndex > 0) && (
+                            <LogicOperator type="or" />
+                          )}
+
+                          <Attribute
+                            properties={attributeProps}
+                            types={attributeTypes}
+                            equalityTypes={equalityTypes}
+                            groupIndex={groupIndex}
+                            index={attributeIndex}
+                            data={attribute}
+                            dragType={dndTypes.attribute}
+                            onChange={handleChangeAttribute}
+                            onRemove={handleRemoveAttribute}
                           >
-                            <AttributeDatasetsForm
-                              groupIndex={groupIndex}
-                              attributeIndex={attributeIndex}
-                              datasets={datasets || []}
+                            <AttributeDatasets
+                              name={title || name}
                               selected={datasetIds || []}
-                              onSubmit={handleSubmitAttribute}
+                              datasets={datasets || []}
+                            >
+                              <AttributeDatasetsSelect
+                                datasets={datasets || []}
+                                selected={datasetIds || []}
+                              >
+                                <AttributeDatasetsForm
+                                  groupIndex={groupIndex}
+                                  attributeIndex={attributeIndex}
+                                  datasets={datasets || []}
+                                  selected={datasetIds || []}
+                                  onSubmit={handleSubmitAttribute}
+                                />
+                              </AttributeDatasetsSelect>
+                            </AttributeDatasets>
+                            <AttributeStatistics
+                              data={getStatistics([groupIndex, attributeIndex])}
                             />
-                          </AttributeDatasetsSelect>
-                        </AttributeDatasets>
-                        <AttributeStatistics
-                          data={getStatistics([groupIndex, attributeIndex])}
-                        />
-                      </Attribute>
-                    );
-                  })}
-                </AttributesGroup>
+                          </Attribute>
+                        </Fragment>
+                      );
+                    })}
+                  </AttributesGroup>
+                </Fragment>
               );
             })}
             <AttributeDropPlaceholder

@@ -1,9 +1,9 @@
 @import '@/theme/include.scss';
 
 .attributesGroup {
-  background-color: $color-gray;
+  background-color: $color-gray-lighter;
   border-radius: .5rem;
-  padding: .5rem;
+  padding: .5rem 0;
   position: relative;
 
   & + & {

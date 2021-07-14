@@ -1,0 +1,39 @@
+@import '@/theme/include.scss';
+
+.text {
+  display: inline-block;
+  line-height: inherit;
+  padding: 0 .5em;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  width: 3.5em;
+  z-index: 1;
+}
+
+.wrapper {
+  color: $color-pink;
+  font-size: .75em;
+  height: 1em;
+  line-height: 1;
+  margin: .75em 0;
+  padding: 0 10%;
+  position: relative;
+  text-transform: uppercase;
+  width: 100%;
+
+  &.or {
+    &::before {
+      border-bottom: thin solid $color-gray;
+      content: '';
+      left: .5rem;
+      position: absolute;
+      right: .5rem;
+      top: 50%;
+    }
+
+    & .text {
+      background-color: $color-gray-lighter;
+    }
+  }
+}
