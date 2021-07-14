@@ -1,7 +1,6 @@
 import React from 'react';
 import IconChevronDown from '@/icons/ChevronDown';
 import NumberGrowth from '@/components/NumberGrowth';
-import styles from './styles.module.scss';
 import Table, { TableRow, TableCell } from './index';
 
 export default {
@@ -220,17 +219,17 @@ export const Statistics = (args) => {
         </TableRow>
       )}
       footer={(
-        <TableRow type="summary">
+        <TableRow
+          type="summary"
+          style={{ fontWeight: 'bold' }}
+        >
           <TableCell />
-          <TableCell
-            className={styles.bold}
-          >
+          <TableCell>
             {total.title}
           </TableCell>
           <TableCell
             align="right"
             nowrap
-            className={styles.bold}
           >
             {total.inWork}
           </TableCell>
@@ -246,7 +245,6 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
-            className={styles.bold}
           >
             {total.active}
           </TableCell>
@@ -262,7 +260,6 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
-            className={styles.bold}
           >
             {total.paused}
           </TableCell>
@@ -278,7 +275,6 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
-            className={styles.bold}
           >
             {total.finished}
           </TableCell>
@@ -294,7 +290,6 @@ export const Statistics = (args) => {
           <TableCell
             align="right"
             nowrap
-            className={styles.bold}
           >
             {total.total}
           </TableCell>
