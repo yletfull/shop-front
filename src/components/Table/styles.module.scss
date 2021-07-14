@@ -63,6 +63,10 @@
       & .cell {
         background-color: $color-gray-lighter;
         border-bottom: 0;
+
+        &.bold {
+          font-weight: bold;
+        }
       }
     }
   }
