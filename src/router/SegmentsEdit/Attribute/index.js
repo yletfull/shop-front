@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
@@ -74,13 +74,17 @@ const Attribute = function Attribute({
 
   const TypedAttribute = type && attributes[type] ? attributes[type] : null;
 
+  const [isDragForbidden, setIsDragForbidden] = useState(true);
+  const handleDragAreaMouseover = () => setIsDragForbidden(false);
+  const handleDragAreaMouseleave = () => setIsDragForbidden(true);
   const [{ opacity }, dragRef] = useDrag(() => ({
     type: dragType,
     item: { from: [groupIndex, index] },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
-  }), [dragType, groupIndex, index]);
+    canDrag: !isDragForbidden,
+  }), [dragType, groupIndex, index, isDragForbidden]);
 
   const handleChangeAttribute = (values) => {
     onChange([groupIndex, index], values);
@@ -104,7 +108,13 @@ const Attribute = function Attribute({
       className={styles.attribute}
       style={{ opacity }}
     >
-      <div className={styles.attributeAside}>
+      <div
+        className={styles.attributeAside}
+        onFocus={handleDragAreaMouseover}
+        onMouseOver={handleDragAreaMouseover}
+        onMouseLeave={handleDragAreaMouseleave}
+        onBlur={handleDragAreaMouseleave}
+      >
         <span className={styles.attributeIcon}>
           <IconArrows />
         </span>
