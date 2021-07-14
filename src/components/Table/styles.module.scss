@@ -58,5 +58,15 @@
         vertical-align: bottom;
       }
     }
+
+    &-summary {
+      font-weight: bold;
+
+      & .cell {
+        background-color: $color-gray-lighter;
+        border-bottom: 0;
+        vertical-align: bottom;
+      }
+    }
   }
 }
