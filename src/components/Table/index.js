@@ -5,15 +5,18 @@ import styles from './styles.module.scss';
 const propTypes = {
   header: PropTypes.node,
   children: PropTypes.node,
+  footer: PropTypes.node,
 };
 const defaultProps = {
   header: null,
   children: null,
+  footer: null,
 };
 
 const Table = function Table({
   header,
   children,
+  footer,
   ...props
 }) {
   return (
@@ -30,6 +33,11 @@ const Table = function Table({
         <tbody>
           {children}
         </tbody>
+        {Boolean(footer) && (
+          <tfoot>
+            {footer}
+          </tfoot>
+        )}
       </table>
     </div>
   );
