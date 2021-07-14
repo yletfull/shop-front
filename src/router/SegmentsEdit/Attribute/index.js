@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 import Button from '@/components/Button';
-import IconArrows from '@/icons/ArrowsLight';
+import IconBars from '@/icons/BarsLight';
 import IconTimes from '@/icons/TimesLight';
 import { getMapProfileTitle } from '../selectors';
 import AttributeDate from './AttributeDate';
@@ -77,14 +78,26 @@ const Attribute = function Attribute({
   const [isDragForbidden, setIsDragForbidden] = useState(true);
   const handleDragAreaMouseover = () => setIsDragForbidden(false);
   const handleDragAreaMouseleave = () => setIsDragForbidden(true);
-  const [{ opacity }, dragRef] = useDrag(() => ({
+  const [{ isDragging }, dragRef] = useDrag(() => ({
     type: dragType,
     item: { from: [groupIndex, index] },
     collect: (monitor) => ({
-      opacity: monitor.isDragging() ? 0.5 : 1,
+      isDragging: monitor.isDragging(),
     }),
     canDrag: !isDragForbidden,
   }), [dragType, groupIndex, index, isDragForbidden]);
+  useEffect(() => {
+    if (!isDragging) {
+      return;
+    }
+
+    const defaultCursor = document.documentElement.style.cursor;
+    document.documentElement.style.cursor = 'grabbing';
+
+    return () => {
+      document.documentElement.style.cursor = defaultCursor;
+    };
+  }, [isDragging]);
 
   const handleChangeAttribute = (values) => {
     onChange([groupIndex, index], values);
@@ -93,30 +106,28 @@ const Attribute = function Attribute({
     const key = properties.negation || 'negation';
     onChange([groupIndex, index], { ...data, [key]: !negation });
   };
-  const handleClickCloseAttribute = (e) => {
-    const { index: attributeIndex, group } = e?.target?.dataset || {};
-    if (typeof attributeIndex === 'undefined'
-      || typeof group === 'undefined') {
-      return;
-    }
-    onRemove([group, attributeIndex]);
+  const handleClickCloseAttribute = () => {
+    onRemove([groupIndex, index]);
   };
 
   return (
     <div
       ref={dragRef}
       className={styles.attribute}
-      style={{ opacity }}
+      data-is-dragging={String(isDragging)}
     >
-      <div
-        className={styles.attributeAside}
-        onFocus={handleDragAreaMouseover}
-        onMouseOver={handleDragAreaMouseover}
-        onMouseLeave={handleDragAreaMouseleave}
-        onBlur={handleDragAreaMouseleave}
-      >
-        <span className={styles.attributeIcon}>
-          <IconArrows />
+      <div className={styles.attributeAside}>
+        <span
+          className={cx(
+            styles.attributeControl,
+            styles.attributeControlDrag,
+          )}
+          onMouseOver={handleDragAreaMouseover}
+          onMouseLeave={handleDragAreaMouseleave}
+          onFocus={handleDragAreaMouseover}
+          onBlur={handleDragAreaMouseleave}
+        >
+          <IconBars />
         </span>
       </div>
 
@@ -168,16 +179,18 @@ const Attribute = function Attribute({
       <div className={styles.attributeAside}>
         <button
           type="button"
-          data-group={groupIndex}
-          data-index={index}
-          className={styles.attributeButton}
+          className={cx(
+            styles.attributeButton,
+            styles.attributeControl,
+            styles.attributeControlRemove,
+          )}
           onClick={handleClickCloseAttribute}
         >
-          <span className={styles.attributeIcon}>
-            <IconTimes />
-          </span>
+          <IconTimes />
         </button>
       </div>
+
+      <div className={styles.attributeOverlay} />
     </div>
   );
 };

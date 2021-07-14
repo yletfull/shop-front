@@ -1,7 +1,7 @@
 @import '@/theme/include.scss';
 
 .attributesGroup {
-  background: $color-gray;
+  background-color: $color-gray;
   border-radius: .5rem;
   padding: .5rem;
   position: relative;
@@ -19,7 +19,7 @@
     }
   }
 
-  &_over {
+  &[data-is-over='true'] {
     background-color: $color-primary;
     background-color: rgba($color-primary, .5);
   }

@@ -33,8 +33,8 @@ const AttributesGroup = function AttributesGroup({
       ref={dropRef}
       className={cx(
         styles.attributesGroup,
-        (isOver ? styles.attributesGroup_over : ''),
       )}
+      data-is-over={String(isOver)}
     >
       {children}
     </div>
