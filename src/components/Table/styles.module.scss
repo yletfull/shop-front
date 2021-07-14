@@ -62,6 +62,10 @@
     &-summary {
       font-weight: bold;
 
+      .diff {
+        font-weight: normal;
+      }
+
       & .cell {
         background-color: $color-gray-lighter;
         border-bottom: 0;
