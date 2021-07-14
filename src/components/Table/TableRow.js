@@ -8,7 +8,6 @@ const propTypes = {
   type: PropTypes.oneOf([
     'default',
     'header',
-    'footer',
     'summary',
   ]),
   children: PropTypes.node,
