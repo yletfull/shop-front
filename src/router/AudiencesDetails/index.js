@@ -15,6 +15,7 @@ import {
   getAudienceDetails,
 } from './selectors';
 import CommonInfo from './CommonInfo';
+import CommonInfoCard from './CommonInfoCard';
 import Comparison from './Comparison';
 import styles from './styles.module.scss';
 
@@ -54,7 +55,16 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
 
       {!isFetchingAudienceDetails && (
         <Fragment>
-          <CommonInfo data={audienceDetails} />
+          <CommonInfo data={audienceDetails}>
+            <CommonInfoCard
+              label="Телефоны"
+              count={audienceDetails.phones}
+            />
+            <CommonInfoCard
+              label="E-mail"
+              count={audienceDetails.emails}
+            />
+          </CommonInfo>
 
           <h2>
             Сравнение с глобальной аудиторией
