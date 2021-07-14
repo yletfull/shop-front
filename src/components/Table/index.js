@@ -1,26 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import styles from './styles.module.scss';
 
 const propTypes = {
   header: PropTypes.node,
   children: PropTypes.node,
   footer: PropTypes.node,
+  className: PropTypes.string,
 };
 const defaultProps = {
   header: null,
   children: null,
   footer: null,
+  className: '',
 };
 
 const Table = function Table({
   header,
   children,
   footer,
+  className,
   ...props
 }) {
   return (
-    <div className={styles.wrapper}>
+    <div className={cx(styles.wrapper, className)}>
       <table
         className={styles.table}
         {...props}
