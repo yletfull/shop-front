@@ -25,16 +25,17 @@
   @include button-reset();
 
   color: $color-primary-darkest;
-  padding: 1em;
+  padding: .5em;
 
-  &_disabled {
-    &,
-    &:disabled,
-    &:hover,
-    &:focus {
-      color: $color-gray;
-      cursor: default;
-    }
+  &:hover {
+    background-color: $color-gray-lighter;
+    border-radius: .25em;
+  }
+
+  &.disabled {
+    color: $color-gray-darker;
+    cursor: default;
+    pointer-events: none;
   }
 }
 
@@ -45,16 +46,17 @@
   display: inline-block;
   font-size: inherit;
   font-weight: bold;
-  padding: 1em;
+  padding: .5em;
   text-decoration: none;
 
+  &:hover {
+    background-color: $color-gray-lighter;
+    border-radius: .25em;
+  }
+
   &_disabled {
-    &,
-    &:disabled,
-    &:hover,
-    &:focus {
-      color: $color-black;
-      cursor: default;
-    }
+    color: $color-black;
+    cursor: default;
+    pointer-events: none;
   }
 }
