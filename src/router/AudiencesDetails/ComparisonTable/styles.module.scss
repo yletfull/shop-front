@@ -1,0 +1,67 @@
+@import '@/theme/include.scss';
+
+.comparison {
+  &Filter {
+    padding: .5rem 0;
+
+    &Form {
+      display: flex;
+
+      & > input {
+        flex-grow: 1;
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  &Table {
+    @include table();
+
+    & tr {
+      &[data-total='true'] {
+        & > td {
+          background: $color-gray-lighter;
+          font-weight: bold;
+
+          &:first-child {
+            border-radius: .375rem 0 0 .375rem;
+          }
+
+          &:last-child {
+            border-radius: 0 .375rem .375rem 0;
+          }
+        }
+      }
+
+      &[data-total='false'] {
+        & > td {
+          color: $color-gray-darker;
+
+          &:first-child {
+            padding-left: 3rem;
+          }
+        }
+      }
+    }
+
+    & th,
+    & td {
+      &:not(:first-child) {
+        text-align: right;
+      }
+    }
+
+    &Button {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    &Cell {
+      display: flex;
+    }
+
+    &Input {
+      margin-right: 1rem;
+    }
+  }
+}

@@ -8,15 +8,18 @@ import Spinner from '@/components/Spinner';
 import { namespace as NS } from './constants';
 import reducer from './reducer';
 import {
+  fetchAudienceCompare,
   fetchAudienceDetails,
 } from './actions';
 import {
+  getIsFetchingAudienceCompare,
   getIsFetchingAudienceDetails,
+  getFormattedAudienceCompare,
   getAudienceDetails,
 } from './selectors';
 import CommonInfo from './CommonInfo';
 import CommonInfoCard from './CommonInfoCard';
-import Comparison from './Comparison';
+import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -32,7 +35,9 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
 
   const { id: audienceId } = useParams();
 
+  const isFetchingAudienceCompare = useSelector(getIsFetchingAudienceCompare);
   const isFetchingAudienceDetails = useSelector(getIsFetchingAudienceDetails);
+  const audienceCompare = useSelector(getFormattedAudienceCompare);
   const audienceDetails = useSelector(getAudienceDetails);
 
   useEffect(() => {
@@ -45,6 +50,7 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
 
   useEffect(() => {
     dispatch(fetchAudienceDetails(audienceId));
+    dispatch(fetchAudienceCompare(audienceId));
   }, [dispatch, audienceId]);
 
   return (
@@ -66,11 +72,15 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
             />
           </CommonInfo>
 
-          <h2>
+          <h2 className={styles.audienceDetailsHeader}>
             Сравнение с глобальной аудиторией
           </h2>
 
-          <Comparison data={audienceDetails} />
+          <ComparisonTable
+            isFetching={isFetchingAudienceCompare}
+            data={audienceCompare}
+            name={audienceDetails?.title || ''}
+          />
         </Fragment>
       )}
     </div>

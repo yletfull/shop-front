@@ -2,6 +2,12 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/external/ctor/api/v1';
 
+const fetchAudienceCompare = function serviceFetchAudienceCompare(id) {
+  return api
+    .get(`${baseUrl}/audiences/${id}/compared/`)
+    .then((response) => response.data.data);
+};
+
 const fetchAudienceDetails = function serviceFetchAudienceDetails(id) {
   return api
     .get(`${baseUrl}/audiences/${id}`)
@@ -9,5 +15,6 @@ const fetchAudienceDetails = function serviceFetchAudienceDetails(id) {
 };
 
 export default {
+  fetchAudienceCompare,
   fetchAudienceDetails,
 };

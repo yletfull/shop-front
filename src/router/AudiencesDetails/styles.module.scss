@@ -1,5 +1,8 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.audienceDetails {
+  &Header {
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
 }
