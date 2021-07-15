@@ -2,36 +2,24 @@
 
 .attribute {
   align-items: stretch;
+  background-color: $color-gray-lighter;
+  border-radius: .5rem;
   display: flex;
+  margin: -.5rem 0;
+  opacity: 1;
+  padding: .5rem;
   position: relative;
+  transition: opacity .2s;
 
-  & + & {
-    margin-top: 2rem;
-
-    &::after {
-      background: $color-gray;
-      color: $color-pink;
-      content: 'ИЛИ';
-      display: block;
-      font-size: .75rem;
-      left: 9rem;
-      padding: 0 .25rem;
-      position: absolute;
-      top: -1.325rem;
-    }
-
-    &::before {
-      border-top: thin solid $color-gray-darker;
-      content: '';
-      display: block;
-      left: .5rem;
-      position: absolute;
-      right: .5rem;
-      top: -1rem;
-    }
+  &[data-is-dragging='true'] {
+    cursor: move;
+    cursor: grabbing;
+    z-index: 2;
   }
 
   &Aside {
+    opacity: 0;
+    transition: opacity .2s;
     width: 1rem;
   }
 
@@ -57,9 +45,33 @@
     padding: .25rem 1rem;
   }
 
-  &Icon {
-    color: $color-accent-darkest;
-    pointer-events: none;
+  &Control {
+    color: $color-gray-darker;
+    opacity: .5;
+    transition: opacity .2s;
+
+    &:active,
+    &:hover,
+    &:focus {
+      opacity: 1;
+    }
+
+    &Drag {
+      color: $color-primary-darkest;
+      cursor: move;
+      cursor: grab;
+      position: relative;
+      vertical-align: -.25em;
+      z-index: 2;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+
+    &Remove {
+      color: $color-red-darkest;
+    }
   }
 
   &Section {
@@ -84,5 +96,21 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 10rem;
+  }
+
+  &Overlay {
+    background-color: inherit;
+    bottom: 0;
+    display: none;
+    left: 0;
+    opacity: .5;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  &:hover &Aside,
+  &:focus-within &Aside {
+    opacity: 1;
   }
 }
