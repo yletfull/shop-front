@@ -40,21 +40,31 @@ const AudiencesList = function AudiencesList({ defaultTitle }) {
   const pagination = useSelector(getAudiencesPagination);
   const tableData = useSelector(getFormattedAudienceList);
 
-  const [filterParams, setFilterParams] = useState({});
-  const [paginationParams, setPaginationParams] = useState({
-    currentPage: query.get(mapQueryParams[queryParams.page]) || 1,
-  });
+  const [requestParams, setRequestParams] = useState(Object.values(queryParams)
+    .reduce((acc, cur) => {
+      if (!query.has(cur)) {
+        return acc;
+      }
+      if (cur === queryParams.searchLocal) {
+        return ({
+          ...acc,
+          [mapQueryParams[cur]]: query.get(cur) === 'true',
+        });
+      }
+      return ({
+        ...acc,
+        [mapQueryParams[cur]]: query.get(cur) || '',
+      });
+    }, {}));
 
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAudiencesList({
-      ...filterParams,
-      ...paginationParams,
-    }));
-  }, [dispatch, filterParams, paginationParams]);
+    console.log('Request Params', requestParams);
+    dispatch(fetchAudiencesList(requestParams));
+  }, [dispatch, requestParams]);
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
@@ -75,17 +85,15 @@ const AudiencesList = function AudiencesList({ defaultTitle }) {
   };
 
   const handleChangePage = (value) => {
-    const params = {
-      ...paginationParams,
-      currentPage: value || 1,
-    };
-    setPaginationParams(params);
+    const params = { ...requestParams, currentPage: value || 1 };
+    setRequestParams(params);
     changeQueryParams(params);
   };
 
   const handleFilterTable = (values) => {
-    setFilterParams(values || {});
-    changeQueryParams(values || {});
+    const params = { ...requestParams, ...values };
+    setRequestParams(params);
+    changeQueryParams(params);
   };
 
   return (

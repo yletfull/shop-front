@@ -49,15 +49,21 @@ const TableView = function TableView({
   };
 
   const initialFormValues = {
-    name: query.get(mapQueryParams[queryParams.searchName]) || '',
-    local: getLocalFromQuery(),
+    [mapQueryParams[queryParams.searchName]]: query
+      .get(mapQueryParams[queryParams.searchName]) || '',
+    [mapQueryParams[queryParams.searchLocal]]: getLocalFromQuery(),
   };
 
   const handleSubmitForm = (values) => {
-    const { name: title, local } = values || {};
-    const params = { title };
+    const keyName = mapQueryParams[queryParams.searchName];
+    const keyLocal = mapQueryParams[queryParams.searchLocal];
+    const {
+      [keyName]: title,
+      [keyLocal]: local,
+    } = values || {};
+    const params = { [keyName]: title };
     if ([0, 1].map(String).includes(local)) {
-      params.local = Boolean(Number(local));
+      params[keyLocal] = Boolean(Number(local));
     }
     onFilter(params);
   };
@@ -82,7 +88,7 @@ const TableView = function TableView({
                     data-purpose="filter"
                   >
                     <Field
-                      name="name"
+                      name={mapQueryParams[queryParams.searchName]}
                       placeholder="Название"
                       className={styles.tableViewInput}
                       component={FormikInput}
@@ -95,11 +101,11 @@ const TableView = function TableView({
                   >
                     <span className={styles.tableViewCell}>
                       <Field
-                        name="local"
+                        name={mapQueryParams[queryParams.searchLocal]}
                         placeholder="Тип"
                         resetText="Сбросить"
                         className={styles.tableViewInput}
-                        value={values.local}
+                        value={values[mapQueryParams[queryParams.searchLocal]]}
                         options={[
                           { text: 'Глобальная', value: '0' },
                           { text: 'Локальная', value: '1' },

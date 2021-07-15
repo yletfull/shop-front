@@ -6,13 +6,13 @@ export const entityTypes = {
 };
 
 export const queryParams = {
-  searchName: 'name',
-  searchLocal: 'local',
+  searchName: 'title',
+  searchLocal: 'isLocal',
   page: 'page',
 };
 
 export const mapQueryParams = {
   [queryParams.searchName]: 'title',
-  [queryParams.searchLocal]: 'local',
-  [queryParams.page]: 'page',
+  [queryParams.searchLocal]: 'isLocal',
+  [queryParams.page]: 'currentPage',
 };
