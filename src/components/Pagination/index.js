@@ -127,6 +127,7 @@ const Pagination = function Pagination({
             className={styles.select}
             options={options}
             value={String(count)}
+            required
             onInput={handleCountSelect}
           />
         </div>
