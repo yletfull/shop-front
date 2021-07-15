@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
+import { queryParams, mapQueryParams } from '../constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -36,21 +37,16 @@ const TableView = function TableView({
 }) {
   const query = useQuery();
 
-  const queryParams = {
-    searchName: 'name',
-    searchType: 'type',
-  };
-
   const initialFormValues = {
-    name: query.get(queryParams.searchName) || '',
-    type: query.get(queryParams.searchType) || '',
+    name: query.get(mapQueryParams[queryParams.searchName]) || '',
+    local: query.get(mapQueryParams[queryParams.searchLocal]) || '',
   };
 
   const handleSubmitForm = (values) => {
-    const { name: title, type } = values || {};
+    const { name: title, local } = values || {};
     const params = { title };
-    if ([0, 1].map(String).includes(type)) {
-      params.isLocal = Boolean(Number(type));
+    if ([0, 1].map(String).includes(local)) {
+      params.local = Boolean(Number(local));
     }
     onFilter(params);
   };
@@ -86,11 +82,11 @@ const TableView = function TableView({
                 >
                   <span className={styles.tableViewCell}>
                     <Field
-                      name="type"
+                      name="local"
                       placeholder="Тип"
                       resetText="Сбросить"
                       className={styles.tableViewInput}
-                      value={values.type}
+                      value={values.local}
                       options={[
                         { text: 'Глобальная', value: 0 },
                         { text: 'Локальная', value: 1 },

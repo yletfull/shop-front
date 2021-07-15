@@ -41,3 +41,7 @@ export const getFormattedAudienceList = createSelector(
       }));
   },
 );
+export const getAudiencesPagination = createSelector(
+  [getAudiencesMeta],
+  (meta) => meta?.pagination || {},
+);
