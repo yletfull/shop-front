@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -40,13 +40,23 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const audienceCompare = useSelector(getFormattedAudienceCompare);
   const audienceDetails = useSelector(getAudienceDetails);
 
+  const [pageTitle, setPageTitle] = useState(defaultTitle || '');
+
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
 
   useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
+    const { title } = audienceDetails || {};
+    if (title) {
+      setPageTitle(`Аудитория «${title}»`);
+    }
+  }, [audienceDetails]);
+
+  useEffect(() => {
+    dispatch(setHeader(pageTitle));
+    return () => dispatch(setHeader(''));
+  }, [dispatch, pageTitle]);
 
   useEffect(() => {
     dispatch(fetchAudienceDetails(audienceId));

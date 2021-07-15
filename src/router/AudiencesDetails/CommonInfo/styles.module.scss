@@ -13,13 +13,13 @@
   }
 
   &Table {
+    font-size: .75rem;
+    line-height: 2rem;
+
     & td {
       &:first-child {
         color: $color-gray-darker;
-      }
-
-      &:last-child {
-        text-align: right;
+        padding-right: 4rem;
       }
     }
   }
