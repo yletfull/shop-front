@@ -285,23 +285,6 @@ export const fetchAttributeStatistics = (position) => (
     }
   });
 
-export const removeAttributeStatistics = (position) => (
-  (dispatch, getState) => {
-    const statistics = getAttributesStatistics(getState());
-    const [groupIndex, attributeIndex] = position || {};
-
-    const newStatistics = [
-      ...statistics.slice(0, groupIndex),
-      [
-        ...statistics[groupIndex].slice(0, attributeIndex),
-        ...statistics[groupIndex].slice(attributeIndex + 1),
-      ],
-      ...statistics.slice(groupIndex + 1),
-    ].filter((group) => group.length > 0);
-
-    dispatch(updateStatistics({ attributes: newStatistics }));
-  });
-
 export const moveCondition = ({ source, target }) => (dispatch, getState) => {
   const [sourceGroup, sourceIndex] = source;
   const [targetGroup, targetIndex] = target;
@@ -413,24 +396,33 @@ export const addSegmentAttribute = (values) => (dispatch, getState) => {
 };
 
 export const removeSegmentAttribute = (position) => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
-  const [groupIndex, attributeIndex] = position;
-  const attribute = attributes[groupIndex];
-  if (!attribute) {
-    return;
-  }
-  const newAttribute = [
-    ...attribute.slice(0, attributeIndex),
-    ...attribute.slice(attributeIndex + 1),
-  ];
+  const [sourceGroup, sourceIndex] = position;
+  const state = getState();
+
+  const conditionsGroups = getSegmentAttributes(state);
+  const filteredConditions = conditionsGroups
+    .map((group, groupIndex) => (
+      group.filter((_, index) => (
+        !(groupIndex === sourceGroup && index === sourceIndex)
+      ))
+    ))
+    .filter((group) => group.length > 0);
+
+  const statisticsGroups = getAttributesStatistics(state);
+  const filteredStatistics = statisticsGroups
+    .map((group, groupIndex) => (
+      group.filter((_, index) => (
+        !(groupIndex === sourceGroup && index === sourceIndex)
+      ))
+    ))
+    .filter((group) => group.length > 0);
+
   dispatch(updateSegment({
-    [segmentProps.attributes]: [
-      ...attributes.slice(0, groupIndex),
-      newAttribute,
-      ...attributes.slice(groupIndex + 1),
-    ].filter((a) => a.length > 0),
+    [segmentProps.attributes]: filteredConditions,
   }));
-  dispatch(removeAttributeStatistics(position));
+  dispatch(updateStatistics({
+    attributes: filteredStatistics,
+  }));
 };
 
 export const saveSegment = (segment, callback) => async (dispatch) => {

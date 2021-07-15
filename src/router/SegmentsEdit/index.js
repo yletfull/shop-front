@@ -152,16 +152,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsShowParams(false);
   };
   const handleRemoveAttribute = (position) => {
-    const [groupIndex, attributeIndex] = position || [];
-    if (typeof attributeIndex === 'undefined'
-      || typeof groupIndex === 'undefined') {
-      return;
-    }
     setIsSegmentChanged(true);
-    dispatch(removeSegmentAttribute([
-      Number(groupIndex),
-      Number(attributeIndex),
-    ]));
+    dispatch(removeSegmentAttribute(position));
   };
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
