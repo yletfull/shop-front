@@ -3,9 +3,10 @@
 .spinner {
   animation: spinner-animation .6s linear infinite;
   background-color: transparent;
-  border: .125rem solid currentColor;
+  border: .125rem solid $color-primary;
   border-bottom-color: transparent;
   border-radius: 50%;
+  border-top-color: transparent;
   display: inline-block;
   height: 1em;
   width: 1em;
