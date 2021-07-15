@@ -1,11 +1,16 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import { useQuery } from '@/hooks';
 import Spinner from '@/components/Spinner';
-import { namespace as NS } from './constants';
+import {
+  queryParams,
+  mapQueryParams,
+  namespace as NS,
+} from './constants';
 import reducer from './reducer';
 import {
   fetchAudienceCompare,
@@ -32,6 +37,8 @@ const defaultProps = {
 
 const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useQuery();
 
   const { id: audienceId } = useParams();
 
@@ -40,6 +47,9 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const audienceCompare = useSelector(getFormattedAudienceCompare);
   const audienceDetails = useSelector(getAudienceDetails);
 
+  const [compareFilter, setCompareFilter] = useState({
+    [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
+  });
   const [pageTitle, setPageTitle] = useState(defaultTitle || '');
 
   useEffect(() => {
@@ -60,8 +70,18 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
 
   useEffect(() => {
     dispatch(fetchAudienceDetails(audienceId));
-    dispatch(fetchAudienceCompare(audienceId));
   }, [dispatch, audienceId]);
+
+  useEffect(() => {
+    dispatch(fetchAudienceCompare(audienceId, compareFilter));
+  }, [dispatch, audienceId, compareFilter]);
+
+  const handleFilterComparisonTable = (values) => {
+    const { [mapQueryParams[queryParams.search]]: search } = values || {};
+    query.set(queryParams.search, search);
+    setCompareFilter({ [mapQueryParams[queryParams.search]]: search || '' });
+    history.push({ search: query.toString() });
+  };
 
   return (
     <div className={styles.audienceDetails}>
@@ -90,6 +110,7 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
             isFetching={isFetchingAudienceCompare}
             data={audienceCompare}
             name={audienceDetails?.title || ''}
+            onFilter={handleFilterComparisonTable}
           />
         </Fragment>
       )}

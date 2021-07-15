@@ -2,9 +2,9 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/external/ctor/api/v1';
 
-const fetchAudienceCompare = function serviceFetchAudienceCompare(id) {
+const fetchAudienceCompare = function serviceFetchAudienceCompare(id, params) {
   return api
-    .get(`${baseUrl}/audiences/${id}/compared/`)
+    .get(`${baseUrl}/audiences/${id}/compared/`, { params })
     .then((response) => response.data.data);
 };
 

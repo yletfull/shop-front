@@ -7,13 +7,13 @@ export const requestAudienceDetails = createAction(`${NS}/request/audienceDetail
 export const updateAudienceCompare = createAction(`${NS}/update/audienceCompare`);
 export const updateAudienceDetails = createAction(`${NS}/update/audienceDetails`);
 
-export const fetchAudienceCompare = (id) => async (dispatch) => {
+export const fetchAudienceCompare = (id, params) => async (dispatch) => {
   if (typeof id === 'undefined') {
     return;
   }
   dispatch(requestAudienceCompare());
   try {
-    const response = await service.fetchAudienceCompare(id);
+    const response = await service.fetchAudienceCompare(id, params);
     dispatch(updateAudienceCompare(response));
   } catch (error) {
     console.error(error);
