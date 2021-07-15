@@ -113,13 +113,4 @@
   &:focus-within &Aside {
     opacity: 1;
   }
-
-  &[data-is-dragging='true'] &Overlay {
-    display: block;
-  }
-}
-
-[data-is-over='true'] .attribute:not([data-is-dragging='true']) {
-  background-color: transparent;
-  background-color: rgba($color-gray-lighter, .5);
 }
