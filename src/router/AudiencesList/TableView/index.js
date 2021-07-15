@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import { useHistory } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+import { Link } from 'react-router-dom';
+import { withFormikField } from '@/components/formik';
 import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
+import Table, { TableCell, TableRow } from '@/components/Table';
+import { queryParams, mapQueryParams } from '../constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.string),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    loadedAt: PropTypes.string,
+    local: PropTypes.bool,
+    title: PropTypes.string,
+    emails: PropTypes.number,
+    phones: PropTypes.number,
+  })),
   isFetching: PropTypes.bool,
   onFilter: PropTypes.func,
 };
@@ -26,158 +36,142 @@ const TableView = function TableView({
   isFetching,
   onFilter,
 }) {
-  const queryParams = {
-    searchDate: 'date',
-    searchName: 'name',
-    searchType: 'type',
-  };
-
-  const history = useHistory();
   const query = useQuery();
 
-  const [
-    searchDate,
-    setSearchDate,
-  ] = useState(query.get(queryParams.searchDate) || '');
-  const [
-    searchName,
-    setSearchName,
-  ] = useState(query.get(queryParams.searchName) || '');
-  const [
-    searchType,
-    setSearchType,
-  ] = useState(query.get(queryParams.searchType) || '');
+  const getLocalFromQuery = () => {
+    const key = mapQueryParams[queryParams.searchLocal];
+    if (!query.has(key)) {
+      return '';
+    }
+    return query.get(key) === 'true'
+      ? '1'
+      : '0';
+  };
 
-  const handleChangeSearchDate = (e) => {
-    const { value } = e?.target || {};
-    if (typeof value === 'undefined') {
-      return;
+  const initialFormValues = {
+    name: query.get(mapQueryParams[queryParams.searchName]) || '',
+    local: getLocalFromQuery(),
+  };
+
+  const handleSubmitForm = (values) => {
+    const { name: title, local } = values || {};
+    const params = { title };
+    if ([0, 1].map(String).includes(local)) {
+      params.local = Boolean(Number(local));
     }
-    setSearchDate(value);
+    onFilter(params);
   };
-  const handleChangeSearchName = (e) => {
-    const { value } = e?.target || {};
-    if (typeof value === 'undefined') {
-      return;
-    }
-    setSearchName(value);
-  };
-  const handleChangeSearchType = (e) => {
-    const { value } = e?.target || {};
-    if (typeof value === 'undefined') {
-      return;
-    }
-    setSearchType(value);
-  };
-  const handleClickSearchButton = () => {
-    query.set(queryParams.searchDate, searchDate);
-    query.set(queryParams.searchName, searchName);
-    query.set(queryParams.searchType, searchType);
-    history.push({ search: query.toString() });
-    onFilter();
-  };
+
+  const FormikInput = withFormikField(Input);
+  const FormikSelect = withFormikField(Select);
 
   return (
-    <table className={styles.tableView}>
-      <tbody>
-        <tr>
-          <td data-purpose="filter">
-            <Input
-              className={cx(
-                styles.tableViewInput,
-                styles.tableViewInput_grow
-              )}
-              placeholder="Дата загрузки"
-              type="text"
-              value={searchDate}
-              onChange={handleChangeSearchDate}
-              fullwidth
-            />
-          </td>
-          <td data-purpose="filter">
-            <Input
-              className={cx(
-                styles.tableViewInput,
-                styles.tableViewInput_grow
-              )}
-              placeholder="Название"
-              type="text"
-              value={searchName}
-              onChange={handleChangeSearchName}
-              fullwidth
-            />
-          </td>
-          <td
-            colSpan="3"
-            data-purpose="filter"
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={handleSubmitForm}
+    >
+      {({ values }) => (
+        <Form>
+          <Table
+            className={styles.tableView}
+            header={(
+              <Fragment>
+                <TableRow>
+                  <TableCell
+                    colSpan="3"
+                    data-purpose="filter"
+                  >
+                    <Field
+                      name="name"
+                      placeholder="Название"
+                      className={styles.tableViewInput}
+                      component={FormikInput}
+                      fullwidth
+                    />
+                  </TableCell>
+                  <TableCell
+                    colSpan="2"
+                    data-purpose="filter"
+                  >
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="local"
+                        placeholder="Тип"
+                        resetText="Сбросить"
+                        className={styles.tableViewInput}
+                        value={values.local}
+                        options={[
+                          { text: 'Глобальная', value: '0' },
+                          { text: 'Локальная', value: '1' },
+                        ]}
+                        component={FormikSelect}
+                        fullwidth
+                      />
+                      <Button
+                        type="submit"
+                        className={styles.tableViewButton}
+                      >
+                        Найти
+                      </Button>
+                    </span>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow type="header">
+                  <TableCell>
+                    Название
+                  </TableCell>
+                  <TableCell align="right">
+                    Телефонов
+                  </TableCell>
+                  <TableCell align="right">
+                    E-mail
+                  </TableCell>
+                  <TableCell>
+                    Тип
+                  </TableCell>
+                  <TableCell align="right">
+                    Дата загрузки
+                  </TableCell>
+                </TableRow>
+              </Fragment>
+            )}
           >
-            <span className={styles.tableViewCell}>
-              <Input
-                className={cx(
-                  styles.tableViewInput,
-                  styles.tableViewInput_grow
-                )}
-                placeholder="Тип"
-                type="text"
-                value={searchType}
-                onChange={handleChangeSearchType}
-              />
-              <Button
-                type="button"
-                onClick={handleClickSearchButton}
-              >
-                Найти
-              </Button>
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            Дата загрузки
-          </th>
-          <th>
-            Название
-          </th>
-          <th>
-            Тип
-          </th>
-          <th>
-            E-mail
-          </th>
-          <th>
-            Телефонов
-          </th>
-        </tr>
+            {isFetching && (
+              <TableRow>
+                <TableCell colSpan="5">
+                  <Spinner />
+                </TableCell>
+              </TableRow>
+            )}
 
-        {isFetching && (
-          <tr>
-            <td colSpan="5">
-              <Spinner />
-            </td>
-          </tr>
-        )}
-
-        {!isFetching && Array.isArray(data) && data.map((row) => (
-          <tr key={row.key}>
-            <td>
-              {formatDate(row.date)}
-            </td>
-            <td>
-              {row.name}
-            </td>
-            <td>
-              {row.type}
-            </td>
-            <td>
-              {formatNumber(row.emailsCount)}
-            </td>
-            <td>
-              {formatNumber(row.phonesCount)}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+            {!isFetching && Array.isArray(data) && data.map((row) => (
+              <TableRow key={row.id || row.key}>
+                <TableCell>
+                  <Link
+                    to={`/audiences/details/${row.id || ''}`}
+                  >
+                    {row.title}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">
+                  {row.emails ? formatNumber(row.emails) : '-'}
+                </TableCell>
+                <TableCell align="right">
+                  {row.phones ? formatNumber(row.phones) : '-'}
+                </TableCell>
+                <TableCell>
+                  {row.local ? 'Локальная' : 'Глобальная'}
+                </TableCell>
+                <TableCell align="right">
+                  {formatDate(row.loadedAt)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

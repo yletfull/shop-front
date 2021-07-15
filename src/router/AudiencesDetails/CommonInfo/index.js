@@ -4,59 +4,61 @@ import { formatDate, formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.objectOf(PropTypes.string),
+  children: PropTypes.node,
+  data: PropTypes.shape({
+    local: PropTypes.false,
+    loadedAt: PropTypes.string,
+    totalEntities: PropTypes.number,
+  }),
 };
 
 const defaultProps = {
+  children: null,
   data: {},
 };
 
-const CommonInfo = function CommonInfo({ data }) {
+const CommonInfo = function CommonInfo({
+  children,
+  data,
+}) {
+  const { local, loadedAt, totalEntities } = data || {};
+
   return (
-    <table className={styles.commonInfo}>
-      <tbody>
-        <tr>
-          <td>
-            Тип
-          </td>
-          <td>
-            {data.type}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Дата загрузки
-          </td>
-          <td>
-            {formatDate(data.date)}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Всего валидных идент.
-          </td>
-          <td>
-            {formatNumber(data.validCount || 0)}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            E-mail
-          </td>
-          <td>
-            {formatNumber(data.emailsCount || 0)}
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Телефонов
-          </td>
-          <td>
-            {formatNumber(data.phonesCount || 0)}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div className={styles.commonInfo}>
+      <div className={styles.commonInfoColumn}>
+        <table className={styles.commonInfoTable}>
+          <tbody>
+            <tr>
+              <td>
+                Тип
+              </td>
+              <td>
+                {local ? 'Локальная' : 'Глобальная'}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Дата загрузки
+              </td>
+              <td>
+                {formatDate(loadedAt)}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Всего валидных идентификаторов
+              </td>
+              <td>
+                {formatNumber(totalEntities || 0)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div className={styles.commonInfoColumn}>
+        {children}
+      </div>
+    </div>
   );
 };
 

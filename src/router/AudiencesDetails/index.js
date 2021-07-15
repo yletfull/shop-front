@@ -1,14 +1,30 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import { useQuery } from '@/hooks';
 import Spinner from '@/components/Spinner';
-import { namespace as NS } from './constants';
+import {
+  queryParams,
+  mapQueryParams,
+  namespace as NS,
+} from './constants';
 import reducer from './reducer';
-import { getIsFetchingData, getData } from './selectors';
+import {
+  fetchAudienceCompare,
+  fetchAudienceDetails,
+} from './actions';
+import {
+  getIsFetchingAudienceCompare,
+  getIsFetchingAudienceDetails,
+  getFormattedAudienceCompare,
+  getAudienceDetails,
+} from './selectors';
 import CommonInfo from './CommonInfo';
-import Comparison from './Comparison';
+import CommonInfoCard from './CommonInfoCard';
+import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -21,33 +37,81 @@ const defaultProps = {
 
 const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useQuery();
 
-  const isFetching = useSelector(getIsFetchingData);
-  const data = useSelector(getData);
+  const { id: audienceId } = useParams();
+
+  const isFetchingAudienceCompare = useSelector(getIsFetchingAudienceCompare);
+  const isFetchingAudienceDetails = useSelector(getIsFetchingAudienceDetails);
+  const audienceCompare = useSelector(getFormattedAudienceCompare);
+  const audienceDetails = useSelector(getAudienceDetails);
+
+  const [compareFilter, setCompareFilter] = useState({
+    [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
+  });
+  const [pageTitle, setPageTitle] = useState(defaultTitle || '');
 
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
 
   useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
+    const { title } = audienceDetails || {};
+    if (title) {
+      setPageTitle(`Аудитория «${title}»`);
+    }
+  }, [audienceDetails]);
+
+  useEffect(() => {
+    dispatch(setHeader(pageTitle));
+    return () => dispatch(setHeader(''));
+  }, [dispatch, pageTitle]);
+
+  useEffect(() => {
+    dispatch(fetchAudienceDetails(audienceId));
+  }, [dispatch, audienceId]);
+
+  useEffect(() => {
+    dispatch(fetchAudienceCompare(audienceId, compareFilter));
+  }, [dispatch, audienceId, compareFilter]);
+
+  const handleFilterComparisonTable = (values) => {
+    const { [mapQueryParams[queryParams.search]]: search } = values || {};
+    query.set(queryParams.search, search);
+    setCompareFilter({ [mapQueryParams[queryParams.search]]: search || '' });
+    history.push({ search: query.toString() });
+  };
 
   return (
     <div className={styles.audienceDetails}>
-      {isFetching && (
+      {isFetchingAudienceDetails && (
         <Spinner />
       )}
 
-      {!isFetching && (
+      {!isFetchingAudienceDetails && (
         <Fragment>
-          <CommonInfo data={data} />
+          <CommonInfo data={audienceDetails}>
+            <CommonInfoCard
+              label="Телефоны"
+              count={audienceDetails.phones}
+            />
+            <CommonInfoCard
+              label="E-mail"
+              count={audienceDetails.emails}
+            />
+          </CommonInfo>
 
-          <h2>
+          <h2 className={styles.audienceDetailsHeader}>
             Сравнение с глобальной аудиторией
           </h2>
 
-          <Comparison data={data} />
+          <ComparisonTable
+            isFetching={isFetchingAudienceCompare}
+            data={audienceCompare}
+            name={audienceDetails?.title || ''}
+            onFilter={handleFilterComparisonTable}
+          />
         </Fragment>
       )}
     </div>

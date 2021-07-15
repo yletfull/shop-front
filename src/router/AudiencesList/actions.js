@@ -2,16 +2,16 @@ import { createAction } from '@reduxjs/toolkit';
 import { namespace as NS } from './constants';
 import service from './service';
 
-export const requestData = createAction(`${NS}/request`);
-export const updateData = createAction(`${NS}/update`);
+export const requestAudiencesList = createAction(`${NS}/request`);
+export const updateAudiencesList = createAction(`${NS}/update`);
 
-export const fetchData = () => async (dispatch) => {
-  dispatch(requestData());
+export const fetchAudiencesList = (params) => async (dispatch) => {
+  dispatch(requestAudiencesList());
   try {
-    const response = await service.fetchData();
-    dispatch(updateData(response));
+    const response = await service.fetchAudiencesList(params);
+    dispatch(updateAudiencesList(response));
   } catch (error) {
     console.error(error);
-    dispatch(updateData([]));
+    dispatch(updateAudiencesList([]));
   }
 };

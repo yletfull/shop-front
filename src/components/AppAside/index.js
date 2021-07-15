@@ -5,6 +5,7 @@ import IconCrop from '@/icons/Crop';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
 import IconUpload from '@/icons/Upload';
+import IconUsers from '@/icons/Users';
 import MenuItem from '@/components/MenuItem';
 import { patchs, titles } from '@/router/routes';
 import { authSignOut } from '../../store/auth/actions';
@@ -27,6 +28,11 @@ const AppAside = function AppAside() {
       title: titles.upload,
       to: patchs.upload,
       icon: <IconUpload />,
+    },
+    {
+      title: titles.audiencesList,
+      to: patchs.audiencesList,
+      icon: <IconUsers />,
     },
   ];
 
