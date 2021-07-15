@@ -1,5 +1,4 @@
 @import './include.scss';
-@import './app-table.scss';
 
 *,
 *::after,
@@ -37,11 +36,6 @@ a {
   &:hover {
     opacity: .8;
   }
-}
-
-
-svg {
-  display: block;
 }
 
 .hasError,
