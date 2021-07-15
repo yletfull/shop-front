@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
+import Table, { TableCell, TableRow } from '@/components/Table';
 import { queryParams, mapQueryParams } from '../constants';
 import styles from './styles.module.scss';
 
@@ -71,99 +72,103 @@ const TableView = function TableView({
     >
       {({ values }) => (
         <Form>
-          <table className={styles.tableView}>
-            <tbody>
-              <tr>
-                <td
-                  colSpan="3"
-                  data-purpose="filter"
-                >
-                  <Field
-                    name="name"
-                    placeholder="Название"
-                    className={styles.tableViewInput}
-                    component={FormikInput}
-                    fullwidth
-                  />
-                </td>
-                <td
-                  colSpan="2"
-                  data-purpose="filter"
-                >
-                  <span className={styles.tableViewCell}>
+          <Table
+            className={styles.tableView}
+            header={(
+              <Fragment>
+                <TableRow>
+                  <TableCell
+                    colSpan="3"
+                    data-purpose="filter"
+                  >
                     <Field
-                      name="local"
-                      placeholder="Тип"
-                      resetText="Сбросить"
+                      name="name"
+                      placeholder="Название"
                       className={styles.tableViewInput}
-                      value={values.local}
-                      options={[
-                        { text: 'Глобальная', value: '0' },
-                        { text: 'Локальная', value: '1' },
-                      ]}
-                      component={FormikSelect}
+                      component={FormikInput}
                       fullwidth
                     />
-                    <Button
-                      type="submit"
-                      className={styles.tableViewButton}
-                    >
-                      Найти
-                    </Button>
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <th>
-                  Название
-                </th>
-                <th>
-                  Телефонов
-                </th>
-                <th>
-                  E-mail
-                </th>
-                <th>
-                  Тип
-                </th>
-                <th>
-                  Дата загрузки
-                </th>
-              </tr>
+                  </TableCell>
+                  <TableCell
+                    colSpan="2"
+                    data-purpose="filter"
+                  >
+                    <span className={styles.tableViewCell}>
+                      <Field
+                        name="local"
+                        placeholder="Тип"
+                        resetText="Сбросить"
+                        className={styles.tableViewInput}
+                        value={values.local}
+                        options={[
+                          { text: 'Глобальная', value: '0' },
+                          { text: 'Локальная', value: '1' },
+                        ]}
+                        component={FormikSelect}
+                        fullwidth
+                      />
+                      <Button
+                        type="submit"
+                        className={styles.tableViewButton}
+                      >
+                        Найти
+                      </Button>
+                    </span>
+                  </TableCell>
+                </TableRow>
 
-              {isFetching && (
-                <tr>
-                  <td colSpan="5">
-                    <Spinner />
-                  </td>
-                </tr>
-              )}
+                <TableRow type="header">
+                  <TableCell>
+                    Название
+                  </TableCell>
+                  <TableCell align="right">
+                    Телефонов
+                  </TableCell>
+                  <TableCell align="right">
+                    E-mail
+                  </TableCell>
+                  <TableCell>
+                    Тип
+                  </TableCell>
+                  <TableCell align="right">
+                    Дата загрузки
+                  </TableCell>
+                </TableRow>
+              </Fragment>
+            )}
+          >
+            {isFetching && (
+              <TableRow>
+                <TableCell colSpan="5">
+                  <Spinner />
+                </TableCell>
+              </TableRow>
+            )}
 
-              {!isFetching && Array.isArray(data) && data.map((row) => (
-                <tr key={row.id || row.key}>
-                  <td>
-                    <Link
-                      to={`/audiences/details/${row.id || ''}`}
-                    >
-                      {row.title}
-                    </Link>
-                  </td>
-                  <td>
-                    {row.emails ? formatNumber(row.emails) : '-'}
-                  </td>
-                  <td>
-                    {row.phones ? formatNumber(row.phones) : '-'}
-                  </td>
-                  <td>
-                    {row.local ? 'Локальная' : 'Глобальная'}
-                  </td>
-                  <td>
-                    {formatDate(row.loadedAt)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {!isFetching && Array.isArray(data) && data.map((row) => (
+              <TableRow key={row.id || row.key}>
+                <TableCell>
+                  <Link
+                    to={`/audiences/details/${row.id || ''}`}
+                  >
+                    {row.title}
+                  </Link>
+                </TableCell>
+                <TableCell align="right">
+                  {row.emails ? formatNumber(row.emails) : '-'}
+                </TableCell>
+                <TableCell align="right">
+                  {row.phones ? formatNumber(row.phones) : '-'}
+                </TableCell>
+                <TableCell>
+                  {row.local ? 'Локальная' : 'Глобальная'}
+                </TableCell>
+                <TableCell align="right">
+                  {formatDate(row.loadedAt)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </Table>
         </Form>
       )}
     </Formik>

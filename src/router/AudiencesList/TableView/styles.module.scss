@@ -1,10 +1,20 @@
 @import '@/theme/include.scss';
 
 .tableView {
-  @include table();
+  & td {
+    &[data-purpose='filter'] {
+      &:first-child,
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &:first-child {
+        padding-left: 0;
+      }
+    }
+  }
 
   &Button {
-    margin-left: 1rem;
     padding-left: 2rem;
     padding-right: 2rem;
   }
@@ -12,5 +22,9 @@
   &Cell {
     display: flex;
     width: 100%;
+  }
+
+  &Input {
+    margin-right: .75rem;
   }
 }
