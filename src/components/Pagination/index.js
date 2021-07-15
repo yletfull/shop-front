@@ -42,7 +42,6 @@ const Pagination = function Pagination({
     return null;
   }
 
-
   const createPageSelectHandler = (number) => (e) => {
     e.preventDefault();
 
@@ -56,7 +55,6 @@ const Pagination = function Pagination({
   };
 
   const pageNumbers = generateNumbers(currentPage, pagesTotal);
-
 
   const options = countOptions.map((item) => ({
     value: String(item),
