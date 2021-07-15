@@ -37,9 +37,19 @@ const TableView = function TableView({
 }) {
   const query = useQuery();
 
+  const getLocalFromQuery = () => {
+    const key = mapQueryParams[queryParams.searchLocal];
+    if (!query.has(key)) {
+      return '';
+    }
+    return query.get(key) === 'true'
+      ? '1'
+      : '0';
+  };
+
   const initialFormValues = {
     name: query.get(mapQueryParams[queryParams.searchName]) || '',
-    local: query.get(mapQueryParams[queryParams.searchLocal]) || '',
+    local: getLocalFromQuery(),
   };
 
   const handleSubmitForm = (values) => {
@@ -88,8 +98,8 @@ const TableView = function TableView({
                       className={styles.tableViewInput}
                       value={values.local}
                       options={[
-                        { text: 'Глобальная', value: 0 },
-                        { text: 'Локальная', value: 1 },
+                        { text: 'Глобальная', value: '0' },
+                        { text: 'Локальная', value: '1' },
                       ]}
                       component={FormikSelect}
                       fullwidth
