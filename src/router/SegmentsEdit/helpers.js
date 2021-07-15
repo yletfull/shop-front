@@ -38,3 +38,8 @@ export const formatSegmentAttributesListForRequest = (attributes) => {
     .map(formatSegmentAttributeForRequest);
   return attributes.map(mapAndSegmentAttributes);
 };
+
+export const getRandomString = () => (
+  String(Date.now())
+  + Math.random().toString(32)
+);

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
@@ -71,8 +71,6 @@ const defaultProps = {
 };
 
 const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
-  const generateKeyByIndex = (key, index) => `${key}-${index}`;
-
   const dispatch = useDispatch();
 
   const history = useHistory();
@@ -242,15 +240,20 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
               isVisible={segmentAttributes.length > 0}
               labels={['Датасеты', 'Телефонов', 'E-mail']}
             />
-            {segmentAttributes.map((group, groupIndex, groups) => {
-              const groupKey = generateKeyByIndex('group', groupIndex);
-              return (
-                <Fragment key={groupKey}>
-                  {(groupIndex > 0) && (
-                    <LogicOperator type="and" />
-                  )}
+            {segmentAttributes.reduce((groupAcc, group, groupIndex, groups) => {
+              const groupKey = (key) => `group-${groupIndex}-${key}`;
 
+              return ([
+                ...groupAcc,
+                (groupIndex > 0) && (
+                  <LogicOperator
+                    key={groupKey('and')}
+                    type="and"
+                  />
+                ),
+                (
                   <DropArea
+                    key={groupKey('drop')}
                     accept={dndTypes.attribute}
                     group={groupIndex}
                     index={-1}
@@ -258,100 +261,103 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     align="middle"
                     onDrop={handleConditionDrop}
                   />
+                ),
+                ...group.reduce((acc, attribute, attributeIndex) => {
+                  const {
+                    [attributeProps.datasets]: datasets,
+                    [attributeProps.datasetIds]: datasetIds,
+                    [attributeProps.name]: name,
+                    [attributeProps.title]: title,
+                  } = attribute || {};
+                  const getStatistics = (position) => {
+                    const [gIndex, aIndex] = position || [];
+                    if (typeof gIndex === 'undefined'
+                      || typeof aIndex === 'undefined') {
+                      return null;
+                    }
+                    return attributesStatistics[gIndex]?.[aIndex] || null;
+                  };
+                  const key = (k) => `attribute-${attribute.id}-${k}`;
 
-                  <div className={styles.conditionsGroup}>
-                    {group.map((attribute, attributeIndex) => {
-                      const {
-                        [attributeProps.datasets]: datasets,
-                        [attributeProps.datasetIds]: datasetIds,
-                        [attributeProps.name]: name,
-                        [attributeProps.title]: title,
-                      } = attribute || {};
-                      const getStatistics = (position) => {
-                        const [gIndex, aIndex] = position || [];
-                        if (typeof gIndex === 'undefined'
-                          || typeof aIndex === 'undefined') {
-                          return null;
-                        }
-                        return attributesStatistics[gIndex]?.[aIndex] || null;
-                      };
-                      return (
-                        <Fragment
-                          key={`${groupKey}-${attribute.attributeName}`}
+                  return ([
+                    ...acc,
+                    (attributeIndex > 0) && (
+                      <LogicOperator
+                        key={key('or')}
+                        type="or"
+                      />
+                    ),
+                    (
+                      <DropArea
+                        key={key('drop')}
+                        accept={dndTypes.attribute}
+                        group={groupIndex}
+                        index={attributeIndex}
+                        align={attributeIndex === 0 ? 'start' : 'middle'}
+                        onDrop={handleConditionDrop}
+                      />
+                    ),
+                    (
+                      <Attribute
+                        key={key('itself')}
+                        properties={attributeProps}
+                        types={attributeTypes}
+                        equalityTypes={equalityTypes}
+                        groupIndex={groupIndex}
+                        index={attributeIndex}
+                        data={attribute}
+                        dragType={dndTypes.attribute}
+                        onChange={handleChangeAttribute}
+                        onRemove={handleRemoveAttribute}
+                      >
+                        <AttributeDatasets
+                          name={title || name}
+                          selected={datasetIds || []}
+                          datasets={datasets || []}
                         >
-                          {(attributeIndex > 0) && (
-                            <LogicOperator type="or" />
-                          )}
-
-                          <DropArea
-                            accept={dndTypes.attribute}
-                            group={groupIndex}
-                            index={attributeIndex}
-                            align={attributeIndex === 0 ? 'start' : 'middle'}
-                            onDrop={handleConditionDrop}
-                          />
-
-                          <Attribute
-                            properties={attributeProps}
-                            types={attributeTypes}
-                            equalityTypes={equalityTypes}
-                            groupIndex={groupIndex}
-                            index={attributeIndex}
-                            data={attribute}
-                            dragType={dndTypes.attribute}
-                            onChange={handleChangeAttribute}
-                            onRemove={handleRemoveAttribute}
+                          <AttributeDatasetsSelect
+                            datasets={datasets || []}
+                            selected={datasetIds || []}
                           >
-                            <AttributeDatasets
-                              name={title || name}
-                              selected={datasetIds || []}
+                            <AttributeDatasetsForm
+                              groupIndex={groupIndex}
+                              attributeIndex={attributeIndex}
                               datasets={datasets || []}
-                            >
-                              <AttributeDatasetsSelect
-                                datasets={datasets || []}
-                                selected={datasetIds || []}
-                              >
-                                <AttributeDatasetsForm
-                                  groupIndex={groupIndex}
-                                  attributeIndex={attributeIndex}
-                                  datasets={datasets || []}
-                                  selected={datasetIds || []}
-                                  onSubmit={handleSubmitAttribute}
-                                />
-                              </AttributeDatasetsSelect>
-                            </AttributeDatasets>
-                            <AttributeStatistics
-                              data={getStatistics([groupIndex, attributeIndex])}
+                              selected={datasetIds || []}
+                              onSubmit={handleSubmitAttribute}
                             />
-                          </Attribute>
-
-                          {(attributeIndex === group.length - 1) && (
-                            <DropArea
-                              accept={dndTypes.attribute}
-                              group={groupIndex}
-                              index={attributeIndex + 1}
-                              align="end"
-                              onDrop={handleConditionDrop}
-                            />
-                          )}
-                        </Fragment>
-                      );
-                    })}
-                  </div>
-
-                  {(groupIndex === groups.length - 1) && (
-                    <DropArea
-                      accept={dndTypes.attribute}
-                      group={groupIndex + 1}
-                      index={-1}
-                      className={styles.dropAreaLast}
-                      align="middle"
-                      onDrop={handleConditionDrop}
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
+                          </AttributeDatasetsSelect>
+                        </AttributeDatasets>
+                        <AttributeStatistics
+                          data={getStatistics([groupIndex, attributeIndex])}
+                        />
+                      </Attribute>
+                    ),
+                    (attributeIndex === group.length - 1) && (
+                      <DropArea
+                        key={key('drop-end')}
+                        accept={dndTypes.attribute}
+                        group={groupIndex}
+                        index={attributeIndex + 1}
+                        align="end"
+                        onDrop={handleConditionDrop}
+                      />
+                    ),
+                  ]);
+                }, []),
+                (groupIndex === groups.length - 1) && (
+                  <DropArea
+                    key={groupKey('drop-end')}
+                    accept={dndTypes.attribute}
+                    group={groupIndex + 1}
+                    index={-1}
+                    className={styles.dropAreaLast}
+                    align="middle"
+                    onDrop={handleConditionDrop}
+                  />
+                ),
+              ]);
+            }, [])}
           </AttributesConstructor>
         </DndProvider>
 
