@@ -15,7 +15,12 @@
   }
 
   &Table {
-    @include table();
+    & td {
+      &[data-purpose='filter'] {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
 
     & tr {
       &[data-total='true'] {
@@ -41,13 +46,6 @@
             padding-left: 3rem;
           }
         }
-      }
-    }
-
-    & th,
-    & td {
-      &:not(:first-child) {
-        text-align: right;
       }
     }
 
