@@ -31,3 +31,20 @@
     }
   }
 }
+
+.dropArea {
+  &First.dropAreaFirst {
+    margin-top: -.25rem;
+  }
+
+  &Last.dropAreaLast {
+    margin-top: .25rem;
+  }
+}
+
+.conditionsGroup {
+  background-color: $color-gray-lighter;
+  border-radius: .5rem;
+  padding: .5rem 0;
+  position: relative;
+}

@@ -14,6 +14,7 @@
   &[data-is-dragging='true'] {
     cursor: move;
     cursor: grabbing;
+    z-index: 2;
   }
 
   &Aside {
@@ -59,7 +60,9 @@
       color: $color-primary-darkest;
       cursor: move;
       cursor: grab;
+      position: relative;
       vertical-align: -.25em;
+      z-index: 2;
 
       &:active {
         cursor: grabbing;

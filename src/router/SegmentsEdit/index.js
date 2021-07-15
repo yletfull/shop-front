@@ -24,8 +24,7 @@ import {
   fetchSegment,
   resetSegment,
   addSegmentAttribute,
-  insertSegmentAttribute,
-  moveSegmentAttribute,
+  moveCondition,
   removeSegmentAttribute,
   updateSegmentAttribute,
   fetchSegmentStatistics,
@@ -47,14 +46,13 @@ import {
   getSegmentStatistics,
 } from './selectors';
 import LogicOperator from './components/LogicOperator';
+import DropArea from './components/DropArea';
 import Attribute from './Attribute';
 import AttributeDatasets from './AttributeDatasets';
 import AttributeDatasetsForm from './AttributeDatasetsForm';
 import AttributeDatasetsSelect from './AttributeDatasetsSelect';
-import AttributeDropPlaceholder from './AttributeDropPlaceholder';
 import AttributeStatistics from './AttributeStatistics';
 import AttributesConstructor from './AttributesConstructor';
-import AttributesGroup from './AttributesGroup';
 import AttributesLabels from './AttributesLabels';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
@@ -153,31 +151,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
   };
-  const handleDropAttribute = (targetGroupIndex) => (sourceIndexes) => {
-    const [sourceGroupIndex, sourceAttributeIndex] = sourceIndexes?.from || [];
-    if (typeof sourceGroupIndex === 'undefined'
-      || typeof sourceAttributeIndex === 'undefined'
-      || sourceGroupIndex === targetGroupIndex) {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(moveSegmentAttribute(
-      [sourceGroupIndex, sourceAttributeIndex],
-      [targetGroupIndex, 0],
-    ));
-  };
-  const handleDropAttributeInPlaceholder = (position) => (sourceIndexes) => {
-    const [sourceGroupIndex, sourceAttributeIndex] = sourceIndexes?.from || [];
-    if (typeof sourceGroupIndex === 'undefined'
-      || typeof sourceAttributeIndex === 'undefined') {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(insertSegmentAttribute(
-      position,
-      [sourceGroupIndex, sourceAttributeIndex],
-    ));
-  };
   const handleRemoveAttribute = (position) => {
     const [groupIndex, attributeIndex] = position || [];
     if (typeof attributeIndex === 'undefined'
@@ -263,6 +236,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }, onSuccessCallback));
   };
 
+  const handleConditionDrop = (target, source) => {
+    dispatch(moveCondition({ source, target }));
+  };
+
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
@@ -273,12 +250,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
               isVisible={segmentAttributes.length > 0}
               labels={['Датасеты', 'Телефонов', 'E-mail']}
             />
-            <AttributeDropPlaceholder
-              accept={dndTypes.attribute}
-              position="top"
-              onDrop={handleDropAttributeInPlaceholder('top')}
-            />
-            {segmentAttributes.map((group, groupIndex) => {
+            {segmentAttributes.map((group, groupIndex, groups) => {
               const groupKey = generateKeyByIndex('group', groupIndex);
               return (
                 <Fragment key={groupKey}>
@@ -286,10 +258,16 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     <LogicOperator type="and" />
                   )}
 
-                  <AttributesGroup
+                  <DropArea
                     accept={dndTypes.attribute}
-                    onDrop={handleDropAttribute(groupIndex)}
-                  >
+                    group={groupIndex}
+                    index={-1}
+                    className={cx(groupIndex === 0 && styles.dropAreaFirst)}
+                    align="middle"
+                    onDrop={handleConditionDrop}
+                  />
+
+                  <div className={styles.conditionsGroup}>
                     {group.map((attribute, attributeIndex) => {
                       const {
                         [attributeProps.datasets]: datasets,
@@ -312,6 +290,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                           {(attributeIndex > 0) && (
                             <LogicOperator type="or" />
                           )}
+
+                          <DropArea
+                            accept={dndTypes.attribute}
+                            group={groupIndex}
+                            index={attributeIndex}
+                            align={attributeIndex === 0 ? 'start' : 'middle'}
+                            onDrop={handleConditionDrop}
+                          />
 
                           <Attribute
                             properties={attributeProps}
@@ -346,18 +332,34 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                               data={getStatistics([groupIndex, attributeIndex])}
                             />
                           </Attribute>
+
+                          {(attributeIndex === group.length - 1) && (
+                            <DropArea
+                              accept={dndTypes.attribute}
+                              group={groupIndex}
+                              index={attributeIndex + 1}
+                              align="end"
+                              onDrop={handleConditionDrop}
+                            />
+                          )}
                         </Fragment>
                       );
                     })}
-                  </AttributesGroup>
+                  </div>
+
+                  {(groupIndex === groups.length - 1) && (
+                    <DropArea
+                      accept={dndTypes.attribute}
+                      group={groupIndex + 1}
+                      index={-1}
+                      className={styles.dropAreaLast}
+                      align="middle"
+                      onDrop={handleConditionDrop}
+                    />
+                  )}
                 </Fragment>
               );
             })}
-            <AttributeDropPlaceholder
-              accept={dndTypes.attribute}
-              position="bottom"
-              onDrop={handleDropAttributeInPlaceholder('bottom')}
-            />
           </AttributesConstructor>
         </DndProvider>
 
