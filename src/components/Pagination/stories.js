@@ -4,9 +4,6 @@ import Pagination from './index';
 export default {
   title: 'Components/Pagination',
   component: Pagination,
-  argTypes: {
-    children: { control: { type: 'text' } },
-  },
 };
 
 export const Playground = (args) => (
@@ -14,7 +11,7 @@ export const Playground = (args) => (
 );
 
 Playground.args = {
-  pagesTotal: 3,
+  pagesTotal: 10,
   currentPage: 1,
   count: 10,
   countOptions: [10, 20],
