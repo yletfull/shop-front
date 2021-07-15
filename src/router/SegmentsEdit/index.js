@@ -28,7 +28,7 @@ import {
   removeSegmentAttribute,
   updateSegmentAttribute,
   fetchSegmentStatistics,
-  fetchAttributeStatistics,
+  // fetchAttributeStatistics,
   saveSegment,
 } from './actions';
 import {
@@ -134,7 +134,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
     setIsSegmentChanged(true);
     dispatch(updateSegmentAttribute(position, values));
-    dispatch(fetchAttributeStatistics(position));
+    // dispatch(fetchAttributeStatistics(position));
   };
   const handleSelectDownloadFile = (platform) => {
     setDownloadedSegment({ type: platform });
@@ -155,7 +155,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleSubmitAttribute = (position, values) => {
     dispatch(updateSegmentAttribute(position, values));
-    dispatch(fetchAttributeStatistics(position));
+    // dispatch(fetchAttributeStatistics(position));
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
@@ -277,7 +277,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     }
                     return attributesStatistics[gIndex]?.[aIndex] || null;
                   };
-                  const key = (k) => `attribute-${attribute.id}-${k}`;
+                  const key = (k) => `attribute-${attribute.fakeId}-${k}`;
 
                   return ([
                     ...acc,
