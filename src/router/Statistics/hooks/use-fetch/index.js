@@ -8,7 +8,7 @@ const UseFetch = function UseFetch({
   dateStart,
   dateEnd,
 }) {
-  const [list, setList] = useState({});
+  const [list, setList] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
 
