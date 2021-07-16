@@ -20,7 +20,7 @@ import {
   getIsFetchingAudienceCompare,
   getIsFetchingAudienceDetails,
   getFormattedAudienceCompare,
-  getAudienceDetails,
+  getFormattedAudienceDetails,
 } from './selectors';
 import CommonInfo from './CommonInfo';
 import CommonInfoCard from './CommonInfoCard';
@@ -45,7 +45,7 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const isFetchingAudienceCompare = useSelector(getIsFetchingAudienceCompare);
   const isFetchingAudienceDetails = useSelector(getIsFetchingAudienceDetails);
   const audienceCompare = useSelector(getFormattedAudienceCompare);
-  const audienceDetails = useSelector(getAudienceDetails);
+  const audienceDetails = useSelector(getFormattedAudienceDetails);
 
   const [compareFilter, setCompareFilter] = useState({
     [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
@@ -94,11 +94,11 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
           <CommonInfo data={audienceDetails}>
             <CommonInfoCard
               label="Телефоны"
-              count={audienceDetails.phones}
+              count={audienceDetails.phoneEntities || 0}
             />
             <CommonInfoCard
               label="E-mail"
-              count={audienceDetails.emails}
+              count={audienceDetails.emailEntities || 0}
             />
           </CommonInfo>
 
