@@ -89,7 +89,6 @@ const Pagination = function Pagination({
               <button
                 type="button"
                 key={pageNumber}
-                appearance="control"
                 className={cx([
                   styles.number,
                   { [styles.number_disabled]: isDisabled },
