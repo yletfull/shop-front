@@ -43,17 +43,13 @@ const Pagination = function Pagination({
   }
 
   const handleNavClick = (e) => {
-    let { value } = e.target.dataset;
+    const { value } = e.target.dataset;
 
     if (!value) {
       return;
     }
 
-    value = Number(value);
-
-    if (value >= 1 && value <= pagesTotal) {
-      onPageSelect(value);
-    }
+    onPageSelect(Math.max(0, Math.min(pagesTotal, Number(value))));
   };
 
   const handleCountSelect = (value) => {
