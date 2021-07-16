@@ -52,8 +52,8 @@ const Pagination = function Pagination({
     onPageSelect(Math.max(0, Math.min(pagesTotal, Number(value))));
   };
 
-  const handleCountSelect = (value) => {
-    onCountSelect(value);
+  const handleCountSelect = (e) => {
+    onCountSelect(e.target.value);
   };
 
   const pageNumbers = generateNumbers(currentPage, pagesTotal);
