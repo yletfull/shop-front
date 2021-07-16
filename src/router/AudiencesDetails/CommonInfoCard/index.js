@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { formatNumber } from '@/utils/format';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -18,7 +19,7 @@ const CommonInfoCard = function CommonInfoCard({
   return (
     <div className={styles.commonInfoCard}>
       <span className={styles.commonInfoCardCount}>
-        {count}
+        {formatNumber(count)}
       </span>
       <span className={styles.commonInfoCardLabel}>
         {label}

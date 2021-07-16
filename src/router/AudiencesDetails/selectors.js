@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import {
+  entityTypes,
   mapEntityTypes,
   namespace as NS,
 } from './constants';
@@ -53,4 +54,28 @@ export const getFormattedAudienceCompare = createSelector(
       })
       .reduce((acc, cur) => ([...acc, ...cur]), []))
     .reduce((acc, cur) => ([...acc, ...cur]), []),
+);
+
+export const getFormattedAudienceDetails = createSelector(
+  [getAudienceDetails],
+  (details) => {
+    const { entityTypeTotals } = details || {};
+    if (!entityTypeTotals || !Array.isArray(entityTypeTotals)) {
+      return details;
+    }
+    const mapEntityTypeKey = {
+      [entityTypes.phones]: 'phones',
+      [entityTypes.emails]: 'emails',
+    };
+    const { emails, phones } = entityTypeTotals
+      .reduce((acc, { entityType, total }) => ({
+        ...acc,
+        [mapEntityTypeKey[entityType]]: total,
+      }), {});
+    return ({
+      emailEntities: emails || 0,
+      phoneEntities: phones || 0,
+      ...details,
+    });
+  },
 );
