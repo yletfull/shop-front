@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconArrowChart from '@/icons/ArrowChart';
-import IconRocket from '@/icons/Rocket';
-import IconThumbsUp from '@/icons/ThumbsUp';
-import IconThumbsDown from '@/icons/ThumbsDown';
-import IconRetweetAlt from '@/icons/RetweetAlt';
-import IconCaretDown from '@/icons/CaretDown';
+import { formatNumber } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
+import NumberGrowth from '@/components/NumberGrowth';
+import IconCaretUp from '@/icons/CaretUp';
+import IconCaretDown from '@/icons/CaretDown';
 import styles from './styles.module.scss';
 
 const shape = {
@@ -15,7 +13,6 @@ const shape = {
 };
 
 const propTypes = {
-  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   indexDiff: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -29,7 +26,6 @@ const propTypes = {
 };
 
 const StatisticsTableRow = function StatisticsTableRow({
-  id,
   index,
   indexDiff,
   name,
@@ -41,125 +37,113 @@ const StatisticsTableRow = function StatisticsTableRow({
   repostsReactions,
   totalReactions,
 }) {
-  console.log({
-    id,
-    index,
-    indexDiff,
-    name,
-    impressions,
-    clicks,
-    ctr,
-    positiveReactions,
-    negativeReactions,
-    repostsReactions,
-    totalReactions,
-  });
   return (
-    <TableRow
-      type="header"
-    >
-      <TableCell width="1" />
+    <TableRow>
+      <TableCell
+        className={styles.index}
+      >
+        {`${index}.`}
+      </TableCell>
       <TableCell>
-        Название
+        {name}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconRocket />
+        <NumberGrowth
+          value={indexDiff}
+          increaseSign={<IconCaretUp />}
+          decreaseSign={<IconCaretDown />}
+          formatter={formatNumber}
+        />
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <button
-          type="button"
-          className={styles.screenings}
-        >
-          Показы
-          <IconCaretDown
-            className={styles.screenings_icon}
-          />
-        </button>
+        {formatNumber(impressions.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {impressions.diff}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        Клики
+        {formatNumber(clicks.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {clicks.diff}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        CTR
+        {ctr.count}
       </TableCell>
       <TableCell
         nowrap
         width="1"
         className={styles.border}
       >
-        <IconArrowChart className={styles.chart} />
+        {ctr.diff}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconThumbsUp />
+        {formatNumber(positiveReactions.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {positiveReactions.diff}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconThumbsDown />
+        {formatNumber(negativeReactions.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {negativeReactions.diff}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconRetweetAlt />
+        {formatNumber(repostsReactions.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {repostsReactions.diff}
       </TableCell>
       <TableCell
+        align="right"
         nowrap
         width="1"
       >
-        Всего
+        {formatNumber(totalReactions.count)}
       </TableCell>
       <TableCell
+        align="right"
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        {totalReactions.diff}
       </TableCell>
     </TableRow>
   );

@@ -2,19 +2,8 @@
 
 $indent-horizontal: 2em;
 
-.screenings {
-  @include button-reset();
-
-  font: inherit;
-
-  &_icon {
-    margin-left: .5em;
-  }
-}
-
-.chart {
+.index {
   color: $color-gray-darker;
-  font-size: .875em;
 }
 
 .border {
