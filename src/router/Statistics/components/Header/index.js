@@ -41,7 +41,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -53,7 +53,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -65,7 +65,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -77,7 +77,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -89,7 +89,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -101,7 +101,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -113,7 +113,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <IconArrowChart />
+        <IconArrowChart className={styles.chart} />
       </TableCell>
     </TableRow>
   );

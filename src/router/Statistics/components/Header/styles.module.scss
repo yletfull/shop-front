@@ -3,7 +3,14 @@
 .screenings {
   @include button-reset();
 
+  font: inherit;
+
   &_icon {
     margin-left: .5em;
   }
+}
+
+.chart {
+  color: $color-gray-darker;
+  font-size: .875em;
 }
