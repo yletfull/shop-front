@@ -42,11 +42,17 @@ const Pagination = function Pagination({
     return null;
   }
 
-  const createPageSelectHandler = (number) => (e) => {
-    e.preventDefault();
+  const handleNavClick = (e) => {
+    let { value } = e.target.dataset;
 
-    if (number >= 1 && number <= pagesTotal) {
-      onPageSelect(number);
+    if (!value) {
+      return;
+    }
+
+    value = Number(value);
+
+    if (value >= 1 && value <= pagesTotal) {
+      onPageSelect(value);
     }
   };
 
@@ -68,7 +74,11 @@ const Pagination = function Pagination({
         styles.wrapper,
       ])}
     >
-      <nav className={styles.navigation}>
+      <nav
+        role="presentation"
+        className={styles.navigation}
+        onClick={handleNavClick}
+      >
         <button
           type="button"
           className={cx([
@@ -76,7 +86,7 @@ const Pagination = function Pagination({
             { [styles.disabled]: currentPage <= 1 },
           ])}
           disabled={currentPage <= 1}
-          onClick={createPageSelectHandler(currentPage - 1)}
+          data-value={currentPage - 1}
         >
           <IconChevronLeft />
         </button>
@@ -89,13 +99,12 @@ const Pagination = function Pagination({
               <button
                 type="button"
                 key={pageNumber}
-                appearance="control"
                 className={cx([
                   styles.number,
                   { [styles.number_disabled]: isDisabled },
                 ])}
                 disabled={isDisabled}
-                onClick={createPageSelectHandler(pageNumber)}
+                data-value={pageNumber}
               >
                 {pageNumber}
               </button>
@@ -110,7 +119,7 @@ const Pagination = function Pagination({
             { [styles.arrow_disabled]: currentPage >= pagesTotal },
           ])}
           disabled={currentPage >= pagesTotal}
-          onClick={createPageSelectHandler(currentPage + 1)}
+          data-value={currentPage + 1}
         >
           <IconChevronRight />
         </button>

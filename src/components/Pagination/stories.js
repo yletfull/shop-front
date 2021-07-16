@@ -15,6 +15,4 @@ Playground.args = {
   currentPage: 1,
   count: 10,
   countOptions: [10, 20],
-  onPageSelect: () => {},
-  onCountSelect: () => {},
 };
