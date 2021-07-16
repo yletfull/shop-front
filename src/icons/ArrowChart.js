@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const ArrowChart = function ArrowChart(props) {
+const ArrowChart = function IconArrowChart(props) {
   return (
     <SVGIconContainer
       {...props}

@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from './SVGIconContainer';
 
-const CaretUp = function CaretUpIcon(props) {
+const CaretUp = function IconCaretUp(props) {
   return (
     <SVGIconContainer
       {...props}
