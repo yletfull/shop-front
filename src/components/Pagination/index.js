@@ -53,7 +53,7 @@ const Pagination = function Pagination({
   };
 
   const handleCountSelect = (e) => {
-    onCountSelect(e.target.value);
+    onCountSelect(Number(e.target.value));
   };
 
   const pageNumbers = generateNumbers(currentPage, pagesTotal);
