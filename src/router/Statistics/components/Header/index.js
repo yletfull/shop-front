@@ -64,6 +64,7 @@ const StatisticsHeader = function StatisticsTaskScreen() {
       <TableCell
         nowrap
         width="1"
+        className={styles.border}
       >
         <IconArrowChart className={styles.chart} />
       </TableCell>
