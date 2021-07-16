@@ -1,0 +1,9 @@
+@import '@/theme/include.scss';
+
+.screenings {
+  @include button-reset();
+
+  &_icon {
+    margin-left: .5em;
+  }
+}
