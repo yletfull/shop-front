@@ -3,46 +3,50 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import styles from './styles.module.scss';
 
-const cssClass = 'u-spinner';
-
 const propTypes = {
+  as: PropTypes.string,
+  layout: PropTypes.oneOf([
+    'inline',
+    'block',
+    'overlay',
+  ]),
   className: PropTypes.string,
-  inline: PropTypes.bool,
+  spinnerClassName: PropTypes.string,
 };
-
 const defaultProps = {
-  inline: false,
+  as: '',
+  layout: 'inline',
   className: '',
+  spinnerClassName: '',
 };
 
-const Input = function Input(props) {
-  const {
-    inline,
-    className,
-    ...attrs
-  } = props;
+const Spinner = function Spinner({
+  as,
+  layout,
+  className,
+  spinnerClassName,
+  ...props
+}) {
+  let Tag = as || 'div';
+
+  if (!as && (layout === 'inline')) {
+    Tag = 'span';
+  }
 
   return (
-    <div
+    <Tag
       className={cx(
-        styles[cssClass],
-        inline && styles[`${[cssClass]}_inline`],
         className,
+        styles[layout],
       )}
-      {...attrs}
+      {...props}
     >
-      <div
-        className={cx(
-          styles[`${cssClass}__circle`],
-          inline && styles[`${cssClass}__circle_inline`]
-        )}
-      />
-    </div>
-
+      <span className={cx(spinnerClassName, styles.spinner)} />
+    </Tag>
   );
 };
 
-Input.propTypes = propTypes;
-Input.defaultProps = defaultProps;
+Spinner.propTypes = propTypes;
+Spinner.defaultProps = defaultProps;
 
-export default Input;
+export default Spinner;
