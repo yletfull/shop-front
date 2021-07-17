@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatNumber } from '@/utils/format';
+import { formatNumber, formatPercent } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
 import IconCaretUp from '@/icons/CaretUp';
@@ -68,7 +68,12 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {impressions.diff}
+        <NumberGrowth
+          value={impressions.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         nowrap
@@ -80,20 +85,30 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {clicks.diff}
+        <NumberGrowth
+          value={clicks.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        {ctr.count}
+        {formatNumber(ctr.count)}
       </TableCell>
       <TableCell
         nowrap
         width="1"
         className={styles.border}
       >
-        {ctr.diff}
+        <NumberGrowth
+          value={ctr.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         nowrap
@@ -105,7 +120,12 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {positiveReactions.diff}
+        <NumberGrowth
+          value={positiveReactions.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         nowrap
@@ -117,7 +137,12 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {negativeReactions.diff}
+        <NumberGrowth
+          value={negativeReactions.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         nowrap
@@ -129,7 +154,12 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {repostsReactions.diff}
+        <NumberGrowth
+          value={repostsReactions.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
       <TableCell
         align="right"
@@ -143,7 +173,12 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {totalReactions.diff}
+        <NumberGrowth
+          value={totalReactions.diff}
+          increaseSign="+"
+          decreaseSign="-"
+          formatter={formatPercent}
+        />
       </TableCell>
     </TableRow>
   );
