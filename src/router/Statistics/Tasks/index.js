@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { formatDate } from '@/utils/format';
 import { setHeader } from '@/store/ui/actions';
 import dayjs from '@/utils/day';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
+import { useService, useQuery } from '@/hooks';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
 import TableRow from '../components/TableRow';
-import useFetch from '../hooks/use-fetch';
+import service from '../service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const countOptions = [10, 20, 30];
 
 const propTypes = {
   defaultTitle: PropTypes.string,
@@ -23,30 +26,46 @@ const defaultProps = {
 
 const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useQuery();
 
-  const [pagination, setPagination] = useState({});
-
-  const handlePageSelect = (value) => setPagination({
-    ...pagination,
-    currentPage: value,
+  const [params, setParams] = useState({
+    dateStart: query.get('dateStart') || formatDate(dayjs().subtract(6, 'month'), DATE_FORMAT),
+    dateEnd: query.get('dateEnd') || formatDate(dayjs(), DATE_FORMAT),
+    currentPage: query.get('currentPage') || 1,
+    perPage: query.get('perPage') || countOptions[0],
   });
 
-  const handleCountSelect = (value) => setPagination({
-    ...pagination,
-    perPage: value,
+  const { fetch, data: response, isFetching } = useService({
+    initialData: {},
+    service: service.fetchTasks,
   });
 
-  const { data, isFetching, error } = useFetch({
-    entity: 'tasks',
-    preventRequest: false,
-    dateStart: formatDate(dayjs().subtract(6, 'month'), DATE_FORMAT),
-    dateEnd: formatDate(dayjs(), DATE_FORMAT),
-  });
+  const handlePageSelect = (value) => () => {
+    setParams({
+      ...params,
+      currentPage: value,
+    });
+    query.set('currentPage', value);
+    history.push({ search: query.toString() });
+  };
 
-  const list = data.data || [];
-  // const { pagination } = data.meta || {};
+  const handleCountSelect = (value) => {
+    setParams({
+      ...params,
+      perPage: value,
+    });
+    query.set('perPage', value);
+    history.push({ search: query.toString() });
+  };
 
-  console.log({ error });
+  useEffect(() => {
+    fetch(params);
+  }, [fetch, params]);
+
+  const { data, meta } = response?.data || {};
+
+  const list = data || [];
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
@@ -76,12 +95,12 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
           />
         ))}
       </Table>
-      {pagination && (
+      {meta?.pagination && (
         <Pagination
-          pagesTotal={pagination.totalPages}
-          currentPage={pagination.currentPage}
-          count={pagination.perPage}
-          countOptions={[10, 20, 30]}
+          pagesTotal={meta.pagination.totalPages}
+          currentPage={meta.pagination.currentPage}
+          count={meta.pagination.perPage}
+          countOptions={countOptions}
           onPageSelect={handlePageSelect}
           onCountSelect={handleCountSelect}
         />
