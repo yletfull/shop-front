@@ -1,0 +1,7 @@
+@import '@/theme/include.scss';
+
+.inputs {
+  & > * {
+    margin-right: .5em;
+  }
+}
