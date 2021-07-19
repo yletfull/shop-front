@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { namespace as NS } from './constants';
@@ -9,6 +9,7 @@ import {
   fetchEntities,
 } from './actions';
 import reducer from './reducer';
+import EntitySelect from './EntitySelect';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -21,8 +22,10 @@ const defaultProps = {
 
 const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
 
-  const { entityType } = useParams();
+  const { entityType, id: entityId } = useParams();
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -38,9 +41,25 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
     }
   }, [dispatch, entityType]);
 
+  const handleChangeSelectedEntity = (value) => {
+    const { pathname } = location || {};
+    if (!pathname || typeof value === 'undefined' || value === null) {
+      return;
+    }
+    const lastSlashIndex = pathname.lastIndexOf('/');
+    if (lastSlashIndex === (-1)) {
+      return;
+    }
+    const path = pathname.slice(0, lastSlashIndex);
+    history.push(`${path}/${value}`);
+  };
+
   return (
     <div className={styles.wrapper}>
-      StatisticsDetails
+      <EntitySelect
+        selected={String(entityId)}
+        onChange={handleChangeSelectedEntity}
+      />
     </div>
   );
 };
