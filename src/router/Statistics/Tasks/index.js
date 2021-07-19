@@ -14,7 +14,7 @@ import TableRow from '../components/TableRow';
 import service from '../service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
-const countOptions = [10, 20, 30];
+const countOptions = [1, 2, 30];
 
 const propTypes = {
   defaultTitle: PropTypes.string,
@@ -41,7 +41,7 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
     service: service.fetchTasks,
   });
 
-  const handlePageSelect = (value) => () => {
+  const handlePageSelect = (value) => {
     setParams({
       ...params,
       currentPage: value,
@@ -53,6 +53,7 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
   const handleCountSelect = (value) => {
     setParams({
       ...params,
+      currentPage: 1,
       perPage: value,
     });
     query.set('perPage', value);
