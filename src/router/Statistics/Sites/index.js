@@ -99,10 +99,6 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
                 impressions={item.impressions}
                 clicks={item.clicks}
                 ctr={item.ctr}
-                positiveReactions={item.positiveReactions}
-                negativeReactions={item.negativeReactions}
-                repostsReactions={item.repostsReactions}
-                totalReactions={item.totalReactions}
               />
             ))}
           </Table>,
