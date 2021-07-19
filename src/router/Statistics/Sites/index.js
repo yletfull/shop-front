@@ -87,6 +87,7 @@ const StatisticsSites = function StatisticsSitesScreen({
                 <TableRow
                   key={item.id}
                   id={item.id}
+                  parentId={item.parentId}
                   index={item.index}
                   indexDiff={item.indexDiff}
                   name={item.name}
