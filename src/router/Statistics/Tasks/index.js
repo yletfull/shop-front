@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Table from '@/components/Table';
@@ -7,6 +7,7 @@ import { useService, useQuery } from '@/hooks';
 import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
+import SearchRow from '../components/SearchRow';
 import TableRow from '../components/TableRow';
 import service from '../service';
 import styles from '../styles.module.scss';
@@ -81,7 +82,12 @@ const StatisticsTasks = function StatisticsTaskScreen({
           : ([
             <Table
               key="table"
-              header={<Header />}
+              header={(
+                <Fragment>
+                  <SearchRow />
+                  <Header />
+                </Fragment>
+              )}
             >
               {list.map((item) => (
                 <TableRow
