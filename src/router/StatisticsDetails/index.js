@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import { namespace as NS } from './constants';
+import reducer from './reducer';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -14,6 +17,10 @@ const defaultProps = {
 
 const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    injectReducer(NS, reducer);
+  }, []);
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
