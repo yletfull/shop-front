@@ -7,10 +7,17 @@ import { setHeader } from '@/store/ui/actions';
 import { namespace as NS } from './constants';
 import {
   fetchEntities,
+  fetchEntityDynamics,
 } from './actions';
 import reducer from './reducer';
+import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import styles from './styles.module.scss';
+
+const params = {
+  dateStart: '2020-06-18',
+  dateEnd: '2021-07-19',
+};
 
 const propTypes = {
   defaultTitle: PropTypes.string,
@@ -41,6 +48,12 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
     }
   }, [dispatch, entityType]);
 
+  useEffect(() => {
+    if (entityType && entityId && params) {
+      dispatch(fetchEntityDynamics(entityType, entityId, params));
+    }
+  }, [dispatch, entityType, entityId]);
+
   const handleChangeSelectedEntity = (value) => {
     const { pathname } = location || {};
     if (!pathname || typeof value === 'undefined' || value === null) {
@@ -60,6 +73,12 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
         selected={String(entityId)}
         onChange={handleChangeSelectedEntity}
       />
+
+      {entityType && entityId && (
+        <div className={styles.statisticsDetailsGraphs}>
+          <EntityDynamics />
+        </div>
+      )}
     </div>
   );
 };

@@ -12,6 +12,24 @@ const fetchEntities = function serviceFetchEntities(entityType) {
     .then((response) => response.data.data);
 };
 
+const fetchEntityDynamics = function serviceFetchEntityDynamics(
+  entityType,
+  entityId,
+  params
+) {
+  if (!entityType || !entityId) {
+    return;
+  }
+
+  const entity = encodeURIComponent(entityType);
+  const id = encodeURIComponent(entityId);
+
+  return api
+    .get(`${baseUrl}/${entity}/${id}/dynamics`, { params })
+    .then((response) => response.data);
+};
+
 export default {
   fetchEntities,
+  fetchEntityDynamics,
 };
