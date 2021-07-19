@@ -1,11 +1,5 @@
 import { lazy } from 'react';
 
-const Tasks = lazy(() => import(
-  /* webpackChunkName: 'statistics-tasks' */
-  /* webpackMode: 'lazy' */
-  './Tasks'
-));
-
 export const paths = {
   tasks: '/statistics/tasks',
   campaigns: '/statistics/campaigns',
@@ -24,8 +18,48 @@ export const titles = {
 
 export default [
   {
-    Component: Tasks,
+    Component: lazy(() => import(
+      /* webpackChunkName: 'statistics-tasks' */
+      /* webpackMode: 'lazy' */
+      './Tasks'
+    )),
     path: paths.tasks,
     title: titles.tasks,
+  },
+  {
+    Component: lazy(() => import(
+      /* webpackChunkName: 'statistics-campaigns' */
+      /* webpackMode: 'lazy' */
+      './Campaigns'
+    )),
+    path: paths.campaigns,
+    title: titles.campaigns,
+  },
+  {
+    Component: lazy(() => import(
+      /* webpackChunkName: 'statistics-platforms' */
+      /* webpackMode: 'lazy' */
+      './Platforms'
+    )),
+    path: paths.platforms,
+    title: titles.platforms,
+  },
+  {
+    Component: lazy(() => import(
+      /* webpackChunkName: 'statistics-sites' */
+      /* webpackMode: 'lazy' */
+      './Sites'
+    )),
+    path: paths.sites,
+    title: titles.sites,
+  },
+  {
+    Component: lazy(() => import(
+      /* webpackChunkName: 'statistics-spheres' */
+      /* webpackMode: 'lazy' */
+      './Spheres'
+    )),
+    path: paths.spheres,
+    title: titles.spheres,
   },
 ];
