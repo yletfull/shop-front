@@ -7,7 +7,15 @@ const generateFetchList = (entity) => (params, { cancelToken }) => api
   .then((data) => data);
 
 const fetchTasks = generateFetchList('tasks');
+const fetchСampaigns = generateFetchList('campaigns');
+const fetchPlatforms = generateFetchList('platforms');
+const fetchSites = generateFetchList('sites');
+const fetchSpheres = generateFetchList('spheres');
 
 export default {
   fetchTasks,
+  fetchСampaigns,
+  fetchPlatforms,
+  fetchSites,
+  fetchSpheres,
 };
