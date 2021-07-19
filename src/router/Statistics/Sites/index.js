@@ -9,7 +9,9 @@ import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
 import TableRow from '../components/TableRow';
+import DateInputs from '../components/DateInputs';
 import service from '../service';
+import styles from '../styles.module.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const countOptions = [10, 20, 30];
@@ -49,6 +51,17 @@ const StatisticsTasks = function StatisticsTaskScreen() {
     history.push({ search: query.toString() });
   };
 
+  const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
+    setParams({
+      ...params,
+      dateStart,
+      dateEnd,
+    });
+    query.set('dateStart', dateStart);
+    query.set('dateEnd', dateEnd);
+    history.push({ search: query.toString() });
+  };
+
   useEffect(() => {
     fetch(params);
   }, [fetch, params]);
@@ -58,47 +71,55 @@ const StatisticsTasks = function StatisticsTaskScreen() {
   const list = data || [];
 
   return (
-    <WidthSpinner
-      isFetching={isFetching}
-    >
-      {error
-        ? (
-          <ErrorMessage
-            key="error-message"
-            error={error}
-          />
-        )
-        : ([
-          <Table
-            key="table"
-            header={<Header />}
-          >
-            {list.map((item) => (
-              <TableRow
-                key={item.id}
-                id={item.id}
-                index={item.index}
-                indexDiff={item.indexDiff}
-                name={item.name}
-                impressions={item.impressions}
-                clicks={item.clicks}
-                ctr={item.ctr}
-              />
-            ))}
-          </Table>,
-          meta?.pagination && (
-            <Pagination
-              key="pagination"
-              pagesTotal={meta.pagination.totalPages}
-              currentPage={meta.pagination.currentPage}
-              count={meta.pagination.perPage}
-              countOptions={countOptions}
-              onPageSelect={handlePageSelect}
-              onCountSelect={handleCountSelect}
+    <div className={styles.page}>
+      <WidthSpinner
+        isFetching={isFetching}
+      >
+        <DateInputs
+          className={styles.dateInputs}
+          dateStart={params.dateStart}
+          dateEnd={params.dateEnd}
+          onSubmit={handleDateInputsSubmit}
+        />
+        {error
+          ? (
+            <ErrorMessage
+              key="error-message"
+              error={error}
             />
-          ),
-        ])}
-    </WidthSpinner>
+          )
+          : ([
+            <Table
+              key="table"
+              header={<Header />}
+            >
+              {list.map((item) => (
+                <TableRow
+                  key={item.id}
+                  id={item.id}
+                  index={item.index}
+                  indexDiff={item.indexDiff}
+                  name={item.name}
+                  impressions={item.impressions}
+                  clicks={item.clicks}
+                  ctr={item.ctr}
+                />
+              ))}
+            </Table>,
+            meta?.pagination && (
+              <Pagination
+                key="pagination"
+                pagesTotal={meta.pagination.totalPages}
+                currentPage={meta.pagination.currentPage}
+                count={meta.pagination.perPage}
+                countOptions={countOptions}
+                onPageSelect={handlePageSelect}
+                onCountSelect={handleCountSelect}
+              />
+            ),
+          ])}
+      </WidthSpinner>
+    </div>
   );
 };
 
