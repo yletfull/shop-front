@@ -19,12 +19,11 @@ const RouterView = function RouterView() {
                 <Helmet defaultTitle="Статистика">
                   {title && (
                     <title>
-                      {title}
+                      {`Статистика. ${title}`}
                     </title>
                   )}
                 </Helmet>
                 <Component
-                  defaultTitle={title}
                   {...props}
                 />
               </Fragment>
