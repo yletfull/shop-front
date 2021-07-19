@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { formatDate } from '@/utils/format';
-import { setHeader } from '@/store/ui/actions';
 import dayjs from '@/utils/day';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
@@ -17,16 +14,7 @@ import service from '../service';
 const DATE_FORMAT = 'YYYY-MM-DD';
 const countOptions = [10, 20, 30];
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
-  const dispatch = useDispatch();
+const StatisticsTasks = function StatisticsTaskScreen() {
   const history = useHistory();
   const query = useQuery();
 
@@ -68,10 +56,6 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
   const { data, meta } = response?.data || {};
 
   const list = data || [];
-
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
 
   return (
     <WidthSpinner
@@ -117,8 +101,5 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
     </WidthSpinner>
   );
 };
-
-StatisticsTasks.propTypes = propTypes;
-StatisticsTasks.defaultProps = defaultProps;
 
 export default StatisticsTasks;
