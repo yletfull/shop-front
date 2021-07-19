@@ -11,6 +11,7 @@ import { useService, useQuery } from '@/hooks';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
 import TableRow from '../components/TableRow';
+import ErrorMessage from '../components/ErrorMessage';
 import service from '../service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -36,7 +37,7 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
     perPage: query.get('perPage') || countOptions[0],
   });
 
-  const { fetch, data: response, isFetching } = useService({
+  const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
     service: service.fetchSpheres,
   });
@@ -76,36 +77,47 @@ const StatisticsTasks = function StatisticsTaskScreen({ defaultTitle }) {
     <WidthSpinner
       isFetching={isFetching}
     >
-      <Table
-        header={<Header />}
-      >
-        {list.map((item) => (
-          <TableRow
-            key={item.id}
-            id={item.id}
-            index={item.index}
-            indexDiff={item.indexDiff}
-            name={item.name}
-            impressions={item.impressions}
-            clicks={item.clicks}
-            ctr={item.ctr}
-            positiveReactions={item.positiveReactions}
-            negativeReactions={item.negativeReactions}
-            repostsReactions={item.repostsReactions}
-            totalReactions={item.totalReactions}
+      {error
+        ? (
+          <ErrorMessage
+            key="error-message"
+            error={error}
           />
-        ))}
-      </Table>
-      {meta?.pagination && (
-        <Pagination
-          pagesTotal={meta.pagination.totalPages}
-          currentPage={meta.pagination.currentPage}
-          count={meta.pagination.perPage}
-          countOptions={countOptions}
-          onPageSelect={handlePageSelect}
-          onCountSelect={handleCountSelect}
-        />
-      )}
+        )
+        : ([
+          <Table
+            key="table"
+            header={<Header />}
+          >
+            {list.map((item) => (
+              <TableRow
+                key={item.id}
+                id={item.id}
+                index={item.index}
+                indexDiff={item.indexDiff}
+                name={item.name}
+                impressions={item.impressions}
+                clicks={item.clicks}
+                ctr={item.ctr}
+                positiveReactions={item.positiveReactions}
+                negativeReactions={item.negativeReactions}
+                repostsReactions={item.repostsReactions}
+                totalReactions={item.totalReactions}
+              />
+            ))}
+          </Table>,
+          meta?.pagination && (
+            <Pagination
+              key="pagination"
+              pagesTotal={meta.pagination.totalPages}
+              currentPage={meta.pagination.currentPage}
+              count={meta.pagination.perPage}
+              countOptions={countOptions}
+              onPageSelect={handlePageSelect}
+              onCountSelect={handleCountSelect}
+            />
+          ),
+        ])}
     </WidthSpinner>
   );
 };
