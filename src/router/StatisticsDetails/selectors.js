@@ -14,7 +14,13 @@ export const getEntityDynamicsData = createSelector(
   [getDynamics],
   (dynamics) => {
     const { data } = dynamics || {};
-    return data || {};
+    if (!data || Object.keys(data).length === 0) {
+      return [];
+    }
+    return Object.keys(data).map((key) => ({
+      ...data[key],
+      date: data[key]?.date || key,
+    }));
   },
 );
 export const getEntityDynamicsMeta = createSelector(
