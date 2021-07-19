@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { formatNumber, formatPercent } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
@@ -15,28 +16,42 @@ const shape = {
 const propTypes = {
   index: PropTypes.number.isRequired,
   indexDiff: PropTypes.number.isRequired,
+  parentId: PropTypes.string,
   name: PropTypes.string.isRequired,
   impressions: PropTypes.shape(shape).isRequired,
   clicks: PropTypes.shape(shape).isRequired,
   ctr: PropTypes.shape(shape).isRequired,
 };
 
+const defaultProps = {
+  parentId: null,
+};
+
 const StatisticsTableRow = function StatisticsTableRow({
   index,
   indexDiff,
+  parentId,
   name,
   impressions,
   clicks,
   ctr,
 }) {
+  const isNested = Boolean(parentId);
+
   return (
-    <TableRow>
+    <TableRow
+      className={cx({
+        [styles.nested]: isNested,
+      })}
+    >
       <TableCell
         className={styles.index}
       >
         {`${index}.`}
       </TableCell>
-      <TableCell>
+      <TableCell
+        className={styles.name}
+      >
         {name}
       </TableCell>
       <TableCell
@@ -106,5 +121,6 @@ const StatisticsTableRow = function StatisticsTableRow({
 };
 
 StatisticsTableRow.propTypes = propTypes;
+StatisticsTableRow.defaultProps = defaultProps;
 
 export default StatisticsTableRow;
