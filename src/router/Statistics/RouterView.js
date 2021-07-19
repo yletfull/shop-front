@@ -8,7 +8,7 @@ const RouterView = function RouterView() {
   return (
     <Suspense fallback={<Spinner />}>
       <Switch>
-        {routes.map(({ exact, path, title, Component }) => (
+        {routes.map(({ exact, path, Component }) => (
           <Route
             key={`h_${path}`}
             path={path}
@@ -16,15 +16,8 @@ const RouterView = function RouterView() {
           >
             {(props) => (
               <Fragment>
-                <Helmet defaultTitle="Статистика">
-                  {title && (
-                    <title>
-                      {title}
-                    </title>
-                  )}
-                </Helmet>
+                <Helmet defaultTitle="Статистика" />
                 <Component
-                  defaultTitle={title}
                   {...props}
                 />
               </Fragment>
