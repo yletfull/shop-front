@@ -1,0 +1,27 @@
+@import '@/theme/include.scss';
+
+$indent-horizontal: 2em;
+
+.screenings {
+  @include button-reset();
+
+  font: inherit;
+
+  &_icon {
+    margin-left: .5em;
+  }
+}
+
+.chart {
+  color: $color-gray-darker;
+  font-size: .875em;
+}
+
+.border {
+  border-right: thin solid $color-white;
+  padding-right: $indent-horizontal;
+
+  & + * {
+    padding-left: $indent-horizontal;
+  }
+}

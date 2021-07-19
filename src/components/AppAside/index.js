@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import IconCrop from '@/icons/Crop';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
+import IconAnalytics from '@/icons/Analytics';
 import IconUpload from '@/icons/Upload';
 import IconUsers from '@/icons/Users';
 import MenuItem from '@/components/MenuItem';
@@ -33,6 +34,11 @@ const AppAside = function AppAside() {
       title: titles.audiencesList,
       to: patchs.audiencesList,
       icon: <IconUsers />,
+    },
+    {
+      title: titles.statistics,
+      to: patchs.statistics,
+      icon: <IconAnalytics />,
     },
   ];
 
