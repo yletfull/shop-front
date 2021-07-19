@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { formatDate } from '@/utils/format';
-import dayjs from '@/utils/day';
+import PropTypes from 'prop-types';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
 import { useService, useQuery } from '@/hooks';
@@ -9,20 +8,24 @@ import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
 import TableRow from '../components/TableRow';
-import DateInputs from '../components/DateInputs';
 import service from '../service';
 import styles from '../styles.module.scss';
 
-const DATE_FORMAT = 'YYYY-MM-DD';
 const countOptions = [10, 20, 30];
 
-const StatisticsTasks = function StatisticsTaskScreen() {
+const propTypes = {
+  dateStart: PropTypes.string.isRequired,
+  dateEnd: PropTypes.string.isRequired,
+};
+
+const StatisticsTasks = function StatisticsTaskScreen({
+  dateStart,
+  dateEnd,
+}) {
   const history = useHistory();
   const query = useQuery();
 
-  const [params, setParams] = useState({
-    dateStart: query.get('dateStart') || formatDate(dayjs().subtract(6, 'month'), DATE_FORMAT),
-    dateEnd: query.get('dateEnd') || formatDate(dayjs(), DATE_FORMAT),
+  const [pagination, setPagination] = useState({
     currentPage: query.get('currentPage') || 1,
     perPage: query.get('perPage') || countOptions[0],
   });
@@ -33,8 +36,8 @@ const StatisticsTasks = function StatisticsTaskScreen() {
   });
 
   const handlePageSelect = (value) => {
-    setParams({
-      ...params,
+    setPagination({
+      ...pagination,
       currentPage: value,
     });
     query.set('currentPage', value);
@@ -42,8 +45,8 @@ const StatisticsTasks = function StatisticsTaskScreen() {
   };
 
   const handleCountSelect = (value) => {
-    setParams({
-      ...params,
+    setPagination({
+      ...pagination,
       currentPage: 1,
       perPage: value,
     });
@@ -52,35 +55,22 @@ const StatisticsTasks = function StatisticsTaskScreen() {
   };
 
   useEffect(() => {
-    fetch(params);
-  }, [fetch, params]);
+    fetch({
+      ...pagination,
+      dateStart,
+      dateEnd,
+    });
+  }, [fetch, pagination, dateStart, dateEnd]);
 
   const { data, meta } = response?.data || {};
 
   const list = data || [];
-
-  const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
-    setParams({
-      ...params,
-      dateStart,
-      dateEnd,
-    });
-    query.set('dateStart', dateStart);
-    query.set('dateEnd', dateEnd);
-    history.push({ search: query.toString() });
-  };
 
   return (
     <div className={styles.page}>
       <WidthSpinner
         isFetching={isFetching}
       >
-        <DateInputs
-          className={styles.dateInputs}
-          dateStart={params.dateStart}
-          dateEnd={params.dateEnd}
-          onSubmit={handleDateInputsSubmit}
-        />
         {error
           ? (
             <ErrorMessage
@@ -126,5 +116,7 @@ const StatisticsTasks = function StatisticsTaskScreen() {
     </div>
   );
 };
+
+StatisticsTasks.propTypes = propTypes;
 
 export default StatisticsTasks;
