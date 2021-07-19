@@ -2,16 +2,16 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/statistics';
 
-const fetchEntityDictionary = function serviceFetchEntityDictionary(entity) {
-  if (!entity) {
+const fetchEntities = function serviceFetchEntities(entityType) {
+  if (!entityType) {
     return;
   }
 
   return api
-    .get(`${baseUrl}/${encodeURIComponent(entity)}/dict`)
+    .get(`${baseUrl}/${encodeURIComponent(entityType)}/dict`)
     .then((response) => response.data.data);
 };
 
 export default {
-  fetchEntityDictionary,
+  fetchEntities,
 };

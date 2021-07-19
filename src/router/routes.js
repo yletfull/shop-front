@@ -47,7 +47,7 @@ export const patchs = {
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
   segmentsUser: '/segments/user/',
-  statisticsDetails: '/statistics/details/:entity/:id',
+  statisticsDetails: '/statistics/details/:entityType/:id',
   upload: '/upload',
   users: '/users',
 };

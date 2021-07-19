@@ -1,22 +1,22 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-  requestDictionary,
-  updateDictinary,
+  requestEntities,
+  updateEntities,
 } from './actions';
 
 const initialState = {
-  isFetchingDictinary: false,
-  dictionary: [],
+  isFetchingEntities: false,
+  entities: [],
 };
 
 export default createReducer(initialState, {
-  [requestDictionary]: (state) => ({
+  [requestEntities]: (state) => ({
     ...state,
-    isFetching: true,
+    isFetchingEntities: true,
   }),
-  [updateDictinary]: (state, action) => ({
+  [updateEntities]: (state, action) => ({
     ...state,
-    isFetchingDictinary: false,
-    dictionary: action?.payload || [],
+    isFetchingEntities: false,
+    entities: action?.payload || [],
   }),
 });

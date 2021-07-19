@@ -2,22 +2,22 @@ import { createAction } from '@reduxjs/toolkit';
 import { namespace as NS } from './constants';
 import service from './service';
 
-export const requestDictionary = createAction(`${NS}/request/dictinary`);
-export const updateDictionary = createAction(`${NS}/update/dictinary`);
+export const requestEntities = createAction(`${NS}/request/entities`);
+export const updateEntities = createAction(`${NS}/update/entities`);
 
-export const fetchDictionary = (entity) => async (dispatch) => {
+export const fetchEntities = (entity) => async (dispatch) => {
   if (!entity) {
-    dispatch(updateDictionary([]));
+    dispatch(updateEntities([]));
     return;
   }
 
-  dispatch(requestDictionary());
+  dispatch(requestEntities());
 
   try {
-    const response = await service.fetchEntityDictionary(entity);
-    dispatch(updateDictionary(response));
+    const response = await service.fetchEntities(entity);
+    dispatch(updateEntities(response));
   } catch (error) {
     console.error(error);
-    dispatch(updateDictionary([]));
+    dispatch(updateEntities([]));
   }
 };
