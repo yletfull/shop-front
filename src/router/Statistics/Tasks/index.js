@@ -9,6 +9,7 @@ import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
 import FilterRow from '../components/FilterRow';
 import TableRow from '../components/TableRow';
+import EmptyTableRow from '../components/EmptyTableRow';
 import service from '../service';
 import styles from '../styles.module.scss';
 
@@ -153,6 +154,9 @@ const StatisticsTasks = function StatisticsTasksScreen({
               totalReactions={item.totalReactions}
             />
           ))}
+          {(!isFetching && list.length === 0) && (
+            <EmptyTableRow colSpan={17} />
+          )}
         </Table>
       </form>
       {meta?.pagination && (
