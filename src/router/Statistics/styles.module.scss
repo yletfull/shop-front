@@ -1,5 +1,12 @@
+@import '@/theme/include.scss';
+
 .page {
   padding-top: 2rem;
+  position: relative;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lightest, .5);
 }
 
 .dateInputs {
