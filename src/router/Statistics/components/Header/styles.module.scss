@@ -2,10 +2,15 @@
 
 $indent-horizontal: 2em;
 
-.screenings {
+.sort {
   @include button-reset();
 
   font: inherit;
+  opacity: .75;
+
+  &_active {
+    opacity: 1;
+  }
 
   &_icon {
     margin-left: .5em;
