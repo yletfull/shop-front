@@ -2,21 +2,6 @@
 
 $indent-horizontal: 2em;
 
-.sort {
-  @include button-reset();
-
-  font: inherit;
-  opacity: .75;
-
-  &_active {
-    opacity: 1;
-  }
-
-  &_icon {
-    margin-left: .5em;
-  }
-}
-
 .chart {
   color: $color-gray-darker;
   font-size: .875em;
