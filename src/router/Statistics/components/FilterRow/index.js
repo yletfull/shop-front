@@ -12,7 +12,7 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const StatisticsTableRow = function StatisticsTableRow({
+const StatisticsFilterRow = function StatisticsFilterRow({
   values,
   onChange,
 }) {
@@ -35,7 +35,7 @@ const StatisticsTableRow = function StatisticsTableRow({
         >
           <Input
             className={styles.input}
-            value={values.search}
+            value={values.search || ''}
             placeholder="Название"
             name="search"
             type="text"
@@ -52,6 +52,6 @@ const StatisticsTableRow = function StatisticsTableRow({
   );
 };
 
-StatisticsTableRow.propTypes = propTypes;
+StatisticsFilterRow.propTypes = propTypes;
 
-export default StatisticsTableRow;
+export default StatisticsFilterRow;

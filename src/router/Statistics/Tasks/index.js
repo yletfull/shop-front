@@ -19,7 +19,7 @@ const propTypes = {
   dateEnd: PropTypes.string.isRequired,
 };
 
-const StatisticsTasks = function StatisticsTaskScreen({
+const StatisticsTasks = function StatisticsTasksScreen({
   dateStart,
   dateEnd,
 }) {

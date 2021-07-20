@@ -19,7 +19,7 @@ const defaultProps = {
   onSubmit: null,
 };
 
-const StatisticsErrorMessage = function StatisticsErrorMessage({
+const StatisticsDateInputs = function StatisticsDateInputs({
   dateStart,
   dateEnd,
   className,
@@ -85,7 +85,7 @@ const StatisticsErrorMessage = function StatisticsErrorMessage({
   );
 };
 
-StatisticsErrorMessage.propTypes = propTypes;
-StatisticsErrorMessage.defaultProps = defaultProps;
+StatisticsDateInputs.propTypes = propTypes;
+StatisticsDateInputs.defaultProps = defaultProps;
 
-export default StatisticsErrorMessage;
+export default StatisticsDateInputs;

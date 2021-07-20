@@ -27,7 +27,7 @@ const defaultProps = {
   parentId: null,
 };
 
-const StatisticsTableRow = function StatisticsTableRow({
+const StatisticsSitesTableRow = function StatisticsSitesTableRow({
   index,
   indexDiff,
   parentId,
@@ -120,7 +120,7 @@ const StatisticsTableRow = function StatisticsTableRow({
   );
 };
 
-StatisticsTableRow.propTypes = propTypes;
-StatisticsTableRow.defaultProps = defaultProps;
+StatisticsSitesTableRow.propTypes = propTypes;
+StatisticsSitesTableRow.defaultProps = defaultProps;
 
-export default StatisticsTableRow;
+export default StatisticsSitesTableRow;

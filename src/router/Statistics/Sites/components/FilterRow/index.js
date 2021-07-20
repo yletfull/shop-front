@@ -12,7 +12,7 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const StatisticsTableRow = function StatisticsTableRow({
+const StatisticsSitesFilterRow = function StatisticsSitesFilterRow({
   values,
   onChange,
 }) {
@@ -52,6 +52,6 @@ const StatisticsTableRow = function StatisticsTableRow({
   );
 };
 
-StatisticsTableRow.propTypes = propTypes;
+StatisticsSitesFilterRow.propTypes = propTypes;
 
-export default StatisticsTableRow;
+export default StatisticsSitesFilterRow;
