@@ -7,7 +7,7 @@ import { useService, useQuery } from '@/hooks';
 import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
-import SearchRow from '../components/SearchRow';
+import FilterRow from '../components/FilterRow';
 import TableRow from '../components/TableRow';
 import service from '../service';
 import styles from '../styles.module.scss';
@@ -31,6 +31,12 @@ const StatisticsTasks = function StatisticsTaskScreen({
     perPage: query.get('perPage') || countOptions[0],
   });
 
+  const [params, setParams] = useState({
+    search: query.get('search') || '',
+  });
+
+  const [filter, setFilter] = useState(params);
+
   const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
     service: service.fetchTasks,
@@ -51,17 +57,30 @@ const StatisticsTasks = function StatisticsTaskScreen({
       currentPage: 1,
       perPage: value,
     });
+    query.set('currentPage', 1);
     query.set('perPage', value);
     history.push({ search: query.toString() });
   };
 
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setParams({
+      ...filter,
+    });
+  };
+
+  const handleFilterChange = (values) => {
+    setFilter(values);
+  };
+
   useEffect(() => {
     fetch({
+      ...params,
       ...pagination,
       dateStart,
       dateEnd,
     });
-  }, [fetch, pagination, dateStart, dateEnd]);
+  }, [fetch, pagination, dateStart, dateEnd, params]);
 
   const { data, meta } = response?.data || {};
 
@@ -70,55 +89,60 @@ const StatisticsTasks = function StatisticsTaskScreen({
   return (
     <div className={styles.page}>
       <WidthSpinner
+        className={styles.spinnerOverlay}
+        layout="overlay"
         isFetching={isFetching}
+      />
+      {error && (
+        <ErrorMessage
+          key="error-message"
+          error={error}
+        />
+      )}
+      <form
+        key="form"
+        onSubmit={handleFormSubmit}
       >
-        {error
-          ? (
-            <ErrorMessage
-              key="error-message"
-              error={error}
-            />
-          )
-          : ([
-            <Table
-              key="table"
-              header={(
-                <Fragment>
-                  <SearchRow />
-                  <Header />
-                </Fragment>
-              )}
-            >
-              {list.map((item) => (
-                <TableRow
-                  key={item.id}
-                  id={item.id}
-                  index={item.index}
-                  indexDiff={item.indexDiff}
-                  name={item.name}
-                  impressions={item.impressions}
-                  clicks={item.clicks}
-                  ctr={item.ctr}
-                  positiveReactions={item.positiveReactions}
-                  negativeReactions={item.negativeReactions}
-                  repostsReactions={item.repostsReactions}
-                  totalReactions={item.totalReactions}
-                />
-              ))}
-            </Table>,
-            meta?.pagination && (
-              <Pagination
-                key="pagination"
-                pagesTotal={meta.pagination.totalPages}
-                currentPage={meta.pagination.currentPage}
-                count={meta.pagination.perPage}
-                countOptions={countOptions}
-                onPageSelect={handlePageSelect}
-                onCountSelect={handleCountSelect}
+        <Table
+          header={(
+            <Fragment>
+              <FilterRow
+                values={filter}
+                onChange={handleFilterChange}
               />
-            ),
-          ])}
-      </WidthSpinner>
+              <Header />
+            </Fragment>
+          )}
+        >
+          {list.map((item) => (
+            <TableRow
+              key={item.id}
+              id={item.id}
+              index={item.index}
+              indexDiff={item.indexDiff}
+              name={item.name}
+              impressions={item.impressions}
+              clicks={item.clicks}
+              ctr={item.ctr}
+              positiveReactions={item.positiveReactions}
+              negativeReactions={item.negativeReactions}
+              repostsReactions={item.repostsReactions}
+              totalReactions={item.totalReactions}
+            />
+          ))}
+        </Table>
+      </form>
+      {meta?.pagination && (
+        <Pagination
+          key="pagination"
+          pagesTotal={meta.pagination.totalPages}
+          currentPage={meta.pagination.currentPage}
+          count={meta.pagination.perPage}
+          countOptions={countOptions}
+          onPageSelect={handlePageSelect}
+          onCountSelect={handleCountSelect}
+        />
+      )}
     </div>
   );
 };
