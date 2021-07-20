@@ -84,17 +84,19 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <EntitySelect
-        selected={String(entityId)}
-        onChange={handleChangeSelectedEntity}
-      />
-
-      <EntityDateRange
-        dateStart={query.get(queryParams.dateStart)}
-        dateEnd={query.get(queryParams.dateEnd)}
-        onChange={handleChangeDateRange}
-      />
+    <div className={styles.statisticsDetails}>
+      <div className={styles.statisticsDetailsHeader}>
+        <EntitySelect
+          selected={String(entityId)}
+          onChange={handleChangeSelectedEntity}
+        />
+        &nbsp;
+        <EntityDateRange
+          dateStart={query.get(queryParams.dateStart)}
+          dateEnd={query.get(queryParams.dateEnd)}
+          onChange={handleChangeDateRange}
+        />
+      </div>
 
       {entityType && entityId && (
         <div className={styles.statisticsDetailsGraphs}>
