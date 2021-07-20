@@ -19,7 +19,7 @@ const propTypes = {
   dateEnd: PropTypes.string.isRequired,
 };
 
-const StatisticsSites = function StatisticsSitesScreen({
+const StatisticsSitesScreen = function StatisticsSitesScreen({
   dateStart,
   dateEnd,
 }) {
@@ -31,8 +31,13 @@ const StatisticsSites = function StatisticsSitesScreen({
     perPage: query.get('perPage') || countOptions[0],
   });
 
+  const [sort, setSort] = useState({
+    sortDir: query.get('sortDir'),
+    sortField: query.get('sortField'),
+  });
+
   const [params, setParams] = useState({
-    search: query.get('search') || '',
+    search: query.get('search'),
   });
 
   const [filter, setFilter] = useState(params);
@@ -69,18 +74,32 @@ const StatisticsSites = function StatisticsSitesScreen({
     });
   };
 
+  const handleSortChange = ({ sortDir, sortField }) => {
+    setSort({ sortDir, sortField });
+  };
+
   const handleFilterChange = (values) => {
     setFilter(values);
   };
 
   useEffect(() => {
-    fetch({
+    const values = Object.entries({
+      ...sort,
       ...params,
       ...pagination,
       dateStart,
       dateEnd,
-    });
-  }, [fetch, pagination, dateStart, dateEnd, params]);
+    })
+      .filter(([, value]) => (
+        typeof value !== 'undefined'
+      ))
+      .reduce((acc, [key, value]) => ({
+        ...acc,
+        [key]: value,
+      }), {});
+
+    fetch(values);
+  }, [fetch, pagination, dateStart, dateEnd, params, sort]);
 
   const { data, meta } = response?.data || {};
 
@@ -110,7 +129,11 @@ const StatisticsSites = function StatisticsSitesScreen({
                 values={filter}
                 onChange={handleFilterChange}
               />
-              <Header />
+              <Header
+                sortDir={meta?.sort?.sortDir}
+                sortField={meta?.sort?.sortField}
+                onSortChange={handleSortChange}
+              />
             </Fragment>
           )}
         >
@@ -143,6 +166,6 @@ const StatisticsSites = function StatisticsSitesScreen({
   );
 };
 
-StatisticsSites.propTypes = propTypes;
+StatisticsSitesScreen.propTypes = propTypes;
 
-export default StatisticsSites;
+export default StatisticsSitesScreen;
