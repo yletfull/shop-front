@@ -6,28 +6,43 @@ import Button from '@/components/Button';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  onButtonClick: PropTypes.func.isRequired,
+  values: PropTypes.objectOf(
+    PropTypes.any
+  ).isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 const StatisticsTableRow = function StatisticsTableRow({
-  onButtonClick,
+  values,
+  onChange,
 }) {
+  const handleSearchChange = (e) => {
+    const { name, value } = e.target;
+    onChange({
+      ...values,
+      [name]: value,
+    });
+  };
+
   return (
     <TableRow>
       <TableCell
-        colspan="17"
+        colSpan="17"
         className={styles.filter}
       >
         <div
           className={styles.wrapper}
         >
           <Input
+            className={styles.input}
+            value={values.search}
+            placeholder="Название"
             name="search"
             type="text"
-            fullWidth
+            onChange={handleSearchChange}
           />
           <Button
-            onClick={onButtonClick}
+            type="submit"
           >
             найти
           </Button>
