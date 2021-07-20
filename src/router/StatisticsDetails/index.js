@@ -4,12 +4,17 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
-import { namespace as NS } from './constants';
+import { useQuery } from '@/hooks';
+import {
+  namespace as NS,
+  queryParams,
+} from './constants';
 import {
   fetchEntities,
   fetchEntityDynamics,
 } from './actions';
 import reducer from './reducer';
+import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import styles from './styles.module.scss';
@@ -30,6 +35,7 @@ const defaultProps = {
 const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   const dispatch = useDispatch();
   const history = useHistory();
+  const query = useQuery();
   const location = useLocation();
 
   const { entityType, id: entityId } = useParams();
@@ -54,6 +60,16 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
     }
   }, [dispatch, entityType, entityId]);
 
+  const handleChangeDateRange = (values) => {
+    const { dateStart, dateEnd } = values || {};
+    if (!dateStart || !dateEnd) {
+      return;
+    }
+    query.set(queryParams.dateStart, dateStart);
+    query.set(queryParams.dateEnd, dateEnd);
+    history.push({ search: query.toString() });
+  };
+
   const handleChangeSelectedEntity = (value) => {
     const { pathname } = location || {};
     if (!pathname || typeof value === 'undefined' || value === null) {
@@ -72,6 +88,12 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
       <EntitySelect
         selected={String(entityId)}
         onChange={handleChangeSelectedEntity}
+      />
+
+      <EntityDateRange
+        dateStart={query.get(queryParams.dateStart)}
+        dateEnd={query.get(queryParams.dateEnd)}
+        onChange={handleChangeDateRange}
       />
 
       {entityType && entityId && (

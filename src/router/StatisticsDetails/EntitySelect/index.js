@@ -47,13 +47,12 @@ const EntitySelect = function EntitySelect({
     onChange(value === 'default' ? '' : value);
   };
 
-  console.log(isFetching, entitiesOptions);
-
   return (
     <div className={styles.entitySelect}>
       <Select
         options={entitiesOptions}
         value={selected}
+        disabled={isFetching}
         onChange={handleChangeSelect}
       />
     </div>
