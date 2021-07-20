@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import IconCaretDown from '@/icons/CaretDown';
-import IconCaretUp from '@/icons/CaretUp';
 import styles from './styles.module.scss';
 
 const directions = {
@@ -13,11 +11,6 @@ const directions = {
 const directionsReverse = {
   asc: 'desc',
   desc: 'asc',
-};
-
-const sortIcons = {
-  [directions.asc]: <IconCaretDown className={styles.sort_icon} />,
-  [directions.desc]: <IconCaretUp className={styles.sort_icon} />,
 };
 
 const propTypes = {
@@ -50,7 +43,7 @@ const StatisticsSortButton = function StatisticsSortButton({
 
     onClick({
       sortField: field,
-      sortDir: directionsReverse[direction],
+      sortDir: isActive ? directionsReverse[direction] : directions[direction],
     });
   };
 
@@ -58,15 +51,30 @@ const StatisticsSortButton = function StatisticsSortButton({
     <button
       type="button"
       className={cx([
-        { [styles.sort_active]: isActive },
-        styles.sort,
+        { [styles.button_active]: isActive },
+        styles.button,
       ])}
       onClick={handleImpressionsClick}
     >
       {children}
-      {isActive
-        ? sortIcons[direction]
-        : sortIcons[directions.asc]}
+      <span
+        className={styles.icons}
+      >
+        <span
+          className={cx([
+            styles.icon,
+            styles.icon_desc,
+            { [styles.current]: direction === directions.desc },
+          ])}
+        />
+        <span
+          className={cx([
+            styles.icon,
+            styles.icon_asc,
+            { [styles.current]: direction === directions.asc },
+          ])}
+        />
+      </span>
     </button>
   );
 };

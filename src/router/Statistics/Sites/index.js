@@ -8,6 +8,7 @@ import ErrorMessage from '../components/ErrorMessage';
 import WidthSpinner from '../components/WithSpinner';
 import service from '../service';
 import styles from '../styles.module.scss';
+import EmptyTableRow from '../components/EmptyTableRow';
 import Header from './components/Header';
 import TableRow from './components/TableRow';
 import FilterRow from './components/FilterRow';
@@ -149,6 +150,9 @@ const StatisticsSitesScreen = function StatisticsSitesScreen({
               ctr={item.ctr}
             />
           ))}
+          {(!isFetching && list.length === 0) && (
+            <EmptyTableRow colSpan={17} />
+          )}
         </Table>
       </form>
       {meta?.pagination && (

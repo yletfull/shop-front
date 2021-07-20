@@ -35,7 +35,7 @@ const StatisticsSitesFilterRow = function StatisticsSitesFilterRow({
         >
           <Input
             className={styles.input}
-            value={values.search}
+            value={values.search || ''}
             placeholder="Название"
             name="search"
             type="text"
