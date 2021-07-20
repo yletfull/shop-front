@@ -1,6 +1,14 @@
 @import '@/theme/include.scss';
 
 .statisticsDetails {
+  &Chart {
+    &Header {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+  }
+
   &Header {
     display: flex;
   }

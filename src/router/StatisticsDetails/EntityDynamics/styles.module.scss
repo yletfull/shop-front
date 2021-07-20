@@ -1,5 +1,40 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.entityDynamics {
+  background: $color-gray-lighter;
+  border-radius: .375rem;
+  padding: 1rem 1.5rem;
+
+  &Chart {
+    height: 18rem;
+    width: 100%;
+
+    &Ticks {
+      font-size: .75rem;
+
+      & > text {
+        fill: $color-gray-darker;
+      }
+    }
+  }
+
+  &Header {
+    font-size: .75rem;
+    font-weight: bold;
+    line-height: .875rem;
+    padding-bottom: 1rem;
+  }
+
+  &Legend {
+    font-size: .75rem;
+    text-align: center;
+
+    &Label {
+      display: inline-block;
+
+      & + & {
+        margin-left: 1.5rem;
+      }
+    }
+  }
 }

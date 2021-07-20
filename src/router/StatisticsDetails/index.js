@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
@@ -19,11 +19,6 @@ import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import styles from './styles.module.scss';
 
-const params = {
-  dateStart: '2020-06-18',
-  dateEnd: '2021-07-19',
-};
-
 const propTypes = {
   defaultTitle: PropTypes.string,
 };
@@ -40,6 +35,11 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
 
   const { entityType, id: entityId } = useParams();
 
+  const [params, setParams] = useState({
+    dateStart: query.get(queryParams.dateStart) || '',
+    dateEnd: query.get(queryParams.dateEnd) || '',
+  });
+
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
@@ -55,16 +55,17 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   }, [dispatch, entityType]);
 
   useEffect(() => {
-    if (entityType && entityId && params) {
+    if (entityType && entityId && params.dateStart && params.dateEnd) {
       dispatch(fetchEntityDynamics(entityType, entityId, params));
     }
-  }, [dispatch, entityType, entityId]);
+  }, [dispatch, entityType, entityId, params]);
 
   const handleChangeDateRange = (values) => {
     const { dateStart, dateEnd } = values || {};
     if (!dateStart || !dateEnd) {
       return;
     }
+    setParams({ ...params, dateStart, dateEnd });
     query.set(queryParams.dateStart, dateStart);
     query.set(queryParams.dateEnd, dateEnd);
     history.push({ search: query.toString() });
@@ -92,15 +93,23 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
         />
         &nbsp;
         <EntityDateRange
-          dateStart={query.get(queryParams.dateStart)}
-          dateEnd={query.get(queryParams.dateEnd)}
+          dateStart={params.dateStart}
+          dateEnd={params.dateEnd}
           onChange={handleChangeDateRange}
         />
       </div>
 
       {entityType && entityId && (
-        <div className={styles.statisticsDetailsGraphs}>
-          <EntityDynamics />
+        <div className={styles.statisticsDetailsCharts}>
+          <EntityDynamics
+            dateStart={params.dateStart}
+            dateEnd={params.dateEnd}
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Открутки
+              </span>
+            )}
+          />
         </div>
       )}
     </div>
