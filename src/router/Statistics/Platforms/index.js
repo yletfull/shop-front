@@ -31,8 +31,13 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
     perPage: query.get('perPage') || countOptions[0],
   });
 
+  const [sort, setSort] = useState({
+    sortDir: query.get('sortDir'),
+    sortField: query.get('sortField'),
+  });
+
   const [params, setParams] = useState({
-    search: query.get('search') || '',
+    search: query.get('search'),
   });
 
   const [filter, setFilter] = useState(params);
@@ -69,18 +74,32 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
     });
   };
 
+  const handleSortChange = ({ sortDir, sortField }) => {
+    setSort({ sortDir, sortField });
+  };
+
   const handleFilterChange = (values) => {
     setFilter(values);
   };
 
   useEffect(() => {
-    fetch({
+    const values = Object.entries({
+      ...sort,
       ...params,
       ...pagination,
       dateStart,
       dateEnd,
-    });
-  }, [fetch, pagination, dateStart, dateEnd, params]);
+    })
+      .filter(([, value]) => (
+        typeof value !== 'undefined'
+      ))
+      .reduce((acc, [key, value]) => ({
+        ...acc,
+        [key]: value,
+      }), {});
+
+    fetch(values);
+  }, [fetch, pagination, dateStart, dateEnd, params, sort]);
 
   const { data, meta } = response?.data || {};
 
@@ -110,7 +129,11 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
                 values={filter}
                 onChange={handleFilterChange}
               />
-              <Header />
+              <Header
+                sortDir={meta?.sort?.sortDir}
+                sortField={meta?.sort?.sortField}
+                onSortChange={handleSortChange}
+              />
             </Fragment>
           )}
         >
