@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import IconArrowChart from '@/icons/ArrowChart';
 import IconRocket from '@/icons/Rocket';
@@ -16,6 +16,12 @@ const directions = {
 
 const fields = {
   impressions: 'impressions',
+  clicks: 'clicks',
+  ctr: 'ctr',
+  negativeReactions: 'negativeReactions',
+  positiveReactions: 'positiveReactions',
+  repostsReactions: 'repostsReactions',
+  totalReactions: 'totalReactions',
 };
 
 const propTypes = {
@@ -35,12 +41,22 @@ const StatisticsHeader = function StatisticsHeader({
   sortDir,
   onSortChange,
 }) {
-  const directionByFields = {
+  const [directionByFields, setDirectionByFields] = useState({
     [fields.impressions]: directions.asc,
+    [fields.clicks]: directions.asc,
+    [fields.ctr]: directions.asc,
+    [fields.negativeReactions]: directions.asc,
+    [fields.repostsReactions]: directions.asc,
+    [fields.totalReactions]: directions.asc,
+    [fields.positiveReactions]: directions.asc,
     [sortField]: sortDir,
-  };
+  });
 
   const handleSortClick = (values) => {
+    setDirectionByFields({
+      ...directionByFields,
+      [values.sortField]: values.sortDir,
+    });
     onSortChange(values);
   };
 
@@ -81,7 +97,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        Клики
+        <SortButton
+          isActive={sortField === fields.clicks}
+          direction={directionByFields[fields.clicks]}
+          field={fields.clicks}
+          onClick={handleSortClick}
+        >
+          Клики
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -93,7 +116,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        CTR
+        <SortButton
+          isActive={sortField === fields.ctr}
+          direction={directionByFields[fields.ctr]}
+          field={fields.ctr}
+          onClick={handleSortClick}
+        >
+          CTR
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -106,7 +136,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconThumbsUp />
+        <SortButton
+          isActive={sortField === fields.positiveReactions}
+          direction={directionByFields[fields.positiveReactions]}
+          field={fields.positiveReactions}
+          onClick={handleSortClick}
+        >
+          <IconThumbsUp />
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -118,7 +155,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconThumbsDown />
+        <SortButton
+          isActive={sortField === fields.negativeReactions}
+          direction={directionByFields[fields.negativeReactions]}
+          field={fields.negativeReactions}
+          onClick={handleSortClick}
+        >
+          <IconThumbsDown />
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -130,7 +174,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconRetweetAlt />
+        <SortButton
+          isActive={sortField === fields.repostsReactions}
+          direction={directionByFields[fields.repostsReactions]}
+          field={fields.repostsReactions}
+          onClick={handleSortClick}
+        >
+          <IconRetweetAlt />
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -142,7 +193,14 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        Всего
+        <SortButton
+          isActive={sortField === fields.totalReactions}
+          direction={directionByFields[fields.totalReactions]}
+          field={fields.totalReactions}
+          onClick={handleSortClick}
+        >
+          Всего
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
