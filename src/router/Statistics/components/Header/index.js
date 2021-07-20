@@ -1,14 +1,49 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconArrowChart from '@/icons/ArrowChart';
 import IconRocket from '@/icons/Rocket';
 import IconThumbsUp from '@/icons/ThumbsUp';
 import IconThumbsDown from '@/icons/ThumbsDown';
 import IconRetweetAlt from '@/icons/RetweetAlt';
-import IconCaretDown from '@/icons/CaretDown';
 import { TableRow, TableCell } from '@/components/Table';
+import SortButton from './SortButton';
 import styles from './styles.module.scss';
 
-const StatisticsHeader = function StatisticsTaskScreen() {
+const directions = {
+  asc: 'asc',
+  desc: 'desc',
+};
+
+const fields = {
+  impressions: 'impressions',
+};
+
+const propTypes = {
+  sortField: PropTypes.string,
+  sortDir: PropTypes.string,
+  onSortChange: PropTypes.func,
+};
+
+const defaultProps = {
+  sortField: '',
+  sortDir: '',
+  onSortChange: () => {},
+};
+
+const StatisticsHeader = function StatisticsHeader({
+  sortField,
+  sortDir,
+  onSortChange,
+}) {
+  const directionByFields = {
+    [fields.impressions]: directions.asc,
+    [sortField]: sortDir,
+  };
+
+  const handleSortClick = (values) => {
+    onSortChange(values);
+  };
+
   return (
     <TableRow
       type="header"
@@ -27,15 +62,14 @@ const StatisticsHeader = function StatisticsTaskScreen() {
         nowrap
         width="1"
       >
-        <button
-          type="button"
-          className={styles.screenings}
+        <SortButton
+          isActive={sortField === fields.impressions}
+          direction={directionByFields[fields.impressions]}
+          field={fields.impressions}
+          onClick={handleSortClick}
         >
           Показы
-          <IconCaretDown
-            className={styles.screenings_icon}
-          />
-        </button>
+        </SortButton>
       </TableCell>
       <TableCell
         nowrap
@@ -119,5 +153,8 @@ const StatisticsHeader = function StatisticsTaskScreen() {
     </TableRow>
   );
 };
+
+StatisticsHeader.propTypes = propTypes;
+StatisticsHeader.defaultProps = defaultProps;
 
 export default StatisticsHeader;
