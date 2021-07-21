@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
@@ -16,6 +16,10 @@ import {
   fetchReactionsTonality,
 } from './actions';
 import reducer from './reducer';
+import {
+  getIsFetchingPeriods,
+  getAvailablePeriods,
+} from './selectors';
 import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
@@ -39,6 +43,9 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
 
   const { entityType, id: entityId } = useParams();
 
+  const isFetchingPeriods = useSelector(getIsFetchingPeriods);
+  const periods = useSelector(getAvailablePeriods);
+
   const [params, setParams] = useState({
     dateStart: query.get(queryParams.dateStart) || '',
     dateEnd: query.get(queryParams.dateEnd) || '',
@@ -51,6 +58,20 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
+
+  useEffect(() => {
+    if (isFetchingPeriods
+      || !periods.dateStart
+      || !periods.dateEnd
+      || params.dateStart
+      || params.dateEnd) {
+      return;
+    }
+    setParams({
+      dateStart: periods.dateStart,
+      dateEnd: periods.dateEnd,
+    });
+  }, [isFetchingPeriods, params, periods]);
 
   useEffect(() => {
     dispatch(fetchPeriods());
