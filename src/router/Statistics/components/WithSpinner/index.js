@@ -21,7 +21,6 @@ const WithSpinner = function WithSpinner({
   if (isFetching) {
     return (
       <Spinner
-        layout="block"
         {...props}
       />
     );
