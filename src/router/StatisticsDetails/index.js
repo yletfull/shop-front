@@ -12,11 +12,14 @@ import {
 import {
   fetchEntities,
   fetchEntityDynamics,
+  fetchReactionsTonality,
 } from './actions';
 import reducer from './reducer';
+import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
+import ReactionsTonality from './ReactionsTonality';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -57,6 +60,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   useEffect(() => {
     if (entityType && entityId && params.dateStart && params.dateEnd) {
       dispatch(fetchEntityDynamics(entityType, entityId, params));
+      dispatch(fetchReactionsTonality(entityType, entityId, params));
     }
   }, [dispatch, entityType, entityId, params]);
 
@@ -110,6 +114,18 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
               </span>
             )}
           />
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Лайки / Дизлайки
+              </span>
+            )}
+          >
+            <ReactionsTonality
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
         </div>
       )}
     </div>

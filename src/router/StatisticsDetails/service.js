@@ -29,7 +29,25 @@ const fetchEntityDynamics = function serviceFetchEntityDynamics(
     .then((response) => response.data);
 };
 
+const fetchReactionsTonality = function serviceFetchReactionsTonality(
+  entityType,
+  entityId,
+  params
+) {
+  if (!entityType || !entityId) {
+    return;
+  }
+
+  const entity = encodeURIComponent(entityType);
+  const id = encodeURIComponent(entityId);
+
+  return api
+    .get(`${baseUrl}/${entity}/${id}/reactions/tonality`, { params })
+    .then((response) => response.data);
+};
+
 export default {
   fetchEntities,
   fetchEntityDynamics,
+  fetchReactionsTonality,
 };

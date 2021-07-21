@@ -9,6 +9,11 @@
     }
   }
 
+  &Charts {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   &Header {
     display: flex;
   }
