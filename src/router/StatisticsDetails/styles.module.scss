@@ -7,6 +7,12 @@
       text-align: center;
       width: 100%;
     }
+
+    &Rectangle {
+      display: inline-block;
+      height: .5rem;
+      width: .5rem;
+    }
   }
 
   &Charts {

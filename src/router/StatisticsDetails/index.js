@@ -6,6 +6,7 @@ import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
 import {
+  colors,
   namespace as NS,
   queryParams,
 } from './constants';
@@ -143,7 +144,23 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
           <ChartContainer
             header={(
               <span className={styles.statisticsDetailsChartHeader}>
-                Лайки / Дизлайки
+                Лайки
+                &nbsp;
+                <span
+                  className={styles.statisticsDetailsChartRectangle}
+                  style={{
+                    background: colors?.tonality?.positive || 'transparent',
+                  }}
+                />
+                &nbsp;
+                / Дизлайки
+                &nbsp;
+                <span
+                  className={styles.statisticsDetailsChartRectangle}
+                  style={{
+                    background: colors?.tonality?.negative || 'transparent',
+                  }}
+                />
               </span>
             )}
           >
