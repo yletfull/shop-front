@@ -4,12 +4,14 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { formatDate } from '@/utils/format';
 import dayjs from '@/utils/day';
-import { useQuery } from '@/hooks';
+import { useService, useQuery } from '@/hooks';
 import { setHeader } from '@/store/ui/actions';
+import WithSpinner from './components/WithSpinner';
 import DateInputs from './components/DateInputs';
 import RouterView from './RouterView';
 import { paths, titles } from './routes';
 import styles from './styles.module.scss';
+import service from './service';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
@@ -26,6 +28,13 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
 
   const query = useQuery();
 
+  const { fetch, data, isFetching } = useService({
+    initialData: [],
+    service: service.fetchPeriods,
+  });
+
+  const { datestart, dateend } = data[0] || {};
+
   const [params, setParams] = useState({
     dateStart: query.get('dateStart') || formatDate(dayjs().subtract(6, 'month'), DATE_FORMAT),
     dateEnd: query.get('dateEnd') || formatDate(dayjs(), DATE_FORMAT),
@@ -37,10 +46,20 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
   return (
-    <div>
+    <WithSpinner
+      layout="block"
+      isFetching={isFetching}
+      className={styles.spinnerOverlay}
+    >
       <DateInputs
         className={styles.dateInputs}
+        min={datestart}
+        max={dateend}
         dateStart={params.dateStart}
         dateEnd={params.dateEnd}
         onSubmit={handleDateInputsSubmit}
@@ -62,7 +81,7 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
         dateStart={params.dateStart}
         dateEnd={params.dateEnd}
       />
-    </div>
+    </WithSpinner>
   );
 };
 

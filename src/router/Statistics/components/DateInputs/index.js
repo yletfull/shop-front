@@ -6,6 +6,8 @@ import Button from '@/components/Button';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  min: PropTypes.string,
+  max: PropTypes.string,
   dateStart: PropTypes.string,
   dateEnd: PropTypes.string,
   className: PropTypes.string,
@@ -13,6 +15,8 @@ const propTypes = {
 };
 
 const defaultProps = {
+  min: '',
+  max: '',
   dateStart: '',
   dateEnd: '',
   className: '',
@@ -20,6 +24,8 @@ const defaultProps = {
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
+  min,
+  max,
   dateStart,
   dateEnd,
   className,
@@ -58,6 +64,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         с
         {' '}
         <Input
+          min={min}
+          max={max}
           name="dateStart"
           type="date"
           value={params.dateStart}
@@ -70,6 +78,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         по
         {' '}
         <Input
+          min={min}
+          max={max}
           name="dateEnd"
           type="date"
           value={params.dateEnd}
