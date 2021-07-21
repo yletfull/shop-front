@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import dayjs from '@/utils/day';
 import { formatDate } from '@/utils/format';
 import Input from '@/components/Input';
+import { getAvailablePeriods } from '../selectors';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -24,6 +26,8 @@ const EntityDateRange = function EntityDateRange({
   const dateFormat = 'YYYY-MM-DD';
   const isValidDate = (date) => dayjs(date).isValid();
 
+  const periods = useSelector(getAvailablePeriods);
+
   const handleChangeDate = (e) => {
     const { name, value } = e?.target || {};
     if (!name) {
@@ -43,7 +47,9 @@ const EntityDateRange = function EntityDateRange({
         name="dateStart"
         value={(isValidDate(dateStart)
           ? formatDate(dateStart, dateFormat)
-          : formatDate(dayjs(), dateFormat))}
+          : periods.dateStart || formatDate(dayjs(), dateFormat))}
+        min={periods.dateStart}
+        max={periods.dateEnd}
         onChange={handleChangeDate}
       />
       &nbsp;
@@ -54,7 +60,9 @@ const EntityDateRange = function EntityDateRange({
         name="dateEnd"
         value={(isValidDate(dateEnd)
           ? formatDate(dateEnd, dateFormat)
-          : formatDate(dayjs(), dateFormat))}
+          : periods.dateEnd || formatDate(dayjs(), dateFormat))}
+        min={periods.dateStart}
+        max={periods.dateEnd}
         onChange={handleChangeDate}
       />
     </div>

@@ -5,14 +5,32 @@ export const getIsFetchingDynamics = (state) => (
   state[NS]?.isFetchingDynamics || false);
 export const getIsFetchingEntities = (state) => (
   state[NS]?.isFetchingEntities || false);
+export const getIsFetchingPeriods = (state) => (
+  state[NS]?.isFetchingPeriods || false);
 export const getIsFetchingReactionsTonality = (state) => (
   state[NS]?.isFetchingReactionsTonality || false);
 export const getDynamics = (state) => (
   state[NS]?.dynamics || {});
 export const getEntities = (state) => (
   state[NS]?.entities || []);
+export const getPeriods = (state) => (
+  state[NS]?.periods || []);
 export const getReactionsTonality = (state) => (
   state[NS]?.reactionsTonality || {});
+
+export const getAvailablePeriods = createSelector(
+  [getPeriods],
+  (periods) => {
+    const {
+      datestart: dateStart,
+      dateend: dateEnd,
+    } = periods[0] || {};
+    return ({
+      dateStart,
+      dateEnd,
+    });
+  },
+);
 
 export const getEntityDynamicsData = createSelector(
   [getDynamics],

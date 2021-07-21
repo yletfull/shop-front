@@ -29,6 +29,12 @@ const fetchEntityDynamics = function serviceFetchEntityDynamics(
     .then((response) => response.data);
 };
 
+const fetchPeriods = function serviceFetchPeriod() {
+  return api
+    .get(`${baseUrl}/periods`)
+    .then((response) => response.data.data);
+};
+
 const fetchReactionsTonality = function serviceFetchReactionsTonality(
   entityType,
   entityId,
@@ -49,5 +55,6 @@ const fetchReactionsTonality = function serviceFetchReactionsTonality(
 export default {
   fetchEntities,
   fetchEntityDynamics,
+  fetchPeriods,
   fetchReactionsTonality,
 };

@@ -12,6 +12,7 @@ import {
 import {
   fetchEntities,
   fetchEntityDynamics,
+  fetchPeriods,
   fetchReactionsTonality,
 } from './actions';
 import reducer from './reducer';
@@ -50,6 +51,10 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
+
+  useEffect(() => {
+    dispatch(fetchPeriods());
+  }, [dispatch]);
 
   useEffect(() => {
     if (entityType) {

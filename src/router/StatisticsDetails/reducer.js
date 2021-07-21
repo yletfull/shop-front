@@ -2,21 +2,25 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   requestDynamics,
   requestEntities,
+  requestPeriods,
   requestReactionsTonality,
   updateDynamics,
   updateEntities,
+  updatePeriods,
   updateReactionsTonality,
 } from './actions';
 
 const initialState = {
   isFetchingDynamics: false,
   isFetchingEntities: false,
+  isFetchingPeriods: false,
   isFetchingReactionsTonality: false,
   dynamics: {
     data: {},
     meta: {},
   },
   entities: [],
+  periods: [],
   reactionsTonality: {
     data: {},
     meta: {},
@@ -31,6 +35,10 @@ export default createReducer(initialState, {
   [requestEntities]: (state) => ({
     ...state,
     isFetchingEntities: true,
+  }),
+  [requestPeriods]: (state) => ({
+    ...state,
+    isFetchingPeriods: true,
   }),
   [requestReactionsTonality]: (state) => ({
     ...state,
@@ -51,6 +59,11 @@ export default createReducer(initialState, {
     ...state,
     entities: action?.payload || [],
     isFetchingEntities: false,
+  }),
+  [updatePeriods]: (state, action) => ({
+    ...state,
+    periods: action?.payload || [],
+    isFetchingPeriods: false,
   }),
   [updateReactionsTonality]: (state, action) => {
     const { data, meta } = action?.payload || {};
