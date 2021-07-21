@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { useElementSize } from '@/hooks';
-import { formatDate, formatToDate } from '@/utils/format';
-import { XYArea, XYTicksX } from '@/components/charts';
+import { formatDate, formatNumber, formatToDate } from '@/utils/format';
+import { XYArea, XYTicksX, XYTicksY } from '@/components/charts';
+import {
+  colors,
+} from '../constants';
 import {
   getReactionsTonalityData,
   getReactionsTonalityMeta,
@@ -12,10 +15,10 @@ import {
 import styles from './styles.module.scss';
 
 const padding = {
-  bottom: 32,
+  bottom: 16,
   left: 32,
   right: 32,
-  top: 0,
+  top: 16,
 };
 
 const propTypes = {
@@ -56,10 +59,11 @@ const ReactionsTonality = function ReactionsTonality({
   const xTickRenderer = () => (value) => (
     <text
       key={value}
+      className={styles.reactionsTonalityTickXLabel}
       x={scaleX(value)}
       y={chartHeight}
       dy="1em"
-      textAnchor="center"
+      textAnchor="middle"
     >
       {formatDate(value)}
     </text>
@@ -67,11 +71,55 @@ const ReactionsTonality = function ReactionsTonality({
   const xTickLineRenderer = () => (value) => (
     <line
       key={value}
+      className={styles.reactionsTonalityTickXLine}
       x1={scaleX(value)}
       y1="0"
       x2={scaleX(value)}
       y2={chartHeight}
       stroke="hsla(0, 0%, 100%, .25)"
+    />
+  );
+  const yPositiveTickRenderer = () => (value) => (
+    <text
+      key={value}
+      className={styles.reactionsTonalityTickYLabel}
+      x={0}
+      y={scaleYPositive(value)}
+      dy=".35em"
+      stroke="hsla(0, 0%, 100%, .25)"
+    >
+      {formatNumber(value)}
+    </text>
+  );
+  const yNegativeTickRenderer = () => (value) => (
+    <text
+      key={value}
+      className={styles.reactionsTonalityTickYLabel}
+      x={0}
+      y={scaleYNegative(value)}
+      dy=".35em"
+    >
+      {formatNumber(value)}
+    </text>
+  );
+  const yPositiveLineTickRenderer = () => (value) => (
+    <line
+      key={value}
+      className={styles.reactionsTonalityTickYLine}
+      x1={0}
+      y1={scaleYPositive(value)}
+      x2={chartWidth}
+      y2={scaleYPositive(value)}
+    />
+  );
+  const yNegativeLineTickRenderer = () => (value) => (
+    <line
+      key={value}
+      className={styles.reactionsTonalityTickYLine}
+      x1={0}
+      y1={scaleYNegative(value)}
+      x2={chartWidth}
+      y2={scaleYNegative(value)}
     />
   );
   /* eslint-enable react/function-component-definition */
@@ -95,7 +143,7 @@ const ReactionsTonality = function ReactionsTonality({
               getY={(d) => d.negative || 0}
               scaleX={scaleX}
               scaleY={scaleYPositive}
-              fill="#00ff00"
+              fill={colors?.tonality?.positive}
             />
           </g>
           <g transform={`translate(${padding.left}, ${padding.top + (chartHeight / 2)})`}>
@@ -107,23 +155,51 @@ const ReactionsTonality = function ReactionsTonality({
               getBaseY={() => 0}
               scaleX={scaleX}
               scaleY={scaleYNegative}
-              fill="#ff0000"
+              fill={colors?.tonality?.negative}
             />
           </g>
+          <XYTicksY
+            transform={`translate(35, ${padding.top})`}
+            scaleX={scaleX}
+            scaleY={scaleYPositive}
+            ticksCount={2}
+            renderTick={yPositiveLineTickRenderer}
+          />
+          <XYTicksY
+            transform={`translate(35, ${padding.top + (chartHeight / 2)})`}
+            scaleX={scaleX}
+            scaleY={scaleYNegative}
+            ticksCount={2}
+            renderTick={yNegativeLineTickRenderer}
+          />
+          <XYTicksY
+            transform={`translate(0, ${padding.top})`}
+            scaleX={scaleX}
+            scaleY={scaleYPositive}
+            ticksCount={2}
+            renderTick={yPositiveTickRenderer}
+          />
+          <XYTicksY
+            transform={`translate(0, ${padding.top + (chartHeight / 2)})`}
+            scaleX={scaleX}
+            scaleY={scaleYNegative}
+            ticksCount={2}
+            renderTick={yNegativeTickRenderer}
+          />
           <XYTicksX
-            transform={`translate(${padding.left}, 0)`}
+            transform={`translate(${padding.left}, ${padding.top})`}
             chartHeight={chartHeight}
             scaleX={scaleX}
             scaleY={scaleY}
-            ticksCount={5}
+            ticksCount={6}
             renderTick={xTickLineRenderer}
           />
           <XYTicksX
-            transform={`translate(${padding.left}, 0)`}
+            transform={`translate(${padding.left}, ${padding.top})`}
             chartHeight={chartHeight}
             scaleX={scaleX}
             scaleY={scaleY}
-            ticksCount={2}
+            ticksCount={6}
             renderTick={xTickRenderer}
           />
         </svg>
