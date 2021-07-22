@@ -25,6 +25,7 @@ import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
+import ReactionsComments from './ReactionsComments';
 import ReactionsTonality from './ReactionsTonality';
 import styles from './styles.module.scss';
 
@@ -165,6 +166,35 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
             )}
           >
             <ReactionsTonality
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Репосты
+                &nbsp;
+                <span
+                  className={styles.statisticsDetailsChartRectangle}
+                  style={{
+                    background: colors?.tonality?.positive || 'transparent',
+                  }}
+                />
+                &nbsp;
+                / Комментарии
+                &nbsp;
+                <span
+                  className={styles.statisticsDetailsChartRectangle}
+                  style={{
+                    background: colors?.tonality?.negative || 'transparent',
+                  }}
+                />
+              </span>
+            )}
+          >
+            <ReactionsComments
               dateStart={params.dateStart}
               dateEnd={params.dateEnd}
             />

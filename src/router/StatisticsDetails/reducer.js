@@ -21,6 +21,10 @@ const initialState = {
   },
   entities: [],
   periods: [],
+  reactionsComments: {
+    data: {},
+    meta: {},
+  },
   reactionsTonality: {
     data: {},
     meta: {},

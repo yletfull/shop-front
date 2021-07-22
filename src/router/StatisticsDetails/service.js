@@ -35,6 +35,23 @@ const fetchPeriods = function serviceFetchPeriod() {
     .then((response) => response.data.data);
 };
 
+const fetchReactionsComments = function serviceFetchReactionsComments(
+  entityType,
+  entityId,
+  params
+) {
+  if (!entityType || !entityId) {
+    return;
+  }
+
+  const entity = encodeURIComponent(entityType);
+  const id = encodeURIComponent(entityId);
+
+  return api
+    .get(`${baseUrl}/${entity}/${id}/reactions/commentsAndReposts`, { params })
+    .then((response) => response.data);
+};
+
 const fetchReactionsTonality = function serviceFetchReactionsTonality(
   entityType,
   entityId,
@@ -56,5 +73,6 @@ export default {
   fetchEntities,
   fetchEntityDynamics,
   fetchPeriods,
+  fetchReactionsComments,
   fetchReactionsTonality,
 };
