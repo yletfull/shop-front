@@ -71,6 +71,7 @@
   color: $color-gray-darker;
 }
 
+.box:hover,
 .input:focus + .box {
-  border-color: $color-primary;
+  border-color: $color-primary-darker;
 }
