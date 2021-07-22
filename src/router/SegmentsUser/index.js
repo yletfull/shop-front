@@ -34,7 +34,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   return (
     <div className={styles.segmentsUser}>
       <SearchForm
-        inputValue={user}
+        user={user}
         onSubmit={handleSearchFormSubmit}
       />
       {!user && (
