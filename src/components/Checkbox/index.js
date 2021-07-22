@@ -59,21 +59,21 @@ const Checkbox = function Checkbox({
 
     if (Array.isArray(checked)) {
       onChange(
+        e,
         nextChecked
           ? [...checked, value]
           : checked.filter((d) => d !== value),
-        e,
       );
       return;
     }
 
     if (typeof checked === 'string' && nextChecked) {
-      onChange(value, e);
+      onChange(e, value);
       return;
     }
 
     // typeof checked === 'boolean'
-    onChange(nextChecked, e);
+    onChange(e, nextChecked);
   };
 
   return (
