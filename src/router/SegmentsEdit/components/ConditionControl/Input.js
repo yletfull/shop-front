@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   attributeTypes,
 } from '../../constants';
+import styles from './styles.module.scss';
 
 const propTypes = {
   type: PropTypes.oneOf(Object.values(attributeTypes)).isRequired,
@@ -53,8 +54,16 @@ const Input = function SegmentConditionControlInput({
     };
   }, [localValue, debounceDelay, onChange]);
 
+  const style = {
+    width: type === attributeTypes.number
+      ? `${localValue.length + 5}ch`
+      : '',
+  };
+
   return (
     <input
+      className={styles.input}
+      style={style}
       type={getInputType(type)}
       value={localValue}
       onChange={handleChange}

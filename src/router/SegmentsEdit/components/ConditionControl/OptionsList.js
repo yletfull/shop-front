@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Checkbox from '@/components/Checkbox';
+import styles from './styles.module.scss';
 
 const propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -8,7 +10,7 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
-  debounceDelay: 1000,
+  debounceDelay: 700,
 };
 
 const OptionsList = function SegmentConditionControlOptionsList({
@@ -18,13 +20,7 @@ const OptionsList = function SegmentConditionControlOptionsList({
   onChange,
 }) {
   const [localChecked, setLocalChecked] = useState(values || []);
-  const handleChange = (e) => {
-    const { checked, value } = e.target;
-
-    const nextValue = checked
-      ? [...localChecked, value]
-      : localChecked.filter((d) => d !== value);
-
+  const handleChange = (e, nextValue) => {
     setLocalChecked(nextValue.sort());
   };
   useEffect(() => {
@@ -41,19 +37,21 @@ const OptionsList = function SegmentConditionControlOptionsList({
   }, [localChecked, debounceDelay, onChange]);
 
   return (
-    <div onChange={handleChange}>
+    <div
+      className={styles.options}
+    >
       {options.map((option) => (
-        <div key={option}>
-          <label>
-            <input
-              type="checkbox"
-              value={option}
-              checked={localChecked.includes(option)}
-            />
-            <span>
-              {option}
-            </span>
-          </label>
+        <div
+          key={option}
+          className={styles.optionsItem}
+        >
+          <Checkbox
+            value={option}
+            checked={localChecked}
+            onChange={handleChange}
+          >
+            {option}
+          </Checkbox>
         </div>
       ))}
     </div>

@@ -52,6 +52,13 @@ const Condition = function SegmentEditorCondition({
     handleDragAreaMouseleave,
   } = useDrag({ groupIndex, index });
 
+  const handleNegationChange = (nextNegation) => {
+    onChange([groupIndex, index], {
+      values,
+      equality,
+      negation: nextNegation,
+    });
+  };
   const handleEqualityChange = (nextEquality) => {
     onChange([groupIndex, index], {
       negation,
@@ -104,25 +111,13 @@ const Condition = function SegmentEditorCondition({
         </div>
 
         <div className={styles.attributeSection}>
-          <button
-            type="button"
-            appearance="control"
-            className={cx(
-              styles.attributeButton,
-              styles.attributeControl,
-              styles.attributeEquality,
-            )}
-          >
-            {negation ? '≠' : '='}
-          </button>
-        </div>
-
-        <div className={styles.attributeSection}>
           <ConditionControl
             type={attribute.type}
             options={attribute.options}
+            negation={negation}
             equality={equality}
             values={values}
+            onNegationChange={handleNegationChange}
             onEqualityChange={handleEqualityChange}
             onValuesChange={handleValuesChange}
           />
