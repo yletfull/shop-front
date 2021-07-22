@@ -18,6 +18,10 @@ import {
   links,
   namespace as NS,
 } from './constants';
+import {
+  fetchAttributes,
+  fetchSegments,
+} from './actions';
 import reducer from './reducer';
 import Attributes from './Attributes';
 import SearchForm from './SearchForm';
@@ -50,6 +54,15 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
+
+  useEffect(() => {
+    const { user } = params || {};
+    if (!user) {
+      return;
+    }
+    dispatch(fetchAttributes(user));
+    dispatch(fetchSegments(user));
+  }, [dispatch, params]);
 
   const handleSearchFormSubmit = (values) => {
     const { user } = values || {};

@@ -10,7 +10,7 @@ const initialState = {
   isFetchingAttributes: false,
   isFetchingSegments: false,
   attributes: {
-    data: {},
+    data: [],
     meta: {},
   },
   segments: {
@@ -33,19 +33,21 @@ export default createReducer(initialState, {
     return ({
       ...state,
       attributes: {
-        data: data || {},
+        data: data || [],
         meta: meta || {},
       },
+      isFetchingAttributes: false,
     });
   },
   [updateSegments]: (state, action) => {
     const { data, meta } = action?.payload || {};
     return ({
       ...state,
-      attributes: {
-        data: data || {},
+      segments: {
+        data: data || [],
         meta: meta || {},
       },
+      isFetchingSegments: false,
     });
   },
 });

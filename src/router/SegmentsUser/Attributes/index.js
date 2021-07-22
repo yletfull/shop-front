@@ -1,25 +1,43 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-// import { formatDate, formatNumber } from '@/utils/format';
+import React, { Fragment, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { formatDate } from '@/utils/format';
+import Button from '@/components/Button';
+import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
+import {
+  getAttributesData,
+  getIsFetchingAttributes,
+} from '../selectors';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  data: PropTypes.objectOf(PropTypes.any),
-};
+const propTypes = {};
+const defaultProps = {};
 
-const defaultProps = {
-  data: {},
-};
+const Attributes = function Attributes() {
+  const attributes = useSelector(getAttributesData);
+  const isFetching = useSelector(getIsFetchingAttributes);
 
-const Attributes = function Attributes({
-  data,
-}) {
-  console.log(data);
+  const generateKey = (prefix, name, index) => `${prefix}-${name}-${index}`;
+  const hasData = !isFetching
+    && Array.isArray(attributes)
+    && attributes.length > 0;
+
+  const [opened, setOpened] = useState([]);
+
+  const handleClickToggleButton = (e) => {
+    const { key } = e?.target?.dataset || {};
+    if (!key) {
+      return;
+    }
+    const index = opened.indexOf(key);
+    setOpened(index === (-1)
+      ? [...opened, key]
+      : [...opened.slice(0, index), ...opened.slice(index + 1)]);
+  };
 
   return (
     <div className={styles.attributes}>
-      <Table>
+      <Table className={styles.attributesTable}>
         <TableRow type="header">
           <TableCell>
             Наименование
@@ -31,6 +49,62 @@ const Attributes = function Attributes({
             Дата
           </TableCell>
         </TableRow>
+
+        {isFetching && (
+          <TableRow>
+            <TableCell colSpan="3">
+              <Spinner />
+            </TableCell>
+          </TableRow>
+        )}
+
+        {!hasData && (
+          <TableRow>
+            <TableCell colSpan="3">
+              Нет данных
+            </TableCell>
+          </TableRow>
+        )}
+
+        {hasData && attributes.map((attribute, attributeIndex) => {
+          const { lastValue, values } = attribute || {};
+          const key = generateKey('lastValue', lastValue.name, attributeIndex);
+          const isOpened = opened.includes(key);
+          return (
+            <Fragment key={key}>
+              <TableRow data-opened={String(isOpened)}>
+                <TableCell>
+                  <Button
+                    appearance="control"
+                    className={styles.attributesTableButton}
+                    data-key={key}
+                    onClick={handleClickToggleButton}
+                  >
+                    {isOpened ? '-' : '+'}
+                  </Button>
+                  {lastValue.name}
+                </TableCell>
+                <TableCell>
+                  {lastValue.value}
+                </TableCell>
+                <TableCell>
+                  {formatDate(lastValue.createdAt)}
+                </TableCell>
+              </TableRow>
+              {isOpened && values.map((value, valueIndex) => (
+                <TableRow key={generateKey('value', value.name, valueIndex)}>
+                  <TableCell />
+                  <TableCell>
+                    {value.value}
+                  </TableCell>
+                  <TableCell>
+                    {formatDate(value.createdAt)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Fragment>
+          );
+        })}
       </Table>
     </div>
   );
