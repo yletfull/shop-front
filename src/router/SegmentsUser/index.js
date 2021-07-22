@@ -8,8 +8,10 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
-import { links } from './constants';
+import { namespace as NS, links } from './constants';
+import reducer from './reducer';
 import SearchForm from './SearchForm';
 import UserAttributes from './UserAttributes';
 import UserSegments from './UserSegments';
@@ -28,13 +30,17 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const { path, url } = useRouteMatch();
 
   useEffect(() => {
+    injectReducer(NS, reducer);
+  }, []);
+
+  useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
   const user = '';
 
-  const handleSearchFormSubmit = (userName) => {
-    console.log('Search Form Submit', userName);
+  const handleSearchFormSubmit = (values) => {
+    console.log('Search Form Submit', values);
   };
 
   return (
