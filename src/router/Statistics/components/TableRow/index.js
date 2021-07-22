@@ -7,6 +7,8 @@ import IconCaretUp from '@/icons/CaretUp';
 import IconCaretDown from '@/icons/CaretDown';
 import styles from './styles.module.scss';
 
+const formatIndexDiff = (value) => formatNumber(Math.abs(value));
+
 const shape = {
   diff: PropTypes.number,
   count: PropTypes.number,
@@ -55,7 +57,7 @@ const StatisticsTableRow = function StatisticsTableRow({
           value={indexDiff}
           increaseSign={<IconCaretUp />}
           decreaseSign={<IconCaretDown />}
-          formatter={formatNumber}
+          formatter={formatIndexDiff}
         />
       </TableCell>
       <TableCell
