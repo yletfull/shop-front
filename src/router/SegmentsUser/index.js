@@ -12,9 +12,9 @@ import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { namespace as NS, links } from './constants';
 import reducer from './reducer';
+import Attributes from './Attributes';
 import SearchForm from './SearchForm';
-import UserAttributes from './UserAttributes';
-import UserSegments from './UserSegments';
+import Segments from './Segments';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -75,10 +75,10 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
           <Redirect to={`${url}/${links.attributes}`} />
         </Route>
         <Route path={`${url}/${links.attributes}`}>
-          <UserAttributes />
+          <Attributes />
         </Route>
         <Route path={`${url}/${links.segments}`}>
-          <UserSegments />
+          <Segments />
         </Route>
       </Switch>
     </div>
