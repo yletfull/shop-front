@@ -77,6 +77,11 @@ export default [
     title: titles.users,
   },
   {
+    Component: SegmentsUser,
+    path: patchs.segmentsUser,
+    title: titles.segmentsUser,
+  },
+  {
     Component: SegmentsList,
     path: patchs.segments,
     title: titles.segments,
@@ -85,11 +90,6 @@ export default [
     Component: SegmentsDetails,
     path: patchs.segmentsDetails,
     title: titles.segmentsDetails,
-  },
-  {
-    Component: SegmentsUser,
-    path: patchs.segmentsUser,
-    title: titles.segmentsUser,
   },
   {
     Component: AudiencesList,

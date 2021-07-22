@@ -1,46 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import Button from '@/components/Button';
+import Input from '@/components/Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  inputValue: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
+  user: PropTypes.string.isRequired,
+  onSubmit: PropTypes.func,
 };
 
-const defaultProps = {};
+const defaultProps = {
+  onSubmit: () => {},
+};
 
-const SearchForm = function SearchForm({ inputValue, onSubmit }) {
-  const [userName, setUserName] = useState(inputValue);
+const SearchForm = function SearchForm({
+  user,
+  onSubmit,
+}) {
+  const [values, setValues] = useState({ user });
 
-  useEffect(() => {
-    setUserName(inputValue);
-  }, [inputValue]);
-
-  const handleChangeUserName = (value) => {
-    setUserName(value);
+  const handleFormChange = (e) => {
+    const { name, value } = e?.target || {};
+    if (!name) {
+      return;
+    }
+    setValues({ ...values, [name]: value || '' });
   };
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    onSubmit(userName);
+    onSubmit(values);
   };
 
   return (
     <form
       className={styles.searchForm}
+      onChange={handleFormChange}
       onSubmit={handleFormSubmit}
     >
-      <input
-        type="text"
-        id="username"
-        name="username"
-        value={userName}
-        onChange={handleChangeUserName}
+      <Input
+        name="user"
+        value={values.user}
       />
-      <button
-        type="submit"
-      >
-        Найти
-      </button>
+      <Button type="submit">
+        найти
+      </Button>
     </form>
   );
 };
