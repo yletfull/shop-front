@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Checkbox from '@/components/Checkbox';
+import InputCheckbox from '@/components/InputCheckbox';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -45,13 +45,13 @@ const OptionsList = function SegmentConditionControlOptionsList({
           key={option}
           className={styles.optionsItem}
         >
-          <Checkbox
+          <InputCheckbox
             value={option}
             checked={localChecked}
             onChange={handleChange}
           >
             {option}
-          </Checkbox>
+          </InputCheckbox>
         </div>
       ))}
     </div>
