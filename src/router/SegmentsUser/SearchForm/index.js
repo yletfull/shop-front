@@ -34,12 +34,12 @@ const SearchForm = function SearchForm({
   return (
     <form
       className={styles.searchForm}
-      onChange={handleFormChange}
       onSubmit={handleFormSubmit}
     >
       <Input
         name="user"
         value={values.user}
+        onChange={handleFormChange}
       />
       <Button type="submit">
         найти
