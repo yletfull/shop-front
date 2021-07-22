@@ -20,7 +20,7 @@ const propTypes = {
   dateEnd: PropTypes.string.isRequired,
 };
 
-const StatisticsTasks = function StatisticsTasksScreen({
+const StatisticsSpheres = function StatisticsSpheresScreen({
   dateStart,
   dateEnd,
 }) {
@@ -32,7 +32,7 @@ const StatisticsTasks = function StatisticsTasksScreen({
 
   const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
-    service: service.fetchTasks,
+    service: service.fetchSpheres,
   });
 
   const handlePageSelect = (value) => {
@@ -148,6 +148,6 @@ const StatisticsTasks = function StatisticsTasksScreen({
   );
 };
 
-StatisticsTasks.propTypes = propTypes;
+StatisticsSpheres.propTypes = propTypes;
 
-export default StatisticsTasks;
+export default StatisticsSpheres;
