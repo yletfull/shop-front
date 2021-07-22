@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   NavLink,
   Redirect,
   Route,
   Switch,
+  useHistory,
   useRouteMatch,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
-import { namespace as NS, links } from './constants';
+import { useQuery } from '@/hooks';
+import {
+  queryParams,
+  links,
+  namespace as NS,
+} from './constants';
 import reducer from './reducer';
 import Attributes from './Attributes';
 import SearchForm from './SearchForm';
@@ -27,7 +33,13 @@ const defaultProps = {
 
 const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useQuery();
   const { path, url } = useRouteMatch();
+
+  const [params, setParams] = useState({
+    user: query.get(queryParams.user) || '',
+  });
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -37,16 +49,17 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
-  const user = '';
-
   const handleSearchFormSubmit = (values) => {
-    console.log('Search Form Submit', values);
+    const { user } = values || {};
+    setParams({ ...params, user });
+    query.set(queryParams.user, user);
+    history.push({ search: query.toString() });
   };
 
   return (
     <div className={styles.segmentsUser}>
       <SearchForm
-        user={user}
+        user={params.user || ''}
         onSubmit={handleSearchFormSubmit}
       />
 
