@@ -26,15 +26,15 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
   const locationSearch = useLocation().search;
   const query = new URLSearchParams(locationSearch);
 
-  const dateStart = query.get('dateStart');
-  const dateEnd = query.get('dateEnd');
-
   const { fetch, data, isFetching } = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
 
   const { datestart, dateend } = data[0] || {};
+
+  const dateEnd = query.get('dateEnd') || dateend;
+  const dateStart = query.get('dateStart') || dateend;
 
   const handleDateInputsSubmit = (dates) => {
     query.set('dateStart', dates.dateStart);
@@ -55,17 +55,17 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
     const queryDateStart = newQuery.get('dateStart');
     const queryDateEnd = newQuery.get('dateEnd');
     if ((queryDateStart && queryDateEnd)
-    || !(datestart && dateend)) {
+    || !(dateStart && dateEnd)) {
       return;
     }
-    if (!queryDateStart) {
-      newQuery.set('dateStart', datestart);
-    }
     if (!queryDateEnd) {
-      newQuery.set('dateEnd', dateend);
+      newQuery.set('dateEnd', dateEnd);
+    }
+    if (!queryDateStart) {
+      newQuery.set('dateStart', dateStart);
     }
     history.push({ search: newQuery.toString() });
-  }, [locationSearch, history, datestart, dateend, data]);
+  }, [locationSearch, history, dateStart, dateEnd]);
 
   return (
     <WithSpinner
