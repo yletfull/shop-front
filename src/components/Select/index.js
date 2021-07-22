@@ -12,6 +12,7 @@ const propTypes = {
   options: PropTypes.arrayOf(PropTypes.any).isRequired,
   placeholder: PropTypes.string,
   type: PropTypes.string,
+  required: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -20,13 +21,14 @@ const defaultProps = {
   fullwidth: false,
   placeholder: '',
   type: 'select',
+  required: false,
 };
 
 const Input = function Input(props) {
   const {
     value, className,
     resetText, fullwidth, options,
-    placeholder, type, ...attrs
+    placeholder, type, required, ...attrs
   } = props;
 
   const currentValue = value || 'default';
@@ -45,14 +47,15 @@ const Input = function Input(props) {
       placeholder={placeholder}
       {...attrs}
     >
-      <option
-        value="default"
-        key="default"
-        hidden={isDefault}
-      >
-        {isDefault ? placeholder : resetText}
-      </option>
-
+      {!required && (
+        <option
+          value="default"
+          key="default"
+          hidden={isDefault}
+        >
+          {isDefault ? placeholder : resetText}
+        </option>
+      )}
       {options.map((option, ind) => (
         <option
           key={ind}
