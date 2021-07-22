@@ -2,7 +2,6 @@ import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { setHeader } from '@/store/ui/actions';
-import CommonInfo from './CommonInfo';
 import SearchForm from './SearchForm';
 import UserAttributes from './UserAttributes';
 import UserSegments from './UserSegments';
@@ -39,13 +38,6 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
       />
       {!user && (
         <Fragment>
-          <CommonInfo
-            segmentsCount={0}
-            uploadsCount={0}
-            lastUpdateDate=""
-            lastUptateIdentifier=""
-          />
-
           <h2 className={styles.heading}>
             Атрибуты пользователя
           </h2>
