@@ -6,6 +6,7 @@ import {
   Route,
   Switch,
   useHistory,
+  useLocation,
   useRouteMatch,
 } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -35,6 +36,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
+  const { search } = useLocation();
   const { path, url } = useRouteMatch();
 
   const [params, setParams] = useState({
@@ -67,14 +69,14 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
         <NavLink
           activeClassName={styles.segmentsUserLink_active}
           className={styles.segmentsUserLink}
-          to={`${url}/${links.attributes}`}
+          to={`${url}/${links.attributes}${search}`}
         >
           Атрибуты
         </NavLink>
         <NavLink
           activeClassName={styles.segmentsUserLink_active}
           className={styles.segmentsUserLink}
-          to={`${url}/${links.segments}`}
+          to={`${url}/${links.segments}${search}`}
         >
           Сегменты
         </NavLink>
