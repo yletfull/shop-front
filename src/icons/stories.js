@@ -1,4 +1,8 @@
 import React from 'react';
+import Exclamation from './Exclamation';
+import Equals from './Equals';
+import GreaterThanEqual from './GreaterThanEqual';
+import LessThanEqual from './LessThanEqual';
 import BarsLight from './BarsLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
@@ -60,6 +64,10 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(Exclamation)}
+    {renderIcon(Equals)}
+    {renderIcon(GreaterThanEqual)}
+    {renderIcon(LessThanEqual)}
     {renderIcon(BarsLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
