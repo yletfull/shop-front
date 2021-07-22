@@ -1,7 +1,32 @@
 @import '@/theme/include.scss';
 
+.form {
+  align-items: center;
+  display: flex;
+}
+
 .inputs {
-  & > * {
-    margin-right: .5em;
+  margin: 0 .5em;
+}
+
+.arrow {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  padding: .5em;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+    border-radius: .25em;
   }
+
+  &:disabled {
+    color: $color-gray-darker;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.submit {
+  margin-left: .5rem;
 }
