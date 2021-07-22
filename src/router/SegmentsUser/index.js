@@ -1,7 +1,15 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import {
+  NavLink,
+  Redirect,
+  Route,
+  Switch,
+  useRouteMatch,
+} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setHeader } from '@/store/ui/actions';
+import { links } from './constants';
 import SearchForm from './SearchForm';
 import UserAttributes from './UserAttributes';
 import UserSegments from './UserSegments';
@@ -17,14 +25,13 @@ const defaultProps = {
 
 const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const dispatch = useDispatch();
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
   const user = '';
-  const userAttributes = [];
-  const userSegments = [];
 
   const handleSearchFormSubmit = (userName) => {
     console.log('Search Form Submit', userName);
@@ -36,25 +43,38 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
         user={user}
         onSubmit={handleSearchFormSubmit}
       />
-      {!user && (
-        <Fragment>
-          <h2 className={styles.heading}>
-            Атрибуты пользователя
-          </h2>
 
-          <UserAttributes
-            data={userAttributes}
-          />
+      <div className={styles.segmentsUserTabs}>
+        <NavLink
+          activeClassName={styles.segmentsUserLink_active}
+          className={styles.segmentsUserLink}
+          to={`${url}/${links.attributes}`}
+        >
+          Атрибуты
+        </NavLink>
+        <NavLink
+          activeClassName={styles.segmentsUserLink_active}
+          className={styles.segmentsUserLink}
+          to={`${url}/${links.segments}`}
+        >
+          Сегменты
+        </NavLink>
+      </div>
 
-          <h2 className={styles.heading}>
-            Сегменты, в которые входит пользователь
-          </h2>
-
-          <UserSegments
-            data={userSegments}
-          />
-        </Fragment>
-      )}
+      <Switch>
+        <Route
+          path={path}
+          exact
+        >
+          <Redirect to={`${url}/${links.attributes}`} />
+        </Route>
+        <Route path={`${url}/${links.attributes}`}>
+          <UserAttributes />
+        </Route>
+        <Route path={`${url}/${links.segments}`}>
+          <UserSegments />
+        </Route>
+      </Switch>
     </div>
   );
 };
