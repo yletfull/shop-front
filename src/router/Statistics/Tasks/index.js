@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
-import { useService, useQuery } from '@/hooks';
+import { useService } from '@/hooks';
 import ErrorMessage from '../components/ErrorMessage';
 import Header from '../components/Header';
 import WidthSpinner from '../components/WithSpinner';
@@ -25,23 +25,10 @@ const StatisticsTasks = function StatisticsTasksScreen({
   dateEnd,
 }) {
   const history = useHistory();
-  const query = useQuery();
+  const locationSearch = useLocation().search;
+  const query = new URLSearchParams(locationSearch);
 
-  const [pagination, setPagination] = useState({
-    currentPage: query.get('currentPage') || 1,
-    perPage: query.get('perPage') || countOptions[0],
-  });
-
-  const [sort, setSort] = useState({
-    sortDir: query.get('sortDir'),
-    sortField: query.get('sortField'),
-  });
-
-  const [params, setParams] = useState({
-    search: query.get('search'),
-  });
-
-  const [filter, setFilter] = useState(params);
+  const [filter, setFilter] = useState({ search: query.get('search') });
 
   const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
@@ -49,20 +36,11 @@ const StatisticsTasks = function StatisticsTasksScreen({
   });
 
   const handlePageSelect = (value) => {
-    setPagination({
-      ...pagination,
-      currentPage: value,
-    });
     query.set('currentPage', value);
     history.push({ search: query.toString() });
   };
 
   const handleCountSelect = (value) => {
-    setPagination({
-      ...pagination,
-      currentPage: 1,
-      perPage: value,
-    });
     query.set('currentPage', 1);
     query.set('perPage', value);
     history.push({ search: query.toString() });
@@ -70,13 +48,14 @@ const StatisticsTasks = function StatisticsTasksScreen({
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setParams({
-      ...filter,
-    });
+    query.set('search', filter.search);
+    history.push({ search: query.toString() });
   };
 
   const handleSortChange = ({ sortDir, sortField }) => {
-    setSort({ sortDir, sortField });
+    query.set('sortDir', sortDir);
+    query.set('sortField', sortField);
+    history.push({ search: query.toString() });
   };
 
   const handleFilterChange = (values) => {
@@ -84,23 +63,18 @@ const StatisticsTasks = function StatisticsTasksScreen({
   };
 
   useEffect(() => {
-    const values = Object.entries({
-      ...sort,
-      ...params,
-      ...pagination,
+    const newQuery = new URLSearchParams(locationSearch);
+    const params = {
+      currentPage: newQuery.get('currentPage') || 1,
+      perPage: newQuery.get('perPage') || countOptions[0],
+      sortDir: newQuery.get('sortDir'),
+      sortField: newQuery.get('sortField'),
+      search: newQuery.get('search'),
       dateStart,
       dateEnd,
-    })
-      .filter(([, value]) => (
-        typeof value !== 'undefined'
-      ))
-      .reduce((acc, [key, value]) => ({
-        ...acc,
-        [key]: value,
-      }), {});
-
-    fetch(values);
-  }, [fetch, pagination, dateStart, dateEnd, params, sort]);
+    };
+    fetch(params);
+  }, [locationSearch, fetch, dateStart, dateEnd]);
 
   const { data, meta } = response?.data || {};
 
