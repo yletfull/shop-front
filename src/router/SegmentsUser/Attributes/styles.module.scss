@@ -1,5 +1,23 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.attributes {
+  &Table {
+    & td {
+      &:not(:first-child) {
+        text-align: right;
+      }
+    }
+
+    & tr {
+      &[data-opened='true'] {
+        & > td {
+          background: $color-gray-lighter;
+        }
+      }
+    }
+
+    &Button {
+      margin-right: .5rem;
+    }
+  }
 }
