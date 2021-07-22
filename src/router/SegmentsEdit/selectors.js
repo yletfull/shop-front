@@ -56,3 +56,13 @@ export const getMapProfileTitle = createSelector(
     }
   }, {}),
 );
+export const getMapAttribute = createSelector(
+  [getParams],
+  (attributes) => attributes.reduce((result, group) => ({
+    ...result,
+    ...group.attributes.reduce((acc, attribute) => ({
+      ...acc,
+      [attribute.id]: attribute,
+    }), {}),
+  }), {}),
+);

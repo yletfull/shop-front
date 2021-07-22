@@ -11,11 +11,7 @@ import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import {
-  attributeProps,
-  attributeTypes,
-  equalityTypes,
   namespace as NS,
-  dndTypes,
   segmentProps,
 } from './constants';
 import reducer from './reducer';
@@ -35,7 +31,6 @@ import {
   formatSegmentAttributesListForRequest,
 } from './helpers';
 import {
-  getAttributesStatistics,
   getIsFetchingParams,
   getIsFetchingSegment,
   getIsSubmittingSegment,
@@ -47,11 +42,7 @@ import {
 } from './selectors';
 import LogicOperator from './components/LogicOperator';
 import DropArea from './components/DropArea';
-import Attribute from './Attribute';
-import AttributeDatasets from './AttributeDatasets';
-import AttributeDatasetsForm from './AttributeDatasetsForm';
-import AttributeDatasetsSelect from './AttributeDatasetsSelect';
-import AttributeStatistics from './AttributeStatistics';
+import Condition from './components/Condition';
 import AttributesConstructor from './AttributesConstructor';
 import AttributesLabels from './AttributesLabels';
 import Params from './Params';
@@ -79,7 +70,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const isFetchingParams = useSelector(getIsFetchingParams);
   const params = useSelector(getParams);
 
-  const attributesStatistics = useSelector(getAttributesStatistics);
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const isSubmittingSegment = useSelector(getIsSubmittingSegment);
   const segmentAttributes = useSelector(getSegmentAttributes);
@@ -152,10 +142,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleRemoveAttribute = (position) => {
     setIsSegmentChanged(true);
     dispatch(removeSegmentAttribute(position));
-  };
-  const handleSubmitAttribute = (position, values) => {
-    dispatch(updateSegmentAttribute(position, values));
-    // dispatch(fetchAttributeStatistics(position));
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
@@ -254,7 +240,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                 (
                   <DropArea
                     key={groupKey('drop')}
-                    accept={dndTypes.attribute}
                     group={groupIndex}
                     index={-1}
                     className={cx(groupIndex === 0 && styles.dropAreaFirst)}
@@ -262,26 +247,12 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     onDrop={handleConditionDrop}
                   />
                 ),
-                ...group.reduce((acc, attribute, attributeIndex) => {
-                  const {
-                    [attributeProps.datasets]: datasets,
-                    [attributeProps.datasetIds]: datasetIds,
-                    [attributeProps.name]: name,
-                    [attributeProps.title]: title,
-                  } = attribute || {};
-                  const getStatistics = (position) => {
-                    const [gIndex, aIndex] = position || [];
-                    if (typeof gIndex === 'undefined'
-                      || typeof aIndex === 'undefined') {
-                      return null;
-                    }
-                    return attributesStatistics[gIndex]?.[aIndex] || null;
-                  };
-                  const key = (k) => `attribute-${attribute.fakeId}-${k}`;
+                ...group.reduce((acc, condition, conditionIndex) => {
+                  const key = (k) => `attribute-${condition.fakeId}-${k}`;
 
                   return ([
                     ...acc,
-                    (attributeIndex > 0) && (
+                    (conditionIndex > 0) && (
                       <LogicOperator
                         key={key('or')}
                         type="or"
@@ -290,55 +261,31 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                     (
                       <DropArea
                         key={key('drop')}
-                        accept={dndTypes.attribute}
                         group={groupIndex}
-                        index={attributeIndex}
-                        align={attributeIndex === 0 ? 'start' : 'middle'}
+                        index={conditionIndex}
+                        align={conditionIndex === 0 ? 'start' : 'middle'}
                         onDrop={handleConditionDrop}
                       />
                     ),
                     (
-                      <Attribute
+                      <Condition
                         key={key('itself')}
-                        properties={attributeProps}
-                        types={attributeTypes}
-                        equalityTypes={equalityTypes}
+                        attributeId={condition.id}
+                        datasetIds={condition.datasetIds}
+                        negation={condition.negation}
+                        equality={condition.equality}
+                        values={condition.values}
                         groupIndex={groupIndex}
-                        index={attributeIndex}
-                        data={attribute}
-                        dragType={dndTypes.attribute}
+                        index={conditionIndex}
                         onChange={handleChangeAttribute}
                         onRemove={handleRemoveAttribute}
-                      >
-                        <AttributeDatasets
-                          name={title || name}
-                          selected={datasetIds || []}
-                          datasets={datasets || []}
-                        >
-                          <AttributeDatasetsSelect
-                            datasets={datasets || []}
-                            selected={datasetIds || []}
-                          >
-                            <AttributeDatasetsForm
-                              groupIndex={groupIndex}
-                              attributeIndex={attributeIndex}
-                              datasets={datasets || []}
-                              selected={datasetIds || []}
-                              onSubmit={handleSubmitAttribute}
-                            />
-                          </AttributeDatasetsSelect>
-                        </AttributeDatasets>
-                        <AttributeStatistics
-                          data={getStatistics([groupIndex, attributeIndex])}
-                        />
-                      </Attribute>
+                      />
                     ),
-                    (attributeIndex === group.length - 1) && (
+                    (conditionIndex === group.length - 1) && (
                       <DropArea
                         key={key('drop-end')}
-                        accept={dndTypes.attribute}
                         group={groupIndex}
-                        index={attributeIndex + 1}
+                        index={conditionIndex + 1}
                         align="end"
                         onDrop={handleConditionDrop}
                       />
@@ -348,7 +295,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                 (groupIndex === groups.length - 1) && (
                   <DropArea
                     key={groupKey('drop-end')}
-                    accept={dndTypes.attribute}
                     group={groupIndex + 1}
                     index={-1}
                     className={styles.dropAreaLast}

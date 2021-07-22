@@ -1,0 +1,155 @@
+/* eslint "no-unused-vars": "off" */
+import React from 'react';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
+import { useSelector } from 'react-redux';
+import IconBars from '@/icons/BarsLight';
+import IconTimes from '@/icons/TimesLight';
+import {
+  equalities,
+} from '../../constants';
+import {
+  getMapProfileTitle,
+  getMapAttribute,
+} from '../../selectors';
+import ConditionControl from '../ConditionControl';
+import Input from './Input';
+import InputOptions from './InputOptions';
+import useDrag from './use-drag';
+import styles from './styles.module.scss';
+
+const propTypes = {
+  groupIndex: PropTypes.number.isRequired,
+  index: PropTypes.number.isRequired,
+  attributeId: PropTypes.number.isRequired,
+  datasetIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  negation: PropTypes.bool.isRequired,
+  equality: PropTypes.oneOf(Object.values(equalities)).isRequired,
+  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func,
+};
+const defaultProps = {
+  onChange: () => {},
+};
+
+const Condition = function SegmentEditorCondition({
+  groupIndex,
+  index,
+  attributeId,
+  datasetIds,
+  negation,
+  equality,
+  values,
+  onChange,
+}) {
+  const mapProfileTitle = useSelector(getMapProfileTitle);
+  const mapAttribute = useSelector(getMapAttribute);
+  const attribute = mapAttribute[attributeId] || {};
+  const profileTitle = mapProfileTitle[attribute.profileId] || '';
+
+  const {
+    dragRef,
+    isDragging,
+    handleDragAreaMouseover,
+    handleDragAreaMouseleave,
+  } = useDrag({ groupIndex, index });
+
+  const handleEqualityChange = (nextEquality) => {
+    onChange([groupIndex, index], {
+      negation,
+      values,
+      equality: nextEquality,
+    });
+  };
+  const handleValuesChange = (nextValues) => {
+    onChange([groupIndex, index], {
+      negation,
+      equality,
+      values: nextValues,
+    });
+  };
+
+  return (
+    <div
+      ref={dragRef}
+      className={styles.attribute}
+      data-is-dragging={String(isDragging)}
+    >
+      <div className={styles.attributeAside}>
+        <span
+          className={cx(
+            styles.attributeControl,
+            styles.attributeControlDrag,
+          )}
+          onMouseOver={handleDragAreaMouseover}
+          onMouseLeave={handleDragAreaMouseleave}
+          onFocus={handleDragAreaMouseover}
+          onBlur={handleDragAreaMouseleave}
+        >
+          <IconBars />
+        </span>
+      </div>
+
+      <div className={styles.attributeMain}>
+        <div className={styles.attributeSection}>
+          <span className={styles.attributeTitle}>
+            {attribute.title || attribute.attributeName || attribute.id}
+          </span>
+          {Boolean(profileTitle) && (
+            <div
+              className={styles.attributeProfile}
+              title={profileTitle}
+            >
+              {profileTitle}
+            </div>
+          )}
+        </div>
+
+        <div className={styles.attributeSection}>
+          <button
+            type="button"
+            appearance="control"
+            className={cx(
+              styles.attributeButton,
+              styles.attributeControl,
+              styles.attributeEquality,
+            )}
+          >
+            {negation ? '≠' : '='}
+          </button>
+        </div>
+
+        <div className={styles.attributeSection}>
+          <ConditionControl
+            type={attribute.type}
+            options={attribute.options}
+            equality={equality}
+            values={values}
+            onEqualityChange={handleEqualityChange}
+            onValuesChange={handleValuesChange}
+          />
+        </div>
+      </div>
+
+      <div className={styles.attributeAside}>
+        <button
+          type="button"
+          className={cx(
+            styles.attributeButton,
+            styles.attributeControl,
+            styles.attributeControlRemove,
+          )}
+        >
+          <IconTimes />
+        </button>
+      </div>
+
+      <div className={styles.attributeOverlay} />
+    </div>
+  );
+};
+
+Condition.propTypes = propTypes;
+Condition.defaultProps = defaultProps;
+
+export default Condition;
