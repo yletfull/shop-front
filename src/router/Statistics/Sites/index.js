@@ -1,6 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
 import { useService } from '@/hooks';
@@ -15,15 +14,7 @@ import FilterRow from './components/FilterRow';
 
 const countOptions = [10, 20, 30];
 
-const propTypes = {
-  dateStart: PropTypes.string.isRequired,
-  dateEnd: PropTypes.string.isRequired,
-};
-
-const StatisticsSitesScreen = function StatisticsSitesScreen({
-  dateStart,
-  dateEnd,
-}) {
+const StatisticsSitesScreen = function StatisticsSitesScreen() {
   const history = useHistory();
   const locationSearch = useLocation().search;
   const query = new URLSearchParams(locationSearch);
@@ -70,11 +61,11 @@ const StatisticsSitesScreen = function StatisticsSitesScreen({
       sortDir: newQuery.get('sortDir'),
       sortField: newQuery.get('sortField'),
       search: newQuery.get('search'),
-      dateStart,
-      dateEnd,
+      dateStart: newQuery.get('dateStart'),
+      dateEnd: newQuery.get('dateEnd'),
     };
     fetch(params);
-  }, [locationSearch, fetch, dateStart, dateEnd]);
+  }, [locationSearch, fetch]);
 
   const { data, meta } = response?.data || {};
 
@@ -143,7 +134,5 @@ const StatisticsSitesScreen = function StatisticsSitesScreen({
     </div>
   );
 };
-
-StatisticsSitesScreen.propTypes = propTypes;
 
 export default StatisticsSitesScreen;

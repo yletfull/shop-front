@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { formatDate } from '@/utils/format';
-import dayjs from '@/utils/day';
-import { useService, useQuery } from '@/hooks';
+import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import { useService } from '@/hooks';
 import { setHeader } from '@/store/ui/actions';
 import WithSpinner from './components/WithSpinner';
 import DateInputs from './components/DateInputs';
@@ -12,8 +10,6 @@ import RouterView from './RouterView';
 import { paths, titles } from './routes';
 import styles from './styles.module.scss';
 import service from './service';
-
-const DATE_FORMAT = 'YYYY-MM-DD';
 
 const propTypes = {
   defaultTitle: PropTypes.string,
@@ -25,8 +21,13 @@ const defaultProps = {
 
 const Statistics = function StatisticsScreen({ defaultTitle }) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const query = useQuery();
+  const locationSearch = useLocation().search;
+  const query = new URLSearchParams(locationSearch);
+
+  const dateStart = query.get('dateStart');
+  const dateEnd = query.get('dateEnd');
 
   const { fetch, data, isFetching } = useService({
     initialData: [],
@@ -35,12 +36,11 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
 
   const { datestart, dateend } = data[0] || {};
 
-  const [params, setParams] = useState({
-    dateStart: query.get('dateStart') || formatDate(dayjs().subtract(6, 'month'), DATE_FORMAT),
-    dateEnd: query.get('dateEnd') || formatDate(dayjs(), DATE_FORMAT),
-  });
-
-  const handleDateInputsSubmit = (values) => setParams(values);
+  const handleDateInputsSubmit = (dates) => {
+    query.set('dateStart', dates.dateStart);
+    query.set('dateEnd', dates.dateEnd);
+    history.push({ search: query.toString() });
+  };
 
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
@@ -49,6 +49,23 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
   useEffect(() => {
     fetch();
   }, [fetch]);
+
+  useEffect(() => {
+    const newQuery = new URLSearchParams(locationSearch);
+    const queryDateStart = newQuery.get('dateStart');
+    const queryDateEnd = newQuery.get('dateEnd');
+    if ((queryDateStart && queryDateEnd)
+    || !(datestart && dateend)) {
+      return;
+    }
+    if (!queryDateStart) {
+      newQuery.set('dateStart', datestart);
+    }
+    if (!queryDateEnd) {
+      newQuery.set('dateEnd', dateend);
+    }
+    history.push({ search: newQuery.toString() });
+  }, [locationSearch, history, datestart, dateend, data]);
 
   return (
     <WithSpinner
@@ -60,8 +77,8 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
         className={styles.dateInputs}
         min={datestart}
         max={dateend}
-        dateStart={params.dateStart}
-        dateEnd={params.dateEnd}
+        dateStart={dateStart}
+        dateEnd={dateEnd}
         onSubmit={handleDateInputsSubmit}
       />
       <div className="nav-links-wrapper">
@@ -77,10 +94,7 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
             </NavLink>
           ))}
       </div>
-      <RouterView
-        dateStart={params.dateStart}
-        dateEnd={params.dateEnd}
-      />
+      <RouterView />
     </WithSpinner>
   );
 };
