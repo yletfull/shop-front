@@ -1,4 +1,5 @@
 import React from 'react';
+import Check from './Check';
 import Exclamation from './Exclamation';
 import Equals from './Equals';
 import GreaterThanEqual from './GreaterThanEqual';
@@ -64,6 +65,7 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(Check)}
     {renderIcon(Exclamation)}
     {renderIcon(Equals)}
     {renderIcon(GreaterThanEqual)}
