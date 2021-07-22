@@ -13,8 +13,6 @@ import {
   getMapAttribute,
 } from '../../selectors';
 import ConditionControl from '../ConditionControl';
-import Input from './Input';
-import InputOptions from './InputOptions';
 import useDrag from './use-drag';
 import styles from './styles.module.scss';
 
