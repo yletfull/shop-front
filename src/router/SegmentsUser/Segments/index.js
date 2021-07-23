@@ -19,13 +19,16 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   onChangePage: PropTypes.func,
+  onSubmitFilter: PropTypes.func,
 };
 const defaultProps = {
   onChangePage: () => {},
+  onSubmitFilter: () => {},
 };
 
 const Segments = function Segments({
   onChangePage,
+  onSubmitFilter,
 }) {
   const history = useHistory();
   const query = useQuery();
@@ -63,6 +66,7 @@ const Segments = function Segments({
     query.set(queryParams.segmentId, values[queryParams.segmentId] || '');
     query.set(queryParams.segmentName, values[queryParams.segmentName] || '');
     history.push({ search: query.toString() });
+    onSubmitFilter(values);
   };
 
   return (
@@ -121,7 +125,9 @@ const Segments = function Segments({
           {isFetching && (
             <TableRow>
               <TableCell colSpan="6">
-                <Spinner />
+                <span className={styles.segmentsTableEmpty}>
+                  <Spinner />
+                </span>
               </TableCell>
             </TableRow>
           )}
@@ -129,7 +135,9 @@ const Segments = function Segments({
           {isEmpty && (
             <TableRow>
               <TableCell colSpan="6">
-                Нет данных
+                <span className={styles.segmentsTableEmpty}>
+                  Нет данных
+                </span>
               </TableCell>
             </TableRow>
           )}
