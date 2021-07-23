@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useKeyPress } from '@/hooks';
 import IconTimesLight from '@/icons/TimesLight';
 import Portal from '../Portal';
 import styles from './styles.module.scss';
@@ -11,6 +12,7 @@ const propTypes = {
   children: PropTypes.node.isRequired,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   width: PropTypes.number,
+  notСlosable: PropTypes.bool,
   onClose: PropTypes.func,
 };
 const defaultProps = {
@@ -18,6 +20,7 @@ const defaultProps = {
   title: null,
   size: 'medium',
   width: 0,
+  notСlosable: false,
   onClose: () => {},
 };
 
@@ -27,11 +30,18 @@ const Modal = function Modal({
   children,
   size,
   width,
+  notСlosable,
   onClose,
 }) {
   const handleClose = onClose;
-  const isClosable = typeof handleClose === 'function';
+  const isClosable = !notСlosable && typeof handleClose === 'function';
   const shouldRenderHeader = Boolean(title) && isClosable;
+
+  useKeyPress({
+    event: isClosable && 'keydown',
+    key: 'Escape',
+    handler: handleClose,
+  });
 
   return (
     <Portal>
