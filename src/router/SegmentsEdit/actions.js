@@ -2,6 +2,7 @@ import { createAction } from '@reduxjs/toolkit';
 import {
   initialStatisticEntities,
   attributeProps,
+  equalities,
   equalityTypes,
   namespace as NS,
   segmentProps,
@@ -339,23 +340,27 @@ export const moveCondition = ({ source, target }) => (dispatch, getState) => {
   }));
 };
 
-export const addSegmentAttribute = (values) => (dispatch, getState) => {
-  const attributes = getSegmentAttributes(getState());
-  const mapAttribute = (attr) => {
-    const initial = {
-      equality: equalityTypes.any,
+export const addSegmentAttribute = (attributes) => (dispatch, getState) => {
+  const conditions = getSegmentAttributes(getState());
+  const createGroupWithCondition = (attribute) => ([
+    {
+      ...attribute,
+      equality: (Array.isArray(attribute.options) && attribute.options.length)
+        ? equalities.in
+        : equalities.eq,
       negation: false,
       values: [],
       datasetIds: [],
       clientId: getRandomString(),
-    };
-    return ([{ ...initial, ...attr }]);
-  };
-  const newAttributes = values.map(mapAttribute);
+    },
+  ]);
+  const newConditions = attributes.map(createGroupWithCondition);
   dispatch(updateSegment({
-    [segmentProps.attributes]: attributes.concat(newAttributes),
+    conditions: [
+      ...conditions,
+      ...newConditions,
+    ],
   }));
-  dispatch(initAttributesStatistics());
 };
 
 export const removeSegmentAttribute = (position) => (dispatch, getState) => {
