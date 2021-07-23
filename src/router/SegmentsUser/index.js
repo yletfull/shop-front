@@ -49,8 +49,8 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
 
   const segmentsCount = useSelector(getSegmentsCount);
 
+  const [entity, setEntity] = useState(query.get(queryParams.user) || '');
   const [params, setParams] = useState({
-    user: query.get(queryParams.user) || '',
     currentPage: query.get(queryParams.page) || 1,
   });
 
@@ -63,15 +63,18 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   }, [dispatch, defaultTitle]);
 
   useEffect(() => {
-    const { user } = params || {};
-    if (!user) {
+    if (!entity) {
       return;
     }
-    dispatch(fetchAttributes(user));
-    dispatch(fetchSegments(user, {
-      currentPage: params?.currentPage || 1,
-    }));
-  }, [dispatch, params]);
+    dispatch(fetchAttributes(entity));
+  }, [dispatch, entity]);
+
+  useEffect(() => {
+    if (!entity) {
+      return;
+    }
+    dispatch(fetchSegments(entity, params));
+  }, [dispatch, entity, params]);
 
   const handleChangeSegmentsPage = (page) => {
     if (!page) {
@@ -81,7 +84,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   };
   const handleSearchFormSubmit = (values) => {
     const { user } = values || {};
-    setParams({ ...params, user });
+    setEntity(user);
     query.set(queryParams.user, user);
     history.push({ search: query.toString() });
   };
@@ -89,7 +92,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   return (
     <div className={styles.segmentsUser}>
       <SearchForm
-        user={params.user || ''}
+        user={entity || ''}
         onSubmit={handleSearchFormSubmit}
       />
 
