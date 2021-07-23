@@ -4,6 +4,7 @@ export const queryParams = {
   user: 'user',
   segmentId: 'segmentId',
   segmentName: 'segmentName',
+  page: 'currentPage',
 };
 
 export const links = {
