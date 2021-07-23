@@ -62,12 +62,7 @@ const EqualitySelect = function SegmentConditionControlEqualitySelect({
   }, [localValue, debounceDelay, onChange]);
 
   return (
-    <span
-      className={styles.pills}
-      value={value}
-      options={options}
-      onChange={handleChange}
-    >
+    <span className={styles.pills}>
       {options.map((option) => (
         <label
           key={option.value}
@@ -79,6 +74,7 @@ const EqualitySelect = function SegmentConditionControlEqualitySelect({
             type="radio"
             value={option.value}
             checked={localValue === option.value}
+            onChange={handleChange}
           />
           <span className={styles.pillsOptionLabel}>
             {option.icon}
