@@ -14,3 +14,38 @@ export const getAttributesData = createSelector(
   [getAttributes],
   (attributes) => attributes?.data || [],
 );
+
+export const getSegmentsData = createSelector(
+  [getSegments],
+  (segments) => {
+    const { data } = segments || {};
+    if (!data || !Array.isArray(data)) {
+      return [];
+    }
+    const entityTypes = {
+      PHONE: 'phones',
+      EMAIL: 'emails',
+    };
+    return data.map((d) => {
+      const { entityTypesTotal } = d || {};
+      if (entityTypesTotal && Array.isArray(entityTypesTotal)) {
+        const { phones, emails } = entityTypesTotal
+          .reduce((acc, { entityType, total }) => {
+            if (!entityType) {
+              return acc;
+            }
+            return ({
+              ...acc,
+              [entityTypes[entityType] || entityType]: total,
+            });
+          }, {});
+        return ({ ...d, phones, emails });
+      }
+      return d;
+    });
+  },
+);
+export const getSegmentMeta = createSelector(
+  [getSegments],
+  (segments) => segments.meta || {},
+);

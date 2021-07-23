@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@/hooks';
-// import { formatDate, formatNumber } from '@/utils/format';
+import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
 import { queryParams } from '../constants';
+import {
+  getIsFetchingSegments,
+  getSegmentsData,
+} from '../selectors';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.any),
-};
-const defaultProps = {
-  data: [],
-};
+const propTypes = {};
+const defaultProps = {};
 
-const Segments = function Segments({
-  data,
-}) {
+const Segments = function Segments() {
   const history = useHistory();
   const query = useQuery();
 
-  console.log(data);
+  const isFetching = useSelector(getIsFetchingSegments);
+  const data = useSelector(getSegmentsData);
+
+  const isEmpty = !isFetching && (!data || data.length === 0);
+  const hasData = !isFetching && Array.isArray(data) && data.length > 0;
 
   const [values, setValues] = useState({
     [queryParams.segmentId]: query.get(queryParams.segmentId) || '',
@@ -47,18 +51,22 @@ const Segments = function Segments({
   return (
     <div className={styles.segments}>
       <form onSubmit={handleFormSubmit}>
-        <Table>
+        <Table className={styles.segmentsTable}>
           <TableRow>
-            <TableCell>
+            <TableCell data-type="filter">
               <Input
                 placeholder="ID"
                 name={queryParams.segmentId}
                 value={values[queryParams.segmentId]}
                 onChange={handleInputChange}
+                fullwidth
               />
             </TableCell>
-            <TableCell colSpan="5">
-              <span>
+            <TableCell
+              colSpan="5"
+              data-type="filter"
+            >
+              <span className={styles.segmentsFilterCell}>
                 <Input
                   placeholder="Название"
                   name={queryParams.segmentName}
@@ -79,19 +87,56 @@ const Segments = function Segments({
             <TableCell>
               Название
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               Телеф.
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               E-mail
             </TableCell>
             <TableCell>
               Файлы
             </TableCell>
-            <TableCell>
+            <TableCell align="right">
               Посл. версия
             </TableCell>
           </TableRow>
+
+          {isFetching && (
+            <TableRow>
+              <TableCell colSpan="6">
+                <Spinner />
+              </TableCell>
+            </TableRow>
+          )}
+
+          {isEmpty && (
+            <TableRow>
+              <TableCell colSpan="6">
+                Нет данных
+              </TableCell>
+            </TableRow>
+          )}
+
+          {hasData && data.map((d) => (
+            <TableRow key={d.id}>
+              <TableCell>
+                {d.id}
+              </TableCell>
+              <TableCell>
+                {d.title}
+              </TableCell>
+              <TableCell align="right">
+                {d.phones ? formatNumber(d.phones) : '-'}
+              </TableCell>
+              <TableCell align="right">
+                {d.emails ? formatNumber(d.emails) : '-'}
+              </TableCell>
+              <TableCell />
+              <TableCell align="right">
+                {formatDate(d.lastVersionDate)}
+              </TableCell>
+            </TableRow>
+          ))}
         </Table>
       </form>
     </div>
