@@ -1,5 +1,32 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.segments {
+  &Filter {
+    &Cell {
+      display: flex;
+
+      & > button {
+        margin-left: .5rem;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
+      & > input {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  &Table {
+    & td {
+      &[data-type='filter'] {
+        padding-right: 0;
+
+        &:first-child {
+          padding-left: 0;
+          width: 4rem;
+        }
+      }
+    }
+  }
 }
