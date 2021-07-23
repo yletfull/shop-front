@@ -52,6 +52,8 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const [entity, setEntity] = useState(query.get(queryParams.user) || '');
   const [params, setParams] = useState({
     currentPage: query.get(queryParams.page) || 1,
+    id: query.get(queryParams.segmentId) || '',
+    title: query.get(queryParams.segmentName) || '',
   });
 
   useEffect(() => {
@@ -88,6 +90,13 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
     query.set(queryParams.user, user);
     history.push({ search: query.toString() });
   };
+  const handleSubmitFilter = (values) => {
+    setParams({
+      ...params,
+      id: values[queryParams.segmentId] || '',
+      title: values[queryParams.segmentName] || '',
+    });
+  };
 
   return (
     <div className={styles.segmentsUser}>
@@ -111,7 +120,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
         >
           Сегменты
           &nbsp;
-          {segmentsCount && (
+          {Boolean(segmentsCount) && (
             <span className={styles.segmentsUserLinkCount}>
               {formatNumber(segmentsCount)}
             </span>
@@ -132,6 +141,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
         <Route path={`${url}/${links.segments}`}>
           <Segments
             onChangePage={handleChangeSegmentsPage}
+            onSubmitFilter={handleSubmitFilter}
           />
         </Route>
       </Switch>

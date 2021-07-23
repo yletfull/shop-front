@@ -24,6 +24,7 @@ export const fetchSegments = (entity, params) => async (dispatch) => {
   if (!entity) {
     return;
   }
+  dispatch(updateSegments({}));
   dispatch(requestSegments());
   try {
     const response = await service.fetchSegments(entity, params);
