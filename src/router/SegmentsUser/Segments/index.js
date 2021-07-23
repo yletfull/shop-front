@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
+import { patchs } from '@/router/routes';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Pagination from '@/components/PagePagination';
@@ -52,7 +53,6 @@ const Segments = function Segments({
     }
     setValues({ ...values, [name]: value });
   };
-
   const handleChangePage = (page) => {
     if (!page) {
       return;
@@ -145,7 +145,9 @@ const Segments = function Segments({
           {hasData && data.map((d) => (
             <TableRow key={d.id}>
               <TableCell>
-                {d.id}
+                <Link to={`${patchs.segmentsDetails.split(':')[0]}${d.id}`}>
+                  {d.id}
+                </Link>
               </TableCell>
               <TableCell>
                 {d.title}
