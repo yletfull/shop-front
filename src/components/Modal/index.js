@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import IconTimesLight from '@/icons/TimesLight';
+import Portal from '../Portal';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -33,47 +34,49 @@ const Modal = function Modal({
   const shouldRenderHeader = Boolean(title) && isClosable;
 
   return (
-    <div className={cx(styles.wrapper, className)}>
-      {isClosable && (
+    <Portal>
+      <div className={cx(styles.wrapper, className)}>
+        {isClosable && (
+          <div
+            role="presentation"
+            className={styles.overlay}
+            onClick={handleClose}
+          />
+        )}
+
         <div
-          role="presentation"
-          className={styles.overlay}
-          onClick={handleClose}
-        />
-      )}
+          className={cx(
+            styles.modal,
+            styles[`modal_size-${size}`],
+          )}
+          style={{
+            width: width ? `${width}rem` : null,
+          }}
+        >
+          {shouldRenderHeader && (
+            <header className={styles.modalHeader}>
+              <span className={styles.modalHeaderTitle}>
+                {title}
+              </span>
 
-      <div
-        className={cx(
-          styles.modal,
-          styles[`modal_size-${size}`],
-        )}
-        style={{
-          width: width ? `${width}rem` : null,
-        }}
-      >
-        {shouldRenderHeader && (
-          <header className={styles.modalHeader}>
-            <span className={styles.modalHeaderTitle}>
-              {title}
-            </span>
+              {isClosable && (
+                <button
+                  type="button"
+                  className={styles.modalCloseButton}
+                  onClick={handleClose}
+                >
+                  <IconTimesLight className={styles.modalCloseIcon} />
+                </button>
+              )}
+            </header>
+          )}
 
-            {isClosable && (
-              <button
-                type="button"
-                className={styles.modalCloseButton}
-                onClick={handleClose}
-              >
-                <IconTimesLight className={styles.modalCloseIcon} />
-              </button>
-            )}
-          </header>
-        )}
-
-        <div className={styles.modalBody}>
-          {children}
+          <div className={styles.modalBody}>
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </Portal>
   );
 };
 
