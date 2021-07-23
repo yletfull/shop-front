@@ -347,7 +347,7 @@ export const addSegmentAttribute = (values) => (dispatch, getState) => {
       negation: false,
       values: [],
       datasetIds: [],
-      fakeId: getRandomString(),
+      clientId: getRandomString(),
     };
     return ([{ ...initial, ...attr }]);
   };
@@ -435,7 +435,7 @@ export const fetchSegment = (id) => async (dispatch) => {
       [attributeProps.values]: attributeValues || [],
       [attributeProps.negation]: attributeNegation || false,
       [attributeProps.equality]: attributeEquality || equalityTypes.any,
-      fakeId: getRandomString(),
+      clientId: getRandomString(),
     });
     const mapAttributesGroup = (group) => group.map(mapAttributes);
     dispatch(updateSegment({

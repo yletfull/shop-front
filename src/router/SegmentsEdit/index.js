@@ -248,7 +248,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                   />
                 ),
                 ...group.reduce((acc, condition, conditionIndex) => {
-                  const key = (k) => `attribute-${condition.fakeId}-${k}`;
+                  const key = (k) => `attribute-${condition.clientId}-${k}`;
 
                   return ([
                     ...acc,
