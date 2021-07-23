@@ -18,6 +18,7 @@ const Attributes = function Attributes() {
   const isFetching = useSelector(getIsFetchingAttributes);
 
   const generateKey = (prefix, name, index) => `${prefix}-${name}-${index}`;
+  const isEmpty = !isFetching && (!attributes || attributes.length === 0);
   const hasData = !isFetching
     && Array.isArray(attributes)
     && attributes.length > 0;
@@ -53,15 +54,19 @@ const Attributes = function Attributes() {
         {isFetching && (
           <TableRow>
             <TableCell colSpan="3">
-              <Spinner />
+              <span className={styles.attributesTableEmpty}>
+                <Spinner />
+              </span>
             </TableCell>
           </TableRow>
         )}
 
-        {!hasData && (
+        {isEmpty && (
           <TableRow>
             <TableCell colSpan="3">
-              Нет данных
+              <span className={styles.attributesTableEmpty}>
+                Нет данных
+              </span>
             </TableCell>
           </TableRow>
         )}
@@ -74,15 +79,22 @@ const Attributes = function Attributes() {
             <Fragment key={key}>
               <TableRow data-opened={String(isOpened)}>
                 <TableCell>
-                  <Button
-                    appearance="control"
-                    className={styles.attributesTableButton}
-                    data-key={key}
-                    onClick={handleClickToggleButton}
-                  >
-                    {isOpened ? '-' : '+'}
-                  </Button>
-                  {lastValue.name}
+                  <span className={styles.attributesTableCell}>
+                    <Button
+                      appearance="control"
+                      className={styles.attributesTableButton}
+                      data-key={key}
+                      onClick={handleClickToggleButton}
+                    >
+                      {isOpened ? '-' : '+'}
+                    </Button>
+                    <span className={styles.attributesTableName}>
+                      {lastValue.name}
+                      <span className={styles.attributesTableNameSub}>
+                        {lastValue.datasetTitle}
+                      </span>
+                    </span>
+                  </span>
                 </TableCell>
                 <TableCell>
                   {lastValue.value}

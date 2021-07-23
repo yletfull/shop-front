@@ -19,5 +19,25 @@
     &Button {
       margin-right: .5rem;
     }
+
+    &Cell {
+      display: flex;
+    }
+
+    &Empty {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+
+    &Name {
+      display: flex;
+      flex-direction: column;
+
+      &Sub {
+        color: $color-gray-darker;
+        font-size: .75rem;
+      }
+    }
   }
 }
