@@ -1,0 +1,62 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  display: flex;
+  font-size: .875rem;
+  justify-content: space-between;
+  padding: 2em 0;
+  user-select: none;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+}
+
+.select {
+  margin: 0 0 0 1em;
+}
+
+.numbers {
+  margin: 0 1em;
+}
+
+.arrow {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  padding: .5em;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+    border-radius: .25em;
+  }
+
+  &.disabled {
+    color: $color-gray-darker;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.number {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: bold;
+  padding: .5em;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+    border-radius: .25em;
+  }
+
+  &_disabled {
+    color: $color-black;
+    cursor: default;
+    pointer-events: none;
+  }
+}

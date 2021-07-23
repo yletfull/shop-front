@@ -56,6 +56,10 @@ const syncVk = ({ cabinetId, clientId }) => api
   .post(`api/v1/ad-cabinet/${cabinetId}/sync`, { clientId })
   .then((data) => data);
 
+const getDashboard = ({ cabinetId, ...params }) => api
+  .get(`api/v1/ad-cabinet/${cabinetId}/dashboard`, { params })
+  .then((response) => response.data.data);
+
 export default {
   fetchAccountsList,
   setAccount,
@@ -70,4 +74,5 @@ export default {
   uploadImages,
   getTask,
   syncVk,
+  getDashboard,
 };

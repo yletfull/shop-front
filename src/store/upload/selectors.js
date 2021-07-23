@@ -20,7 +20,11 @@ export const getDocuments = (state) => state[NS]?.documents || [];
 export const getStage = (state) => state[NS]
   ?.stage || firstUploadStages.selectAccount;
 
-export const getSyncVkTask = (state) => state[NS]?.syncVkTask || {};
+export const getSyncVkTask = (state) => (
+  state[NS]?.syncVkTask?.command
+    ? state[NS]?.syncVkTask
+    : state[NS]?.dashboard?.fullSyncTask?.data || {}
+);
 export const getSelectedList = (state) => state[NS]?.selectedList || null;
 export const getParentDocument = (state) => state[NS]?.parentDocument || {};
 export const getImages = (state) => state[NS]?.images || [];
