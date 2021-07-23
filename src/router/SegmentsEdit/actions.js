@@ -294,49 +294,9 @@ export const moveCondition = ({ source, target }) => (dispatch, getState) => {
     .map((group) => group.filter(Boolean))
     .filter((group) => group.length > 0);
 
-  // move statistics
-  const statisticsGroups = getAttributesStatistics(state);
-  const statistics = statisticsGroups[sourceGroup][sourceIndex];
-  const updatedStatistics = statisticsGroups.map((group, groupIndex) => {
-    if (groupIndex === sourceGroup) {
-      return [
-        ...group.slice(0, sourceIndex),
-        null,
-        ...group.slice(sourceIndex + 1),
-      ];
-    }
-
-    return group;
-  });
-  const movedStatistics = targetIndex === -1
-    // inser new statistics group at index
-    ? ([
-      ...updatedStatistics.slice(0, targetGroup),
-      [statistics],
-      ...updatedStatistics.slice(targetGroup),
-    ])
-    // merge statistics into existing group
-    : updatedStatistics.map((group, groupIndex) => {
-      if (groupIndex === targetGroup) {
-        return [
-          ...group.slice(0, targetIndex),
-          statistics,
-          ...group.slice(targetIndex),
-        ];
-      }
-
-      return group;
-    });
-  const filteredStatistics = movedStatistics
-    .map((group) => group.filter(Boolean))
-    .filter((group) => group.length > 0);
-
   // commit changes
   dispatch(updateSegment({
     [segmentProps.attributes]: filteredGroups,
-  }));
-  dispatch(updateStatistics({
-    attributes: filteredStatistics,
   }));
 };
 
