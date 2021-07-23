@@ -5,6 +5,7 @@ import { useKeyPress } from '@/hooks';
 import IconTimesLight from '@/icons/TimesLight';
 import Portal from '../Portal';
 import styles from './styles.module.scss';
+import useAllowBodyScroll from './useAllowBodyScroll';
 
 const propTypes = {
   className: PropTypes.string,
@@ -13,6 +14,7 @@ const propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   width: PropTypes.number,
   notСlosable: PropTypes.bool,
+  allowBodyScroll: PropTypes.bool,
   onClose: PropTypes.func,
 };
 const defaultProps = {
@@ -21,6 +23,7 @@ const defaultProps = {
   size: 'medium',
   width: 0,
   notСlosable: false,
+  allowBodyScroll: false,
   onClose: () => {},
 };
 
@@ -31,6 +34,7 @@ const Modal = function Modal({
   size,
   width,
   notСlosable,
+  allowBodyScroll,
   onClose,
 }) {
   const handleClose = onClose;
@@ -42,6 +46,8 @@ const Modal = function Modal({
     key: 'Escape',
     handler: handleClose,
   });
+
+  useAllowBodyScroll(allowBodyScroll);
 
   return (
     <Portal>
