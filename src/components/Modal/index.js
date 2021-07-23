@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useKeyPress } from '@/hooks';
@@ -6,6 +6,7 @@ import IconTimesLight from '@/icons/TimesLight';
 import Portal from '../Portal';
 import styles from './styles.module.scss';
 import useAllowBodyScroll from './useAllowBodyScroll';
+import useFocusCapture from './useFocusCapture';
 
 const propTypes = {
   className: PropTypes.string,
@@ -15,6 +16,8 @@ const propTypes = {
   width: PropTypes.number,
   notСlosable: PropTypes.bool,
   allowBodyScroll: PropTypes.bool,
+  preventCloseByEsc: PropTypes.bool,
+  preventFocusCapture: PropTypes.bool,
   onClose: PropTypes.func,
 };
 const defaultProps = {
@@ -24,6 +27,8 @@ const defaultProps = {
   width: 0,
   notСlosable: false,
   allowBodyScroll: false,
+  preventCloseByEsc: false,
+  preventFocusCapture: false,
   onClose: () => {},
 };
 
@@ -35,23 +40,30 @@ const Modal = function Modal({
   width,
   notСlosable,
   allowBodyScroll,
+  preventCloseByEsc,
+  preventFocusCapture,
   onClose,
 }) {
   const handleClose = onClose;
   const isClosable = !notСlosable && typeof handleClose === 'function';
   const shouldRenderHeader = Boolean(title) && isClosable;
+  const modal = createRef();
 
   useKeyPress({
-    event: isClosable && 'keydown',
+    event: (!preventCloseByEsc && isClosable) && 'keydown',
     key: 'Escape',
     handler: handleClose,
   });
 
   useAllowBodyScroll(allowBodyScroll);
+  useFocusCapture({ preventFocusCapture, modal });
 
   return (
     <Portal>
-      <div className={cx(styles.wrapper, className)}>
+      <div
+        ref={modal}
+        className={cx(styles.wrapper, className)}
+      >
         {isClosable && (
           <div
             role="presentation"
@@ -89,6 +101,11 @@ const Modal = function Modal({
 
           <div className={styles.modalBody}>
             {children}
+            <button
+              type="button"
+            >
+              111
+            </button>
           </div>
         </div>
       </div>
