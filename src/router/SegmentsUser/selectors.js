@@ -15,6 +15,16 @@ export const getAttributesData = createSelector(
   (attributes) => attributes?.data || [],
 );
 
+export const getSegmentsCount = createSelector(
+  [getSegments],
+  (segments) => {
+    const { data } = segments || {};
+    if (!data || !Array.isArray(data)) {
+      return 0;
+    }
+    return data.length;
+  },
+);
 export const getSegmentsData = createSelector(
   [getSegments],
   (segments) => {

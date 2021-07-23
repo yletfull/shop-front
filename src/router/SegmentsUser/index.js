@@ -9,10 +9,11 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
+import { formatNumber } from '@/utils/format';
 import {
   queryParams,
   links,
@@ -23,6 +24,9 @@ import {
   fetchSegments,
 } from './actions';
 import reducer from './reducer';
+import {
+  getSegmentsCount,
+} from './selectors';
 import Attributes from './Attributes';
 import SearchForm from './SearchForm';
 import Segments from './Segments';
@@ -42,6 +46,8 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   const query = useQuery();
   const { search } = useLocation();
   const { path, url } = useRouteMatch();
+
+  const segmentsCount = useSelector(getSegmentsCount);
 
   const [params, setParams] = useState({
     user: query.get(queryParams.user) || '',
@@ -92,6 +98,12 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
           to={`${url}/${links.segments}${search}`}
         >
           Сегменты
+          &nbsp;
+          {segmentsCount && (
+            <span className={styles.segmentsUserLinkCount}>
+              {formatNumber(segmentsCount)}
+            </span>
+          )}
         </NavLink>
       </div>
 
