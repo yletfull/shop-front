@@ -112,10 +112,12 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
   useEffect(() => {
-    dispatch(fetchSegmentStatistics({
-      title: segmentName || '',
-      attributes: segmentAttributes || [],
-    }));
+    if (false) {
+      dispatch(fetchSegmentStatistics({
+        title: segmentName || '',
+        attributes: segmentAttributes || [],
+      }));
+    }
   }, [dispatch, segmentName, segmentAttributes]);
 
   const handleChangeAttribute = (position, values) => {
