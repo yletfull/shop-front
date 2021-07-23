@@ -1,29 +1,38 @@
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import Pagination from '@/components/PagePagination';
 import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
 import { queryParams } from '../constants';
 import {
   getIsFetchingSegments,
   getSegmentsData,
+  getSegmentsMeta,
 } from '../selectors';
 import styles from './styles.module.scss';
 
-const propTypes = {};
-const defaultProps = {};
+const propTypes = {
+  onChangePage: PropTypes.func,
+};
+const defaultProps = {
+  onChangePage: () => {},
+};
 
-const Segments = function Segments() {
+const Segments = function Segments({
+  onChangePage,
+}) {
   const history = useHistory();
   const query = useQuery();
 
   const isFetching = useSelector(getIsFetchingSegments);
   const data = useSelector(getSegmentsData);
+  const { pagination } = useSelector(getSegmentsMeta);
 
   const isEmpty = !isFetching && (!data || data.length === 0);
   const hasData = !isFetching && Array.isArray(data) && data.length > 0;
@@ -41,6 +50,14 @@ const Segments = function Segments() {
     setValues({ ...values, [name]: value });
   };
 
+  const handleChangePage = (page) => {
+    if (!page) {
+      return;
+    }
+    query.set(queryParams.page, page);
+    history.push({ search: query.toString() });
+    onChangePage(page);
+  };
   const handleFormSubmit = (e) => {
     e.preventDefault();
     query.set(queryParams.segmentId, values[queryParams.segmentId] || '');
@@ -139,6 +156,15 @@ const Segments = function Segments() {
           ))}
         </Table>
       </form>
+
+      {pagination && (
+        <Pagination
+          isDisabled={isFetching}
+          page={pagination.currentPage || 1}
+          numberOfPages={pagination.totalPages || 1}
+          onChangePage={handleChangePage}
+        />
+      )}
     </div>
   );
 };

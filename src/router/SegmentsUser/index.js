@@ -51,6 +51,7 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
 
   const [params, setParams] = useState({
     user: query.get(queryParams.user) || '',
+    currentPage: query.get(queryParams.page) || 1,
   });
 
   useEffect(() => {
@@ -67,9 +68,17 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
       return;
     }
     dispatch(fetchAttributes(user));
-    dispatch(fetchSegments(user));
+    dispatch(fetchSegments(user, {
+      currentPage: params?.currentPage || 1,
+    }));
   }, [dispatch, params]);
 
+  const handleChangeSegmentsPage = (page) => {
+    if (!page) {
+      return;
+    }
+    setParams({ ...params, currentPage: page });
+  };
   const handleSearchFormSubmit = (values) => {
     const { user } = values || {};
     setParams({ ...params, user });
@@ -118,7 +127,9 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
           <Attributes />
         </Route>
         <Route path={`${url}/${links.segments}`}>
-          <Segments />
+          <Segments
+            onChangePage={handleChangeSegmentsPage}
+          />
         </Route>
       </Switch>
     </div>

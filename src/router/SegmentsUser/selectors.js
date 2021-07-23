@@ -55,7 +55,7 @@ export const getSegmentsData = createSelector(
     });
   },
 );
-export const getSegmentMeta = createSelector(
+export const getSegmentsMeta = createSelector(
   [getSegments],
   (segments) => segments.meta || {},
 );
