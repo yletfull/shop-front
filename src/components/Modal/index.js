@@ -101,11 +101,6 @@ const Modal = function Modal({
 
           <div className={styles.modalBody}>
             {children}
-            <button
-              type="button"
-            >
-              111
-            </button>
           </div>
         </div>
       </div>
