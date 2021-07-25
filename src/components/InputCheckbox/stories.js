@@ -2,7 +2,7 @@ import React from 'react';
 import Checkbox from './index';
 
 export default {
-  title: 'Components/Checkbox',
+  title: 'Components/InputCheckbox',
   component: Checkbox,
   argTypes: {
     style: { table: { disable: true } },
