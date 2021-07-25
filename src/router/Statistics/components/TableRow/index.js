@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { formatNumber, formatPercent } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
@@ -15,6 +16,8 @@ const shape = {
 };
 
 const propTypes = {
+  entity: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   indexDiff: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -28,6 +31,8 @@ const propTypes = {
 };
 
 const StatisticsTableRow = function StatisticsTableRow({
+  entity,
+  id,
   index,
   indexDiff,
   name,
@@ -47,7 +52,11 @@ const StatisticsTableRow = function StatisticsTableRow({
         {`${index}.`}
       </TableCell>
       <TableCell>
-        {name}
+        <Link
+          to={`/details/${entity}/${id}`}
+        >
+          {name}
+        </Link>
       </TableCell>
       <TableCell
         nowrap

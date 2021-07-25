@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import { formatNumber, formatPercent } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
@@ -16,6 +17,8 @@ const shape = {
 };
 
 const propTypes = {
+  entity: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
   indexDiff: PropTypes.number.isRequired,
   parentId: PropTypes.string,
@@ -30,6 +33,8 @@ const defaultProps = {
 };
 
 const StatisticsSitesTableRow = function StatisticsSitesTableRow({
+  entity,
+  id,
   index,
   indexDiff,
   parentId,
@@ -54,7 +59,11 @@ const StatisticsSitesTableRow = function StatisticsSitesTableRow({
       <TableCell
         className={styles.name}
       >
-        {name}
+        <Link
+          to={`/details/${entity}/${id}`}
+        >
+          {name}
+        </Link>
       </TableCell>
       <TableCell
         nowrap
