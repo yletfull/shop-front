@@ -46,7 +46,7 @@ const Modal = function Modal({
 }) {
   const handleClose = onClose;
   const isClosable = !notСlosable && typeof handleClose === 'function';
-  const shouldRenderHeader = Boolean(title) && isClosable;
+  const shouldRenderHeader = Boolean(title) || isClosable;
   const modal = createRef();
 
   useKeyPress({
