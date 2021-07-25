@@ -1,12 +1,13 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { rootNodes } from '@/constants/dom';
 import { useKeyPress } from '@/hooks';
 import IconTimesLight from '@/icons/TimesLight';
-import Portal from '../Portal';
-import styles from './styles.module.scss';
+import Portal from '@/components/Portal';
 import useScrollDisable from './use-scroll-disable';
 import useFocusCapture from './use-focus-capture';
+import styles from './styles.module.scss';
 
 const propTypes = {
   className: PropTypes.string,
@@ -59,7 +60,7 @@ const Modal = function Modal({
   useFocusCapture({ preventFocusCapture, ref });
 
   return (
-    <Portal>
+    <Portal target={rootNodes.portalModals}>
       <div
         ref={ref}
         className={cx(styles.wrapper, className)}
