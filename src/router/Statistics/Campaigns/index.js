@@ -109,6 +109,7 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
           {list.map((item) => (
             <TableRow
               key={item.id}
+              entity="campaigns"
               id={item.id}
               index={item.index}
               indexDiff={item.indexDiff}

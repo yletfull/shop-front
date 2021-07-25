@@ -109,6 +109,7 @@ const StatisticsSpheres = function StatisticsSpheresScreen() {
           {list.map((item) => (
             <TableRow
               key={item.id}
+              entity="spheres"
               id={item.id}
               index={item.index}
               indexDiff={item.indexDiff}

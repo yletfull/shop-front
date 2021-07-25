@@ -109,6 +109,7 @@ const StatisticsSitesScreen = function StatisticsSitesScreen() {
           {list.map((item) => (
             <TableRow
               key={item.id}
+              entity="sites"
               id={item.id}
               index={item.index}
               indexDiff={item.indexDiff}
