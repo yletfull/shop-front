@@ -6,13 +6,14 @@ const useScrollDisable = function useScrollDisableModalHook(
 ) {
   useEffect(() => {
     const target = ref.current || ref;
+    const defaultOverflow = target.style.overflow || '';
 
     if (!preventDisable) {
       target.style.overflow = 'hidden';
     }
     return () => {
       if (!preventDisable) {
-        target.style.overflow = '';
+        target.style.overflow = defaultOverflow;
       }
     };
   }, [preventDisable, ref]);
