@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getFocusableChildren } from './utils/getFocusableChildren';
+import { getFocusableChildren } from '@/utils/dom';
 
 const keys = {
   tab: 'Tab',
