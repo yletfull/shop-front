@@ -40,7 +40,7 @@ a {
 
 *:focus {
   outline: .125rem dashed $color-pink;
-  outline-offset: .5rem;
+  outline-offset: .125rem;
 }
 
 [data-js-focus-visible] *:focus:not([data-focus-visible-added]) {
