@@ -58,20 +58,21 @@ const AttributeDatasets = function AttributeDatasets({
           </span>
         )}
 
-      <Modal
-        isVisible={isShowModal}
-        header={(
-          <span className={styles.attributeDatasetsHeader}>
-            Датасеты
-            {name ? ` с параметром «${name}»` : ''}
-          </span>
-        )}
-        onClose={handleCloseModal}
-      >
-        {Children.map(children, (child) => cloneElement(child, {
-          onClose: handleCloseModal,
-        }))}
-      </Modal>
+      {isShowModal && (
+        <Modal
+          title={(
+            <span className={styles.attributeDatasetsHeader}>
+              Датасеты
+              {name ? ` с параметром «${name}»` : ''}
+            </span>
+          )}
+          onClose={handleCloseModal}
+        >
+          {Children.map(children, (child) => cloneElement(child, {
+            onClose: handleCloseModal,
+          }))}
+        </Modal>
+      )}
     </div>
   );
 };

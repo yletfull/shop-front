@@ -377,34 +377,35 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         />
       </div>
 
-      <Modal
-        header={(
-          <span>
-            Сохранение файлов для
-            {' '}
-            {downloadedSegment?.type.toUpperCase() || ''}
-          </span>
-        )}
-        isVisible={Boolean(downloadedSegment)}
-        onClose={handleCloseDownloadForm}
-      >
-        <DownloadFilesForm
-          id={downloadedSegment?.id}
-          isDisabled={isRequestedDownloadSegment}
-          name={downloadedSegment?.name}
+      {Boolean(downloadedSegment) && (
+        <Modal
+          title={(
+            <span>
+              Сохранение файлов для
+              {' '}
+              {downloadedSegment?.type.toUpperCase() || ''}
+            </span>
+          )}
           onClose={handleCloseDownloadForm}
-          onSubmit={handleSubmitDownloadForm}
-        />
-        <a ref={downloadLinkRef} />
-        {downloadError && (
-          <span className={styles.segmentsEditError}>
-            При экспорте файла возникла ошибка
-            {downloadError.status && (
-              ` (код ошибки: ${downloadError.status})`
-            )}
-          </span>
-        )}
-      </Modal>
+        >
+          <DownloadFilesForm
+            id={downloadedSegment?.id}
+            isDisabled={isRequestedDownloadSegment}
+            name={downloadedSegment?.name}
+            onClose={handleCloseDownloadForm}
+            onSubmit={handleSubmitDownloadForm}
+          />
+          <a ref={downloadLinkRef} />
+          {downloadError && (
+            <span className={styles.segmentsEditError}>
+              При экспорте файла возникла ошибка
+              {downloadError.status && (
+                ` (код ошибки: ${downloadError.status})`
+              )}
+            </span>
+          )}
+        </Modal>
+      )}
     </div>
   );
   /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
