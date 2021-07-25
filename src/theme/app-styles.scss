@@ -38,6 +38,15 @@ a {
   }
 }
 
+*:focus {
+  outline: .125rem dashed $color-pink;
+  outline-offset: .125rem;
+}
+
+[data-js-focus-visible] *:focus:not([data-focus-visible-added]) {
+  outline: 0;
+}
+
 .hasError,
 .indicator-red {
   background-color: $color-pink;
