@@ -5,9 +5,9 @@ const keys = {
   tab: 'Tab',
 };
 
-const useAllowBodyScroll = function useAllowBodyScroll({
+const useAllowBodyScroll = function useAllowBodyScrollModalHook({
   preventFocusCapture,
-  modal,
+  ref,
 }) {
   useEffect(() => {
     let focusableChildren = null;
@@ -16,8 +16,8 @@ const useAllowBodyScroll = function useAllowBodyScroll({
     let moveFocusToLastElement = null;
     let moveFocusToFirstElement = null;
 
-    if (!preventFocusCapture && modal.current) {
-      focusableChildren = getFocusableChildren(modal.current);
+    if (!preventFocusCapture && ref.current) {
+      focusableChildren = getFocusableChildren(ref.current);
       if (focusableChildren.length) {
         [firstFocusable] = focusableChildren;
         lastFocusable = focusableChildren[focusableChildren.length - 1];
@@ -48,7 +48,7 @@ const useAllowBodyScroll = function useAllowBodyScroll({
     };
   }, [
     preventFocusCapture,
-    modal,
+    ref,
   ]);
 };
 

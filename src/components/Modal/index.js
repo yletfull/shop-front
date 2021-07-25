@@ -1,11 +1,11 @@
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useKeyPress } from '@/hooks';
 import IconTimesLight from '@/icons/TimesLight';
 import Portal from '../Portal';
 import styles from './styles.module.scss';
-import useAllowBodyScroll from './useAllowBodyScroll';
+import useScrollDisable from './useAllowBodyScroll';
 import useFocusCapture from './useFocusCapture';
 
 const propTypes = {
@@ -14,8 +14,8 @@ const propTypes = {
   children: PropTypes.node.isRequired,
   size: PropTypes.oneOf(['small', 'medium', 'large']),
   width: PropTypes.number,
-  notСlosable: PropTypes.bool,
-  allowBodyScroll: PropTypes.bool,
+  preventClose: PropTypes.bool,
+  preventScrollDisable: PropTypes.bool,
   preventCloseByEsc: PropTypes.bool,
   preventFocusCapture: PropTypes.bool,
   onClose: PropTypes.func,
@@ -25,8 +25,8 @@ const defaultProps = {
   title: null,
   size: 'medium',
   width: 0,
-  notСlosable: false,
-  allowBodyScroll: false,
+  preventClose: false,
+  preventScrollDisable: false,
   preventCloseByEsc: false,
   preventFocusCapture: false,
   onClose: () => {},
@@ -38,16 +38,16 @@ const Modal = function Modal({
   children,
   size,
   width,
-  notСlosable,
-  allowBodyScroll,
+  preventClose,
+  preventScrollDisable,
   preventCloseByEsc,
   preventFocusCapture,
   onClose,
 }) {
   const handleClose = onClose;
-  const isClosable = !notСlosable && typeof handleClose === 'function';
+  const isClosable = !preventClose && typeof handleClose === 'function';
   const shouldRenderHeader = Boolean(title) || isClosable;
-  const modal = createRef();
+  const ref = useRef();
 
   useKeyPress({
     event: (!preventCloseByEsc && isClosable) && 'keydown',
@@ -55,13 +55,13 @@ const Modal = function Modal({
     handler: handleClose,
   });
 
-  useAllowBodyScroll(allowBodyScroll);
-  useFocusCapture({ preventFocusCapture, modal });
+  useScrollDisable(preventScrollDisable);
+  useFocusCapture({ preventFocusCapture, ref });
 
   return (
     <Portal>
       <div
-        ref={modal}
+        ref={ref}
         className={cx(styles.wrapper, className)}
       >
         {isClosable && (

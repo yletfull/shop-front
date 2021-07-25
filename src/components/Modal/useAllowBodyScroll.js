@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 
-const useAllowBodyScroll = function useAllowBodyScroll(allowBodyScroll) {
+const useScrollDisable = function useScrollDisableModalHook(preventDisable) {
   useEffect(() => {
-    if (!allowBodyScroll) {
+    if (!preventDisable) {
       document.body.style.overflow = 'hidden';
     }
     return () => {
-      if (!allowBodyScroll) {
+      if (!preventDisable) {
         document.body.style.overflow = '';
       }
     };
-  }, [allowBodyScroll]);
+  }, [preventDisable]);
 };
 
-export default useAllowBodyScroll;
+export default useScrollDisable;
