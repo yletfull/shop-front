@@ -5,7 +5,7 @@ const keys = {
   tab: 'Tab',
 };
 
-const useAllowBodyScroll = function useAllowBodyScrollModalHook({
+const useFocusCapture = function useFocusCaptureModalHook({
   preventFocusCapture,
   ref,
 }) {
@@ -52,4 +52,4 @@ const useAllowBodyScroll = function useAllowBodyScrollModalHook({
   ]);
 };
 
-export default useAllowBodyScroll;
+export default useFocusCapture;

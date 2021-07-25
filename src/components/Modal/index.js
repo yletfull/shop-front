@@ -5,8 +5,8 @@ import { useKeyPress } from '@/hooks';
 import IconTimesLight from '@/icons/TimesLight';
 import Portal from '../Portal';
 import styles from './styles.module.scss';
-import useScrollDisable from './useAllowBodyScroll';
-import useFocusCapture from './useFocusCapture';
+import useScrollDisable from './use-scroll-disable';
+import useFocusCapture from './use-focus-capture';
 
 const propTypes = {
   className: PropTypes.string,
