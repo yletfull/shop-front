@@ -1,16 +1,21 @@
 import { useEffect } from 'react';
 
-const useScrollDisable = function useScrollDisableModalHook(preventDisable) {
+const useScrollDisable = function useScrollDisableModalHook(
+  preventDisable,
+  ref = document.body,
+) {
   useEffect(() => {
+    const target = ref.current || ref;
+
     if (!preventDisable) {
-      document.body.style.overflow = 'hidden';
+      target.style.overflow = 'hidden';
     }
     return () => {
       if (!preventDisable) {
-        document.body.style.overflow = '';
+        target.style.overflow = '';
       }
     };
-  }, [preventDisable]);
+  }, [preventDisable, ref]);
 };
 
 export default useScrollDisable;
