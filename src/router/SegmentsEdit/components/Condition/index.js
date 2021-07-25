@@ -1,4 +1,3 @@
-/* eslint "no-unused-vars": "off" */
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -14,6 +13,7 @@ import {
   getMapAttribute,
 } from '../../selectors';
 import ConditionControl from '../ConditionControl';
+import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';
 import useDrag from './use-drag';
 import useStatistics from './use-statistics';
@@ -32,6 +32,10 @@ const propTypes = {
 const defaultProps = {
   onChange: () => {},
 };
+
+const getAttributeTitle = (attribute) => (
+  attribute.title || attribute.attributeName || attribute.id
+);
 
 const Condition = function SegmentEditorCondition({
   groupIndex,
@@ -67,25 +71,16 @@ const Condition = function SegmentEditorCondition({
   const handleStatisticsReload = () => statistics.fetch(statisticsParams);
 
   const handleNegationChange = (nextNegation) => {
-    onChange([groupIndex, index], {
-      values,
-      equality,
-      negation: nextNegation,
-    });
+    onChange([groupIndex, index], { negation: nextNegation });
   };
   const handleEqualityChange = (nextEquality) => {
-    onChange([groupIndex, index], {
-      negation,
-      values,
-      equality: nextEquality,
-    });
+    onChange([groupIndex, index], { equality: nextEquality });
   };
   const handleValuesChange = (nextValues) => {
-    onChange([groupIndex, index], {
-      negation,
-      equality,
-      values: nextValues,
-    });
+    onChange([groupIndex, index], { values: nextValues });
+  };
+  const handleDatasetIdsChange = (nextDatasetIds) => {
+    onChange([groupIndex, index], { datasetIds: nextDatasetIds });
   };
 
   return (
@@ -112,7 +107,7 @@ const Condition = function SegmentEditorCondition({
       <div className={styles.attributeMain}>
         <div className={styles.attributeSection}>
           <span className={styles.attributeTitle}>
-            {attribute.title || attribute.attributeName || attribute.id}
+            {getAttributeTitle(attribute)}
           </span>
           {Boolean(profileTitle) && (
             <div
@@ -136,6 +131,15 @@ const Condition = function SegmentEditorCondition({
             onValuesChange={handleValuesChange}
           />
         </div>
+      </div>
+
+      <div>
+        <ConditionDatasets
+          attributeName={getAttributeTitle(attribute)}
+          value={datasetIds}
+          options={attribute?.datasets || []}
+          onChange={handleDatasetIdsChange}
+        />
       </div>
 
       <ConditionStatistics
