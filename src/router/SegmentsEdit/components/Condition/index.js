@@ -28,9 +28,11 @@ const propTypes = {
   equality: PropTypes.oneOf(Object.values(equalities)).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   onChange: PropTypes.func,
+  onRemove: PropTypes.func,
 };
 const defaultProps = {
   onChange: () => {},
+  onRemove: () => {},
 };
 
 const getAttributeTitle = (attribute) => (
@@ -46,6 +48,7 @@ const Condition = function SegmentEditorCondition({
   equality,
   values,
   onChange,
+  onRemove,
 }) {
   const mapProfileTitle = useSelector(getMapProfileTitle);
   const mapAttribute = useSelector(getMapAttribute);
@@ -81,6 +84,11 @@ const Condition = function SegmentEditorCondition({
   };
   const handleDatasetIdsChange = (nextDatasetIds) => {
     onChange([groupIndex, index], { datasetIds: nextDatasetIds });
+  };
+
+  const handleRemoveClick = () => {
+    statistics.cancel();
+    onRemove([groupIndex, index]);
   };
 
   return (
@@ -156,6 +164,7 @@ const Condition = function SegmentEditorCondition({
             styles.attributeControl,
             styles.attributeControlRemove,
           )}
+          onClick={handleRemoveClick}
         >
           <IconTimes />
         </button>
