@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { rootNodes } from '@/constants/dom';
-import { useKeyPress } from '@/hooks';
+import useKeyPress from '@/hooks/use-key-press';
+import useScrollDisable from '@/hooks/use-scroll-disable';
+import useFocusCapture from '@/hooks/use-focus-capture';
 import IconTimesLight from '@/icons/TimesLight';
 import Portal from '@/components/Portal';
-import useScrollDisable from './use-scroll-disable';
-import useFocusCapture from './use-focus-capture';
 import styles from './styles.module.scss';
 
 const propTypes = {
