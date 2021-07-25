@@ -29,9 +29,9 @@
   display: inline-flex;
   flex-grow: 0;
   flex-shrink: 0;
-  height: .75em;
+  height: .875em;
   justify-content: center;
-  width: .75em;
+  width: .875em;
 
   &::after {
     background-color: $color-primary;
@@ -50,6 +50,7 @@
   flex-shrink: 1;
   font-size: .75em;
   line-height: inherit;
+  margin-top: .25em;
 }
 
 .box + .label {
