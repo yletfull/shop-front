@@ -1,3 +1,4 @@
+import 'focus-visible';
 import '../src/theme/app-styles.scss';
 
 export const parameters = {

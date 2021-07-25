@@ -5,6 +5,7 @@ import Equals from './Equals';
 import GreaterThanEqual from './GreaterThanEqual';
 import LessThanEqual from './LessThanEqual';
 import BarsLight from './BarsLight';
+import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
 import ChevronLeft from './ChevronLeft';
@@ -71,6 +72,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(GreaterThanEqual)}
     {renderIcon(LessThanEqual)}
     {renderIcon(BarsLight)}
+    {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
     {renderIcon(ChevronLeft)}
