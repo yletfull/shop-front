@@ -16,7 +16,13 @@ export default {
 
 const Template = (args) => {
   const { isShown, ...props } = args;
-  return isShown ? <Modal {...props} /> : <div />;
+  return (
+    <div style={{ height: '200vh' }}>
+      {isShown && (
+        <Modal {...props} />
+      )}
+    </div>
+  );
 };
 
 export const Playground = Template.bind({});
