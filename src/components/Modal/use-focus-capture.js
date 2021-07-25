@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import { getFocusableChildren } from '@/utils/dom';
 
-const keys = {
-  tab: 'Tab',
-};
+const tabKey = 'Tab';
 
 const useFocusCapture = function useFocusCaptureModalHook({
   preventFocusCapture,
@@ -23,13 +21,13 @@ const useFocusCapture = function useFocusCaptureModalHook({
         lastFocusable = focusableChildren[focusableChildren.length - 1];
         firstFocusable.focus();
         moveFocusToLastElement = (e) => {
-          if (e.shiftKey && (e.key ? e.key : e.code) === keys.tab) {
+          if (e.shiftKey && (e.key ? e.key : e.code) === tabKey) {
             e.preventDefault();
             lastFocusable.focus();
           }
         };
         moveFocusToFirstElement = (e) => {
-          if (!e.shiftKey && (e.key ? e.key : e.code) === keys.tab) {
+          if (!e.shiftKey && (e.key ? e.key : e.code) === tabKey) {
             e.preventDefault();
             firstFocusable.focus();
           }
