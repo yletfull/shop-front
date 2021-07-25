@@ -33,8 +33,12 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
 
   const { datestart, dateend } = data[0] || {};
 
-  const dateEnd = query.get('dateEnd') || dateend;
   const dateStart = query.get('dateStart') || dateend;
+  const dateEnd = query.get('dateEnd') || dateend;
+
+  const searchQuery = new URLSearchParams('');
+  searchQuery.set('dateEnd', dateEnd);
+  searchQuery.set('dateStart', dateStart);
 
   const handleDateInputsSubmit = (dates) => {
     query.set('dateStart', dates.dateStart);
@@ -86,7 +90,10 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
           .map((key) => (
             <NavLink
               key={key}
-              to={paths[key]}
+              to={{
+                pathname: paths[key],
+                search: searchQuery.toString(),
+              }}
               className="link-class_nav"
               activeClassName="active-link-class_nav"
             >
