@@ -1,0 +1,75 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  align-items: flex-start;
+  display: inline-block;
+  display: inline-flex;
+  line-height: 1;
+  position: relative;
+}
+
+.input {
+  appearance: none;
+  display: inline-block;
+  height: .75em;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  width: .75em;
+}
+
+.box {
+  align-items: center;
+  background-color: $color-white;
+  border: thin solid $color-gray-darker;
+  border-radius: 50%;
+  display: inline-flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: .75em;
+  justify-content: center;
+  width: .75em;
+
+  &::after {
+    background-color: $color-primary;
+    border-radius: 50%;
+    content: '';
+    display: inline-block;
+    height: .5em;
+    opacity: 0;
+    transition: opacity .2s;
+    width: .5em;
+  }
+}
+
+.label {
+  display: inline-block;
+  flex-shrink: 1;
+  font-size: .75em;
+  line-height: inherit;
+}
+
+.box + .label {
+  margin-left: .5rem;
+}
+
+.input:checked + .box::after {
+  opacity: 1;
+}
+
+.input:disabled + .box {
+  background-color: $color-gray-lighter;
+  border-color: $color-gray-darker;
+}
+
+.input:disabled:checked + .box::after {
+  opacity: .75;
+}
+
+.box:hover,
+.input:focus + .box {
+  border-color: $color-primary-darker;
+}
