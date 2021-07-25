@@ -6,21 +6,31 @@ export default {
   argTypes: {
     key: {
       control: { type: 'text' },
+      description: 'String or Array (input multiple values using ",")',
     },
     event: {
       options: ['keydown', 'keyup'],
       control: { type: 'radio' },
+      description: 'Type of event',
     },
-    onKeypress: { action: 'Key pressed on window' },
+    handler: { action: 'Key pressed on window' },
   },
 };
 
-export const Index = ({ key, event, onKeypress, ...args }) => {
-  useKeyPress(key, onKeypress, event);
+export const Index = ({ key, event, handler, ...args }) => {
+  useKeyPress({
+    event,
+    handler,
+    key: key.replace(/\s+/, '').split(','),
+  });
 
   return (
     <div {...args}>
-      Press the selected key
+      Press the
+      <code>
+        {` ${key} `}
+      </code>
+      key
     </div>
   );
 };
