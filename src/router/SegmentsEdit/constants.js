@@ -1,5 +1,7 @@
 export const namespace = 'segmentsEdit';
 
+export const statisticsFields = ['phone'];
+
 export const dndTypes = {
   attribute: 'attribute',
   condition: 'condition',

@@ -226,7 +226,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           <AttributesConstructor isFetching={isFetchingSegment}>
             <AttributesLabels
               isVisible={segmentAttributes.length > 0}
-              labels={['Датасеты', 'Телефонов', 'E-mail']}
+              labels={['Датасеты', 'Телефонов']}
             />
             {segmentAttributes.reduce((groupAcc, group, groupIndex, groups) => {
               const groupKey = (key) => `group-${groupIndex}-${key}`;

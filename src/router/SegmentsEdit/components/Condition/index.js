@@ -7,13 +7,16 @@ import IconBars from '@/icons/BarsLight';
 import IconTimes from '@/icons/TimesLight';
 import {
   equalities,
+  statisticsFields,
 } from '../../constants';
 import {
   getMapProfileTitle,
   getMapAttribute,
 } from '../../selectors';
 import ConditionControl from '../ConditionControl';
+import ConditionStatistics from '../ConditionStatistics';
 import useDrag from './use-drag';
+import useStatistics from './use-statistics';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -51,6 +54,17 @@ const Condition = function SegmentEditorCondition({
     handleDragAreaMouseover,
     handleDragAreaMouseleave,
   } = useDrag({ groupIndex, index });
+
+  const statisticsParams = {
+    attribute,
+    attributeId,
+    datasetIds,
+    equality,
+    negation,
+    values,
+  };
+  const statistics = useStatistics(statisticsParams);
+  const handleStatisticsReload = () => statistics.fetch(statisticsParams);
 
   const handleNegationChange = (nextNegation) => {
     onChange([groupIndex, index], {
@@ -123,6 +137,12 @@ const Condition = function SegmentEditorCondition({
           />
         </div>
       </div>
+
+      <ConditionStatistics
+        {...statistics}
+        fields={statisticsFields}
+        onReload={handleStatisticsReload}
+      />
 
       <div className={styles.attributeAside}>
         <button
