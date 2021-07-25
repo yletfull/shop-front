@@ -1,5 +1,5 @@
 export const rootNodes = {
-  app: document.getElementById('app'),
+  app: document.getElementById('root'),
   portalModals: document.getElementById('portal-modals'),
 };
 
