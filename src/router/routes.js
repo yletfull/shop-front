@@ -55,7 +55,7 @@ export const patchs = {
   statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
   users: '/users',
-  statistics: '/statistics',
+  statistics: '/statistics/lists',
 };
 
 export const titles = {

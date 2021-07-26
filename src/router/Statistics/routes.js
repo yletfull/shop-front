@@ -1,11 +1,11 @@
 import { lazy } from 'react';
 
 export const paths = {
-  tasks: '/statistics/tasks',
-  campaigns: '/statistics/campaigns',
-  platforms: '/statistics/platforms',
-  sites: '/statistics/sites',
-  spheres: '/statistics/spheres',
+  tasks: '/statistics/lists/tasks',
+  campaigns: '/statistics/lists/campaigns',
+  platforms: '/statistics/lists/platforms',
+  sites: '/statistics/lists/sites',
+  spheres: '/statistics/lists/spheres',
 };
 
 export const titles = {
