@@ -2,10 +2,10 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/external/ctor/api/v1';
 
-const fetchParams = function serviceFetchSegmentsAttributes() {
+const fetchAttributes = function segmentsServiceFetchAttributes() {
   return api
     .get(`${baseUrl}/attributes/`)
-    .then((response) => response.data.data);
+    .then((response) => response?.data?.data?.groups || []);
 };
 const fetchSegment = function serviceFetchSegment(id) {
   if (typeof id === 'undefined') {
@@ -58,7 +58,7 @@ const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
 };
 
 export default {
-  fetchParams,
+  fetchAttributes,
   fetchSegment,
   fetchSegmentStatistics,
   getSegmentDownloadLink,

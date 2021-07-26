@@ -1,3 +1,13 @@
+// TODO: use UUID
+export const getRandomString = () => (
+  String(Date.now())
+  + Math.random().toString(32)
+);
+
+export const checkHasOptions = (options) => (
+  Array.isArray(options) && options.length > 0
+);
+
 export const serializeValues = (values) => (
   values
     .map(String)
@@ -18,6 +28,8 @@ export const mapStatisticsEntities = (data) => {
 };
 
 export default {
+  getRandomString,
+  checkHasOptions,
   serializeValues,
   mapStatisticsEntities,
 };

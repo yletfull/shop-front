@@ -11,7 +11,7 @@ import {
 import {
   getMapProfileTitle,
   getMapAttribute,
-} from '../../selectors';
+} from '../../store/selectors';
 import ConditionControl from '../ConditionControl';
 import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';

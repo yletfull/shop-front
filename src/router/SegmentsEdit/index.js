@@ -15,27 +15,30 @@ import {
   segmentProps,
 } from './constants';
 import reducer from './reducer';
+import store from './store/reducer';
 import {
-  fetchParams,
+  fetchAttributes,
+  appendConditions,
+  moveCondition,
+  patchCondition,
+  removeCondition,
+} from './store/actions';
+import {
+  getAreAttributesFetching,
+  getAttributesTree,
+  getConditions,
+} from './store/selectors';
+import {
   fetchSegment,
   resetSegment,
-  addSegmentAttribute,
-  moveCondition,
-  removeSegmentAttribute,
-  updateSegmentAttribute,
-  fetchSegmentStatistics,
-  // fetchAttributeStatistics,
   saveSegment,
 } from './actions';
 import {
   formatSegmentAttributesListForRequest,
 } from './helpers';
 import {
-  getIsFetchingParams,
   getIsFetchingSegment,
   getIsSubmittingSegment,
-  getParams,
-  getSegmentAttributes,
   getSegmentId,
   getSegmentName,
   getSegmentStatistics,
@@ -62,17 +65,24 @@ const defaultProps = {
 };
 
 const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
+  useEffect(() => {
+    injectReducer(store.NS, store);
+  }, []);
+
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAttributes());
+  }, [dispatch]);
 
   const history = useHistory();
   const { id: paramsSegmentId } = useParams();
 
-  const isFetchingParams = useSelector(getIsFetchingParams);
-  const params = useSelector(getParams);
+  const areAttributesFetching = useSelector(getAreAttributesFetching);
+  const attributesTree = useSelector(getAttributesTree);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const isSubmittingSegment = useSelector(getIsSubmittingSegment);
-  const segmentAttributes = useSelector(getSegmentAttributes);
+  const conditions = useSelector(getConditions);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
   const segmentStatistics = useSelector(getSegmentStatistics);
@@ -82,7 +92,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
-  const [isSegmentChanged, setIsSegmentChanged] = useState(false);
   const [
     isRequestedDownloadSegment,
     setIsRequestedDownloadSegment,
@@ -93,10 +102,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchParams());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setHeader(isNewSegment
@@ -111,23 +116,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  useEffect(() => {
-    if (false) {
-      dispatch(fetchSegmentStatistics({
-        title: segmentName || '',
-        attributes: segmentAttributes || [],
-      }));
-    }
-  }, [dispatch, segmentName, segmentAttributes]);
-
-  const handleChangeAttribute = (position, values) => {
-    if (!position || !Array.isArray(position) || position.length < 2) {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(updateSegmentAttribute(position, values));
-    // dispatch(fetchAttributeStatistics(position));
-  };
   const handleSelectDownloadFile = (platform) => {
     setDownloadedSegment({ type: platform });
   };
@@ -140,10 +128,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
-  };
-  const handleRemoveAttribute = (position) => {
-    setIsSegmentChanged(true);
-    dispatch(removeSegmentAttribute(position));
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
@@ -162,10 +146,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(true);
 
-    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
+    const attributes = formatSegmentAttributesListForRequest(conditions);
     try {
       const url = await service.getSegmentDownloadLink(
-        isSegmentChanged ? null : segmentId,
+        segmentId,
         {
           adsPlatform,
           fileName,
@@ -194,28 +178,30 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(false);
   };
-  const handleSubmitParams = (selectedParams) => {
-    setIsShowParams(false);
-    if (!selectedParams) {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(addSegmentAttribute(selectedParams));
-  };
   const handleSubmitSaveForm = ({ fileName }) => {
     if (!fileName) {
       return;
     }
     const onSuccessCallback = () => history.push('/segments');
     dispatch(saveSegment({
-      attributes: segmentAttributes,
+      attributes: conditions,
       id: isNewSegment ? paramsSegmentId : null,
       title: fileName,
     }, onSuccessCallback));
   };
 
+  const handleSubmitParams = (selectedAttributes) => {
+    setIsShowParams(false);
+    dispatch(appendConditions(selectedAttributes));
+  };
+  const handleConditionChange = (position, changes) => {
+    dispatch(patchCondition({ position, changes }));
+  };
   const handleConditionDrop = (target, source) => {
     dispatch(moveCondition({ source, target }));
+  };
+  const handleConditionRemove = (position) => {
+    dispatch(removeCondition(position));
   };
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
@@ -225,10 +211,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <DndProvider backend={HTML5Backend}>
           <AttributesConstructor isFetching={isFetchingSegment}>
             <AttributesLabels
-              isVisible={segmentAttributes.length > 0}
+              isVisible={conditions.length > 0}
               labels={['Датасеты', 'Телефонов']}
             />
-            {segmentAttributes.reduce((groupAcc, group, groupIndex, groups) => {
+            {conditions.reduce((groupAcc, group, groupIndex, groups) => {
               const groupKey = (key) => `group-${groupIndex}-${key}`;
 
               return ([
@@ -279,8 +265,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
                         values={condition.values}
                         groupIndex={groupIndex}
                         index={conditionIndex}
-                        onChange={handleChangeAttribute}
-                        onRemove={handleRemoveAttribute}
+                        onChange={handleConditionChange}
+                        onRemove={handleConditionRemove}
                       />
                     ),
                     (conditionIndex === group.length - 1) && (
@@ -310,11 +296,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </DndProvider>
 
         <Params
-          isFetching={isFetchingParams}
+          isFetching={areAttributesFetching}
           isVisible={isShowParams}
           form={(
             <ParamsForm
-              data={params}
+              data={attributesTree}
               onCancel={handleCloseParamsForm}
               onSubmit={handleSubmitParams}
             />
