@@ -18,6 +18,11 @@
   &Charts {
     display: flex;
     flex-wrap: wrap;
+    gap: 1em;
+
+    & > * {
+      flex-grow: 1;
+    }
   }
 
   &Header {
