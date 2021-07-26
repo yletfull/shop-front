@@ -1,5 +1,6 @@
 import React from 'react';
 import BarsLight from './BarsLight';
+import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
 import ChevronLeft from './ChevronLeft';
@@ -61,6 +62,7 @@ export const Icons = ({ color, size }) => (
   >
     {/* hygen-inject */}
     {renderIcon(BarsLight)}
+    {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
     {renderIcon(ChevronLeft)}

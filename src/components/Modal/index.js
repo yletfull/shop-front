@@ -1,70 +1,111 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useOnClickOutside } from '@/hooks';
-import IconTimes from '@/icons/TimesLight';
+import cx from 'classnames';
+import { rootNodes } from '@/constants/dom';
+import useKeyPress from '@/hooks/use-key-press';
+import useScrollDisable from '@/hooks/use-scroll-disable';
+import useFocusCapture from '@/hooks/use-focus-capture';
+import IconTimesLight from '@/icons/TimesLight';
+import Portal from '@/components/Portal';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  children: PropTypes.node,
-  isVisible: PropTypes.bool,
-  header: PropTypes.node,
+  className: PropTypes.string,
+  title: PropTypes.node,
+  children: PropTypes.node.isRequired,
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  width: PropTypes.number,
+  preventClose: PropTypes.bool,
+  preventScrollDisable: PropTypes.bool,
+  preventCloseByEsc: PropTypes.bool,
+  preventFocusCapture: PropTypes.bool,
   onClose: PropTypes.func,
 };
 const defaultProps = {
-  children: null,
-  isVisible: false,
-  header: null,
+  className: '',
+  title: null,
+  size: 'medium',
+  width: 0,
+  preventClose: false,
+  preventScrollDisable: false,
+  preventCloseByEsc: false,
+  preventFocusCapture: false,
   onClose: () => {},
 };
 
 const Modal = function Modal({
+  className,
+  title,
   children,
-  isVisible,
-  header,
+  size,
+  width,
+  preventClose,
+  preventScrollDisable,
+  preventCloseByEsc,
+  preventFocusCapture,
   onClose,
 }) {
-  const modalRef = useRef(null);
+  const handleClose = onClose;
+  const isClosable = !preventClose && typeof handleClose === 'function';
+  const shouldRenderHeader = Boolean(title) || isClosable;
+  const ref = useRef();
 
-  const [isShowModal, setIsShowModal] = useState(isVisible);
+  useKeyPress({
+    event: (!preventCloseByEsc && isClosable) && 'keydown',
+    key: 'Escape',
+    handler: handleClose,
+  });
 
-  const closeModal = () => {
-    setIsShowModal(false);
-    onClose();
-  };
-  const handleClickCloseButton = () => closeModal();
-  const handleClickOutside = () => closeModal();
-
-  useEffect(() => {
-    setIsShowModal(isVisible);
-  }, [isVisible]);
-
-  useOnClickOutside(modalRef, handleClickOutside);
-
-  if (!isShowModal) {
-    return null;
-  }
+  useScrollDisable(preventScrollDisable);
+  useFocusCapture({ preventFocusCapture, ref });
 
   return (
-    <div className={styles.wrapper}>
+    <Portal target={rootNodes.portalModals}>
       <div
-        ref={modalRef}
-        className={styles.modal}
+        ref={ref}
+        className={cx(styles.wrapper, className)}
       >
-        <div className={styles.modalHeader}>
-          {header}
-          <button
-            type="button"
-            className={styles.modalClose}
-            onClick={handleClickCloseButton}
-          >
-            <IconTimes />
-          </button>
-        </div>
-        <div className={styles.modalContent}>
-          {children}
+        {isClosable && (
+          <div
+            role="presentation"
+            className={styles.overlay}
+            onClick={handleClose}
+          />
+        )}
+
+        <div
+          className={cx(
+            styles.modal,
+            styles[`modal_size-${size}`],
+          )}
+          style={{
+            width: width ? `${width}rem` : null,
+          }}
+        >
+          {shouldRenderHeader && (
+            <header className={styles.modalHeader}>
+              <span className={styles.modalHeaderTitle}>
+                {title}
+              </span>
+
+              {isClosable && (
+                <button
+                  type="button"
+                  className={styles.modalCloseButton}
+                  onClick={handleClose}
+                >
+                  <IconTimesLight className={styles.modalCloseIcon} />
+                </button>
+              )}
+            </header>
+          )}
+
+          <div className={styles.modalBody}>
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </Portal>
   );
 };
 
