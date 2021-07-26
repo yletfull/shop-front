@@ -35,11 +35,11 @@ const fetchPeriods = function serviceFetchPeriod() {
     .then((response) => response.data.data);
 };
 
-const fetchReactionsComments = function serviceFetchReactionsComments(
+const fetchReactionsComments = function serviceFetchReactionsComments({
   entityType,
   entityId,
-  params
-) {
+  params,
+}) {
   if (!entityType || !entityId) {
     return;
   }
