@@ -1,0 +1,26 @@
+@import '@/theme/include.scss';
+
+.statisticsDetails {
+  &Chart {
+    &Header {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+
+    &Rectangle {
+      display: inline-block;
+      height: .5rem;
+      width: .5rem;
+    }
+  }
+
+  &Charts {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &Header {
+    display: flex;
+  }
+}
