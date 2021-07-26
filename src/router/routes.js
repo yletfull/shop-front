@@ -106,11 +106,6 @@ export default [
     title: titles.segments,
   },
   {
-    Component: SegmentsDetails,
-    path: patchs.segmentsDetails,
-    title: titles.segmentsDetails,
-  },
-  {
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
