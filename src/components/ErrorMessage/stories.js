@@ -9,9 +9,6 @@ const error = { response: { data: { error: { title, message } } } };
 export default {
   title: 'Components/ErrorMessage',
   component: ErrorMessage,
-  argTypes: {
-    children: { control: { type: 'text' } },
-  },
 };
 
 export const Playground = (args) => (
