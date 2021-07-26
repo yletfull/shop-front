@@ -49,7 +49,7 @@ export const patchs = {
   segmentsUser: '/segments/user/',
   upload: '/upload',
   users: '/users',
-  statistics: '/statistics',
+  statistics: '/statistics/lists',
 };
 
 export const titles = {
