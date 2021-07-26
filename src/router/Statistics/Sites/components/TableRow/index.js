@@ -60,7 +60,7 @@ const StatisticsSitesTableRow = function StatisticsSitesTableRow({
         className={styles.name}
       >
         <Link
-          to={`/details/${entity}/${id}`}
+          to={`details/${entity}/${id}`}
         >
           {name}
         </Link>
