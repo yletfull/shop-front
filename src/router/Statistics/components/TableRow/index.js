@@ -53,7 +53,7 @@ const StatisticsTableRow = function StatisticsTableRow({
       </TableCell>
       <TableCell>
         <Link
-          to={`details/${entity}/${id}`}
+          to={`/statistics/details/${entity}/${id}`}
         >
           {name}
         </Link>
