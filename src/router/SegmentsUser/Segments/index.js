@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
-import { patchs } from '@/router/routes';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Pagination from '@/components/PagePagination';
@@ -145,7 +144,7 @@ const Segments = function Segments({
           {hasData && data.map((d) => (
             <TableRow key={d.id}>
               <TableCell>
-                <Link to={`${patchs.segmentsDetails.split(':')[0]}${d.id}`}>
+                <Link to={`/segments/details/${d.id}`}>
                   {d.id}
                 </Link>
               </TableCell>
