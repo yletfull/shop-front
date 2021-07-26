@@ -23,6 +23,7 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
+import ExclamationTriangle from './ExclamationTriangle';
 
 export default {
   title: 'Components/Icons',
@@ -84,6 +85,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
+    {renderIcon(ExclamationTriangle)}
   </div>
 );
 Icons.storyName = 'Icons';
