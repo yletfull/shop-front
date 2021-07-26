@@ -57,8 +57,33 @@ const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
     .then((response) => response.data.data);
 };
 
+const fetchStatistics = function segmentServiceFetchStatistics(
+  { conditions, title },
+  options = {},
+) {
+  return api
+    .post(
+      `${baseUrl}/segments/stats/`,
+      {
+        title: title || 'new-segment',
+        conditions: conditions.map((group) => (
+          group.map((condition) => ({
+            attributeId: condition.id,
+            type: condition.equality,
+            negation: condition.negation,
+            values: condition.values,
+            datasetIds: condition.datasetIds,
+          }))
+        )),
+      },
+      options,
+    )
+    .then((response) => response.data.data);
+};
+
 export default {
   fetchAttributes,
+  fetchStatistics,
   fetchSegment,
   fetchSegmentStatistics,
   getSegmentDownloadLink,

@@ -22,6 +22,7 @@ import {
   moveCondition,
   patchCondition,
   removeCondition,
+  fetchStatistics,
 } from './store/actions';
 import {
   getAreAttributesFetching,
@@ -196,12 +197,26 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleConditionChange = (position, changes) => {
     dispatch(patchCondition({ position, changes }));
+    dispatch(fetchStatistics());
   };
   const handleConditionDrop = (target, source) => {
+    const prevGroup = [...(conditions[source[0]] || [])];
     dispatch(moveCondition({ source, target }));
+
+    const [sourceGroup] = source || [];
+    const [targetGroup, targetIndex] = target || [];
+
+    if (sourceGroup === targetGroup) {
+      return;
+    }
+
+    if (targetIndex === -1 && prevGroup.length === 1) {
+      dispatch(fetchStatistics());
+    }
   };
   const handleConditionRemove = (position) => {
     dispatch(removeCondition(position));
+    dispatch(fetchStatistics());
   };
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
