@@ -57,7 +57,7 @@ const TotalSocialReactionChart = function TotalSocialReactionChart({
   const groupBandwidth = scaleXGroup.bandwidth();
 
   const scaleX = useMemo(() => scaleBand()
-    .domain(['comments', 'reposts'])
+    .domain(['value'])
     .range([0, groupBandwidth])
     .round(true)
     .paddingInner(0.1)
