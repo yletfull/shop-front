@@ -70,7 +70,7 @@ const fetchReactionsTonality = function serviceFetchReactionsTonality(
     .then((response) => response.data);
 };
 
-const fetchReactionsTotal = function serviceFetchReactionsTotal({
+const fetchTotalSocialReaction = function servicefetchTotalSocialReaction({
   entityType,
   entityId,
   params,
@@ -84,7 +84,7 @@ const fetchReactionsTotal = function serviceFetchReactionsTotal({
 
   return api
     .get(`${baseUrl}/${entity}/${id}/reactions/total`, { params })
-    .then((response) => response.data.data);
+    .then((response) => response.data);
 };
 
 export default {
@@ -93,5 +93,5 @@ export default {
   fetchPeriods,
   fetchReactionsComments,
   fetchReactionsTonality,
-  fetchReactionsTotal,
+  fetchTotalSocialReaction,
 };
