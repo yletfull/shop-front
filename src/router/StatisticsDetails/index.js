@@ -179,7 +179,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
                 <span
                   className={styles.statisticsDetailsChartRectangle}
                   style={{
-                    background: colors?.tonality?.positive || 'transparent',
+                    background: colors?.commentsAndReposts?.reposts || 'transparent',
                   }}
                 />
                 &nbsp;
@@ -188,7 +188,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
                 <span
                   className={styles.statisticsDetailsChartRectangle}
                   style={{
-                    background: colors?.tonality?.negative || 'transparent',
+                    background: colors?.commentsAndReposts?.comments || 'transparent',
                   }}
                 />
               </span>
@@ -197,6 +197,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
             <ReactionsComments
               dateStart={params.dateStart}
               dateEnd={params.dateEnd}
+              colors={colors.commentsAndReposts}
             />
           </ChartContainer>
         </div>

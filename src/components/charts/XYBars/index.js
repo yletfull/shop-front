@@ -50,7 +50,7 @@ const XYBars = function XYBars({
         key={getKey(d, i, arr)}
         x={scaleX(getX(d, i, arr)) - ((width || 0) / 2)}
         y={chartHeight - scaleY(getY(d, i, arr))}
-        height={scaleY(getY(d, i, arr))}
+        height={Math.max(0, scaleY(getY(d, i, arr)))}
         width={width}
         fill={getFill(d, i, arr)}
         {...props}

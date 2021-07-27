@@ -5,14 +5,8 @@ import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatToUnix } from '@/utils/format';
 import { XYBars } from '@/components/charts';
+import { padding } from './constants';
 import styles from './styles.module.scss';
-
-const padding = {
-  bottom: 16,
-  left: 32,
-  right: 32,
-  top: 16,
-};
 
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
@@ -22,16 +16,19 @@ const propTypes = {
   })),
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
+  colors: PropTypes.objectOf(PropTypes.string),
 };
 
 const defaultProps = {
   data: [],
+  colors: {},
 };
 
 const ReactionsCommentsChart = function ReactionsCommentsChart({
   data,
   dateStart,
   dateEnd,
+  colors,
 }) {
   const chartRef = useRef(null);
 
@@ -87,11 +84,14 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
               <XYBars
                 data={Object.keys(d).filter((key) => key !== 'date')}
                 chartHeight={chartHeight}
+                getFill={(key) => colors[key] || 'currentColor'}
                 getX={(key) => key}
                 getY={(key) => d[key]}
                 scaleX={scaleX}
                 scaleY={scaleY}
                 width={bandwidth}
+                rx={bandwidth < 8 ? 2 : 4}
+                ry={bandwidth < 8 ? 2 : 4}
               />
             </g>
           ))}

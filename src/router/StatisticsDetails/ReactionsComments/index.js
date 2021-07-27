@@ -11,13 +11,17 @@ import styles from './styles.module.scss';
 const propTypes = {
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
+  colors: PropTypes.objectOf(PropTypes.string),
 };
 
-const defaultProps = {};
+const defaultProps = {
+  colors: {},
+};
 
 const ReactionsComments = function ReactionsComments({
   dateStart,
   dateEnd,
+  colors,
 }) {
   const { entityType, id: entityId } = useParams();
 
@@ -61,6 +65,7 @@ const ReactionsComments = function ReactionsComments({
             data={chartData}
             dateStart={dateStart}
             dateEnd={dateEnd}
+            colors={colors}
           />
         )}
       </WithSpinner>
