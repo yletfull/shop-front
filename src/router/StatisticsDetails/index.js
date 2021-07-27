@@ -28,6 +28,7 @@ import EntitySelect from './EntitySelect';
 import ReactionsComments from './ReactionsComments';
 import ReactionsTonality from './ReactionsTonality';
 import ReactionsTotal from './ReactionsTotal';
+import ReactionsFacebook from './ReactionsFacebook';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -210,6 +211,18 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
             )}
           >
             <ReactionsTotal
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Facebook
+              </span>
+            )}
+          >
+            <ReactionsFacebook
               dateStart={params.dateStart}
               dateEnd={params.dateEnd}
             />
