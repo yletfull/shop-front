@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
+import NumberGrowth from '@/components/NumberGrowth';
 import ErrorMessage from '../components/ErrorMessage';
 import WithSpinner from '../components/WithSpinner';
 import service from '../service';
@@ -26,6 +27,8 @@ const ReactionsTotal = function ReactionsTotal({
     service: service.fetchReactionsByPlatform,
   });
 
+  const { total = {} } = data;
+
   useEffect(() => {
     if (!dateStart || !dateEnd) {
       return;
@@ -40,10 +43,12 @@ const ReactionsTotal = function ReactionsTotal({
   }, [fetch, dateStart, dateEnd, entityType, entityId]);
 
   const chartData = useMemo(() => {
-    if (!data) {
+    const { dynamics } = data;
+    if (!dynamics) {
       return ([]);
     }
-    return Object.keys(data).map((date) => ({ date, value: data[date] }));
+    return Object.keys(dynamics)
+      .map((date) => ({ date, value: data[date] }));
   }, [data]);
 
   return (
@@ -56,11 +61,32 @@ const ReactionsTotal = function ReactionsTotal({
         {error
           ? <ErrorMessage error={error} />
           : (
-            <Chart
-              data={chartData}
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-            />
+            <div>
+              <Chart
+                data={chartData}
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+              <div className={styles.summary}>
+                <div>
+                  Реакций за период
+                  <span className={styles.summary_indicator} />
+                </div>
+                <div
+                  className={styles.total}
+                >
+                  <span
+                    className={styles.total_count}
+                  >
+                    {total.count}
+                  </span>
+                  <NumberGrowth
+                    renderZero
+                    value={total.diff}
+                  />
+                </div>
+              </div>
+            </div>
           )}
       </WithSpinner>
     </div>
