@@ -84,7 +84,7 @@ const fetchTotalSocialReaction = function servicefetchTotalSocialReaction({
 
   return api
     .get(`${baseUrl}/${entity}/${id}/reactions/total`, { params })
-    .then((response) => response.data);
+    .then((response) => response.data.data);
 };
 
 export default {
