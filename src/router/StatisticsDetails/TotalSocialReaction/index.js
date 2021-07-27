@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useService } from '@/hooks';
+import { useService, useElementSize } from '@/hooks';
 import WithSpinner from '../components/WithSpinner';
-import ChartContainer from '../ChartContainer';
 import ErrorMessage from '../components/ErrorMessage';
 import service from '../service';
-import { colors } from '../constants';
-import Chart from './Chart';
 import styles from './styles.module.scss';
+import Chart from './Chart';
 
 const propTypes = {
   dateStart: PropTypes.string.isRequired,
@@ -17,15 +15,18 @@ const propTypes = {
 
 const defaultProps = {};
 
-const ReactionsComments = function ReactionsComments({
+const TotalSocialReaction = function TotalSocialReaction({
   dateStart,
   dateEnd,
 }) {
+  const chartRef = useRef(null);
+  const [width, height] = useElementSize(chartRef);
+
   const { entityType, id: entityId } = useParams();
 
-  const { fetch, data: response, isFetching, error } = useService({
+  const { fetch, data, isFetching, error } = useService({
     initialData: {},
-    service: service.fetchReactionsComments,
+    service: service.fetchTotalSocialReaction,
   });
 
   useEffect(() => {
@@ -41,53 +42,35 @@ const ReactionsComments = function ReactionsComments({
     );
   }, [fetch, dateStart, dateEnd, entityType, entityId]);
 
-  const data = Object.keys(response?.data || {})
-    .map((key) => response.data[key]);
-
-  console.log({ data });
-
   return (
-    <ChartContainer
-      header={(
-        <span className={styles.statisticsDetailsChartHeader}>
-          Репосты
-          &nbsp;
-          <span
-            className={styles.statisticsDetailsChartRectangle}
-            style={{
-              background: colors?.tonality?.positive || 'transparent',
-            }}
-          />
-          &nbsp;
-          / Комментарии
-          &nbsp;
-          <span
-            className={styles.statisticsDetailsChartRectangle}
-            style={{
-              background: colors?.tonality?.negative || 'transparent',
-            }}
-          />
-        </span>
-      )}
-    >
-      <div className={styles.wrapper}>
+    <div className={styles.reactionsComments}>
+      <div
+        ref={chartRef}
+        className={styles.reactionsCommentsChart}
+      >
         <WithSpinner
           layout="overlay"
           isFetching={isFetching}
           className={styles.spinnerOverlay}
-        />
-        {error && (
-          <ErrorMessage
-            error={error}
-          />
-        )}
-        <Chart />
+        >
+          {error
+            ? <ErrorMessage error={error} />
+            : (
+              <Chart
+                data={data}
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+                width={width}
+                height={height}
+              />
+            )}
+        </WithSpinner>
       </div>
-    </ChartContainer>
+    </div>
   );
 };
 
-ReactionsComments.propTypes = propTypes;
-ReactionsComments.defaultProps = defaultProps;
+TotalSocialReaction.propTypes = propTypes;
+TotalSocialReaction.defaultProps = defaultProps;
 
-export default ReactionsComments;
+export default TotalSocialReaction;

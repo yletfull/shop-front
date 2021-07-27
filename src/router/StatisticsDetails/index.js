@@ -214,6 +214,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
               dateEnd={params.dateEnd}
             />
           </ChartContainer>
+
         </div>
       )}
     </div>
