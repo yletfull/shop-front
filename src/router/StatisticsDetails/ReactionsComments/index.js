@@ -94,32 +94,33 @@ const ReactionsComments = function ReactionsComments({
           layout="overlay"
           isFetching={isFetching}
           className={styles.spinnerOverlay}
-        />
-        {error && (
-          <ErrorMessage
-            error={error}
-          />
-        )}
-        {!isFetching && !error && data && (
-          <svg
-            height={height}
-            width={width}
-            viewBox={`0 0 ${width} ${height}`}
-          >
-            <g transform={`translate(${padding.left}, ${padding.top})`}>
-              <XYBars
-                data={chartData}
-                chartHeight={chartHeight}
-                getKey={(d) => d.date}
-                getX={(d) => formatToDate(d.date)}
-                getY={(d) => d.comments || 0}
-                scaleX={scaleX}
-                scaleY={scaleY}
-                scaleXBand={scaleXBand}
-              />
-            </g>
-          </svg>
-        )}
+        >
+          {error && (
+            <ErrorMessage
+              error={error}
+            />
+          )}
+          {!isFetching && !error && data && (
+            <svg
+              height={height}
+              width={width}
+              viewBox={`0 0 ${width} ${height}`}
+            >
+              <g transform={`translate(${padding.left}, ${padding.top})`}>
+                <XYBars
+                  data={chartData}
+                  chartHeight={chartHeight}
+                  getKey={(d) => d.date}
+                  getX={(d) => formatToDate(d.date)}
+                  getY={(d) => d.comments || 0}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  scaleXBand={scaleXBand}
+                />
+              </g>
+            </svg>
+          )}
+        </WithSpinner>
       </div>
     </div>
   );
