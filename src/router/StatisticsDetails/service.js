@@ -87,6 +87,24 @@ const fetchReactionsTotal = function serviceFetchReactionsTotal({
     .then((response) => response.data.data);
 };
 
+const fetchReactionsByPlatform = function serviceFetchReactionsByPlatform({
+  platformId,
+  entityType,
+  entityId,
+  params,
+}) {
+  if (!entityType || !entityId) {
+    return;
+  }
+
+  const entity = encodeURIComponent(entityType);
+  const id = encodeURIComponent(entityId);
+
+  return api
+    .get(`${baseUrl}/${entity}/${id}/reactions/byPlatform/${platformId}`, { params })
+    .then((response) => response.data.data);
+};
+
 export default {
   fetchEntities,
   fetchEntityDynamics,
@@ -94,4 +112,5 @@ export default {
   fetchReactionsComments,
   fetchReactionsTonality,
   fetchReactionsTotal,
+  fetchReactionsByPlatform,
 };
