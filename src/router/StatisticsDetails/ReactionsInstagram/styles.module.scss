@@ -1,0 +1,26 @@
+@import '@/theme/include.scss';
+
+.summary {
+  display: flex;
+  font-size: .75rem;
+  justify-content: space-between;
+  margin-top: 2rem;
+
+  &_indicator {
+    background-color: $color-gray-darker;
+    border-radius: .25em;
+    display: inline-block;
+    height: 1em;
+    margin-left: .5em;
+    vertical-align: middle;
+    width: 1em;
+  }
+}
+
+.total {
+  &_count {
+    font-size: 1.25em;
+    font-weight: bold;
+    margin-right: 1.5em;
+  }
+}

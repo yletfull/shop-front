@@ -29,6 +29,8 @@ import ReactionsComments from './ReactionsComments';
 import ReactionsTonality from './ReactionsTonality';
 import ReactionsTotal from './ReactionsTotal';
 import ReactionsFacebook from './ReactionsFacebook';
+import ReactionsVkontakte from './ReactionsVkontakte';
+import ReactionsInstagram from './ReactionsInstagram';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -227,7 +229,30 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
               dateEnd={params.dateEnd}
             />
           </ChartContainer>
-
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                vk
+              </span>
+            )}
+          >
+            <ReactionsVkontakte
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Instagram
+              </span>
+            )}
+          >
+            <ReactionsInstagram
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
         </div>
       )}
     </div>
