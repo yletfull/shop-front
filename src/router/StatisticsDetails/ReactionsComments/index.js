@@ -100,7 +100,7 @@ const ReactionsComments = function ReactionsComments({
               error={error}
             />
           )}
-          {!isFetching && !error && data && (
+          {!error && data && (
             <svg
               height={height}
               width={width}
