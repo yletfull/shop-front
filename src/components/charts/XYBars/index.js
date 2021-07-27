@@ -12,9 +12,9 @@ const propTypes = {
   getX: PropTypes.func,
   getY: PropTypes.func,
   scaleX: PropTypes.func,
-  scaleXBand: PropTypes.func,
   scaleY: PropTypes.func,
   rendererRect: PropTypes.func,
+  width: PropTypes.number,
 };
 
 const defaultProps = {
@@ -25,9 +25,9 @@ const defaultProps = {
   getX: (d) => d.x,
   getY: (d) => d.y,
   scaleX: (d) => d,
-  scaleXBand: (d) => d,
   scaleY: (d) => d,
   rendererRect: null,
+  width: 1,
 };
 
 const XYBars = function XYBars({
@@ -38,9 +38,9 @@ const XYBars = function XYBars({
   getX,
   getY,
   scaleX,
-  scaleXBand,
   scaleY,
   rendererRect,
+  width,
   ...props
 }) {
   const rectRenderer = typeof rendererRect === 'function'
@@ -48,11 +48,10 @@ const XYBars = function XYBars({
     : (d, i, arr) => (
       <rect
         key={getKey(d, i, arr)}
-        x={scaleX(getX(d, i, arr)) - (
-          (scaleXBand?.bandwidth() || 0) / 2)}
+        x={scaleX(getX(d, i, arr)) - ((width || 0) / 2)}
         y={chartHeight - scaleY(getY(d, i, arr))}
-        width={scaleXBand?.bandwidth() || 0}
         height={scaleY(getY(d, i, arr))}
+        width={width}
         fill={getFill(d, i, arr)}
         {...props}
       />
