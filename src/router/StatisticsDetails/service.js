@@ -12,6 +12,7 @@ const fetchEntities = function serviceFetchEntities(entityType) {
     .then((response) => response.data.data);
 };
 
+
 const fetchEntityDynamics = function serviceFetchEntityDynamics(
   entityType,
   entityId,
@@ -49,7 +50,7 @@ const fetchReactionsComments = function serviceFetchReactionsComments({
 
   return api
     .get(`${baseUrl}/${entity}/${id}/reactions/commentsAndReposts`, { params })
-    .then((response) => response.data);
+    .then((response) => response.data.data);
 };
 
 const fetchReactionsTonality = function serviceFetchReactionsTonality(
