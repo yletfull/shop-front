@@ -1,0 +1,18 @@
+@import '@/theme/include.scss';
+
+.reactionsTotalChart {
+  height: 200px;
+  width: 350px;
+
+  &Tick {
+    &Label {
+      fill: $color-gray-darker;
+      font-size: .625rem;
+    }
+
+    &Line {
+      stroke: $color-gray;
+      stroke: rgba($color-gray, .9);
+    }
+  }
+}

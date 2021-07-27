@@ -70,10 +70,28 @@ const fetchReactionsTonality = function serviceFetchReactionsTonality(
     .then((response) => response.data);
 };
 
+const fetchReactionsTotal = function serviceFetchReactionsTotal({
+  entityType,
+  entityId,
+  params,
+}) {
+  if (!entityType || !entityId) {
+    return;
+  }
+
+  const entity = encodeURIComponent(entityType);
+  const id = encodeURIComponent(entityId);
+
+  return api
+    .get(`${baseUrl}/${entity}/${id}/reactions/total`, { params })
+    .then((response) => response.data.data);
+};
+
 export default {
   fetchEntities,
   fetchEntityDynamics,
   fetchPeriods,
   fetchReactionsComments,
   fetchReactionsTonality,
+  fetchReactionsTotal,
 };

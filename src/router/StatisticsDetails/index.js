@@ -27,6 +27,7 @@ import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import ReactionsComments from './ReactionsComments';
 import ReactionsTonality from './ReactionsTonality';
+import ReactionsTotal from './ReactionsTotal';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -198,6 +199,19 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
               dateStart={params.dateStart}
               dateEnd={params.dateEnd}
               colors={colors.commentsAndReposts}
+            />
+          </ChartContainer>
+
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Всего соцреакций
+              </span>
+            )}
+          >
+            <ReactionsTotal
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
             />
           </ChartContainer>
         </div>
