@@ -1,8 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
-import { formatToDate } from '@/utils/format';
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { useElementSize } from '@/hooks';
+import { getDatesRange } from '@/utils/day';
+import { formatToUnix } from '@/utils/format';
 import { XYBars } from '@/components/charts';
+import styles from './styles.module.scss';
 
 const padding = {
   bottom: 16,
@@ -12,88 +15,94 @@ const padding = {
 };
 
 const propTypes = {
-  // data: PropTypes.objectOf(
-  //   PropTypes.number
-  // ).isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    date: PropTypes.string,
+    value: PropTypes.number,
+  })),
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
-  height: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
+};
+
+const defaultProps = {
+  data: [],
 };
 
 const TotalSocialReactionChart = function TotalSocialReactionChart({
-  // data,
+  data,
   dateStart,
   dateEnd,
-  height,
-  width,
 }) {
-  const data = useMemo(() => ({
-    '2021-07-14': 10,
-    '2021-07-15': 20,
-    '2021-07-16': 30,
-    '2021-07-17': 40,
-    '2021-07-18': 20,
-    '2021-07-19': 10,
-    '2021-07-20': 30,
-    '2021-07-21': 50,
-  }), []);
+  const chartRef = useRef(null);
+
+  const [width, height] = useElementSize(chartRef);
 
   const chartHeight = height - padding.bottom - padding.top;
   const chartWidth = width - padding.left - padding.right;
 
-  const chartData = useMemo(() => {
-    if (!data) {
-      return ([]);
-    }
-    return Object.keys(data).map((date) => ({ value: data[date], date }));
-  }, [data]);
+  const maxValue = useMemo(() => Math.max(...data
+    .map((d) => d.value)), [data]);
 
-  const maxValue = useMemo(() => {
-    if (!data || Object.keys(data).length === 0) {
-      return 0;
-    }
-    return Math.max(...Object.keys(data)
-      .map((key) => (data[key])));
-  }, [data]);
+  const dateRangeByDays = useMemo(() => {
+    const dateRange = getDatesRange(dateStart, dateEnd);
+    return dateRange.map(formatToUnix);
+  }, [dateStart, dateEnd]);
 
-  // const period = dayjs(dateEnd).diff(dateStart, 'day');
-  // const paddingInner = Math.min(0.98, period / chartWidth);
-  const scaleX = useMemo(() => scaleTime()
-    .domain([formatToDate(dateStart), formatToDate(dateEnd)])
-    .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
-  const scaleXBand = useMemo(() => scaleBand()
-    .domain(chartData.map((d) => formatToDate(d.date)))
+  const scaleXGroup = useMemo(() => scaleBand()
+    .domain(dateRangeByDays)
     .range([0, chartWidth])
     .round(true)
-    .paddingInner(0)
-    .paddingOuter(0), [chartData, chartWidth]);
+    .paddingInner(0.3)
+    .paddingOuter(0), [dateRangeByDays, chartWidth]);
+
+  const groupBandwidth = scaleXGroup.bandwidth();
+
+  const scaleX = useMemo(() => scaleBand()
+    .domain(['comments', 'reposts'])
+    .range([0, groupBandwidth])
+    .round(true)
+    .paddingInner(0.1)
+    .paddingOuter(0), [groupBandwidth]);
+  const bandwidth = scaleX.bandwidth();
+
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
     .range([chartHeight, 0]), [chartHeight, maxValue]);
 
   return (
-    <svg
-      height={height}
-      width={width}
-      viewBox={`0 0 ${width} ${height}`}
+    <div
+      ref={chartRef}
+      className={styles.reactionsCommentsChart}
     >
-      <g transform={`translate(${padding.left}, ${padding.top})`}>
-        <XYBars
-          data={chartData}
-          chartHeight={chartHeight}
-          getKey={(d) => d.date}
-          getX={(d) => formatToDate(d.date)}
-          getY={(d) => d.value || 0}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          scaleXBand={scaleXBand}
-        />
-      </g>
-    </svg>
+      <svg
+        height={height}
+        width={width}
+        viewBox={`0 0 ${width} ${height}`}
+      >
+        <g transform={`translate(${padding.left}, ${padding.top})`}>
+          {data.map((d) => (
+            <g
+              key={d.date}
+              transform={`translate(${scaleXGroup(formatToUnix(d.date))}, 0)`}
+              data-width={groupBandwidth}
+            >
+              <XYBars
+                data={Object.keys(d).filter((key) => key !== 'date')}
+                chartHeight={chartHeight}
+                getX={(key) => key}
+                getY={(key) => d[key]}
+                scaleX={scaleX}
+                scaleY={scaleY}
+                width={bandwidth}
+              />
+            </g>
+          ))}
+        </g>
+      </svg>
+    </div>
   );
 };
 
 TotalSocialReactionChart.propTypes = propTypes;
+TotalSocialReactionChart.defaultProps = defaultProps;
 
 export default TotalSocialReactionChart;
