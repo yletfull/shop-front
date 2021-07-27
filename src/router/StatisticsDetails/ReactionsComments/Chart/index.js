@@ -1,10 +1,10 @@
 import React, { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { scaleBand, scaleLinear } from 'd3-scale';
+import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
 import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
-import { formatNumber, formatToUnix } from '@/utils/format';
-import { XYBars, XYTicksY } from '@/components/charts';
+import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
+import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
 import { padding } from './constants';
 import styles from './styles.module.scss';
 
@@ -60,11 +60,27 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
     .paddingOuter(0), [groupBandwidth]);
   const bandwidth = scaleX.bandwidth();
 
+  const scaleXTicks = useMemo(() => scaleTime()
+    .domain([formatToDate(dateStart), formatToDate(dateEnd)])
+    .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
+
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
     .range([chartHeight, 0]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
+  const xTickRenderer = () => (value) => (
+    <text
+      key={value}
+      className={styles.reactionsCommentsChartTickLabel}
+      x={scaleXTicks(value)}
+      y={chartHeight}
+      dy="1em"
+      textAnchor="middle"
+    >
+      {formatDate(value)}
+    </text>
+  );
   const yTickRenderer = () => (value) => (
     <text
       key={value}
@@ -104,6 +120,13 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
           renderTick={yTickRenderer}
         />
         <g transform={`translate(${padding.left}, ${padding.top})`}>
+          <XYTicksX
+            chartHeight={chartHeight}
+            scaleX={scaleXTicks}
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={xTickRenderer}
+          />
           <XYTicksY
             scaleY={scaleY}
             ticksCount={4}
