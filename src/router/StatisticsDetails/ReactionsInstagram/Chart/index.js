@@ -13,6 +13,7 @@ const padding = {
   right: 32,
   top: 16,
 };
+
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.string,
@@ -58,13 +59,13 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([0, chartHeight]), [chartHeight, maxValue]);
+    .range([chartHeight, 0]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.tickLabel}
+      className={styles.XTickLabel}
       x={scaleXTicks(value)}
       y={chartHeight}
       dy="1em"
@@ -76,10 +77,10 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
   const yTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.tickLabel}
+      className={styles.YTickLabel}
       x={0}
-      y={scaleY(maxValue - value)}
-      dy="1em"
+      y={scaleY(value)}
+      dy=".35em"
     >
       {formatNumber(value)}
     </text>
@@ -87,11 +88,11 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
   const yTickLineRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.tickLine}
+      className={styles.YTickLine}
       x1={0}
-      y1={scaleY(maxValue - value)}
+      y1={scaleY(value)}
       x2={chartWidth}
-      y2={scaleY(maxValue - value)}
+      y2={scaleY(value)}
     />
   );
   /* eslint-enable react/function-component-definition */
@@ -106,12 +107,12 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
-        <XYTicksY
-          scaleY={scaleY}
-          ticksCount={4}
-          renderTick={yTickRenderer}
-        />
         <g transform={`translate(${padding.left}, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickLineRenderer}
+          />
           <XYTicksX
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
@@ -119,23 +120,29 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
             ticksCount={4}
             renderTick={xTickRenderer}
           />
-          <XYTicksY
-            scaleY={scaleY}
-            ticksCount={4}
-            renderTick={yTickLineRenderer}
-          />
+        </g>
+
+        <g transform={`translate(${padding.left}, ${padding.top})`}>
           <XYBars
             data={data}
             chartHeight={chartHeight}
             getFill={() => 'hsl(210, 7%, 77%)'}
             getX={(d) => formatToUnix(d.date)}
-            getY={(d) => d.value}
+            getY={(d) => (maxValue - d.value)}
             getKey={(d) => d.date}
             scaleX={scaleX}
             scaleY={scaleY}
             width={bandwidth}
             rx={bandwidth < 8 ? 2 : 4}
             ry={bandwidth < 8 ? 2 : 4}
+          />
+        </g>
+
+        <g transform={`translate(0, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickRenderer}
           />
         </g>
       </svg>
