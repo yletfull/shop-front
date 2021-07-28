@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
+import { formatPercent } from '@/utils/format';
 import { useService } from '@/hooks';
 import NumberGrowth from '@/components/NumberGrowth';
 import ErrorMessage from '../components/ErrorMessage';
@@ -83,6 +84,7 @@ const ReactionsInstagram = function ReactionsInstagram({
                   <NumberGrowth
                     renderZero
                     value={total.diff || 0}
+                    formatter={formatPercent}
                   />
                 </div>
               </div>
