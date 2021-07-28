@@ -58,7 +58,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([chartHeight, 0]), [chartHeight, maxValue]);
+    .range([0, chartHeight]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value) => (
