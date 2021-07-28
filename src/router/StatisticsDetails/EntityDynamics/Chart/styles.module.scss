@@ -1,0 +1,14 @@
+@import '@/theme/include.scss';
+
+.entityDynamicsChart {
+  height: 18rem;
+  width: 100%;
+
+  &Ticks {
+    font-size: .75rem;
+
+    & > text {
+      fill: $color-gray-darker;
+    }
+  }
+}

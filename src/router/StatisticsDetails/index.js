@@ -135,15 +135,18 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
 
       {entityType && entityId && (
         <div className={styles.statisticsDetailsCharts}>
-          <EntityDynamics
-            dateStart={params.dateStart}
-            dateEnd={params.dateEnd}
+          <ChartContainer
             header={(
               <span className={styles.statisticsDetailsChartHeader}>
                 Открутки
               </span>
             )}
-          />
+          >
+            <EntityDynamics
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
           <ChartContainer
             header={(
               <span className={styles.statisticsDetailsChartHeader}>
