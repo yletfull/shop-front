@@ -78,8 +78,8 @@ const ReactionsTotalChart = function ReactionsTotalChart({
       key={value}
       className={styles.reactionsTotalChartTickLabel}
       x={0}
-      y={scaleY(value)}
-      dy=".35em"
+      y={scaleY(maxValue - value)}
+      dy="1em"
     >
       {formatNumber(value)}
     </text>

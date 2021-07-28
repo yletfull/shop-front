@@ -78,7 +78,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
       key={value}
       className={styles.tickLabel}
       x={0}
-      y={scaleY(value)}
+      y={scaleY(maxValue - value)}
       dy="1em"
     >
       {formatNumber(value)}
