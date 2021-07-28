@@ -3,18 +3,15 @@ import {
   requestDynamics,
   requestEntities,
   requestPeriods,
-  requestReactionsTonality,
   updateDynamics,
   updateEntities,
   updatePeriods,
-  updateReactionsTonality,
 } from './actions';
 
 const initialState = {
   isFetchingDynamics: false,
   isFetchingEntities: false,
   isFetchingPeriods: false,
-  isFetchingReactionsTonality: false,
   dynamics: {
     data: {},
     meta: {},
@@ -22,10 +19,6 @@ const initialState = {
   entities: [],
   periods: [],
   reactionsComments: {
-    data: {},
-    meta: {},
-  },
-  reactionsTonality: {
     data: {},
     meta: {},
   },
@@ -43,10 +36,6 @@ export default createReducer(initialState, {
   [requestPeriods]: (state) => ({
     ...state,
     isFetchingPeriods: true,
-  }),
-  [requestReactionsTonality]: (state) => ({
-    ...state,
-    isFetchingReactionsTonality: true,
   }),
   [updateDynamics]: (state, action) => {
     const { data, meta } = action?.payload || {};
@@ -69,15 +58,4 @@ export default createReducer(initialState, {
     periods: action?.payload || [],
     isFetchingPeriods: false,
   }),
-  [updateReactionsTonality]: (state, action) => {
-    const { data, meta } = action?.payload || {};
-    return ({
-      ...state,
-      reactionsTonality: {
-        data: data || {},
-        meta: meta || {},
-      },
-      isFetchingReactionsTonality: false,
-    });
-  },
 });

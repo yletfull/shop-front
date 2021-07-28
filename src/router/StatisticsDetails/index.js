@@ -14,7 +14,6 @@ import {
   fetchEntities,
   fetchEntityDynamics,
   fetchPeriods,
-  fetchReactionsTonality,
 } from './actions';
 import reducer from './reducer';
 import {
@@ -92,7 +91,6 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   useEffect(() => {
     if (entityType && entityId && params.dateStart && params.dateEnd) {
       dispatch(fetchEntityDynamics(entityType, entityId, params));
-      dispatch(fetchReactionsTonality(entityType, entityId, params));
     }
   }, [dispatch, entityType, entityId, params]);
 

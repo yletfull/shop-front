@@ -6,14 +6,10 @@ export const requestDynamics = createAction(`${NS}/request/dynamics`);
 export const requestEntities = createAction(`${NS}/request/entities`);
 export const requestPeriods = (
   createAction(`${NS}/request/periods`));
-export const requestReactionsTonality = (
-  createAction(`${NS}/request/reactions/tonality`));
 export const updateDynamics = createAction(`${NS}/update/dynamics`);
 export const updateEntities = createAction(`${NS}/update/entities`);
 export const updatePeriods = (
   createAction(`${NS}/update/periods`));
-export const updateReactionsTonality = (
-  createAction(`${NS}/update/reactions/tonality`));
 
 export const fetchEntities = (entity) => async (dispatch) => {
   if (!entity) {
@@ -66,27 +62,3 @@ export const fetchPeriods = () => async (dispatch) => {
     console.error(error);
   }
 };
-
-export const fetchReactionsTonality = (entity, id, params) => (
-  async (dispatch) => {
-    const { dateStart, dateEnd } = params || {};
-
-    if (!entity || !id || !dateStart || !dateEnd) {
-      dispatch(updateReactionsTonality({}));
-      return;
-    }
-
-    dispatch(requestReactionsTonality());
-
-    try {
-      const { data, meta } = await service.fetchReactionsTonality(
-        entity,
-        id,
-        { dateStart, dateEnd },
-      );
-      dispatch(updateReactionsTonality({ data, meta }));
-    } catch (error) {
-      dispatch(updateReactionsTonality({}));
-      console.error(error);
-    }
-  });

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useService } from '@/hooks';
 import { colors } from '../constants';
-import {
-  getReactionsTonalityData,
-  getReactionsTonalityMeta,
-} from '../selectors';
+import WithSpinner from '../components/WithSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import Chart from './Chart';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -20,18 +20,65 @@ const ReactionsTonality = function ReactionsTonality({
   dateStart,
   dateEnd,
 }) {
-  const data = useSelector(getReactionsTonalityData);
-  const meta = useSelector(getReactionsTonalityMeta);
+  const { entityType, id: entityId } = useParams();
+
+  const { fetch, data, isFetching, error } = useService({
+    initialData: {},
+    service: service.fetchReactionsTonality,
+  });
+
+  useEffect(() => {
+    if (!dateStart || !dateEnd) {
+      return;
+    }
+    const params = { dateStart, dateEnd };
+    fetch({ entityType, entityId, params });
+  }, [fetch, dateStart, dateEnd, entityType, entityId]);
+
+  const chartData = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return [];
+    }
+    return Object.keys(data).map((key) => ({
+      ...data[key],
+      date: data[key]?.date || key,
+    }));
+  }, [data]);
+  const chartMeta = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return ({
+        maxNegative: 0,
+        maxPositive: 0,
+      });
+    }
+    return ({
+      maxNegative: Math.max(...Object.values(data)
+        .map((values) => values.negative || 0)),
+      maxPositive: Math.max(...Object.values(data)
+        .map((values) => values.positive || 0)),
+    });
+  }, [data]);
 
   return (
     <div className={styles.reactionsTonality}>
-      <Chart
-        data={data}
-        meta={meta}
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        colors={colors}
-      />
+      <WithSpinner
+        layout="overlay"
+        isFetching={isFetching}
+        className={styles.spinnerOverlay}
+      >
+        {error && (
+          <ErrorMessage error={error} />
+        )}
+        {!error && data && (
+          <Chart
+            data={chartData}
+            meta={chartMeta}
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+            colors={colors}
+          />
+        )}
+      </WithSpinner>
     </div>
   );
 };
