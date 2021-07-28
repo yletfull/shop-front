@@ -45,7 +45,7 @@ const XYBars = function XYBars({
     : (d, i, arr) => (
       <rect
         key={getKey(d, i, arr)}
-        x={scaleX(getX(d, i, arr)) - ((width || 0) / 2)}
+        x={scaleX(getX(d, i, arr))}
         y={chartHeight - scaleY(getY(d, i, arr))}
         height={Math.max(0, scaleY(getY(d, i, arr)))}
         width={width}
