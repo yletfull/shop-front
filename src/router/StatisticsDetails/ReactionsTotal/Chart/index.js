@@ -90,9 +90,9 @@ const ReactionsTotalChart = function ReactionsTotalChart({
       key={value}
       className={styles.reactionsTotalChartYTickLine}
       x1={0}
-      y1={scaleY(value)}
+      y1={scaleY(maxValue - value)}
       x2={chartWidth}
-      y2={scaleY(value)}
+      y2={scaleY(maxValue - value)}
     />
   );
   /* eslint-enable react/function-component-definition */
