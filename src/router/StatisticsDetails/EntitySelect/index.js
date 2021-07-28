@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useService } from '@/hooks';
 import Select from '@/components/Select';
-import {
-  getEntities,
-  getIsFetchingEntities,
-} from '../selectors';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -22,22 +20,38 @@ const EntitySelect = function EntitySelect({
   selected,
   onChange,
 }) {
-  const entities = useSelector(getEntities);
-  const isFetching = useSelector(getIsFetchingEntities);
+  const { entityType } = useParams();
 
-  const entitiesOptions = entities
-    .reduce((acc, cur) => {
-      if (!cur || !cur.id) {
-        return acc;
-      }
-      return ([
-        ...acc,
-        {
-          text: cur.title || cur.id,
-          value: cur.id,
-        },
-      ]);
-    }, []);
+  const { fetch, data: entities, isFetching } = useService({
+    initialData: {},
+    service: service.fetchEntities,
+  });
+
+  useEffect(() => {
+    if (!entityType) {
+      return;
+    }
+    fetch(entityType);
+  }, [fetch, entityType]);
+
+  const entitiesOptions = useMemo(() => {
+    if (!entities || !Array.isArray(entities)) {
+      return ([]);
+    }
+    return entities
+      .reduce((acc, cur) => {
+        if (!cur || !cur.id) {
+          return acc;
+        }
+        return ([
+          ...acc,
+          {
+            text: cur.title || cur.id,
+            value: cur.id,
+          },
+        ]);
+      }, []);
+  }, [entities]);
 
   const handleChangeSelect = (e) => {
     const { value } = e?.target || {};

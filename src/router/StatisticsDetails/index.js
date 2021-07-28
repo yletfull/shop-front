@@ -10,10 +10,7 @@ import {
   namespace as NS,
   queryParams,
 } from './constants';
-import {
-  fetchEntities,
-  fetchPeriods,
-} from './actions';
+import { fetchPeriods } from './actions';
 import reducer from './reducer';
 import {
   getIsFetchingPeriods,
@@ -80,12 +77,6 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
   useEffect(() => {
     dispatch(fetchPeriods());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (entityType) {
-      dispatch(fetchEntities(entityType));
-    }
-  }, [dispatch, entityType]);
 
   const handleChangeDateRange = (values) => {
     const { dateStart, dateEnd } = values || {};
