@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { formatPercent } from '@/utils/format';
+import { formatPercent, formatNumber } from '@/utils/format';
 import { useService } from '@/hooks';
 import NumberGrowth from '@/components/NumberGrowth';
 import ErrorMessage from '../components/ErrorMessage';
@@ -78,7 +78,7 @@ const ReactionsInstagram = function ReactionsInstagram({
                   <span
                     className={styles.total_count}
                   >
-                    {total.count}
+                    {formatNumber(total.count)}
                   </span>
                   <NumberGrowth
                     renderZero
