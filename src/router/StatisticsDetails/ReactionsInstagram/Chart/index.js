@@ -79,7 +79,7 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
       className={styles.tickLabel}
       x={0}
       y={scaleY(value)}
-      dy=".35em"
+      dy="1em"
     >
       {formatNumber(value)}
     </text>
