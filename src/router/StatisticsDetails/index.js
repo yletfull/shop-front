@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
-import {
-  colors,
-  namespace as NS,
-  queryParams,
-} from './constants';
-import { fetchPeriods } from './actions';
-import reducer from './reducer';
-import {
-  getIsFetchingPeriods,
-  getAvailablePeriods,
-} from './selectors';
+import { colors, queryParams } from './constants';
 import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
@@ -44,39 +33,14 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
 
   const { entityType, id: entityId } = useParams();
 
-  const isFetchingPeriods = useSelector(getIsFetchingPeriods);
-  const periods = useSelector(getAvailablePeriods);
-
   const [params, setParams] = useState({
     dateStart: query.get(queryParams.dateStart) || '',
     dateEnd: query.get(queryParams.dateEnd) || '',
   });
 
   useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
-
-  useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
-
-  useEffect(() => {
-    if (isFetchingPeriods
-      || !periods.dateStart
-      || !periods.dateEnd
-      || params.dateStart
-      || params.dateEnd) {
-      return;
-    }
-    setParams({
-      dateStart: periods.dateStart,
-      dateEnd: periods.dateEnd,
-    });
-  }, [isFetchingPeriods, params, periods]);
-
-  useEffect(() => {
-    dispatch(fetchPeriods());
-  }, [dispatch]);
 
   const handleChangeDateRange = (values) => {
     const { dateStart, dateEnd } = values || {};
@@ -87,6 +51,16 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
     query.set(queryParams.dateStart, dateStart);
     query.set(queryParams.dateEnd, dateEnd);
     history.push({ search: query.toString() });
+  };
+  const handleChangeDateRangeLimits = (values) => {
+    console.log('=============== Change Limits', values);
+    if (!values || !values.dateStart || !values.dateEnd) {
+      return;
+    }
+    setParams({
+      dateStart: values.dateStart,
+      dateEnd: values.dateEnd,
+    });
   };
 
   const handleChangeSelectedEntity = (value) => {
@@ -114,6 +88,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
           dateStart={params.dateStart}
           dateEnd={params.dateEnd}
           onChange={handleChangeDateRange}
+          onChangeLimits={handleChangeDateRangeLimits}
         />
       </div>
 
