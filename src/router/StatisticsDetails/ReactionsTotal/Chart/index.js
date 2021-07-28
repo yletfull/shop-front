@@ -128,7 +128,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
             chartHeight={chartHeight}
             getFill={() => 'hsl(210, 7%, 77%)'}
             getX={(d) => formatToUnix(d.date)}
-            getY={(d) => d.value}
+            getY={(d) => (maxValue - d.value)}
             getKey={(d) => d.date}
             scaleX={scaleX}
             scaleY={scaleY}
