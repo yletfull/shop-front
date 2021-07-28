@@ -1,17 +1,17 @@
 @import '@/theme/include.scss';
 
-.reactionsTotalChart {
+.chart {
   height: 200px;
+}
 
-  &Tick {
-    &Label {
-      fill: $color-gray-darker;
-      font-size: .625rem;
-    }
+.tick {
+  &Label {
+    fill: $color-gray-darker;
+    font-size: .625rem;
+  }
 
-    &Line {
-      stroke: $color-gray;
-      stroke: rgba($color-gray, .9);
-    }
+  &Line {
+    stroke: $color-gray;
+    stroke: rgba($color-gray, .9);
   }
 }

@@ -26,7 +26,7 @@ const defaultProps = {
   data: [],
 };
 
-const ReactionsTotalChart = function ReactionsTotalChart({
+const ReactionsFacebookChart = function ReactionsFacebookChart({
   data,
   dateStart,
   dateEnd,
@@ -64,7 +64,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   const xTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsTotalChartTickLabel}
+      className={styles.tickLabel}
       x={scaleXTicks(value)}
       y={chartHeight}
       dy="1em"
@@ -76,7 +76,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   const yTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsTotalChartTickLabel}
+      className={styles.tickLabel}
       x={0}
       y={scaleY(value)}
       dy=".35em"
@@ -87,7 +87,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   const yTickLineRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.reactionsTotalChartTickLine}
+      className={styles.tickLine}
       x1={0}
       y1={scaleY(value)}
       x2={chartWidth}
@@ -99,7 +99,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   return (
     <div
       ref={chartRef}
-      className={styles.reactionsTotalChart}
+      className={styles.chart}
     >
       <svg
         height={height}
@@ -142,7 +142,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   );
 };
 
-ReactionsTotalChart.propTypes = propTypes;
-ReactionsTotalChart.defaultProps = defaultProps;
+ReactionsFacebookChart.propTypes = propTypes;
+ReactionsFacebookChart.defaultProps = defaultProps;
 
-export default ReactionsTotalChart;
+export default ReactionsFacebookChart;
