@@ -76,9 +76,8 @@ const EntityDynamics = function EntityDynamics({
   return (
     <div className={styles.entityDynamics}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.spinnerOverlay}
       >
         {error && (
           <ErrorMessage error={error} />

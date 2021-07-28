@@ -53,9 +53,8 @@ const ReactionsComments = function ReactionsComments({
   return (
     <div className={styles.reactionsComments}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.spinnerOverlay}
       >
         {error && (
           <ErrorMessage error={error} />

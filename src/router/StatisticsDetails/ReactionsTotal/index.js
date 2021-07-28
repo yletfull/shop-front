@@ -44,9 +44,8 @@ const ReactionsTotal = function ReactionsTotal({
   return (
     <div className={styles.reactionsTotal}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.reactionsTotalSpinner}
       >
         {error && (
           <ErrorMessage error={error} />

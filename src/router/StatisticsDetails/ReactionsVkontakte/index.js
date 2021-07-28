@@ -55,9 +55,8 @@ const ReactionsVkontakte = function ReactionsVkontakte({
   return (
     <div className={styles.wrapper}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.spinnerOverlay}
       >
         {error
           ? <ErrorMessage error={error} />

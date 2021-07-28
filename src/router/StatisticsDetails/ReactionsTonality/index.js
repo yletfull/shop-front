@@ -62,9 +62,8 @@ const ReactionsTonality = function ReactionsTonality({
   return (
     <div className={styles.reactionsTonality}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.spinnerOverlay}
       >
         {error && (
           <ErrorMessage error={error} />

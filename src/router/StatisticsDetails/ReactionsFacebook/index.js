@@ -55,9 +55,8 @@ const ReactionsFacebook = function ReactionsFacebook({
   return (
     <div className={styles.wrapper}>
       <WithSpinner
-        layout="overlay"
+        layout="block"
         isFetching={isFetching}
-        className={styles.spinnerOverlay}
       >
         {error
           ? <ErrorMessage error={error} />
