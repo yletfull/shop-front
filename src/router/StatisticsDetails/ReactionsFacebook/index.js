@@ -48,7 +48,7 @@ const ReactionsFacebook = function ReactionsFacebook({
       return ([]);
     }
     return Object.keys(dynamics)
-      .map((date) => ({ date, value: data[date] }));
+      .map((date) => ({ date, value: dynamics[date] }));
   }, [data]);
 
   return (
