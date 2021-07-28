@@ -16,7 +16,7 @@ const propTypes = {
 
 const defaultProps = {};
 
-const ReactionsTotal = function ReactionsTotal({
+const ReactionsFacebook = function ReactionsFacebook({
   dateStart,
   dateEnd,
 }) {
@@ -82,7 +82,7 @@ const ReactionsTotal = function ReactionsTotal({
                   </span>
                   <NumberGrowth
                     renderZero
-                    value={total.diff}
+                    value={total.diff || 0}
                   />
                 </div>
               </div>
@@ -93,7 +93,7 @@ const ReactionsTotal = function ReactionsTotal({
   );
 };
 
-ReactionsTotal.propTypes = propTypes;
-ReactionsTotal.defaultProps = defaultProps;
+ReactionsFacebook.propTypes = propTypes;
+ReactionsFacebook.defaultProps = defaultProps;
 
-export default ReactionsTotal;
+export default ReactionsFacebook;
