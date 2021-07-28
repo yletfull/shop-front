@@ -72,7 +72,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   const xTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsCommentsChartTickLabel}
+      className={styles.reactionsCommentsChartXTickLabel}
       x={scaleXTicks(value)}
       y={chartHeight}
       dy="1em"
@@ -84,7 +84,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   const yTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsCommentsChartTickLabel}
+      className={styles.reactionsCommentsChartYTickLabel}
       x={0}
       y={scaleY(value)}
       dy=".35em"
@@ -95,7 +95,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   const yTickLineRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.reactionsCommentsChartTickLine}
+      className={styles.reactionsCommentsChartYTickLine}
       x1={0}
       y1={scaleY(value)}
       x2={chartWidth}
@@ -114,11 +114,6 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
-        <XYTicksY
-          scaleY={scaleY}
-          ticksCount={4}
-          renderTick={yTickRenderer}
-        />
         <g transform={`translate(${padding.left}, ${padding.top})`}>
           <XYTicksX
             chartHeight={chartHeight}
@@ -132,6 +127,9 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
             ticksCount={4}
             renderTick={yTickLineRenderer}
           />
+        </g>
+
+        <g transform={`translate(${padding.left}, ${padding.top})`}>
           {data.map((d) => (
             <g
               key={d.date}
@@ -143,7 +141,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
                 chartHeight={chartHeight}
                 getFill={(key) => colors[key] || 'currentColor'}
                 getX={(key) => key}
-                getY={(key) => d[key]}
+                getY={(key) => (maxValue - d[key])}
                 scaleX={scaleX}
                 scaleY={scaleY}
                 width={bandwidth}
@@ -152,6 +150,14 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
               />
             </g>
           ))}
+        </g>
+
+        <g transform={`translate(0, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickRenderer}
+          />
         </g>
       </svg>
     </div>

@@ -4,15 +4,22 @@
   height: 200px;
   width: 100%;
 
-  &Tick {
+  &YTick {
     &Label {
-      fill: $color-gray-darker;
+      fill: $color-black;
       font-size: .625rem;
     }
 
     &Line {
       stroke: $color-gray;
       stroke: rgba($color-gray, .9);
+    }
+  }
+
+  &XTick {
+    &Label {
+      fill: $color-gray-darker;
+      font-size: .625rem;
     }
   }
 }
