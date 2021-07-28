@@ -12,7 +12,6 @@ import {
 } from './constants';
 import {
   fetchEntities,
-  fetchEntityDynamics,
   fetchPeriods,
 } from './actions';
 import reducer from './reducer';
@@ -87,12 +86,6 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
       dispatch(fetchEntities(entityType));
     }
   }, [dispatch, entityType]);
-
-  useEffect(() => {
-    if (entityType && entityId && params.dateStart && params.dateEnd) {
-      dispatch(fetchEntityDynamics(entityType, entityId, params));
-    }
-  }, [dispatch, entityType, entityId, params]);
 
   const handleChangeDateRange = (values) => {
     const { dateStart, dateEnd } = values || {};

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import {
-  getEntityDynamicsData,
-  getEntityDynamicsMeta,
-} from '../selectors';
+import { useParams } from 'react-router-dom';
+import { useService } from '@/hooks';
+import WithSpinner from '../components/WithSpinner';
+import ErrorMessage from '../components/ErrorMessage';
 import { lines, linesLabels, linesFactors } from './constants';
 import Chart from './Chart';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -20,8 +20,42 @@ const EntityDynamics = function EntityDynamics({
   dateStart,
   dateEnd,
 }) {
-  const data = useSelector(getEntityDynamicsData);
-  const meta = useSelector(getEntityDynamicsMeta);
+  const { entityType, id: entityId } = useParams();
+
+  const { fetch, data, isFetching, error } = useService({
+    initialData: {},
+    service: service.fetchEntityDynamics,
+  });
+
+  useEffect(() => {
+    if (!dateStart || !dateEnd) {
+      return;
+    }
+    const params = { dateStart, dateEnd };
+    fetch({ entityType, entityId, params });
+  }, [fetch, dateStart, dateEnd, entityType, entityId]);
+
+  const chartData = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return [];
+    }
+    return Object.keys(data).map((key) => ({
+      ...data[key],
+      date: data[key]?.date || key,
+    }));
+  }, [data]);
+  const chartMeta = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return ({
+        maxValue: 0,
+      });
+    }
+    return ({
+      maxValue: Math.max(...Object.values(data)
+        .map((values) => Math.max(...Object.keys(values)
+          .map((key) => (key === 'date' ? 0 : Number(values[key])))))),
+    });
+  }, [data]);
 
   const [visibleLines, setVisibleLines] = useState(Object.values(lines));
 
@@ -41,30 +75,44 @@ const EntityDynamics = function EntityDynamics({
 
   return (
     <div className={styles.entityDynamics}>
-      <Chart
-        data={data}
-        meta={meta}
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        lines={visibleLines}
-      />
-      <div className={styles.entityDynamicsLegend}>
-        {Object.values(lines).map((key) => (
-          <label
-            key={key}
-            className={styles.entityDynamicsLegendLabel}
-          >
-            <input
-              type="checkbox"
-              name={key}
-              checked={visibleLines.includes(key)}
-              disabled={visibleLines.length === 1 && visibleLines[0] === key}
-              onChange={handleChangeCheckbox}
+      <WithSpinner
+        layout="overlay"
+        isFetching={isFetching}
+        className={styles.spinnerOverlay}
+      >
+        {error && (
+          <ErrorMessage error={error} />
+        )}
+        {!error && data && (
+          <Fragment>
+            <Chart
+              data={chartData}
+              meta={chartMeta}
+              dateStart={dateStart}
+              dateEnd={dateEnd}
+              lines={visibleLines}
             />
-            {`${linesLabels[key]} (x${linesFactors[key]})`}
-          </label>
-        ))}
-      </div>
+            <div className={styles.entityDynamicsLegend}>
+              {Object.values(lines).map((key) => (
+                <label
+                  key={key}
+                  className={styles.entityDynamicsLegendLabel}
+                >
+                  <input
+                    type="checkbox"
+                    name={key}
+                    checked={visibleLines.includes(key)}
+                    disabled={visibleLines.length === 1
+                      && visibleLines[0] === key}
+                    onChange={handleChangeCheckbox}
+                  />
+                  {`${linesLabels[key]} (x${linesFactors[key]})`}
+                </label>
+              ))}
+            </div>
+          </Fragment>
+        )}
+      </WithSpinner>
     </div>
   );
 };
