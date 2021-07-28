@@ -52,11 +52,11 @@ const ReactionsTotal = function ReactionsTotal({
   }, [data]);
 
   return (
-    <div className={styles.reactionsTotal}>
+    <div className={styles.wrapper}>
       <WithSpinner
         layout="overlay"
         isFetching={isFetching}
-        className={styles.reactionsTotalSpinner}
+        className={styles.spinnerOverlay}
       >
         {error
           ? <ErrorMessage error={error} />

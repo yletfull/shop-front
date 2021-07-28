@@ -1,5 +1,13 @@
 @import '@/theme/include.scss';
 
+.wrapper {
+  position: relative;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lighter, .5);
+}
+
 .summary {
   display: flex;
   font-size: .75rem;

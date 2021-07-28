@@ -1,5 +1,9 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.reactionsTotal {
+  position: relative;
+
+  &Spinner {
+    background-color: rgba($color-gray-lighter, .5);
+  }
 }
