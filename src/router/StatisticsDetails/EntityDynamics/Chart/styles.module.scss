@@ -10,5 +10,10 @@
     & > text {
       fill: $color-gray-darker;
     }
+
+    &Line {
+      stroke: $color-gray;
+      stroke: rgba($color-gray, .9);
+    }
   }
 }

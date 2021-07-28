@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { useElementSize } from '@/hooks';
 import { formatDate, formatToDate } from '@/utils/format';
-import { XYLine, XYTicksX } from '@/components/charts';
+import { XYLine, XYTicksX, XYTicksY } from '@/components/charts';
 import { padding, linesFactors, linesColors } from '../constants';
 import styles from './styles.module.scss';
 
@@ -54,6 +54,16 @@ const EntityDynamicsChart = function EntityDynamicsChart({
       {formatDate(value)}
     </text>
   );
+  const yTickRenderer = () => (value) => (
+    <line
+      key={value}
+      className={styles.entityDynamicsChartTicksLine}
+      x1={0}
+      y1={scaleY(value)}
+      x2={chartWidth}
+      y2={scaleY(value)}
+    />
+  );
   /* eslint-enable react/function-component-definition */
 
   return (
@@ -66,7 +76,21 @@ const EntityDynamicsChart = function EntityDynamicsChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
+        <XYTicksX
+          className={styles.entityDynamicsChartTicks}
+          transform="translate(0, 8)"
+          chartHeight={chartHeight}
+          scaleX={scaleX}
+          scaleY={scaleY}
+          ticksCount={10}
+          renderTick={xTickRenderer}
+        />
         <g transform={`translate(${padding.left}, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickRenderer}
+          />
           {lines.map((line) => (
             <XYLine
               key={line}
@@ -80,15 +104,6 @@ const EntityDynamicsChart = function EntityDynamicsChart({
             />
           ))}
         </g>
-        <XYTicksX
-          className={styles.entityDynamicsChartTicks}
-          transform="translate(0, 8)"
-          chartHeight={chartHeight}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          ticksCount={10}
-          renderTick={xTickRenderer}
-        />
       </svg>
     </div>
   );
