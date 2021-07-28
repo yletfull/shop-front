@@ -90,9 +90,9 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
       key={value}
       className={styles.YTickLine}
       x1={0}
-      y1={scaleY(maxValue - value)}
+      y1={scaleY(value)}
       x2={chartWidth}
-      y2={scaleY(maxValue - value)}
+      y2={scaleY(value)}
     />
   );
   /* eslint-enable react/function-component-definition */
