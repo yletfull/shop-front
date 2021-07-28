@@ -13,6 +13,7 @@ const padding = {
   right: 32,
   top: 16,
 };
+
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     date: PropTypes.string,
@@ -58,13 +59,13 @@ const ReactionsTotalChart = function ReactionsTotalChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([0, chartHeight]), [chartHeight, maxValue]);
+    .range([chartHeight, 0]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsTotalChartTickLabel}
+      className={styles.reactionsTotalChartXTickLabel}
       x={scaleXTicks(value)}
       y={chartHeight}
       dy="1em"
@@ -76,10 +77,10 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   const yTickRenderer = () => (value) => (
     <text
       key={value}
-      className={styles.reactionsTotalChartTickLabel}
+      className={styles.reactionsTotalChartYTickLabel}
       x={0}
-      y={scaleY(maxValue - value)}
-      dy="1em"
+      y={scaleY(value)}
+      dy=".35em"
     >
       {formatNumber(value)}
     </text>
@@ -87,7 +88,7 @@ const ReactionsTotalChart = function ReactionsTotalChart({
   const yTickLineRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.reactionsTotalChartTickLine}
+      className={styles.reactionsTotalChartYTickLine}
       x1={0}
       y1={scaleY(value)}
       x2={chartWidth}
@@ -106,12 +107,12 @@ const ReactionsTotalChart = function ReactionsTotalChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
-        <XYTicksY
-          scaleY={scaleY}
-          ticksCount={4}
-          renderTick={yTickRenderer}
-        />
         <g transform={`translate(${padding.left}, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickLineRenderer}
+          />
           <XYTicksX
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
@@ -119,11 +120,9 @@ const ReactionsTotalChart = function ReactionsTotalChart({
             ticksCount={4}
             renderTick={xTickRenderer}
           />
-          <XYTicksY
-            scaleY={scaleY}
-            ticksCount={4}
-            renderTick={yTickLineRenderer}
-          />
+        </g>
+
+        <g transform={`translate(${padding.left}, ${padding.top})`}>
           <XYBars
             data={data}
             chartHeight={chartHeight}
@@ -136,6 +135,14 @@ const ReactionsTotalChart = function ReactionsTotalChart({
             width={bandwidth}
             rx={bandwidth < 8 ? 2 : 4}
             ry={bandwidth < 8 ? 2 : 4}
+          />
+        </g>
+
+        <g transform={`translate(0, ${padding.top})`}>
+          <XYTicksY
+            scaleY={scaleY}
+            ticksCount={4}
+            renderTick={yTickRenderer}
           />
         </g>
       </svg>

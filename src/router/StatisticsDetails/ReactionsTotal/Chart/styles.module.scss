@@ -4,9 +4,16 @@
   height: 200px;
   width: 100%;
 
-  &Tick {
+  &XTick {
     &Label {
       fill: $color-gray-darker;
+      font-size: .625rem;
+    }
+  }
+
+  &YTick {
+    &Label {
+      fill: $color-black;
       font-size: .625rem;
     }
 
