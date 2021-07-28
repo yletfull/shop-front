@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   chartHeight: PropTypes.number,
-  data: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number,
-    y: PropTypes.number,
-  })),
+  data: PropTypes.arrayOf(PropTypes.any),
   getFill: PropTypes.func,
   getKey: PropTypes.func,
   getX: PropTypes.func,
