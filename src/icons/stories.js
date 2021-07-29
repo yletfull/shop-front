@@ -26,9 +26,9 @@ import Vk from './Vk';
 import Warning from './Warning';
 import ExclamationTriangle from './ExclamationTriangle';
 import RetweetAlt from './RetweetAlt';
-import Rocket from './Rocket';
-import ThumbsDown from './ThumbsDown';
-import ThumbsUp from './ThumbsUp';
+import RocketSolid from './RocketSolid';
+import ThumbsDownSolid from './ThumbsDownSolid';
+import ThumbsUpSolid from './ThumbsUpSolid';
 
 export default {
   title: 'Components/Icons',
@@ -93,9 +93,9 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Warning)}
     {renderIcon(ExclamationTriangle)}
     {renderIcon(RetweetAlt)}
-    {renderIcon(Rocket)}
-    {renderIcon(ThumbsDown)}
-    {renderIcon(ThumbsUp)}
+    {renderIcon(RocketSolid)}
+    {renderIcon(ThumbsDownSolid)}
+    {renderIcon(ThumbsUpSolid)}
   </div>
 );
 Icons.storyName = 'Icons';

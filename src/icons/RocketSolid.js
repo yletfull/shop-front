@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const Rocket = function IconRocket(props) {
+const RocketSolid = function IconRocketSolid(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -13,4 +13,4 @@ const Rocket = function IconRocket(props) {
   );
 };
 
-export default Rocket;
+export default RocketSolid;
