@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
-import IconUpload from '@/icons/Upload';
+import IconVk from '@/icons/Vk';
 import { patchs, titles } from '@/router/routes';
 import { authSignOut } from '@/store/auth/actions';
 import styles from './styles.module.scss';
@@ -19,7 +19,7 @@ const AppAside = function AppAside() {
     {
       title: titles.upload,
       to: patchs.upload,
-      icon: <IconUpload />,
+      icon: <IconVk />,
     },
   ];
 
