@@ -24,11 +24,14 @@ const propTypes = {
       }),
     ),
   ).isRequired,
+  mapAttribute: PropTypes.objectOf(PropTypes.object).isRequired,
+  mapProfileTitle: PropTypes.objectOf(PropTypes.string),
   readOnly: PropTypes.bool,
   onChange: PropTypes.func,
 };
 const defaultProps = {
   isFetching: false,
+  mapProfileTitle: {},
   readOnly: false,
   onChange: () => {},
 };
@@ -36,6 +39,8 @@ const defaultProps = {
 const ConditionsEditor = function SegmentsEditConditionsEditor({
   isFetching,
   conditions,
+  mapAttribute,
+  mapProfileTitle,
   readOnly,
   onChange,
 }) {
@@ -84,6 +89,8 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
             ),
             ...group.reduce((acc, condition, conditionIndex) => {
               const key = (k) => `attribute-${condition.clientId}-${k}`;
+              const attribute = mapAttribute[condition.id] || {};
+              const profileTitle = mapProfileTitle[condition.id] || '';
 
               return ([
                 ...acc,
@@ -113,6 +120,8 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                     values={condition.values}
                     groupIndex={groupIndex}
                     index={conditionIndex}
+                    attribute={attribute}
+                    profileTitle={profileTitle}
                     onChange={handleConditionChange}
                     onRemove={handleConditionRemove}
                   />

@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { useSelector } from 'react-redux';
 import IconBars from '@/icons/BarsLight';
 import IconTimes from '@/icons/TimesLight';
 import {
   equalities,
   statisticsFields,
 } from '../../constants';
-import {
-  getMapProfileTitle,
-  getMapAttribute,
-} from '../../store/selectors';
 import ConditionControl from '../ConditionControl';
 import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';
@@ -27,10 +22,22 @@ const propTypes = {
   negation: PropTypes.bool.isRequired,
   equality: PropTypes.oneOf(Object.values(equalities)).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  attribute: PropTypes.shape({
+    id: PropTypes.number,
+    attributeName: PropTypes.string,
+    title: PropTypes.string,
+    datasets: PropTypes.arrayOf(PropTypes.object),
+    type: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.string),
+    minValue: PropTypes.string,
+    maxValue: PropTypes.string,
+  }).isRequired,
+  profileTitle: PropTypes.string,
   onChange: PropTypes.func,
   onRemove: PropTypes.func,
 };
 const defaultProps = {
+  profileTitle: null,
   onChange: () => {},
   onRemove: () => {},
 };
@@ -47,14 +54,11 @@ const Condition = function SegmentEditorCondition({
   negation,
   equality,
   values,
+  attribute,
+  profileTitle,
   onChange,
   onRemove,
 }) {
-  const mapProfileTitle = useSelector(getMapProfileTitle);
-  const mapAttribute = useSelector(getMapAttribute);
-  const attribute = mapAttribute[attributeId] || {};
-  const profileTitle = mapProfileTitle[attribute.profileId] || '';
-
   const {
     dragRef,
     isDragging,
