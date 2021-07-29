@@ -29,7 +29,15 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
+import Analytics from './Analytics';
+import ArrowChart from './ArrowChart';
+import CaretDown from './CaretDown';
+import CaretUp from './CaretUp';
 import ExclamationTriangle from './ExclamationTriangle';
+import RetweetAlt from './RetweetAlt';
+import Rocket from './Rocket';
+import ThumbsDown from './ThumbsDown';
+import ThumbsUp from './ThumbsUp';
 
 export default {
   title: 'Components/Icons',
@@ -97,7 +105,15 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
+    {renderIcon(Analytics)}
+    {renderIcon(ArrowChart)}
+    {renderIcon(CaretDown)}
+    {renderIcon(CaretUp)}
     {renderIcon(ExclamationTriangle)}
+    {renderIcon(RetweetAlt)}
+    {renderIcon(Rocket)}
+    {renderIcon(ThumbsDown)}
+    {renderIcon(ThumbsUp)}
   </div>
 );
 Icons.storyName = 'Icons';

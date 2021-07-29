@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const Rocket = function RocketIcon(props) {
+const Rocket = function IconRocket(props) {
   return (
     <SVGIconContainer
       {...props}

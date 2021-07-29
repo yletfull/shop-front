@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const ThumbsDown = function ThumbsDownIcon(props) {
+const ThumbsDown = function IconThumbsDown(props) {
   return (
     <SVGIconContainer
       {...props}
