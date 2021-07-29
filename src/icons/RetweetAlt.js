@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from '@/icons/SVGIconContainer';
 
-const RetweetAlt = function RetweetAltIcon(props) {
+const RetweetAlt = function IconRetweetAlt(props) {
   return (
     <SVGIconContainer
       {...props}
