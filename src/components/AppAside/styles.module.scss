@@ -1,6 +1,6 @@
 @import '@/theme/include.scss';
 
-.wrapper {
+.appAside {
   align-items: center;
   bottom: 0;
   display: flex;
@@ -11,6 +11,17 @@
   padding: $app-top-padding 1rem 1em;
   position: fixed;
   top: 0;
+  width: 3.5rem;
+}
+
+.menuItem {
+  color: $color-gray-darker;
+  display: block;
+  margin-top: 2.75rem;
+
+  &Active {
+    color: $color-pink;
+  }
 }
 
 .menuItems {

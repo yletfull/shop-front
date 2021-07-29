@@ -1,12 +1,11 @@
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
 import IconUpload from '@/icons/Upload';
-import MenuItem from '@/components/MenuItem';
 import { patchs, titles } from '@/router/routes';
-import { authSignOut } from '../../store/auth/actions';
+import { authSignOut } from '@/store/auth/actions';
 import styles from './styles.module.scss';
 
 const AppAside = function AppAside() {
@@ -16,7 +15,7 @@ const AppAside = function AppAside() {
     dispatch(authSignOut());
   };
 
-  const menuItemsList = [
+  const menuItems = [
     {
       title: titles.upload,
       to: patchs.upload,
@@ -25,22 +24,24 @@ const AppAside = function AppAside() {
   ];
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.wrapperTop}>
+    <div className={styles.appAside}>
+      <div className={styles.appAsideTop}>
         <IconLogo />
         <div className={styles.menuItems}>
-          {menuItemsList.map((menuItem, ind) => (
-            <MenuItem
-              key={ind}
-              to={menuItem.to}
-              icon={menuItem.icon}
-              title={menuItem.title}
-            />
+          {menuItems.map(({ icon, title, to }) => (
+            <NavLink
+              key={to}
+              to={to}
+              title={title}
+              className={styles.menuItem}
+              activeClassName={styles.menuItemActive}
+            >
+              {icon}
+            </NavLink>
           ))}
         </div>
-
       </div>
-      <div className={styles.wrapperBottom}>
+      <div className={styles.appAsideBottom}>
         <button
           className="button-control"
           type="button"
