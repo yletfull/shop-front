@@ -106,14 +106,14 @@ export default [
     title: titles.segments,
   },
   {
-    Component: AudiencesList,
-    path: patchs.audiencesList,
-    title: titles.audiencesList,
-  },
-  {
     Component: AudiencesDetails,
     path: patchs.audiencesDetails,
     title: titles.audiencesDetails,
+  },
+  {
+    Component: AudiencesList,
+    path: patchs.audiencesList,
+    title: titles.audiencesList,
   },
   {
     Component: Statistics,
