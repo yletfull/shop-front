@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import { useService } from '@/hooks';
 import { setHeader } from '@/store/ui/actions';
-import WithSpinner from './components/WithSpinner';
+import WithSpinner from '@/components/WithSpinner';
 import DateInputs from './components/DateInputs';
 import RouterView from './RouterView';
 import { paths, titles } from './routes';

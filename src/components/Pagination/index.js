@@ -97,7 +97,7 @@ const Pagination = function Pagination({
                 key={pageNumber}
                 className={cx([
                   styles.number,
-                  { [styles.number_disabled]: isDisabled },
+                  { [styles.disabled]: isDisabled },
                 ])}
                 disabled={isDisabled}
                 data-value={pageNumber}
