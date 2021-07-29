@@ -1,4 +1,6 @@
 import React from 'react';
+import CaretDownSolid from './CaretDownSolid';
+import CaretUpSolid from './CaretUpSolid';
 import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
@@ -66,6 +68,8 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(CaretDownSolid)}
+    {renderIcon(CaretUpSolid)}
     {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
