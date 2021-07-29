@@ -217,7 +217,10 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
         </div>
       )}
       {entityType && (
-        <Lists />
+        <Lists
+          dateStart={params.dateStart}
+          dateEnd={params.dateEnd}
+        />
       )}
     </div>
   );
