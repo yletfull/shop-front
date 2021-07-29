@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
 import InputCheckbox from '@/components/InputCheckbox';
-import WithSpinner from '../components/WithSpinner';
+import WithSpinner from '@/components/WithSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { lines, linesLabels, linesFactors } from './constants';
 import Chart from './Chart';
