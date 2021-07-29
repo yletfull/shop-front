@@ -2,8 +2,8 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
-import WithSpinner from '../components/WithSpinner';
 import ErrorMessage from '../components/ErrorMessage';
+import WithSpinner from '../components/WithSpinner';
 import service from '../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
@@ -11,47 +11,38 @@ import styles from './styles.module.scss';
 const propTypes = {
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
-  colors: PropTypes.objectOf(PropTypes.string),
 };
 
-const defaultProps = {
-  colors: {},
-};
+const defaultProps = {};
 
-const ReactionsComments = function ReactionsComments({
+const ReactionsTotal = function ReactionsTotal({
   dateStart,
   dateEnd,
-  colors,
 }) {
   const { entityType, id: entityId } = useParams();
 
   const { fetch, data, isFetching, error } = useService({
     initialData: {},
-    service: service.fetchReactionsComments,
+    service: service.fetchReactionsTotal,
   });
 
   useEffect(() => {
     if (!dateStart || !dateEnd) {
       return;
     }
-    fetch(
-      {
-        entityType,
-        entityId,
-        params: { dateStart, dateEnd },
-      }
-    );
+    const params = { dateStart, dateEnd };
+    fetch({ entityType, entityId, params });
   }, [fetch, dateStart, dateEnd, entityType, entityId]);
 
   const chartData = useMemo(() => {
     if (!data) {
       return ([]);
     }
-    return Object.keys(data).map((date) => ({ ...data[date], date }));
+    return Object.keys(data).map((date) => ({ date, value: data[date] }));
   }, [data]);
 
   return (
-    <div className={styles.reactionsComments}>
+    <div className={styles.reactionsTotal}>
       <WithSpinner
         layout="block"
         isFetching={isFetching}
@@ -64,7 +55,6 @@ const ReactionsComments = function ReactionsComments({
             data={chartData}
             dateStart={dateStart}
             dateEnd={dateEnd}
-            colors={colors}
           />
         )}
       </WithSpinner>
@@ -72,7 +62,7 @@ const ReactionsComments = function ReactionsComments({
   );
 };
 
-ReactionsComments.propTypes = propTypes;
-ReactionsComments.defaultProps = defaultProps;
+ReactionsTotal.propTypes = propTypes;
+ReactionsTotal.defaultProps = defaultProps;
 
-export default ReactionsComments;
+export default ReactionsTotal;

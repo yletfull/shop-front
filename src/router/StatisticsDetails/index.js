@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
-import {
-  colors,
-  namespace as NS,
-  queryParams,
-} from './constants';
-import {
-  fetchEntities,
-  fetchEntityDynamics,
-  fetchPeriods,
-  fetchReactionsTonality,
-} from './actions';
-import reducer from './reducer';
-import {
-  getIsFetchingPeriods,
-  getAvailablePeriods,
-} from './selectors';
+import { colors, queryParams } from './constants';
 import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import ReactionsComments from './ReactionsComments';
 import ReactionsTonality from './ReactionsTonality';
+import ReactionsTotal from './ReactionsTotal';
+import ReactionsFacebook from './ReactionsFacebook';
+import ReactionsVkontakte from './ReactionsVkontakte';
+import ReactionsInstagram from './ReactionsInstagram';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -45,52 +33,14 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
 
   const { entityType, id: entityId } = useParams();
 
-  const isFetchingPeriods = useSelector(getIsFetchingPeriods);
-  const periods = useSelector(getAvailablePeriods);
-
   const [params, setParams] = useState({
     dateStart: query.get(queryParams.dateStart) || '',
     dateEnd: query.get(queryParams.dateEnd) || '',
   });
 
   useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
-
-  useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
-
-  useEffect(() => {
-    if (isFetchingPeriods
-      || !periods.dateStart
-      || !periods.dateEnd
-      || params.dateStart
-      || params.dateEnd) {
-      return;
-    }
-    setParams({
-      dateStart: periods.dateStart,
-      dateEnd: periods.dateEnd,
-    });
-  }, [isFetchingPeriods, params, periods]);
-
-  useEffect(() => {
-    dispatch(fetchPeriods());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (entityType) {
-      dispatch(fetchEntities(entityType));
-    }
-  }, [dispatch, entityType]);
-
-  useEffect(() => {
-    if (entityType && entityId && params.dateStart && params.dateEnd) {
-      dispatch(fetchEntityDynamics(entityType, entityId, params));
-      dispatch(fetchReactionsTonality(entityType, entityId, params));
-    }
-  }, [dispatch, entityType, entityId, params]);
 
   const handleChangeDateRange = (values) => {
     const { dateStart, dateEnd } = values || {};
@@ -101,6 +51,16 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
     query.set(queryParams.dateStart, dateStart);
     query.set(queryParams.dateEnd, dateEnd);
     history.push({ search: query.toString() });
+  };
+  const handleChangeDateRangeLimits = (values) => {
+    console.log('=============== Change Limits', values);
+    if (!values || !values.dateStart || !values.dateEnd) {
+      return;
+    }
+    setParams({
+      dateStart: values.dateStart,
+      dateEnd: values.dateEnd,
+    });
   };
 
   const handleChangeSelectedEntity = (value) => {
@@ -128,20 +88,24 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
           dateStart={params.dateStart}
           dateEnd={params.dateEnd}
           onChange={handleChangeDateRange}
+          onChangeLimits={handleChangeDateRangeLimits}
         />
       </div>
 
       {entityType && entityId && (
         <div className={styles.statisticsDetailsCharts}>
-          <EntityDynamics
-            dateStart={params.dateStart}
-            dateEnd={params.dateEnd}
+          <ChartContainer
             header={(
               <span className={styles.statisticsDetailsChartHeader}>
                 Открутки
               </span>
             )}
-          />
+          >
+            <EntityDynamics
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
           <ChartContainer
             header={(
               <span className={styles.statisticsDetailsChartHeader}>
@@ -179,7 +143,7 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
                 <span
                   className={styles.statisticsDetailsChartRectangle}
                   style={{
-                    background: colors?.tonality?.positive || 'transparent',
+                    background: colors?.commentsAndReposts?.reposts || 'transparent',
                   }}
                 />
                 &nbsp;
@@ -188,13 +152,63 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
                 <span
                   className={styles.statisticsDetailsChartRectangle}
                   style={{
-                    background: colors?.tonality?.negative || 'transparent',
+                    background: colors?.commentsAndReposts?.comments || 'transparent',
                   }}
                 />
               </span>
             )}
           >
             <ReactionsComments
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+              colors={colors.commentsAndReposts}
+            />
+          </ChartContainer>
+
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Всего соцреакций
+              </span>
+            )}
+          >
+            <ReactionsTotal
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Facebook
+              </span>
+            )}
+          >
+            <ReactionsFacebook
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                vk
+              </span>
+            )}
+          >
+            <ReactionsVkontakte
+              dateStart={params.dateStart}
+              dateEnd={params.dateEnd}
+            />
+          </ChartContainer>
+          <ChartContainer
+            header={(
+              <span className={styles.statisticsDetailsChartHeader}>
+                Instagram
+              </span>
+            )}
+          >
+            <ReactionsInstagram
               dateStart={params.dateStart}
               dateEnd={params.dateEnd}
             />

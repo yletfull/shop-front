@@ -1,4 +1,8 @@
+@use 'sass:math';
+
 @import '@/theme/include.scss';
+
+$gap: 1em;
 
 .statisticsDetails {
   &Chart {
@@ -18,6 +22,16 @@
   &Charts {
     display: flex;
     flex-wrap: wrap;
+    gap: $gap;
+
+    & > * {
+      &:first-child {
+        flex-basis: 100%;
+      }
+
+      flex-basis: calc(33% - #{math.div($gap, 2)});
+      flex-grow: 1;
+    }
   }
 
   &Header {

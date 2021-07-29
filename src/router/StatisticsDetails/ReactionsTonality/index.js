@@ -1,25 +1,13 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { scaleLinear, scaleTime } from 'd3-scale';
-import { useElementSize } from '@/hooks';
-import { formatDate, formatNumber, formatToDate } from '@/utils/format';
-import { XYArea, XYTicksX, XYTicksY } from '@/components/charts';
-import {
-  colors,
-} from '../constants';
-import {
-  getReactionsTonalityData,
-  getReactionsTonalityMeta,
-} from '../selectors';
+import { useParams } from 'react-router-dom';
+import { useService } from '@/hooks';
+import { colors } from '../constants';
+import WithSpinner from '../components/WithSpinner';
+import ErrorMessage from '../components/ErrorMessage';
+import Chart from './Chart';
+import service from './service';
 import styles from './styles.module.scss';
-
-const padding = {
-  bottom: 16,
-  left: 32,
-  right: 32,
-  top: 16,
-};
 
 const propTypes = {
   dateStart: PropTypes.string.isRequired,
@@ -32,178 +20,64 @@ const ReactionsTonality = function ReactionsTonality({
   dateStart,
   dateEnd,
 }) {
-  const chartRef = useRef(null);
+  const { entityType, id: entityId } = useParams();
 
-  const data = useSelector(getReactionsTonalityData);
-  const meta = useSelector(getReactionsTonalityMeta);
+  const { fetch, data, isFetching, error } = useService({
+    initialData: {},
+    service: service.fetchReactionsTonality,
+  });
 
-  const [width, height] = useElementSize(chartRef);
+  useEffect(() => {
+    if (!dateStart || !dateEnd) {
+      return;
+    }
+    const params = { dateStart, dateEnd };
+    fetch({ entityType, entityId, params });
+  }, [fetch, dateStart, dateEnd, entityType, entityId]);
 
-  const chartHeight = height - padding.bottom - padding.top;
-  const chartWidth = width - padding.left - padding.right;
-
-  const scaleX = useMemo(() => scaleTime()
-    .domain([formatToDate(dateStart), formatToDate(dateEnd)])
-    .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
-  const scaleY = useMemo(() => scaleLinear()
-    .domain([0, meta.maxPositive + meta.maxNegative])
-    .range([chartHeight, 0]), [chartHeight, meta]);
-  const scaleYPositive = useMemo(() => scaleLinear()
-    .domain([0, meta.maxPositive])
-    .range([chartHeight / 2, 0]), [chartHeight, meta]);
-  const scaleYNegative = useMemo(() => scaleLinear()
-    .domain([0, meta.maxNegative])
-    .range([0, chartHeight / 2]), [chartHeight, meta]);
-
-  /* eslint-disable react/function-component-definition */
-  const xTickRenderer = () => (value) => (
-    <text
-      key={value}
-      className={styles.reactionsTonalityTickXLabel}
-      x={scaleX(value)}
-      y={chartHeight}
-      dy="1em"
-      textAnchor="middle"
-    >
-      {formatDate(value)}
-    </text>
-  );
-  const xTickLineRenderer = () => (value) => (
-    <line
-      key={value}
-      className={styles.reactionsTonalityTickXLine}
-      x1={scaleX(value)}
-      y1="0"
-      x2={scaleX(value)}
-      y2={chartHeight}
-      stroke="hsla(0, 0%, 100%, .25)"
-    />
-  );
-  const yPositiveTickRenderer = () => (value) => (
-    <text
-      key={value}
-      className={styles.reactionsTonalityTickYLabel}
-      x={0}
-      y={scaleYPositive(value)}
-      dy=".35em"
-      stroke="hsla(0, 0%, 100%, .25)"
-    >
-      {formatNumber(value)}
-    </text>
-  );
-  const yNegativeTickRenderer = () => (value) => (
-    <text
-      key={value}
-      className={styles.reactionsTonalityTickYLabel}
-      x={0}
-      y={scaleYNegative(value)}
-      dy=".35em"
-    >
-      {formatNumber(value)}
-    </text>
-  );
-  const yPositiveLineTickRenderer = () => (value) => (
-    <line
-      key={value}
-      className={styles.reactionsTonalityTickYLine}
-      x1={0}
-      y1={scaleYPositive(value)}
-      x2={chartWidth}
-      y2={scaleYPositive(value)}
-    />
-  );
-  const yNegativeLineTickRenderer = () => (value) => (
-    <line
-      key={value}
-      className={styles.reactionsTonalityTickYLine}
-      x1={0}
-      y1={scaleYNegative(value)}
-      x2={chartWidth}
-      y2={scaleYNegative(value)}
-    />
-  );
-  /* eslint-enable react/function-component-definition */
+  const chartData = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return [];
+    }
+    return Object.keys(data).map((key) => ({
+      ...data[key],
+      date: data[key]?.date || key,
+    }));
+  }, [data]);
+  const chartMeta = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return ({
+        maxNegative: 0,
+        maxPositive: 0,
+      });
+    }
+    return ({
+      maxNegative: Math.max(...Object.values(data)
+        .map((values) => values.negative || 0)),
+      maxPositive: Math.max(...Object.values(data)
+        .map((values) => values.positive || 0)),
+    });
+  }, [data]);
 
   return (
     <div className={styles.reactionsTonality}>
-      <div
-        ref={chartRef}
-        className={styles.reactionsTonalityChart}
+      <WithSpinner
+        layout="block"
+        isFetching={isFetching}
       >
-        <svg
-          height={height}
-          width={width}
-          viewBox={`0 0 ${width} ${height}`}
-        >
-          <g transform={`translate(${padding.left}, ${padding.top})`}>
-            <XYArea
-              data={data}
-              chartHeight={chartHeight / 2}
-              getX={(d) => formatToDate(d.date)}
-              getY={(d) => d.negative || 0}
-              scaleX={scaleX}
-              scaleY={scaleYPositive}
-              fill={colors?.tonality?.positive}
-            />
-          </g>
-          <g transform={`translate(${padding.left}, ${padding.top + (chartHeight / 2)})`}>
-            <XYArea
-              data={data}
-              chartHeight={chartHeight / 2}
-              getX={(d) => formatToDate(d.date)}
-              getY={(d) => d.negative || 0}
-              getBaseY={() => 0}
-              scaleX={scaleX}
-              scaleY={scaleYNegative}
-              fill={colors?.tonality?.negative}
-            />
-          </g>
-          <XYTicksY
-            transform={`translate(35, ${padding.top})`}
-            scaleX={scaleX}
-            scaleY={scaleYPositive}
-            ticksCount={2}
-            renderTick={yPositiveLineTickRenderer}
+        {error && (
+          <ErrorMessage error={error} />
+        )}
+        {!error && data && (
+          <Chart
+            data={chartData}
+            meta={chartMeta}
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+            colors={colors}
           />
-          <XYTicksY
-            transform={`translate(35, ${padding.top + (chartHeight / 2)})`}
-            scaleX={scaleX}
-            scaleY={scaleYNegative}
-            ticksCount={2}
-            renderTick={yNegativeLineTickRenderer}
-          />
-          <XYTicksY
-            transform={`translate(0, ${padding.top})`}
-            scaleX={scaleX}
-            scaleY={scaleYPositive}
-            ticksCount={2}
-            renderTick={yPositiveTickRenderer}
-          />
-          <XYTicksY
-            transform={`translate(0, ${padding.top + (chartHeight / 2)})`}
-            scaleX={scaleX}
-            scaleY={scaleYNegative}
-            ticksCount={2}
-            renderTick={yNegativeTickRenderer}
-          />
-          <XYTicksX
-            transform={`translate(${padding.left}, ${padding.top})`}
-            chartHeight={chartHeight}
-            scaleX={scaleX}
-            scaleY={scaleY}
-            ticksCount={6}
-            renderTick={xTickLineRenderer}
-          />
-          <XYTicksX
-            transform={`translate(${padding.left}, ${padding.top})`}
-            chartHeight={chartHeight}
-            scaleX={scaleX}
-            scaleY={scaleY}
-            ticksCount={6}
-            renderTick={xTickRenderer}
-          />
-        </svg>
-      </div>
+        )}
+      </WithSpinner>
     </div>
   );
 };

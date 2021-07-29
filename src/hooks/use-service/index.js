@@ -36,12 +36,12 @@ const useService = function useServiceHook({
       );
 
       setData(response);
-      setIsFetching(false);
     } catch (thrown) {
       if (!axios.isCancel(thrown)) {
-        setIsFetching(false);
         setError(thrown);
       }
+    } finally {
+      setIsFetching(false);
     }
   }, [autoCancel, service]);
 

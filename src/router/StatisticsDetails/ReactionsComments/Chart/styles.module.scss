@@ -1,0 +1,25 @@
+@import '@/theme/include.scss';
+
+.reactionsCommentsChart {
+  height: 200px;
+  width: 100%;
+
+  &YTick {
+    &Label {
+      fill: $color-black;
+      font-size: .625rem;
+    }
+
+    &Line {
+      stroke: $color-gray;
+      stroke: rgba($color-gray, .9);
+    }
+  }
+
+  &XTick {
+    &Label {
+      fill: $color-gray-darker;
+      font-size: .625rem;
+    }
+  }
+}
