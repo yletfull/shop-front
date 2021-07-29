@@ -90,7 +90,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
             ...group.reduce((acc, condition, conditionIndex) => {
               const key = (k) => `attribute-${condition.clientId}-${k}`;
               const attribute = mapAttribute[condition.id] || {};
-              const profileTitle = mapProfileTitle[condition.id] || '';
+              const profileTitle = mapProfileTitle[attribute.profileId] || '';
 
               return ([
                 ...acc,
