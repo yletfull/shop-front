@@ -24,8 +24,6 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
-import CaretDown from './CaretDown';
-import CaretUp from './CaretUp';
 import ExclamationTriangle from './ExclamationTriangle';
 import RetweetAlt from './RetweetAlt';
 import Rocket from './Rocket';
@@ -93,8 +91,6 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
-    {renderIcon(CaretDown)}
-    {renderIcon(CaretUp)}
     {renderIcon(ExclamationTriangle)}
     {renderIcon(RetweetAlt)}
     {renderIcon(Rocket)}
