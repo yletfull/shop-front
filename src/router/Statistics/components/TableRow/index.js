@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { formatNumber, formatPercent } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
-import IconCaretUp from '@/icons/CaretUp';
-import IconCaretDown from '@/icons/CaretDown';
+import IconCaretUpSolid from '@/icons/CaretUpSolid';
+import IconCaretDownSolid from '@/icons/CaretDownSolid';
 import styles from './styles.module.scss';
 
 const formatIndexDiff = (value) => formatNumber(Math.abs(value));
@@ -64,8 +64,8 @@ const StatisticsTableRow = function StatisticsTableRow({
       >
         <NumberGrowth
           value={indexDiff}
-          increaseSign={<IconCaretUp />}
-          decreaseSign={<IconCaretDown />}
+          increaseSign={<IconCaretUpSolid />}
+          decreaseSign={<IconCaretDownSolid />}
           formatter={formatIndexDiff}
         />
       </TableCell>

@@ -1,4 +1,6 @@
 import React from 'react';
+import CaretUpSolid from './CaretUpSolid';
+import CaretDownSolid from './CaretDownSolid';
 import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
@@ -96,6 +98,8 @@ export const Icons = ({ color, size }) => (
     {renderIcon(RocketSolid)}
     {renderIcon(ThumbsDownSolid)}
     {renderIcon(ThumbsUpSolid)}
+    {renderIcon(CaretUpSolid)}
+    {renderIcon(CaretDownSolid)}
   </div>
 );
 Icons.storyName = 'Icons';
