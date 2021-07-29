@@ -24,7 +24,6 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
-import Analytics from './Analytics';
 import CaretDown from './CaretDown';
 import CaretUp from './CaretUp';
 import ExclamationTriangle from './ExclamationTriangle';
@@ -94,7 +93,6 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
-    {renderIcon(Analytics)}
     {renderIcon(CaretDown)}
     {renderIcon(CaretUp)}
     {renderIcon(ExclamationTriangle)}
