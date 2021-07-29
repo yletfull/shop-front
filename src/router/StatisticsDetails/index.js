@@ -5,6 +5,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
 import { colors, queryParams } from './constants';
+import Lists from './Lists';
 import ChartContainer from './ChartContainer';
 import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
@@ -214,6 +215,9 @@ const StatisticsDetails = function StatisticsDetails({ defaultTitle }) {
             />
           </ChartContainer>
         </div>
+      )}
+      {entityType && (
+        <Lists />
       )}
     </div>
   );
