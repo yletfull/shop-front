@@ -22,6 +22,11 @@
             background-color: #999da3;
             border-color: #999da3;
           }
+
+          &:disabled + span {
+            background-color: $color-gray;
+            border-color: $color-gray;
+          }
         }
 
         &[data-line='clicks'] {
@@ -29,12 +34,22 @@
             background-color: #5f84c6;
             border-color: #5f84c6;
           }
+
+          &:disabled + span {
+            background-color: $color-gray;
+            border-color: $color-gray;
+          }
         }
 
         &[data-line='ctr'] {
           &:checked + span {
             background-color: #f27c30;
             border-color: #f27c30;
+          }
+
+          &:disabled + span {
+            background-color: $color-gray;
+            border-color: $color-gray;
           }
         }
       }
