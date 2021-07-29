@@ -4,8 +4,12 @@ import { useParams } from 'react-router-dom';
 import { formatPercent, formatNumber } from '@/utils/format';
 import { useService } from '@/hooks';
 import NumberGrowth from '@/components/NumberGrowth';
+import IconHeart from '@/icons/Heart';
+import IconPaperPlaneTilt from '@/icons/PaperPlaneTilt';
+import IconSave from '@/icons/Save';
 import ErrorMessage from '../components/ErrorMessage';
 import WithSpinner from '../components/WithSpinner';
+import ReactionType from '../components/ReactionType';
 import service from '../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
@@ -86,6 +90,19 @@ const ReactionsInstagram = function ReactionsInstagram({
                     formatter={formatPercent}
                   />
                 </div>
+              </div>
+              <div
+                className={styles.reactionTypes}
+              >
+                <ReactionType
+                  icon={<IconHeart />}
+                />
+                <ReactionType
+                  icon={<IconPaperPlaneTilt />}
+                />
+                <ReactionType
+                  icon={<IconSave />}
+                />
               </div>
             </div>
           )}

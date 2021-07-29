@@ -4,8 +4,16 @@ import { useParams } from 'react-router-dom';
 import { formatPercent, formatNumber } from '@/utils/format';
 import { useService } from '@/hooks';
 import NumberGrowth from '@/components/NumberGrowth';
+import angry from '@/images/facebook/angry.svg';
+import care from '@/images/facebook/care.svg';
+import haha from '@/images/facebook/haha.svg';
+import like from '@/images/facebook/like.svg';
+import love from '@/images/facebook/love.svg';
+import sad from '@/images/facebook/sad.svg';
+import wow from '@/images/facebook/wow.svg';
 import ErrorMessage from '../components/ErrorMessage';
 import WithSpinner from '../components/WithSpinner';
+import ReactionType from '../components/ReactionType';
 import service from '../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
@@ -86,6 +94,66 @@ const ReactionsFacebook = function ReactionsFacebook({
                     formatter={formatPercent}
                   />
                 </div>
+              </div>
+              <div
+                className={styles.reactionTypes}
+              >
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="like"
+                      src={like}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="love"
+                      src={love}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="care"
+                      src={care}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="haha"
+                      src={haha}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="wow"
+                      src={wow}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="sad"
+                      src={sad}
+                    />
+                  )}
+                />
+                <ReactionType
+                  icon={(
+                    <img
+                      alt="angry"
+                      src={angry}
+                    />
+                  )}
+                />
               </div>
             </div>
           )}

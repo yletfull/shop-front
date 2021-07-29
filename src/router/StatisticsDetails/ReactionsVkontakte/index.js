@@ -4,8 +4,12 @@ import { useParams } from 'react-router-dom';
 import { formatPercent, formatNumber } from '@/utils/format';
 import { useService } from '@/hooks';
 import NumberGrowth from '@/components/NumberGrowth';
+import IconHeart from '@/icons/Heart';
+import IconShare from '@/icons/Share';
+import IconWarningOctagon from '@/icons/WarningOctagon';
 import ErrorMessage from '../components/ErrorMessage';
 import WithSpinner from '../components/WithSpinner';
+import ReactionType from '../components/ReactionType';
 import service from '../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
@@ -86,6 +90,19 @@ const ReactionsVkontakte = function ReactionsVkontakte({
                     formatter={formatPercent}
                   />
                 </div>
+              </div>
+              <div
+                className={styles.reactionTypes}
+              >
+                <ReactionType
+                  icon={<IconHeart />}
+                />
+                <ReactionType
+                  icon={<IconShare />}
+                />
+                <ReactionType
+                  icon={<IconWarningOctagon />}
+                />
               </div>
             </div>
           )}
