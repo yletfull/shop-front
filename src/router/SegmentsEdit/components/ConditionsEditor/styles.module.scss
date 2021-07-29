@@ -1,0 +1,22 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  flex-grow: 1;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  padding: .5rem 0;
+}
+
+.dropArea {
+  &First.dropAreaFirst {
+    margin-top: -.75rem;
+  }
+
+  &Last.dropAreaLast {
+    margin-top: .75rem;
+  }
+}
