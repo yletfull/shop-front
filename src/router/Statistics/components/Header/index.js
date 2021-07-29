@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import IconArrowChart from '@/icons/ArrowChart';
+import IconChartLine from '@/icons/ChartLine';
 import IconRocket from '@/icons/Rocket';
-import IconThumbsUp from '@/icons/ThumbsUp';
-import IconThumbsDown from '@/icons/ThumbsDown';
+import IconThumbsUpSolid from '@/icons/ThumbsUpSolid';
+import IconThumbsDownSolid from '@/icons/ThumbsDownSolid';
 import IconRetweetAlt from '@/icons/RetweetAlt';
 import { TableRow, TableCell } from '@/components/Table';
 import SortButton from '../SortButton';
@@ -91,7 +91,7 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -110,7 +110,7 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -130,7 +130,7 @@ const StatisticsHeader = function StatisticsHeader({
         width="1"
         className={styles.border}
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -142,14 +142,14 @@ const StatisticsHeader = function StatisticsHeader({
           field={fields.positiveReactions}
           onClick={handleSortClick}
         >
-          <IconThumbsUp />
+          <IconThumbsUpSolid />
         </SortButton>
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -161,14 +161,14 @@ const StatisticsHeader = function StatisticsHeader({
           field={fields.negativeReactions}
           onClick={handleSortClick}
         >
-          <IconThumbsDown />
+          <IconThumbsDownSolid />
         </SortButton>
       </TableCell>
       <TableCell
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -187,7 +187,7 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -206,7 +206,7 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
     </TableRow>
   );
