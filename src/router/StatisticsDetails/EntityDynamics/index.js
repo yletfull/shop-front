@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
+import InputCheckbox from '@/components/InputCheckbox';
 import WithSpinner from '../components/WithSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { lines, linesLabels, linesFactors } from './constants';
@@ -93,20 +94,18 @@ const EntityDynamics = function EntityDynamics({
             />
             <div className={styles.entityDynamicsLegend}>
               {Object.values(lines).map((key) => (
-                <label
+                <InputCheckbox
                   key={key}
-                  className={styles.entityDynamicsLegendLabel}
+                  name={key}
+                  data-line={key}
+                  className={styles.entityDynamicsLegendCheckbox}
+                  checked={visibleLines.includes(key)}
+                  disabled={visibleLines.length === 1
+                    && visibleLines[0] === key}
+                  onChange={handleChangeCheckbox}
                 >
-                  <input
-                    type="checkbox"
-                    name={key}
-                    checked={visibleLines.includes(key)}
-                    disabled={visibleLines.length === 1
-                      && visibleLines[0] === key}
-                    onChange={handleChangeCheckbox}
-                  />
                   {`${linesLabels[key]} (x${linesFactors[key]})`}
-                </label>
+                </InputCheckbox>
               ))}
             </div>
           </Fragment>

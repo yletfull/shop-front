@@ -7,14 +7,36 @@
   width: 100%;
 
   &Legend {
-    font-size: .75rem;
     text-align: center;
 
-    &Label {
-      display: inline-block;
+    &Checkbox {
+      font-size: .875rem;
 
       & + & {
         margin-left: 1.5rem;
+      }
+
+      & > input {
+        &[data-line='impressions'] {
+          &:checked + span {
+            background-color: #999da3;
+            border-color: #999da3;
+          }
+        }
+
+        &[data-line='clicks'] {
+          &:checked + span {
+            background-color: #5f84c6;
+            border-color: #5f84c6;
+          }
+        }
+
+        &[data-line='ctr'] {
+          &:checked + span {
+            background-color: #f27c30;
+            border-color: #f27c30;
+          }
+        }
       }
     }
   }
