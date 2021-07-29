@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useDrop } from 'react-dnd';
+import { dndTypes } from '../../constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  accept: PropTypes.string.isRequired,
   group: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   align: PropTypes.oneOf(['start', 'middle', 'end']),
@@ -18,7 +18,6 @@ const defaultProps = {
 };
 
 const DropArea = function DropArea({
-  accept,
   group,
   index,
   align,
@@ -27,7 +26,7 @@ const DropArea = function DropArea({
   ...props
 }) {
   const [{ canDrop, isOver }, dropRef] = useDrop({
-    accept,
+    accept: dndTypes.condition,
     drop: (source) => onDrop([group, index], source?.from || [], source),
     collect: (monitor) => ({
       isOver: monitor.isOver(),

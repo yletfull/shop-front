@@ -1,0 +1,94 @@
+@import '@/theme/include.scss';
+
+.button {
+  @include button-reset();
+
+  color: $color-primary;
+  font-size: .75rem;
+  height: 1.5rem;
+  margin: 0 -.5rem;
+  padding: 0 .5rem;
+
+  &:hover,
+  &:focus {
+    color: $color-primary-lighter;
+  }
+}
+
+.radio,
+.checkbox {
+  font-size: 1rem;
+
+  &Label {
+    display: inline-block;
+    padding-left: .25em;
+  }
+}
+
+.form {
+  &Header {
+    margin-bottom: 1.5rem;
+
+    &Row {
+      & + & {
+        margin-top: .25em;
+      }
+    }
+  }
+
+  &Button {
+    font-weight: bold;
+    margin: .25rem 1.5rem .25rem 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 1rem;
+
+  &Summary {
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  padding-bottom: 1em;
+}
+
+.table {
+  & td {
+    font-size: .75rem;
+    line-height: 1;
+    padding-bottom: 0;
+    padding-top: .5em;
+
+    &:first-child {
+      padding-left: 0;
+      padding-right: 0;
+
+      & + td {
+        padding-left: 1em;
+      }
+    }
+  }
+
+  &Header {
+    font-weight: bold;
+
+    & td {
+      border-bottom: thin solid $color-gray;
+      padding-bottom: .5em;
+    }
+  }
+}

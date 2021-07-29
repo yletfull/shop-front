@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
@@ -11,47 +11,42 @@ import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import {
-  attributeProps,
-  attributeTypes,
-  equalityTypes,
   namespace as NS,
-  dndTypes,
   segmentProps,
 } from './constants';
 import reducer from './reducer';
+import store from './store/reducer';
 import {
-  fetchParams,
+  fetchAttributes,
+  appendConditions,
+  moveCondition,
+  patchCondition,
+  removeCondition,
+  fetchStatistics,
+} from './store/actions';
+import {
+  getAreAttributesFetching,
+  getAttributesTree,
+  getConditions,
+} from './store/selectors';
+import {
   fetchSegment,
   resetSegment,
-  addSegmentAttribute,
-  moveCondition,
-  removeSegmentAttribute,
-  updateSegmentAttribute,
-  fetchSegmentStatistics,
-  fetchAttributeStatistics,
   saveSegment,
 } from './actions';
 import {
   formatSegmentAttributesListForRequest,
 } from './helpers';
 import {
-  getAttributesStatistics,
-  getIsFetchingParams,
   getIsFetchingSegment,
   getIsSubmittingSegment,
-  getParams,
-  getSegmentAttributes,
   getSegmentId,
   getSegmentName,
   getSegmentStatistics,
 } from './selectors';
 import LogicOperator from './components/LogicOperator';
 import DropArea from './components/DropArea';
-import Attribute from './Attribute';
-import AttributeDatasets from './AttributeDatasets';
-import AttributeDatasetsForm from './AttributeDatasetsForm';
-import AttributeDatasetsSelect from './AttributeDatasetsSelect';
-import AttributeStatistics from './AttributeStatistics';
+import Condition from './components/Condition';
 import AttributesConstructor from './AttributesConstructor';
 import AttributesLabels from './AttributesLabels';
 import Params from './Params';
@@ -71,20 +66,24 @@ const defaultProps = {
 };
 
 const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
-  const generateKeyByIndex = (key, index) => `${key}-${index}`;
+  useEffect(() => {
+    injectReducer(store.NS, store);
+  }, []);
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchAttributes());
+  }, [dispatch]);
 
   const history = useHistory();
   const { id: paramsSegmentId } = useParams();
 
-  const isFetchingParams = useSelector(getIsFetchingParams);
-  const params = useSelector(getParams);
+  const areAttributesFetching = useSelector(getAreAttributesFetching);
+  const attributesTree = useSelector(getAttributesTree);
 
-  const attributesStatistics = useSelector(getAttributesStatistics);
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const isSubmittingSegment = useSelector(getIsSubmittingSegment);
-  const segmentAttributes = useSelector(getSegmentAttributes);
+  const conditions = useSelector(getConditions);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
   const segmentStatistics = useSelector(getSegmentStatistics);
@@ -94,7 +93,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
   const [isShowParams, setIsShowParams] = useState(false);
-  const [isSegmentChanged, setIsSegmentChanged] = useState(false);
   const [
     isRequestedDownloadSegment,
     setIsRequestedDownloadSegment,
@@ -105,10 +103,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
-
-  useEffect(() => {
-    dispatch(fetchParams());
-  }, [dispatch]);
 
   useEffect(() => {
     dispatch(setHeader(isNewSegment
@@ -123,21 +117,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  useEffect(() => {
-    dispatch(fetchSegmentStatistics({
-      title: segmentName || '',
-      attributes: segmentAttributes || [],
-    }));
-  }, [dispatch, segmentName, segmentAttributes]);
-
-  const handleChangeAttribute = (position, values) => {
-    if (!position || !Array.isArray(position) || position.length < 2) {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(updateSegmentAttribute(position, values));
-    dispatch(fetchAttributeStatistics(position));
-  };
   const handleSelectDownloadFile = (platform) => {
     setDownloadedSegment({ type: platform });
   };
@@ -150,14 +129,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   };
   const handleCloseParamsForm = () => {
     setIsShowParams(false);
-  };
-  const handleRemoveAttribute = (position) => {
-    setIsSegmentChanged(true);
-    dispatch(removeSegmentAttribute(position));
-  };
-  const handleSubmitAttribute = (position, values) => {
-    dispatch(updateSegmentAttribute(position, values));
-    dispatch(fetchAttributeStatistics(position));
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
@@ -176,10 +147,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(true);
 
-    const attributes = formatSegmentAttributesListForRequest(segmentAttributes);
+    const attributes = formatSegmentAttributesListForRequest(conditions);
     try {
       const url = await service.getSegmentDownloadLink(
-        isSegmentChanged ? null : segmentId,
+        segmentId,
         {
           adsPlatform,
           fileName,
@@ -208,28 +179,44 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
     setIsRequestedDownloadSegment(false);
   };
-  const handleSubmitParams = (selectedParams) => {
-    setIsShowParams(false);
-    if (!selectedParams) {
-      return;
-    }
-    setIsSegmentChanged(true);
-    dispatch(addSegmentAttribute(selectedParams));
-  };
   const handleSubmitSaveForm = ({ fileName }) => {
     if (!fileName) {
       return;
     }
     const onSuccessCallback = () => history.push('/segments');
     dispatch(saveSegment({
-      attributes: segmentAttributes,
+      attributes: conditions,
       id: isNewSegment ? paramsSegmentId : null,
       title: fileName,
     }, onSuccessCallback));
   };
 
+  const handleSubmitParams = (selectedAttributes) => {
+    setIsShowParams(false);
+    dispatch(appendConditions(selectedAttributes));
+  };
+  const handleConditionChange = (position, changes) => {
+    dispatch(patchCondition({ position, changes }));
+    dispatch(fetchStatistics());
+  };
   const handleConditionDrop = (target, source) => {
+    const prevGroup = [...(conditions[source[0]] || [])];
     dispatch(moveCondition({ source, target }));
+
+    const [sourceGroup] = source || [];
+    const [targetGroup, targetIndex] = target || [];
+
+    if (sourceGroup === targetGroup) {
+      return;
+    }
+
+    if (targetIndex === -1 && prevGroup.length === 1) {
+      dispatch(fetchStatistics());
+    }
+  };
+  const handleConditionRemove = (position) => {
+    dispatch(removeCondition(position));
+    dispatch(fetchStatistics());
   };
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
@@ -239,128 +226,96 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <DndProvider backend={HTML5Backend}>
           <AttributesConstructor isFetching={isFetchingSegment}>
             <AttributesLabels
-              isVisible={segmentAttributes.length > 0}
-              labels={['Датасеты', 'Телефонов', 'E-mail']}
+              isVisible={conditions.length > 0}
+              labels={['Датасеты', 'Телефонов']}
             />
-            {segmentAttributes.map((group, groupIndex, groups) => {
-              const groupKey = generateKeyByIndex('group', groupIndex);
-              return (
-                <Fragment key={groupKey}>
-                  {(groupIndex > 0) && (
-                    <LogicOperator type="and" />
-                  )}
+            {conditions.reduce((groupAcc, group, groupIndex, groups) => {
+              const groupKey = (key) => `group-${groupIndex}-${key}`;
 
+              return ([
+                ...groupAcc,
+                (groupIndex > 0) && (
+                  <LogicOperator
+                    key={groupKey('and')}
+                    type="and"
+                  />
+                ),
+                (
                   <DropArea
-                    accept={dndTypes.attribute}
+                    key={groupKey('drop')}
                     group={groupIndex}
                     index={-1}
                     className={cx(groupIndex === 0 && styles.dropAreaFirst)}
                     align="middle"
                     onDrop={handleConditionDrop}
                   />
+                ),
+                ...group.reduce((acc, condition, conditionIndex) => {
+                  const key = (k) => `attribute-${condition.clientId}-${k}`;
 
-                  <div className={styles.conditionsGroup}>
-                    {group.map((attribute, attributeIndex) => {
-                      const {
-                        [attributeProps.datasets]: datasets,
-                        [attributeProps.datasetIds]: datasetIds,
-                        [attributeProps.name]: name,
-                        [attributeProps.title]: title,
-                      } = attribute || {};
-                      const getStatistics = (position) => {
-                        const [gIndex, aIndex] = position || [];
-                        if (typeof gIndex === 'undefined'
-                          || typeof aIndex === 'undefined') {
-                          return null;
-                        }
-                        return attributesStatistics[gIndex]?.[aIndex] || null;
-                      };
-                      return (
-                        <Fragment
-                          key={`${groupKey}-${attribute.attributeName}`}
-                        >
-                          {(attributeIndex > 0) && (
-                            <LogicOperator type="or" />
-                          )}
-
-                          <DropArea
-                            accept={dndTypes.attribute}
-                            group={groupIndex}
-                            index={attributeIndex}
-                            align={attributeIndex === 0 ? 'start' : 'middle'}
-                            onDrop={handleConditionDrop}
-                          />
-
-                          <Attribute
-                            properties={attributeProps}
-                            types={attributeTypes}
-                            equalityTypes={equalityTypes}
-                            groupIndex={groupIndex}
-                            index={attributeIndex}
-                            data={attribute}
-                            dragType={dndTypes.attribute}
-                            onChange={handleChangeAttribute}
-                            onRemove={handleRemoveAttribute}
-                          >
-                            <AttributeDatasets
-                              name={title || name}
-                              selected={datasetIds || []}
-                              datasets={datasets || []}
-                            >
-                              <AttributeDatasetsSelect
-                                datasets={datasets || []}
-                                selected={datasetIds || []}
-                              >
-                                <AttributeDatasetsForm
-                                  groupIndex={groupIndex}
-                                  attributeIndex={attributeIndex}
-                                  datasets={datasets || []}
-                                  selected={datasetIds || []}
-                                  onSubmit={handleSubmitAttribute}
-                                />
-                              </AttributeDatasetsSelect>
-                            </AttributeDatasets>
-                            <AttributeStatistics
-                              data={getStatistics([groupIndex, attributeIndex])}
-                            />
-                          </Attribute>
-
-                          {(attributeIndex === group.length - 1) && (
-                            <DropArea
-                              accept={dndTypes.attribute}
-                              group={groupIndex}
-                              index={attributeIndex + 1}
-                              align="end"
-                              onDrop={handleConditionDrop}
-                            />
-                          )}
-                        </Fragment>
-                      );
-                    })}
-                  </div>
-
-                  {(groupIndex === groups.length - 1) && (
-                    <DropArea
-                      accept={dndTypes.attribute}
-                      group={groupIndex + 1}
-                      index={-1}
-                      className={styles.dropAreaLast}
-                      align="middle"
-                      onDrop={handleConditionDrop}
-                    />
-                  )}
-                </Fragment>
-              );
-            })}
+                  return ([
+                    ...acc,
+                    (conditionIndex > 0) && (
+                      <LogicOperator
+                        key={key('or')}
+                        type="or"
+                      />
+                    ),
+                    (
+                      <DropArea
+                        key={key('drop')}
+                        group={groupIndex}
+                        index={conditionIndex}
+                        align={conditionIndex === 0 ? 'start' : 'middle'}
+                        onDrop={handleConditionDrop}
+                      />
+                    ),
+                    (
+                      <Condition
+                        key={key('itself')}
+                        attributeId={condition.id}
+                        datasetIds={condition.datasetIds}
+                        negation={condition.negation}
+                        equality={condition.equality}
+                        values={condition.values}
+                        groupIndex={groupIndex}
+                        index={conditionIndex}
+                        onChange={handleConditionChange}
+                        onRemove={handleConditionRemove}
+                      />
+                    ),
+                    (conditionIndex === group.length - 1) && (
+                      <DropArea
+                        key={key('drop-end')}
+                        group={groupIndex}
+                        index={conditionIndex + 1}
+                        align="end"
+                        onDrop={handleConditionDrop}
+                      />
+                    ),
+                  ]);
+                }, []),
+                (groupIndex === groups.length - 1) && (
+                  <DropArea
+                    key={groupKey('drop-end')}
+                    group={groupIndex + 1}
+                    index={-1}
+                    className={styles.dropAreaLast}
+                    align="middle"
+                    onDrop={handleConditionDrop}
+                  />
+                ),
+              ]);
+            }, [])}
           </AttributesConstructor>
         </DndProvider>
 
         <Params
-          isFetching={isFetchingParams}
+          isFetching={areAttributesFetching}
           isVisible={isShowParams}
           form={(
             <ParamsForm
-              data={params}
+              data={attributesTree}
               onCancel={handleCloseParamsForm}
               onSubmit={handleSubmitParams}
             />
@@ -423,34 +378,35 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         />
       </div>
 
-      <Modal
-        header={(
-          <span>
-            Сохранение файлов для
-            {' '}
-            {downloadedSegment?.type.toUpperCase() || ''}
-          </span>
-        )}
-        isVisible={Boolean(downloadedSegment)}
-        onClose={handleCloseDownloadForm}
-      >
-        <DownloadFilesForm
-          id={downloadedSegment?.id}
-          isDisabled={isRequestedDownloadSegment}
-          name={downloadedSegment?.name}
+      {Boolean(downloadedSegment) && (
+        <Modal
+          title={(
+            <span>
+              Сохранение файлов для
+              {' '}
+              {downloadedSegment?.type.toUpperCase() || ''}
+            </span>
+          )}
           onClose={handleCloseDownloadForm}
-          onSubmit={handleSubmitDownloadForm}
-        />
-        <a ref={downloadLinkRef} />
-        {downloadError && (
-          <span className={styles.segmentsEditError}>
-            При экспорте файла возникла ошибка
-            {downloadError.status && (
-              ` (код ошибки: ${downloadError.status})`
-            )}
-          </span>
-        )}
-      </Modal>
+        >
+          <DownloadFilesForm
+            id={downloadedSegment?.id}
+            isDisabled={isRequestedDownloadSegment}
+            name={downloadedSegment?.name}
+            onClose={handleCloseDownloadForm}
+            onSubmit={handleSubmitDownloadForm}
+          />
+          <a ref={downloadLinkRef} />
+          {downloadError && (
+            <span className={styles.segmentsEditError}>
+              При экспорте файла возникла ошибка
+              {downloadError.status && (
+                ` (код ошибки: ${downloadError.status})`
+              )}
+            </span>
+          )}
+        </Modal>
+      )}
     </div>
   );
   /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */

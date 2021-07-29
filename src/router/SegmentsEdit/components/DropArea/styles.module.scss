@@ -9,15 +9,17 @@
   z-index: 1;
 
   &.align-start {
-    margin-top: -.25rem;
+    margin-top: .125rem;
+    transform: translateY(.25rem);
   }
 
   &.align-middle {
-    margin-top: -1rem;
+    margin-top: -.75rem;
   }
 
   &.align-end {
-    margin-top: .25rem;
+    margin-top: -.125rem;
+    transform: translateY(-.25rem);
   }
 
   &[data-can-drop='true'] {

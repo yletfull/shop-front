@@ -2,10 +2,10 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/external/ctor/api/v1';
 
-const fetchParams = function serviceFetchSegmentsAttributes() {
+const fetchAttributes = function segmentsServiceFetchAttributes() {
   return api
     .get(`${baseUrl}/attributes/`)
-    .then((response) => response.data.data);
+    .then((response) => response?.data?.data?.groups || []);
 };
 const fetchSegment = function serviceFetchSegment(id) {
   if (typeof id === 'undefined') {
@@ -48,14 +48,42 @@ const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
       .createObjectURL(new Blob([response.data], { type: 'application/zip' })));
 };
 
-const fetchSegmentStatistics = function serviceFetchSegmentStatistics(data) {
+const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
+  data,
+  options = {},
+) {
   return api
-    .post(`${baseUrl}/segments/stats/`, data)
+    .post(`${baseUrl}/segments/stats/`, data, options)
+    .then((response) => response.data.data);
+};
+
+const fetchStatistics = function segmentServiceFetchStatistics(
+  { conditions, title },
+  options = {},
+) {
+  return api
+    .post(
+      `${baseUrl}/segments/stats/`,
+      {
+        title: title || 'new-segment',
+        conditions: conditions.map((group) => (
+          group.map((condition) => ({
+            attributeId: condition.id,
+            type: condition.equality,
+            negation: condition.negation,
+            values: condition.values,
+            datasetIds: condition.datasetIds,
+          }))
+        )),
+      },
+      options,
+    )
     .then((response) => response.data.data);
 };
 
 export default {
-  fetchParams,
+  fetchAttributes,
+  fetchStatistics,
   fetchSegment,
   fetchSegmentStatistics,
   getSegmentDownloadLink,

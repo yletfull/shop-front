@@ -33,20 +33,21 @@ const Params = function Params({
   return (
     <div className={styles.params}>
       {children}
-      <Modal
-        isVisible={isVisible}
-        header={(
-          <span>
-            Выбрать значения
-          </span>
-        )}
-        onClose={handleCloseModal}
-      >
-        {isFetching && (
-          <Spinner />
-        )}
-        {!isFetching && form}
-      </Modal>
+      {isVisible && (
+        <Modal
+          title={(
+            <span>
+              Выбрать значения
+            </span>
+          )}
+          onClose={handleCloseModal}
+        >
+          {isFetching && (
+            <Spinner />
+          )}
+          {!isFetching && form}
+        </Modal>
+      )}
     </div>
   );
 };

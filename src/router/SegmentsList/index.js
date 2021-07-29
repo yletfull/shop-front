@@ -207,34 +207,35 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
         onChangePage={handleChangePage}
       />
 
-      <Modal
-        header={(
-          <span>
-            Сохранение файлов для
-            {' '}
-            {downloadedSegment?.type.toUpperCase() || ''}
-          </span>
-        )}
-        isVisible={Boolean(downloadedSegment)}
-        onClose={handleCloseDownloadForm}
-      >
-        <DownloadFilesForm
-          id={downloadedSegment?.id}
-          name={downloadedSegment?.name}
-          isDisabled={isRequestedDownloadSegment}
+      {Boolean(downloadedSegment) && (
+        <Modal
+          title={(
+            <span>
+              Сохранение файлов для
+              {' '}
+              {downloadedSegment?.type.toUpperCase() || ''}
+            </span>
+          )}
           onClose={handleCloseDownloadForm}
-          onSubmit={handleSubmitDownloadForm}
-        />
-        <a ref={downloadLinkRef} />
-        {downloadError && (
-          <span className={styles.segmentsListError}>
-            При экспорте файла возникла ошибка
-            {downloadError.status && (
-              ` (код ошибки: ${downloadError.status})`
-            )}
-          </span>
-        )}
-      </Modal>
+        >
+          <DownloadFilesForm
+            id={downloadedSegment?.id}
+            name={downloadedSegment?.name}
+            isDisabled={isRequestedDownloadSegment}
+            onClose={handleCloseDownloadForm}
+            onSubmit={handleSubmitDownloadForm}
+          />
+          <a ref={downloadLinkRef} />
+          {downloadError && (
+            <span className={styles.segmentsListError}>
+              При экспорте файла возникла ошибка
+              {downloadError.status && (
+                ` (код ошибки: ${downloadError.status})`
+              )}
+            </span>
+          )}
+        </Modal>
+      )}
     </div>
   );
   /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */

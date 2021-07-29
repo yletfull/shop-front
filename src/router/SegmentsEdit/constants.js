@@ -1,7 +1,10 @@
 export const namespace = 'segmentsEdit';
 
+export const statisticsFields = ['phone'];
+
 export const dndTypes = {
   attribute: 'attribute',
+  condition: 'condition',
 };
 
 export const attributeProps = {
@@ -29,6 +32,15 @@ export const equalityTypes = {
   equal: 'EQUAL',
   greaterOrEqual: 'GREATER_OR_EQUAL',
   less: 'LESS',
+  lesserOfEqual: 'LESSER_OR_EQUAL',
+};
+
+export const equalities = {
+  in: 'ANY',
+  eq: 'EQUAL',
+  gte: 'GREATER_OR_EQUAL',
+  lt: 'LESS',
+  lte: 'LESSER_OR_EQUAL',
 };
 
 export const entityTypes = {

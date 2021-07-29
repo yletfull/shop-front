@@ -57,6 +57,7 @@
   &CloseButton {
     @include button-reset();
 
+    align-self: flex-start;
     color: $color-primary;
     flex-grow: 0;
     flex-shrink: 0;
