@@ -97,7 +97,7 @@ const Pagination = function Pagination({
                 key={pageNumber}
                 className={cx([
                   styles.number,
-                  { [styles.number_disabled]: isDisabled },
+                  { [styles.disabled]: isDisabled },
                 ])}
                 disabled={isDisabled}
                 data-value={pageNumber}
@@ -112,7 +112,7 @@ const Pagination = function Pagination({
           type="button"
           className={cx([
             styles.arrow,
-            { [styles.arrow_disabled]: currentPage >= pagesTotal },
+            { [styles.disabled]: currentPage >= pagesTotal },
           ])}
           disabled={currentPage >= pagesTotal}
           data-value={currentPage + 1}

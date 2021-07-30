@@ -1,4 +1,5 @@
 import React from 'react';
+import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
@@ -24,6 +25,10 @@ import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
 import ExclamationTriangle from './ExclamationTriangle';
+import RetweetAlt from './RetweetAlt';
+import RocketSolid from './RocketSolid';
+import ThumbsDownSolid from './ThumbsDownSolid';
+import ThumbsUpSolid from './ThumbsUpSolid';
 
 export default {
   title: 'Components/Icons',
@@ -61,6 +66,7 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
@@ -86,6 +92,10 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vk)}
     {renderIcon(Warning)}
     {renderIcon(ExclamationTriangle)}
+    {renderIcon(RetweetAlt)}
+    {renderIcon(RocketSolid)}
+    {renderIcon(ThumbsDownSolid)}
+    {renderIcon(ThumbsUpSolid)}
   </div>
 );
 Icons.storyName = 'Icons';
