@@ -1,5 +1,5 @@
 import React from 'react';
-import ErrorMessage from './index';
+import ErrorMessageBlock from './index';
 
 const title = 'Ошибка';
 const message = 'Красочное описание ошибки';
@@ -7,12 +7,12 @@ const message = 'Красочное описание ошибки';
 const error = { response: { data: { error: { title, message } } } };
 
 export default {
-  title: 'Components/ErrorMessage',
-  component: ErrorMessage,
+  title: 'Components/ErrorMessageBlock',
+  component: ErrorMessageBlock,
 };
 
 export const Playground = (args) => (
-  <ErrorMessage {...args} />
+  <ErrorMessageBlock {...args} />
 );
 Playground.args = {
   error,
