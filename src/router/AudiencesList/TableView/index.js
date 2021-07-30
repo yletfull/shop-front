@@ -161,10 +161,10 @@ const TableView = function TableView({
                   </Link>
                 </TableCell>
                 <TableCell align="right">
-                  {row.emails ? formatNumber(row.emails) : '-'}
+                  {row.phones ? formatNumber(row.phones) : '-'}
                 </TableCell>
                 <TableCell align="right">
-                  {row.phones ? formatNumber(row.phones) : '-'}
+                  {row.emails ? formatNumber(row.emails) : '-'}
                 </TableCell>
                 <TableCell>
                   {row.local ? 'Локальная' : 'Глобальная'}
