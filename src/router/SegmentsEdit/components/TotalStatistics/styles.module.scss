@@ -1,0 +1,69 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  font-size: .75rem;
+  line-height: 1.875rem;
+  position: relative;
+}
+
+.spinner {
+  background-color: rgba($color-gray-lighter, .75);
+  font-size: 1.25rem;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.entity {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  white-space: nowrap;
+
+  &Label {
+    color: $color-gray-darker;
+  }
+
+  &Count {
+    font-weight: bold;
+  }
+}
+
+.error {
+  align-items: center;
+  background-color: rgba($color-gray-lighter, .75);
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  line-height: 1.25;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+
+  &Message {
+    color: $color-red-darker;
+    margin-bottom: .5em;
+  }
+
+  &Reload {
+    @include button-reset();
+
+    color: $color-primary;
+
+    & > svg {
+      transform: rotate(0);
+      transition: transform .2s;
+    }
+
+    &:hover,
+    &:focus {
+      color: $color-primary-lighter;
+
+      & > svg {
+        transform: rotate(-90deg);
+      }
+    }
+  }
+}
