@@ -19,6 +19,9 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
   const locationSearch = useLocation().search;
   const query = new URLSearchParams(locationSearch);
 
+  const dateStart = query.get('dateStart');
+  const dateEnd = query.get('dateEnd');
+
   const [filter, setFilter] = useState({ search: query.get('search') });
 
   const { fetch, data: response, isFetching, error } = useService({
@@ -108,6 +111,8 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="campaigns"
               id={item.id}

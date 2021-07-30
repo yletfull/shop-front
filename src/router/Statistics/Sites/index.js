@@ -19,6 +19,9 @@ const StatisticsSitesScreen = function StatisticsSitesScreen() {
   const locationSearch = useLocation().search;
   const query = new URLSearchParams(locationSearch);
 
+  const dateStart = query.get('dateStart');
+  const dateEnd = query.get('dateEnd');
+
   const [filter, setFilter] = useState({ search: query.get('search') });
 
   const { fetch, data: response, isFetching, error } = useService({
@@ -108,6 +111,8 @@ const StatisticsSitesScreen = function StatisticsSitesScreen() {
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="sites"
               id={item.id}
