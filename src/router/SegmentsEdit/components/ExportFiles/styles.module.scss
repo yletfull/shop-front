@@ -1,0 +1,83 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  margin: 0 -.25rem;
+}
+
+.button {
+  @include button-reset();
+
+  color: $color-primary;
+  font-size: .75rem;
+  padding: 0 .25rem;
+  transition: color .2s;
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  &:disabled {
+    color: $color-gray-darker;
+    cursor: default;
+  }
+
+  &:not(:disabled):hover,
+  &:not(:disabled):focus {
+    color: $color-primary-lighter;
+  }
+
+  &Icon {
+    font-size: .875rem;
+    margin-right: .25rem;
+  }
+}
+
+.form {
+  font-size: .75rem;
+  line-height: 1.25rem;
+
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    & + & {
+      margin-left: .75rem;
+    }
+  }
+
+  &Checkbox {
+    font-size: 1rem;
+    margin-right: 1.25rem;
+  }
+
+  &Input {
+    width: 25rem;
+
+    &[type='number'] {
+      margin-right: .5rem;
+      width: 4rem;
+    }
+
+    &[name="fileName"] {
+      width: 100%;
+    }
+  }
+
+  &Label {
+    color: $color-gray-darker;
+    display: inline-block;
+    width: 10rem;
+  }
+
+  &Row {
+    & + & {
+      padding-top: .5rem;
+    }
+  }
+
+  &Footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+}
