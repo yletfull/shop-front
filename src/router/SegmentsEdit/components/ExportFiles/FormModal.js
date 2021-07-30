@@ -4,6 +4,7 @@ import { Formik, Form, Field } from 'formik';
 import { formatNumber } from '@/utils/format';
 import { withFormikField } from '@/components/formik';
 import Spinner from '@/components/Spinner';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import Modal from '@/components/Modal';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
@@ -59,9 +60,15 @@ const FormModal = function SegmentsExportFilesFormModal({
   }), [defaultFileName]);
   const platform = mapPlatform[platformId];
 
-  const handleModalClose = onClose;
+  const handleModalClose = () => {
+    if (!isSubmitting) {
+      onClose();
+    }
+  };
   const handleSubmitForm = (values) => {
-    onSubmit(values);
+    if (!isSubmitting) {
+      onSubmit(values);
+    }
   };
 
   return (
@@ -201,9 +208,10 @@ const FormModal = function SegmentsExportFilesFormModal({
               </div>
 
               {Boolean(error) && (
-                <div className={styles.formError}>
-                  {JSON.stringify(error)}
-                </div>
+                <ErrorMessageBlock
+                  error={error}
+                  className={styles.formError}
+                />
               )}
 
               <div className={styles.formFooter}>
