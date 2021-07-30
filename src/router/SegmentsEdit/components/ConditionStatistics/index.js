@@ -25,7 +25,10 @@ const defaultProps = {
 const allowedFields = ['phone', 'email'];
 
 const getErrorMessage = (error) => (
-  error?.response?.status || error.message
+  [
+    'Ошибка',
+    error?.response?.status || error.message,
+  ].join(': ')
 );
 
 const ConditionStatistics = function SegmentConditionStatistics({
