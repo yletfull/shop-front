@@ -19,3 +19,24 @@ export const getIsAuthorized = createSelector(
   [getUser],
   (user) => user && Object.keys(user).length > 0,
 );
+export const getAbilitiesBySection = createSelector(
+  [getAbilities],
+  (abilities) => abilities
+    .reduce((acc, cur) => {
+      const { id, name } = cur || {};
+      if (!name || !id) {
+        return acc;
+      }
+      const [section, action] = name.split('.');
+      if (!section) {
+        return acc;
+      }
+      return ({
+        ...acc,
+        [section]: {
+          ...acc[section] || {},
+          [action || 'view']: cur,
+        },
+      });
+    }, {}),
+);
