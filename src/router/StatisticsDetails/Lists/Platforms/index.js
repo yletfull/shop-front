@@ -63,9 +63,6 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
   };
 
   useEffect(() => {
-    if (!locationSearch) {
-      return;
-    }
     const newQuery = new URLSearchParams(locationSearch);
     const params = {
       currentPage: newQuery.get('currentPage') || 1,

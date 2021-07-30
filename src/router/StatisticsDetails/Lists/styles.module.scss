@@ -21,6 +21,15 @@
   }
 }
 
-.navigations {
-  margin-bottom: 2rem;
+.page {
+  padding-top: 2rem;
+  position: relative;
+}
+
+.error {
+  margin-bottom: 1rem;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lightest, .5);
 }
