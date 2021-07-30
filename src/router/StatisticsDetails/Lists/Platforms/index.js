@@ -77,7 +77,7 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
       dateEnd,
     };
     fetch(params);
-  }, [locationSearch, fetch, dateStart, dateEnd,]);
+  }, [locationSearch, fetch, dateStart, dateEnd]);
 
   const { data, meta } = response?.data || {};
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import Tasks from './Tasks';
+import ScreenControler from './ScreenControler';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -43,7 +43,10 @@ const Lists = function StatisticsDetailsLists({
     <div className={styles.wrapper}>
       <nav
         role="presentation"
-        className="nav-links-wrapper"
+        className={cx([
+          styles.navigations,
+          'nav-links-wrapper',
+        ])}
         onClick={handleNavigationClick}
       >
         {navigations
@@ -64,7 +67,8 @@ const Lists = function StatisticsDetailsLists({
             </button>
           ))}
       </nav>
-      <Tasks
+      <ScreenControler
+        entity={currentEntity}
         dateStart={dateStart}
         dateEnd={dateEnd}
       />
