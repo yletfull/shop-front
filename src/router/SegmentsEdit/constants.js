@@ -1,6 +1,6 @@
 export const namespace = 'segmentsEdit';
 
-export const statisticsFields = ['phone'];
+export const statisticsFields = ['phone', 'email'];
 
 export const dndTypes = {
   attribute: 'attribute',
