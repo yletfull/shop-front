@@ -15,7 +15,7 @@ const defaultProps = {
   className: '',
 };
 
-const ErrorMessage = function ErrorMessage({
+const ErrorMessageBlock = function ErrorMessageBlock({
   error,
   className,
   ...props
@@ -59,7 +59,7 @@ const ErrorMessage = function ErrorMessage({
   );
 };
 
-ErrorMessage.propTypes = propTypes;
-ErrorMessage.defaultProps = defaultProps;
+ErrorMessageBlock.propTypes = propTypes;
+ErrorMessageBlock.defaultProps = defaultProps;
 
-export default ErrorMessage;
+export default ErrorMessageBlock;
