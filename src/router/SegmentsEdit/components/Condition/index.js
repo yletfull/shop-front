@@ -98,14 +98,14 @@ const Condition = function SegmentEditorCondition({
   return (
     <div
       ref={dragRef}
-      className={styles.attribute}
+      className={styles.wrapper}
       data-is-dragging={String(isDragging)}
     >
-      <div className={styles.attributeAside}>
+      <div className={styles.aside}>
         <span
           className={cx(
-            styles.attributeControl,
-            styles.attributeControlDrag,
+            styles.control,
+            styles.controlDrag,
           )}
           onMouseOver={handleDragAreaMouseover}
           onMouseLeave={handleDragAreaMouseleave}
@@ -116,14 +116,14 @@ const Condition = function SegmentEditorCondition({
         </span>
       </div>
 
-      <div className={styles.attributeMain}>
-        <div className={styles.attributeSection}>
-          <span className={styles.attributeTitle}>
+      <div className={styles.main}>
+        <div className={styles.section}>
+          <span className={styles.title}>
             {getAttributeTitle(attribute)}
           </span>
           {Boolean(profileTitle) && (
             <div
-              className={styles.attributeProfile}
+              className={styles.profileTitle}
               title={profileTitle}
             >
               {profileTitle}
@@ -131,7 +131,7 @@ const Condition = function SegmentEditorCondition({
           )}
         </div>
 
-        <div className={styles.attributeSection}>
+        <div className={styles.section}>
           <ConditionControl
             type={attribute.type}
             options={attribute.options}
@@ -158,13 +158,13 @@ const Condition = function SegmentEditorCondition({
         onReload={handleStatisticsReload}
       />
 
-      <div className={styles.attributeAside}>
+      <div className={styles.aside}>
         <button
           type="button"
           className={cx(
-            styles.attributeButton,
-            styles.attributeControl,
-            styles.attributeControlRemove,
+            styles.button,
+            styles.control,
+            styles.controlRemove,
           )}
           onClick={handleRemoveClick}
         >
