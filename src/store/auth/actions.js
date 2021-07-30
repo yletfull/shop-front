@@ -50,7 +50,7 @@ export const authSignIn = ({
   dispatch(setIsFetching(true));
   try {
     const user = await service.login(payload);
-    dispatch(authLogin(user.data));
+    dispatch(authLogin(user));
     dispatch(setIsFetching(false));
   } catch (err) {
     dispatch(authError('Ошибка авторизации'));
@@ -61,4 +61,5 @@ export const authSignIn = ({
 export const authSignOut = () => async (dispatch) => {
   await service.logout();
   dispatch(authLogout());
+  dispatch(updateAbilities([]));
 };
