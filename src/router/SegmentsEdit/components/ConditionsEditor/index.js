@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Spinner from '@/components/Spinner';
 import { equalities } from '../../constants';
-import LogicOperator from '../LogicOperator';
-import DropArea from '../DropArea';
 import Condition from '../Condition';
+import DropArea from './DropArea';
+import LogicOperator from './LogicOperator';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -82,7 +81,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                 key={groupKey('drop')}
                 group={groupIndex}
                 index={-1}
-                className={cx(groupIndex === 0 && styles.dropAreaFirst)}
+                isFirst={groupIndex === 0}
                 align="middle"
                 onDrop={handleConditionDrop}
               />
@@ -142,7 +141,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                 key={groupKey('drop-end')}
                 group={groupIndex + 1}
                 index={-1}
-                className={styles.dropAreaLast}
+                isLast
                 align="middle"
                 onDrop={handleConditionDrop}
               />

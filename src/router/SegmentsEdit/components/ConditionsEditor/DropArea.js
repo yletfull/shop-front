@@ -9,18 +9,24 @@ const propTypes = {
   group: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   align: PropTypes.oneOf(['start', 'middle', 'end']),
+  isFirst: PropTypes.bool,
+  isLast: PropTypes.bool,
   className: PropTypes.string,
   onDrop: PropTypes.func.isRequired,
 };
 const defaultProps = {
   align: 'middle',
   className: '',
+  isFirst: false,
+  isLast: false,
 };
 
 const DropArea = function DropArea({
   group,
   index,
   align,
+  isFirst,
+  isLast,
   className,
   onDrop,
   ...props
@@ -38,15 +44,17 @@ const DropArea = function DropArea({
     <div
       ref={dropRef}
       className={cx(
-        styles.wrapper,
+        styles.dropArea,
         styles[`align-${align}`],
         className,
       )}
       data-can-drop={String(canDrop)}
       data-is-over={String(isOver)}
+      data-is-first={String(isFirst)}
+      data-is-last={String(isLast)}
       {...props}
     >
-      <div className={styles.overlay} />
+      <div className={styles.dropAreaOverlay} />
     </div>
   );
 };

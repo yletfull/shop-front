@@ -23,13 +23,13 @@ const LogicOperator = function LogicOperator({
   return (
     <div
       className={cx(
-        styles.wrapper,
+        styles.logicOperator,
         className,
         styles[type],
       )}
       {...props}
     >
-      <span className={styles.text}>
+      <span className={styles.logicOperatorText}>
         {type === 'or'
           ? 'или'
           : 'и'}
