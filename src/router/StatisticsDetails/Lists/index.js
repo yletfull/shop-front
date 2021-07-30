@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Tasks from './Tasks';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -21,10 +22,6 @@ const Lists = function StatisticsDetailsLists({
   dateStart,
   dateEnd,
 }) {
-  console.log({
-    dateStart,
-    dateEnd,
-  });
   const { entityType } = useParams();
 
   const navigations = Object.keys(titles)
@@ -67,6 +64,10 @@ const Lists = function StatisticsDetailsLists({
             </button>
           ))}
       </nav>
+      <Tasks
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+      />
     </div>
   );
 };
