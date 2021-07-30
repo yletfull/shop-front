@@ -34,14 +34,17 @@ const withCheckRights = function withCheckRights(Component) {
     const hasUnlimitedAccess = useSelector(getHasUnlimitedAccess);
 
     const isAvailable = hasUnlimitedAccess
-      || (section && action && abilities[section]?.[action]);
+      || (section && action && abilities[section]);
 
     if (!isAvailable) {
       return null;
     }
 
     return (
-      <Component {...props} />
+      <Component
+        readonly={!abilities[section]?.[action]}
+        {...props}
+      />
     );
   };
 
