@@ -22,6 +22,9 @@ import {
   getAreAttributesFetching,
   getAttributesTree,
   getConditions,
+  getIsStatisticsFetching,
+  getStatistics,
+  getStatisticsError,
 } from './store/selectors';
 import {
   fetchSegment,
@@ -36,12 +39,11 @@ import {
   getIsSubmittingSegment,
   getSegmentId,
   getSegmentName,
-  getSegmentStatistics,
 } from './selectors';
 import ConditionsEditor from './components/ConditionsEditor';
+import TotalStatistics from './components/TotalStatistics';
 import SelectFilePlatform from './SelectFilePlatform';
 import SaveForm from './SaveForm';
-import Statistics from './Statistics';
 import service from './service';
 import styles from './styles.module.scss';
 
@@ -74,7 +76,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const conditions = useSelector(getConditions);
   const segmentId = useSelector(getSegmentId);
   const segmentName = useSelector(getSegmentName);
-  const segmentStatistics = useSelector(getSegmentStatistics);
+  const isStatisticsFetching = useSelector(getIsStatisticsFetching);
+  const statistics = useSelector(getStatistics);
+  const statisticsError = useSelector(getStatisticsError);
 
   const downloadLinkRef = useRef(null);
 
@@ -180,6 +184,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }
   };
 
+  const handleRetryStatisticsFetch = () => dispatch(fetchStatistics());
+
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
@@ -198,11 +204,11 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Итоговая выборка
         </h2>
 
-        <Statistics
-          isFetching={segmentStatistics.isFetching}
-          emailsCount={segmentStatistics.emails}
-          phonesCount={segmentStatistics.phones}
-          error={segmentStatistics.error}
+        <TotalStatistics
+          isFetching={isStatisticsFetching}
+          data={statistics}
+          error={statisticsError}
+          onRetry={handleRetryStatisticsFetch}
         />
 
         <h3

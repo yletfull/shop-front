@@ -61,13 +61,15 @@ const TotalStatistics = function SegmentsTotalStatistics({
               {getErrorMessage(error)}
             </div>
           )}
-          <button
-            type="button"
-            className={styles.errorReload}
-            onClick={handleRetryClick}
-          >
-            <IconSync />
-          </button>
+          {canRetry && (
+            <button
+              type="button"
+              className={styles.errorReload}
+              onClick={handleRetryClick}
+            >
+              <IconSync />
+            </button>
+          )}
         </div>
       )}
 

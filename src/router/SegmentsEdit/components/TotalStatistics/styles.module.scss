@@ -7,7 +7,7 @@
 }
 
 .spinner {
-  background-color: rgba($color-gray-lighter, .75);
+  background-color: rgba($color-gray-lightest, .75);
   font-size: 1.25rem;
   padding-bottom: 0;
   padding-top: 0;
@@ -30,7 +30,7 @@
 
 .error {
   align-items: center;
-  background-color: rgba($color-gray-lighter, .75);
+  background-color: rgba($color-gray-lightest, .75);
   bottom: 0;
   display: flex;
   flex-direction: column;

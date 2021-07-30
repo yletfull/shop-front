@@ -85,10 +85,10 @@
       right: .5rem;
       top: 50%;
     }
+  }
 
-    & .text {
-      background-color: $color-gray-lighter;
-    }
+  &.or &Text {
+    background-color: $color-gray-lighter;
   }
 
   &Text {

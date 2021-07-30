@@ -4,6 +4,9 @@ import {
   attributesData,
   attributesError,
   conditionsChange,
+  statisticsRequest,
+  statisticsData,
+  statisticsError,
 } from './actions';
 import NS from './ns';
 
@@ -49,6 +52,31 @@ const reducer = createReducer(initialState, {
   [conditionsChange]: (state, action) => ({
     ...state,
     conditions: action.payload || [],
+  }),
+  [statisticsRequest]: (state) => ({
+    ...state,
+    statistics: {
+      ...state.statistics,
+      error: null,
+      isFetching: true,
+    },
+  }),
+  [statisticsData]: (state, action) => ({
+    ...state,
+    statistics: {
+      ...state.statistics,
+      error: null,
+      isFetching: false,
+      data: Array.isArray(action.payload) ? action.payload : [],
+    },
+  }),
+  [statisticsError]: (state, action) => ({
+    ...state,
+    statistics: {
+      ...state.statistics,
+      error: action.payload,
+      isFetching: false,
+    },
   }),
 });
 
