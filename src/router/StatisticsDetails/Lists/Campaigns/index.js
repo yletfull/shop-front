@@ -114,6 +114,8 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen({
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="campaigns"
               id={item.id}

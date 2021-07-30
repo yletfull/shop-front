@@ -114,6 +114,8 @@ const StatisticsTasks = function StatisticsTasksScreen({
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="tasks"
               id={item.id}

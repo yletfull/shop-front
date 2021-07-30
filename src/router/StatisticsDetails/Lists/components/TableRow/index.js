@@ -16,6 +16,8 @@ const shape = {
 };
 
 const propTypes = {
+  dateStart: PropTypes.string.isRequired,
+  dateEnd: PropTypes.string.isRequired,
   entity: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
@@ -31,6 +33,8 @@ const propTypes = {
 };
 
 const StatisticsTableRow = function StatisticsTableRow({
+  dateStart,
+  dateEnd,
   entity,
   id,
   index,
@@ -44,6 +48,10 @@ const StatisticsTableRow = function StatisticsTableRow({
   repostsReactions,
   totalReactions,
 }) {
+  const searchQuery = new URLSearchParams('');
+  searchQuery.set('dateStart', dateStart);
+  searchQuery.set('dateEnd', dateEnd);
+
   return (
     <TableRow>
       <TableCell
@@ -53,7 +61,10 @@ const StatisticsTableRow = function StatisticsTableRow({
       </TableCell>
       <TableCell>
         <Link
-          to={`/statistics/details/${entity}/${id}`}
+          to={{
+            pathname: `/statistics/details/${entity}/${id}`,
+            search: searchQuery.toString(),
+          }}
         >
           {name}
         </Link>

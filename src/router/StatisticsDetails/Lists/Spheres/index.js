@@ -114,6 +114,8 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="spheres"
               id={item.id}

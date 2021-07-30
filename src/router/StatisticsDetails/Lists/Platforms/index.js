@@ -114,6 +114,8 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen({
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="platforms"
               id={item.id}
