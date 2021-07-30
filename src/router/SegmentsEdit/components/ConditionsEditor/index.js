@@ -8,6 +8,8 @@ import Condition from '../Condition';
 import DropArea from './DropArea';
 import LogicOperator from './LogicOperator';
 import useModel from './use-model';
+import useMapAttribute from './use-map-attribute';
+import useMapProfileTitle from './use-map-profile-title';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -24,14 +26,23 @@ const propTypes = {
       }),
     ),
   ).isRequired,
-  mapAttribute: PropTypes.objectOf(PropTypes.object).isRequired,
-  mapProfileTitle: PropTypes.objectOf(PropTypes.string),
+  attributesTree: PropTypes.arrayOf(
+    PropTypes.shape({
+      group: PropTypes.string,
+      attributes: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number,
+          attributeName: PropTypes.string,
+          title: PropTypes.string,
+        }),
+      ),
+    }),
+  ).isRequired,
   readOnly: PropTypes.bool,
   onChange: PropTypes.func,
 };
 const defaultProps = {
   isFetching: false,
-  mapProfileTitle: {},
   readOnly: false,
   onChange: () => {},
 };
@@ -39,8 +50,7 @@ const defaultProps = {
 const ConditionsEditor = function SegmentsEditConditionsEditor({
   isFetching,
   conditions,
-  mapAttribute,
-  mapProfileTitle,
+  attributesTree,
   readOnly,
   onChange,
 }) {
@@ -49,6 +59,8 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
     handleConditionMove,
     handleConditionRemove,
   } = useModel(conditions, onChange);
+  const mapAttribute = useMapAttribute(attributesTree);
+  const mapProfileTitle = useMapProfileTitle(attributesTree);
 
   return (
     <div className={styles.wrapper}>

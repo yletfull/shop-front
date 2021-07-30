@@ -23,8 +23,6 @@ import {
 import {
   getAreAttributesFetching,
   getAttributesTree,
-  getMapAttribute,
-  getMapProfileTitle,
   getConditions,
 } from './store/selectors';
 import {
@@ -74,8 +72,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const areAttributesFetching = useSelector(getAreAttributesFetching);
   const attributesTree = useSelector(getAttributesTree);
-  const mapAttribute = useSelector(getMapAttribute);
-  const mapProfileTitle = useSelector(getMapProfileTitle);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const isSubmittingSegment = useSelector(getIsSubmittingSegment);
@@ -207,8 +203,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <ConditionsEditor
           isFetching={isFetchingSegment}
           conditions={conditions}
-          mapAttribute={mapAttribute}
-          mapProfileTitle={mapProfileTitle}
+          attributesTree={attributesTree}
           onChange={handleConditionsChange}
         />
 
