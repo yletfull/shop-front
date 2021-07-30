@@ -3,10 +3,18 @@ import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
-import IconVk from '@/icons/Vk';
+import IconVK from '@/icons/Vk';
 import { patchs, titles } from '@/router/routes';
 import { authSignOut } from '@/store/auth/actions';
 import styles from './styles.module.scss';
+
+const menuItems = [
+  {
+    title: titles.upload,
+    to: patchs.upload,
+    icon: (<IconVK />),
+  },
+];
 
 const AppAside = function AppAside() {
   const dispatch = useDispatch();
@@ -14,14 +22,6 @@ const AppAside = function AppAside() {
   const handleLogoutButtonClick = () => {
     dispatch(authSignOut());
   };
-
-  const menuItems = [
-    {
-      title: titles.upload,
-      to: patchs.upload,
-      icon: <IconVk />,
-    },
-  ];
 
   return (
     <div className={styles.appAside}>
