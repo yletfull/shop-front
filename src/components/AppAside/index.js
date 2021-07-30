@@ -20,36 +20,43 @@ import styles from './styles.module.scss';
 const menuItems = {
   top: [
     {
+      key: 'not-found-0',
       title: '',
       to: '/not-found',
       icon: (<IconCrop />),
     },
     {
+      key: 'not-found-1',
       title: '',
       to: '/not-found',
       icon: (<IconUsers />),
     },
     {
+      key: patchs.upload,
       title: titles.upload,
       to: patchs.upload,
       icon: (<IconVK />),
     },
     {
+      key: 'not-found-3',
       title: '',
       to: '/not-found',
       icon: (<IconAnalytics />),
     },
     {
+      key: 'not-found-4',
       title: '',
       to: '/not-found',
       icon: (<IconTasks />),
     },
     {
+      key: 'not-found-5',
       title: '',
       to: '/not-found',
       icon: (<IconRubleSign />),
     },
     {
+      key: 'not-found-6',
       title: '',
       to: '/not-found',
       icon: (<IconSignalStream />),
@@ -57,11 +64,13 @@ const menuItems = {
   ],
   bottom: [
     {
+      key: 'not-found-7',
       title: '',
       to: '/not-found',
       icon: (<IconCog />),
     },
     {
+      key: 'not-found-8',
       title: '',
       to: '/not-found',
       icon: (<IconTvAlt />),
@@ -83,9 +92,9 @@ const AppAside = function AppAside() {
           <IconLogo />
         </div>
         <div className={styles.menuItems}>
-          {menuItems.top.map(({ icon, title, to }) => (
+          {menuItems.top.map(({ key, icon, title, to }) => (
             <NavLink
-              key={to}
+              key={key}
               to={to}
               title={title}
               className={styles.menuItem}
@@ -98,9 +107,9 @@ const AppAside = function AppAside() {
       </div>
       <div className={styles.appAsideBottom}>
         <div className={styles.menuItems}>
-          {menuItems.bottom.map(({ icon, title, to }) => (
+          {menuItems.bottom.map(({ key, icon, title, to }) => (
             <NavLink
-              key={to}
+              key={key}
               to={to}
               title={title}
               className={styles.menuItem}
