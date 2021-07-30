@@ -1,0 +1,26 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  padding: 2rem 0;
+}
+
+.navigation {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  font-size: .875rem;
+  padding-bottom: .5rem;
+
+  & + & {
+    margin-left: 1rem;
+  }
+
+  &.active {
+    border-bottom: 5px $color-red-lightest solid;
+    color: $color-red-lightest;
+  }
+}
+
+.navigations {
+  margin-bottom: 2rem;
+}
