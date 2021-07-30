@@ -29,6 +29,9 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
   const query = new URLSearchParams(locationSearch);
 
   const [filter, setFilter] = useState({ search: query.get('search') });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(countOptions[0]);
+  const [search, setSearch] = useState('');
 
   const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
@@ -36,20 +39,17 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
   });
 
   const handlePageSelect = (value) => {
-    query.set('currentPage', value);
-    history.push({ search: query.toString() });
+    setCurrentPage(value);
   };
 
   const handleCountSelect = (value) => {
-    query.set('currentPage', 1);
-    query.set('perPage', value);
-    history.push({ search: query.toString() });
+    setCurrentPage(1);
+    setPerPage(value);
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    query.set('search', filter.search);
-    history.push({ search: query.toString() });
+    setSearch(filter.search);
   };
 
   const handleSortChange = ({ sortDir, sortField }) => {
@@ -65,16 +65,16 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
   useEffect(() => {
     const newQuery = new URLSearchParams(locationSearch);
     const params = {
-      currentPage: newQuery.get('currentPage') || 1,
-      perPage: newQuery.get('perPage') || countOptions[0],
+      currentPage,
+      perPage,
       sortDir: newQuery.get('sortDir'),
       sortField: newQuery.get('sortField'),
-      search: newQuery.get('search'),
+      search,
       dateStart,
       dateEnd,
     };
     fetch(params);
-  }, [locationSearch, fetch, dateStart, dateEnd]);
+  }, [locationSearch, fetch, dateStart, dateEnd, currentPage, perPage, search]);
 
   const { data, meta } = response?.data || {};
 
@@ -114,6 +114,8 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
         >
           {list.map((item) => (
             <TableRow
+              dateStart={dateStart}
+              dateEnd={dateEnd}
               key={item.id}
               entity="spheres"
               id={item.id}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import IconChartLine from '@/icons/ChartLine';
 import IconRocketSolid from '@/icons/RocketSolid';
@@ -41,7 +41,7 @@ const StatisticsHeader = function StatisticsHeader({
   sortDir,
   onSortChange,
 }) {
-  const [directionByFields, setDirectionByFields] = useState({
+  const directionByFields = {
     [fields.impressions]: directions.asc,
     [fields.clicks]: directions.asc,
     [fields.ctr]: directions.asc,
@@ -50,13 +50,9 @@ const StatisticsHeader = function StatisticsHeader({
     [fields.totalReactions]: directions.asc,
     [fields.positiveReactions]: directions.asc,
     [sortField]: sortDir,
-  });
+  };
 
   const handleSortClick = (values) => {
-    setDirectionByFields({
-      ...directionByFields,
-      [values.sortField]: values.sortDir,
-    });
     onSortChange(values);
   };
 

@@ -17,6 +17,8 @@ const shape = {
 };
 
 const propTypes = {
+  dateStart: PropTypes.string.isRequired,
+  dateEnd: PropTypes.string.isRequired,
   entity: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
@@ -33,6 +35,8 @@ const defaultProps = {
 };
 
 const StatisticsSitesTableRow = function StatisticsSitesTableRow({
+  dateStart,
+  dateEnd,
   entity,
   id,
   index,
@@ -44,6 +48,9 @@ const StatisticsSitesTableRow = function StatisticsSitesTableRow({
   ctr,
 }) {
   const isNested = Boolean(parentId);
+  const searchQuery = new URLSearchParams('');
+  searchQuery.set('dateStart', dateStart);
+  searchQuery.set('dateEnd', dateEnd);
 
   return (
     <TableRow
@@ -60,7 +67,10 @@ const StatisticsSitesTableRow = function StatisticsSitesTableRow({
         className={styles.name}
       >
         <Link
-          to={`/statistics/details/${entity}/${id}`}
+          to={{
+            pathname: `/statistics/details/${entity}/${id}`,
+            search: searchQuery.toString(),
+          }}
         >
           {name}
         </Link>

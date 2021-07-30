@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -38,6 +38,12 @@ const Lists = function StatisticsDetailsLists({
 
     setCurrentEntity(entity);
   };
+
+  useEffect(() => {
+    if (entityType === currentEntity) {
+      setCurrentEntity(navigations[0]);
+    }
+  }, [entityType, currentEntity, navigations]);
 
   return (
     <div className={styles.wrapper}>
