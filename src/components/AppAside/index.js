@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import Button from '@/components/Button';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
 import IconVK from '@/icons/Vk';
@@ -26,7 +27,9 @@ const AppAside = function AppAside() {
   return (
     <div className={styles.appAside}>
       <div className={styles.appAsideTop}>
-        <IconLogo />
+        <div className={styles.appAsideLogo}>
+          <IconLogo />
+        </div>
         <div className={styles.menuItems}>
           {menuItems.map(({ icon, title, to }) => (
             <NavLink
@@ -42,13 +45,13 @@ const AppAside = function AppAside() {
         </div>
       </div>
       <div className={styles.appAsideBottom}>
-        <button
-          className="button-control"
-          type="button"
+        <Button
+          appearance="control"
+          className={styles.appAsideButton}
           onClick={handleLogoutButtonClick}
         >
           <IconLogout />
-        </button>
+        </Button>
       </div>
     </div>
 
