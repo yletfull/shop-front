@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import IconPlus from '@/icons/Plus';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import { equalities } from '../../constants';
@@ -9,6 +10,7 @@ import Condition from '../Condition';
 import AddAttributesModal from '../AddAttributesModal';
 import DropArea from './DropArea';
 import LogicOperator from './LogicOperator';
+import EmptyState from './EmptyState';
 import useModel from './use-model';
 import useMapAttribute from './use-map-attribute';
 import useMapProfileTitle from './use-map-profile-title';
@@ -91,6 +93,13 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
   return (
     <div className={styles.wrapper}>
       {isFetching && <Spinner layout="overlay" />}
+
+      {(!isFetching && isEmpty) && (
+        <EmptyState
+          readOnly={readOnly}
+          onAddClick={handleAddModalOpen}
+        />
+      )}
 
       {!isEmpty && (
         <header className={styles.header}>
@@ -204,12 +213,15 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
 
       {!readOnly && (
         <footer className={styles.footer}>
-          <Button
-            className={styles.footerAddButton}
-            onClick={handleAddModalOpen}
-          >
-            + добавить параметры
-          </Button>
+          {(!isFetching && !isEmpty) && (
+            <Button
+              className={styles.addButton}
+              onClick={handleAddModalOpen}
+            >
+              <IconPlus className={styles.addButtonIcon} />
+              добавить параметры
+            </Button>
+          )}
 
           {isAddModalOpened && (
             <AddAttributesModal

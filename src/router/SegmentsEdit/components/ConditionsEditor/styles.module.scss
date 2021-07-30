@@ -29,9 +29,26 @@
 
 .footer {
   margin-top: 1.5rem;
+  padding-left: 7.5%;
+}
 
-  &AddButton {
-    margin-left: 5%;
+.addButton {
+  &Icon {
+    margin-right: .5em;
+  }
+}
+
+.empty {
+  text-align: center;
+
+  &Icon {
+    color: $color-gray;
+    font-size: 5rem;
+  }
+
+  &Body {
+    color: $color-gray-darker;
+    margin: 1rem 0;
   }
 }
 
