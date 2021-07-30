@@ -19,6 +19,10 @@ export const getIsAuthorized = createSelector(
   [getUser],
   (user) => user && Object.keys(user).length > 0,
 );
+export const getHasUnlimitedAccess = createSelector(
+  [getAbilities],
+  (abilities) => abilities.map(({ name }) => name).includes('*'),
+);
 export const getAbilitiesBySection = createSelector(
   [getAbilities],
   (abilities) => abilities
