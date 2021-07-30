@@ -6,12 +6,14 @@ import {
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   type: PropTypes.oneOf(Object.values(attributeTypes)).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
   debounceDelay: PropTypes.number,
   onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  readOnly: false,
   debounceDelay: 1000,
 };
 
@@ -28,6 +30,7 @@ const getInputType = (attributeType) => {
 };
 
 const Input = function SegmentConditionControlInput({
+  readOnly,
   type,
   values,
   debounceDelay,
@@ -38,6 +41,10 @@ const Input = function SegmentConditionControlInput({
     setLocalValue(values[0] || '');
   }, [values]);
   const handleChange = (e) => {
+    if (readOnly) {
+      return;
+    }
+
     setLocalValue(String(e.target.value));
   };
   const handleBlur = () => {
@@ -66,6 +73,7 @@ const Input = function SegmentConditionControlInput({
       style={style}
       type={getInputType(type)}
       value={localValue}
+      readOnly={readOnly}
       onChange={handleChange}
       onBlur={handleBlur}
     />

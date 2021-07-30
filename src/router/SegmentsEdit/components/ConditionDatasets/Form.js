@@ -12,6 +12,7 @@ import { mapStatisticsEntities } from '../../utils';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   value: PropTypes.arrayOf(PropTypes.number).isRequired,
   options: PropTypes.arrayOf(
     PropTypes.shape({
@@ -30,11 +31,13 @@ const propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  readOnly: false,
 };
 
 const getOptionId = (option) => `segmentConditionDataset_${option.id}`;
 
 const Form = function SegmentConditionDatasetsSelectForm({
+  readOnly,
   value,
   options,
   onReset,
@@ -49,12 +52,20 @@ const Form = function SegmentConditionDatasetsSelectForm({
   const isEveryChecked = checked.length === options.length;
   const handleCheckedChange = (e, nextChecked) => setChecked(nextChecked);
   const handleEveryCheckedToggle = () => {
+    if (readOnly) {
+      return;
+    }
+
     setChecked(isEveryChecked
       ? []
       : options.map((d) => String(d.id)));
   };
 
   const handleTypeChange = (e, nextType) => {
+    if (readOnly) {
+      return;
+    }
+
     setType(nextType);
   };
 
@@ -65,53 +76,67 @@ const Form = function SegmentConditionDatasetsSelectForm({
     onSubmit(type === 'any' ? [] : checked.map(Number));
   };
 
+  const optionsList = readOnly && type === 'listed'
+    ? options.filter((option) => value.includes(option.id))
+    : options;
+
   return (
     <form
       action="#"
       className={styles.form}
       onSubmit={handleSubmit}
     >
-      <div className={styles.formHeader}>
-        <div className={styles.formHeaderRow}>
-          <InputRadio
-            className={styles.radio}
-            checked={type}
-            value="any"
-            onChange={handleTypeChange}
-          >
-            <span className={styles.radioLabel}>
-              Любой
-            </span>
-          </InputRadio>
+      {!readOnly && (
+        <div className={styles.formHeader}>
+          <div className={styles.formHeaderRow}>
+            <InputRadio
+              className={styles.radio}
+              checked={type}
+              value="any"
+              onChange={handleTypeChange}
+            >
+              <span className={styles.radioLabel}>
+                Любой
+                {readOnly && (
+                  <small>
+                    {' '}
+                    (из доступных атрибутов)
+                  </small>
+                )}
+              </span>
+            </InputRadio>
+          </div>
+          <div className={styles.formHeaderRow}>
+            <InputRadio
+              className={styles.radio}
+              checked={type}
+              value="listed"
+              onChange={handleTypeChange}
+            >
+              <span className={styles.radioLabel}>
+                Выбрать из списка
+              </span>
+            </InputRadio>
+          </div>
         </div>
-        <div className={styles.formHeaderRow}>
-          <InputRadio
-            className={styles.radio}
-            checked={type}
-            value="listed"
-            onChange={handleTypeChange}
-          >
-            <span className={styles.radioLabel}>
-              Выбрать из списка
-            </span>
-          </InputRadio>
-        </div>
-      </div>
+      )}
 
-      {(type !== 'any') && (
+      {(type !== 'any' || readOnly) && (
         <div className={styles.tableWrapper}>
           <Table
             className={styles.table}
             header={(
               <TableRow className={styles.tableHeader}>
-                <TableCell width="1">
-                  <InputCheckbox
-                    className={styles.checkbox}
-                    id="segmentConditionDatasetsEvery"
-                    checked={isEveryChecked}
-                    onChange={handleEveryCheckedToggle}
-                  />
-                </TableCell>
+                {!readOnly && (
+                  <TableCell width="1">
+                    <InputCheckbox
+                      className={styles.checkbox}
+                      id="segmentConditionDatasetsEvery"
+                      checked={isEveryChecked}
+                      onChange={handleEveryCheckedToggle}
+                    />
+                  </TableCell>
+                )}
                 <TableCell>
                   <label htmlFor="segmentConditionDatasetsEvery">
                     Название
@@ -139,7 +164,7 @@ const Form = function SegmentConditionDatasetsSelectForm({
               </TableRow>
             )}
           >
-            {options.map((option) => {
+            {optionsList.map((option) => {
               const checkboxId = getOptionId(option);
               const statistics = mapStatisticsEntities(
                 option.entityTypeTotals || [],
@@ -150,15 +175,17 @@ const Form = function SegmentConditionDatasetsSelectForm({
                   key={option.id}
                   className={styles.tableBody}
                 >
-                  <TableCell width="1">
-                    <InputCheckbox
-                      className={styles.checkbox}
-                      id={checkboxId}
-                      value={String(option.id)}
-                      checked={checked}
-                      onChange={handleCheckedChange}
-                    />
-                  </TableCell>
+                  {!readOnly && (
+                    <TableCell width="1">
+                      <InputCheckbox
+                        className={styles.checkbox}
+                        id={checkboxId}
+                        value={String(option.id)}
+                        checked={checked}
+                        onChange={handleCheckedChange}
+                      />
+                    </TableCell>
+                  )}
                   <TableCell>
                     <label htmlFor={checkboxId}>
                       {option.name}
@@ -194,38 +221,40 @@ const Form = function SegmentConditionDatasetsSelectForm({
         </div>
       )}
 
-      <div className={styles.footer}>
-        <div className={styles.footerSummary}>
-          {(type !== 'any') && (
-            <span>
-              Выбрано:
-              <b>
-                {` ${checked.length} из ${options.length}`}
-              </b>
-            </span>
-          )}
+      {!readOnly && (
+        <div className={styles.footer}>
+          <div className={styles.footerSummary}>
+            {(type !== 'any') && (
+              <span>
+                Выбрано:
+                <b>
+                  {` ${checked.length} из ${options.length}`}
+                </b>
+              </span>
+            )}
+          </div>
+          <div className={styles.footerButtons}>
+            <Button
+              className={styles.formButton}
+              color="secondary"
+              onClick={handleReset}
+            >
+              отменить
+            </Button>
+            <Button
+              className={styles.formButton}
+              type="submit"
+            >
+              выбрать
+            </Button>
+          </div>
         </div>
-        <div className={styles.footerButtons}>
-          <Button
-            className={styles.formButton}
-            color="secondary"
-            onClick={handleReset}
-          >
-            отменить
-          </Button>
-          <Button
-            className={styles.formButton}
-            type="submit"
-          >
-            выбрать
-          </Button>
-        </div>
-      </div>
+      )}
     </form>
   );
 };
 
 Form.propTypes = propTypes;
-Form.defaulProps = defaultProps;
+Form.defaultProps = defaultProps;
 
 export default Form;

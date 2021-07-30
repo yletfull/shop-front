@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { useSelector } from 'react-redux';
 import IconBars from '@/icons/BarsLight';
 import IconTimes from '@/icons/TimesLight';
 import {
   equalities,
   statisticsFields,
 } from '../../constants';
-import {
-  getMapProfileTitle,
-  getMapAttribute,
-} from '../../store/selectors';
 import ConditionControl from '../ConditionControl';
 import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';
@@ -20,6 +15,7 @@ import useStatistics from './use-statistics';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   attributeId: PropTypes.number.isRequired,
@@ -27,10 +23,23 @@ const propTypes = {
   negation: PropTypes.bool.isRequired,
   equality: PropTypes.oneOf(Object.values(equalities)).isRequired,
   values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  attribute: PropTypes.shape({
+    id: PropTypes.number,
+    attributeName: PropTypes.string,
+    title: PropTypes.string,
+    datasets: PropTypes.arrayOf(PropTypes.object),
+    type: PropTypes.string,
+    options: PropTypes.arrayOf(PropTypes.string),
+    minValue: PropTypes.string,
+    maxValue: PropTypes.string,
+  }).isRequired,
+  profileTitle: PropTypes.string,
   onChange: PropTypes.func,
   onRemove: PropTypes.func,
 };
 const defaultProps = {
+  readOnly: false,
+  profileTitle: null,
   onChange: () => {},
   onRemove: () => {},
 };
@@ -40,6 +49,7 @@ const getAttributeTitle = (attribute) => (
 );
 
 const Condition = function SegmentEditorCondition({
+  readOnly,
   groupIndex,
   index,
   attributeId,
@@ -47,14 +57,11 @@ const Condition = function SegmentEditorCondition({
   negation,
   equality,
   values,
+  attribute,
+  profileTitle,
   onChange,
   onRemove,
 }) {
-  const mapProfileTitle = useSelector(getMapProfileTitle);
-  const mapAttribute = useSelector(getMapAttribute);
-  const attribute = mapAttribute[attributeId] || {};
-  const profileTitle = mapProfileTitle[attribute.profileId] || '';
-
   const {
     dragRef,
     isDragging,
@@ -94,32 +101,34 @@ const Condition = function SegmentEditorCondition({
   return (
     <div
       ref={dragRef}
-      className={styles.attribute}
+      className={styles.wrapper}
       data-is-dragging={String(isDragging)}
     >
-      <div className={styles.attributeAside}>
-        <span
-          className={cx(
-            styles.attributeControl,
-            styles.attributeControlDrag,
-          )}
-          onMouseOver={handleDragAreaMouseover}
-          onMouseLeave={handleDragAreaMouseleave}
-          onFocus={handleDragAreaMouseover}
-          onBlur={handleDragAreaMouseleave}
-        >
-          <IconBars />
-        </span>
+      <div className={styles.aside}>
+        {!readOnly && (
+          <span
+            className={cx(
+              styles.control,
+              styles.controlDrag,
+            )}
+            onMouseOver={handleDragAreaMouseover}
+            onMouseLeave={handleDragAreaMouseleave}
+            onFocus={handleDragAreaMouseover}
+            onBlur={handleDragAreaMouseleave}
+          >
+            <IconBars />
+          </span>
+        )}
       </div>
 
-      <div className={styles.attributeMain}>
-        <div className={styles.attributeSection}>
-          <span className={styles.attributeTitle}>
+      <div className={styles.main}>
+        <div className={styles.section}>
+          <span className={styles.title}>
             {getAttributeTitle(attribute)}
           </span>
           {Boolean(profileTitle) && (
             <div
-              className={styles.attributeProfile}
+              className={styles.profileTitle}
               title={profileTitle}
             >
               {profileTitle}
@@ -127,8 +136,9 @@ const Condition = function SegmentEditorCondition({
           )}
         </div>
 
-        <div className={styles.attributeSection}>
+        <div className={styles.section}>
           <ConditionControl
+            readOnly={readOnly}
             type={attribute.type}
             options={attribute.options}
             negation={negation}
@@ -141,14 +151,13 @@ const Condition = function SegmentEditorCondition({
         </div>
       </div>
 
-      <div>
-        <ConditionDatasets
-          attributeName={getAttributeTitle(attribute)}
-          value={datasetIds}
-          options={attribute?.datasets || []}
-          onChange={handleDatasetIdsChange}
-        />
-      </div>
+      <ConditionDatasets
+        readOnly={readOnly}
+        attributeName={getAttributeTitle(attribute)}
+        value={datasetIds}
+        options={attribute?.datasets || []}
+        onChange={handleDatasetIdsChange}
+      />
 
       <ConditionStatistics
         {...statistics}
@@ -156,18 +165,20 @@ const Condition = function SegmentEditorCondition({
         onReload={handleStatisticsReload}
       />
 
-      <div className={styles.attributeAside}>
-        <button
-          type="button"
-          className={cx(
-            styles.attributeButton,
-            styles.attributeControl,
-            styles.attributeControlRemove,
-          )}
-          onClick={handleRemoveClick}
-        >
-          <IconTimes />
-        </button>
+      <div className={styles.aside}>
+        {!readOnly && (
+          <button
+            type="button"
+            className={cx(
+              styles.button,
+              styles.control,
+              styles.controlRemove,
+            )}
+            onClick={handleRemoveClick}
+          >
+            <IconTimes />
+          </button>
+        )}
       </div>
 
       <div className={styles.attributeOverlay} />

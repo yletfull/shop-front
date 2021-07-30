@@ -1,4 +1,3 @@
-import { createSelector } from '@reduxjs/toolkit';
 import NS from './ns';
 
 export const getAreAttributesFetching = (state) => (
@@ -9,29 +8,10 @@ export const getAttributesTree = (state) => (
 );
 export const getConditions = (state) => state[NS]?.conditions || [];
 
-export const getMapProfileTitle = createSelector(
-  [getAttributesTree],
-  (attributesTree) => attributesTree.reduce((acc, group) => {
-    try {
-      const [{ profileId }] = group.attributes;
-
-      return {
-        ...acc,
-        [profileId]: group.group,
-      };
-    } catch (error) {
-      console.error(error);
-      return acc;
-    }
-  }, {}),
+export const getStatistics = (state) => state[NS]?.statistics?.data || [];
+export const getIsStatisticsFetching = (state) => (
+  Boolean(state[NS]?.statistics?.isFetching)
 );
-export const getMapAttribute = createSelector(
-  [getAttributesTree],
-  (attributesTree) => attributesTree.reduce((result, group) => ({
-    ...result,
-    ...group.attributes.reduce((acc, attribute) => ({
-      ...acc,
-      [attribute.id]: attribute,
-    }), {}),
-  }), {}),
+export const getStatisticsError = (state) => (
+  state[NS]?.statistics?.error || null
 );

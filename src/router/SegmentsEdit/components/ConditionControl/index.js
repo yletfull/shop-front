@@ -12,6 +12,7 @@ import Input from './Input';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   negation: PropTypes.bool.isRequired,
   type: PropTypes.oneOf(Object.values(attributeTypes)).isRequired,
   options: PropTypes.arrayOf(PropTypes.string),
@@ -22,6 +23,7 @@ const propTypes = {
   onValuesChange: PropTypes.func,
 };
 const defaultProps = {
+  readOnly: false,
   options: [],
   onNegationChange: () => {},
   onEqualityChange: () => {},
@@ -29,6 +31,7 @@ const defaultProps = {
 };
 
 const ConditionControl = function SegmentConditionControl({
+  readOnly,
   negation,
   type,
   options,
@@ -42,19 +45,19 @@ const ConditionControl = function SegmentConditionControl({
     && options.length > 0;
 
   const handleNegationChange = (nextNegation) => {
-    if (nextNegation !== negation) {
+    if (!readOnly && nextNegation !== negation) {
       onNegationChange(nextNegation);
     }
   };
 
   const handleEqualityChange = (nextEquality) => {
-    if (nextEquality !== equality) {
+    if (!readOnly && nextEquality !== equality) {
       onEqualityChange(nextEquality);
     }
   };
 
   const handleValuesChange = (nextValues) => {
-    if (serializeValues(values) !== serializeValues(nextValues)) {
+    if (!readOnly && serializeValues(values) !== serializeValues(nextValues)) {
       onValuesChange(nextValues);
     }
   };
@@ -62,6 +65,7 @@ const ConditionControl = function SegmentConditionControl({
   return (
     <span className={styles.wrapper}>
       <NegationToggle
+        readOnly={readOnly}
         value={negation}
         onChange={handleNegationChange}
       />
@@ -69,6 +73,7 @@ const ConditionControl = function SegmentConditionControl({
       {hasOptions
         ? (
           <OptionsList
+            readOnly={readOnly}
             options={options}
             values={values}
             onChange={handleValuesChange}
@@ -77,11 +82,13 @@ const ConditionControl = function SegmentConditionControl({
         : (
           <Fragment>
             <EqualitySelect
+              readOnly={readOnly}
               className={styles.fieldEqualitySelect}
               value={equality}
               onChange={handleEqualityChange}
             />
             <Input
+              readOnly={readOnly}
               type={type}
               values={values}
               onChange={handleValuesChange}

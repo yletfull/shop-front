@@ -49,8 +49,12 @@
       color .2s;
   }
 
-  &:hover &Label,
-  &Input:focus + &Label {
+  &[data-readonly='true'] &Label {
+    background-color: transparent;
+  }
+
+  &:not([data-readonly='true']):hover &Label,
+  &Input:not(:read-only):focus + &Label {
     background-color: $color-gray;
     color: $color-black;
   }
@@ -60,14 +64,16 @@
     color: $color-white;
   }
 
-  &:hover &Input:checked + &Label,
-  &Input:focus:checked + &Label {
+  &:not([data-readonly='true']):hover &Input:checked + &Label,
+  &Input:not(:read-only):focus:checked + &Label {
     background-color: $color-primary-lighter;
     color: $color-white;
   }
 }
 
 .options {
+  padding-top: .25rem;
+
   &Item {
     & + & {
       margin-top: .125rem;
@@ -89,7 +95,11 @@
   min-width: 0;
   padding: 0 .5rem;
 
-  &:focus {
+  &:read-only {
+    background-color: transparent;
+  }
+
+  &:not(:read-only):focus {
     border-color: $color-primary;
     outline: none;
   }
@@ -138,8 +148,12 @@
         color .2s;
     }
 
-    &:hover &Label,
-    &Input:focus + &Label {
+    &[data-readonly='true'] &Label {
+      background-color: transparent;
+    }
+
+    &:not([data-readonly='true']):hover &Label,
+    &:not([data-readonly='true']) &Input:focus + &Label {
       background-color: $color-gray;
       color: $color-black;
     }
