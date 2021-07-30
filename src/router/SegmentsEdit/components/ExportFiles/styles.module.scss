@@ -35,6 +35,12 @@
 .form {
   font-size: .75rem;
   line-height: 1.25rem;
+  position: relative;
+
+  &Spinner {
+    background: rgba($color-gray-lighter, .75);
+    font-size: 2rem;
+  }
 
   &Button {
     padding-left: 1.5rem;
@@ -58,7 +64,7 @@
       width: 4rem;
     }
 
-    &[name="fileName"] {
+    &[name='fileName'] {
       width: 100%;
     }
   }

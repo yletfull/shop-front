@@ -1,15 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
-import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
-import Modal from '@/components/Modal';
 import {
   namespace as NS,
-  segmentProps,
 } from './constants';
 import reducer from './reducer';
 import store from './store/reducer';
@@ -32,9 +29,6 @@ import {
   saveSegment,
 } from './actions';
 import {
-  formatSegmentAttributesListForRequest,
-} from './helpers';
-import {
   getIsFetchingSegment,
   getIsSubmittingSegment,
   getSegmentId,
@@ -42,9 +36,8 @@ import {
 } from './selectors';
 import ConditionsEditor from './components/ConditionsEditor';
 import TotalStatistics from './components/TotalStatistics';
-import SelectFilePlatform from './SelectFilePlatform';
+import ExportFiles from './components/ExportFiles';
 import SaveForm from './SaveForm';
-import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -80,15 +73,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const statistics = useSelector(getStatistics);
   const statisticsError = useSelector(getStatisticsError);
 
-  const downloadLinkRef = useRef(null);
-
-  const [downloadError, setDownloadError] = useState(null);
-  const [downloadedSegment, setDownloadedSegment] = useState(null);
-  const [
-    isRequestedDownloadSegment,
-    setIsRequestedDownloadSegment,
-  ] = useState(false);
-
   const isNewSegment = typeof paramsSegmentId === 'undefined';
 
   useEffect(() => {
@@ -108,62 +92,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const handleSelectDownloadFile = (platform) => {
-    setDownloadedSegment({ type: platform });
-  };
-  const handleCloseDownloadForm = () => {
-    setDownloadError(null);
-    setDownloadedSegment(null);
-  };
-  const handleSubmitDownloadForm = async (values) => {
-    const {
-      sources: entityTypes,
-      count: splitFilesCount,
-      name: fileName,
-      samples: sampleRowsSize,
-    } = values;
-    const {
-      type: adsPlatform,
-    } = downloadedSegment;
-
-    if (!fileName || !entityTypes || !Array.isArray(entityTypes)) {
-      return;
-    }
-
-    setIsRequestedDownloadSegment(true);
-
-    const attributes = formatSegmentAttributesListForRequest(conditions);
-    try {
-      const url = await service.getSegmentDownloadLink(
-        segmentId,
-        {
-          adsPlatform,
-          fileName,
-          sampleRowsSize,
-          splitFilesCount,
-          entityTypes,
-          segment: { [segmentProps.attributes]: attributes },
-        },
-      );
-      if (!url) {
-        return;
-      }
-      const { current: linkNode } = downloadLinkRef || {};
-      linkNode.download = fileName;
-      linkNode.href = url;
-      linkNode.click();
-
-      setDownloadedSegment(null);
-      setDownloadError(null);
-    } catch (error) {
-      if (error.response) {
-        setDownloadError(error.response);
-      }
-      console.error(error);
-    }
-
-    setIsRequestedDownloadSegment(false);
-  };
   const handleSubmitSaveForm = ({ fileName }) => {
     if (!fileName) {
       return;
@@ -186,7 +114,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const handleRetryStatisticsFetch = () => dispatch(fetchStatistics());
 
-  /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
   return (
     <div className={styles.segmentsEdit}>
       <div className={styles.segmentsEditMain}>
@@ -220,14 +147,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           Файлы для площадок
         </h3>
 
-        <SelectFilePlatform
-          platforms={[
-            { label: 'VK', value: 'VK' },
-            { label: 'FB', value: 'FACEBOOK' },
-            { label: 'MailRu', value: 'MAIL_RU' },
-            { label: 'Яндекс', value: 'YANDEX' },
-          ]}
-          onSelect={handleSelectDownloadFile}
+        <ExportFiles
+          conditions={conditions}
+          statistics={statistics}
         />
 
         <h3
@@ -245,39 +167,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           onSubmit={handleSubmitSaveForm}
         />
       </div>
-
-      {Boolean(downloadedSegment) && (
-        <Modal
-          title={(
-            <span>
-              Сохранение файлов для
-              {' '}
-              {downloadedSegment?.type.toUpperCase() || ''}
-            </span>
-          )}
-          onClose={handleCloseDownloadForm}
-        >
-          <DownloadFilesForm
-            id={downloadedSegment?.id}
-            isDisabled={isRequestedDownloadSegment}
-            name={downloadedSegment?.name}
-            onClose={handleCloseDownloadForm}
-            onSubmit={handleSubmitDownloadForm}
-          />
-          <a ref={downloadLinkRef} />
-          {downloadError && (
-            <span className={styles.segmentsEditError}>
-              При экспорте файла возникла ошибка
-              {downloadError.status && (
-                ` (код ошибки: ${downloadError.status})`
-              )}
-            </span>
-          )}
-        </Modal>
-      )}
     </div>
   );
-  /* eslint-enable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
 };
 
 SegmentsEdit.propTypes = propTypes;

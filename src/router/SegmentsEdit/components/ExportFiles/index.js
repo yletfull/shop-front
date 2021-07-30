@@ -1,10 +1,10 @@
-/* eslint "no-unused-vars": "off" */
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import IconDownload from '@/icons/Download';
 import { platforms } from './constants';
 import FormModal from './FormModal';
+import { downloadSegment } from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -44,6 +44,34 @@ const ExportFiles = function SegmentsExportFiles({
   const isDisabled = !segmentId
     && (!Array.isArray(conditions) || !conditions.length);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleFormSubmit = async (values) => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const result = await downloadSegment({
+        ...values,
+        segmentId,
+        conditions,
+        adsPlatform: selectedPlatform,
+      });
+
+      console.log(result);
+
+      setIsSubmitting(false);
+    } catch (err) {
+      setIsSubmitting(false);
+      setError(err);
+    }
+  };
+
   return (
     <Fragment>
       <div className={cx(styles.wrapper, className)}>
@@ -66,10 +94,13 @@ const ExportFiles = function SegmentsExportFiles({
       </div>
       {Boolean(selectedPlatform) && (
         <FormModal
+          isSubmitting={isSubmitting}
+          error={error}
           platformId={selectedPlatform}
           defaultFileName={defaultFileName}
           statistics={statistics}
           onClose={handleModalClose}
+          onSubmit={handleFormSubmit}
         />
       )}
     </Fragment>

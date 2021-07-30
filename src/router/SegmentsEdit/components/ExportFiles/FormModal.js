@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { formatNumber } from '@/utils/format';
 import { withFormikField } from '@/components/formik';
+import Spinner from '@/components/Spinner';
 import Modal from '@/components/Modal';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
@@ -11,6 +12,8 @@ import { mapPlatform } from './constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  isSubmitting: PropTypes.bool,
+  error: PropTypes.objectOf(PropTypes.any),
   platformId: PropTypes.oneOf(Object.keys(mapPlatform)).isRequired,
   defaultFileName: PropTypes.string,
   statistics: PropTypes.arrayOf(
@@ -20,8 +23,11 @@ const propTypes = {
     }),
   ),
   onClose: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  isSubmitting: false,
+  error: null,
   defaultFileName: '',
   statistics: [],
 };
@@ -30,10 +36,13 @@ const FormikCheckbox = withFormikField(InputCheckbox);
 const FormikInput = withFormikField(Input);
 
 const FormModal = function SegmentsExportFilesFormModal({
+  isSubmitting,
+  error,
   platformId,
   defaultFileName,
   statistics,
   onClose,
+  onSubmit,
 }) {
   const [shouldSplit, setShouldSplit] = useState(false);
   const handleShouldSplitChange = (_, should) => {
@@ -52,12 +61,13 @@ const FormModal = function SegmentsExportFilesFormModal({
 
   const handleModalClose = onClose;
   const handleSubmitForm = (values) => {
-    console.log(values);
+    onSubmit(values);
   };
 
   return (
     <Modal
       title={`Сохранение файлов для «${platform.name}»`}
+      preventClose={isSubmitting}
       onClose={handleModalClose}
     >
       <Formik
@@ -78,6 +88,13 @@ const FormModal = function SegmentsExportFilesFormModal({
 
           return (
             <Form className={styles.form}>
+              {isSubmitting && (
+                <Spinner
+                  layout="overlay"
+                  className={styles.formSpinner}
+                />
+              )}
+
               <div className={styles.formRow}>
                 <span className={styles.formLabel}>
                   Название
@@ -182,6 +199,12 @@ const FormModal = function SegmentsExportFilesFormModal({
                   {shouldSplit && 'файлов'}
                 </span>
               </div>
+
+              {Boolean(error) && (
+                <div className={styles.formError}>
+                  {JSON.stringify(error)}
+                </div>
+              )}
 
               <div className={styles.formFooter}>
                 <Button
