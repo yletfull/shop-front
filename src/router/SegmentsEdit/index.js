@@ -6,7 +6,6 @@ import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
 import DownloadFilesForm from '@/components/segments/DownloadFilesForm';
-import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import {
   namespace as NS,
@@ -16,7 +15,6 @@ import reducer from './reducer';
 import store from './store/reducer';
 import {
   fetchAttributes,
-  appendConditions,
   conditionsChange,
   fetchStatistics,
 } from './store/actions';
@@ -41,8 +39,6 @@ import {
   getSegmentStatistics,
 } from './selectors';
 import ConditionsEditor from './components/ConditionsEditor';
-import Params from './Params';
-import ParamsForm from './ParamsForm';
 import SelectFilePlatform from './SelectFilePlatform';
 import SaveForm from './SaveForm';
 import Statistics from './Statistics';
@@ -84,7 +80,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const [downloadError, setDownloadError] = useState(null);
   const [downloadedSegment, setDownloadedSegment] = useState(null);
-  const [isShowParams, setIsShowParams] = useState(false);
   const [
     isRequestedDownloadSegment,
     setIsRequestedDownloadSegment,
@@ -112,15 +107,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleSelectDownloadFile = (platform) => {
     setDownloadedSegment({ type: platform });
   };
-  const handleClickShowParams = () => {
-    setIsShowParams(true);
-  };
   const handleCloseDownloadForm = () => {
     setDownloadError(null);
     setDownloadedSegment(null);
-  };
-  const handleCloseParamsForm = () => {
-    setIsShowParams(false);
   };
   const handleSubmitDownloadForm = async (values) => {
     const {
@@ -183,11 +172,6 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     }, onSuccessCallback));
   };
 
-  const handleSubmitParams = (selectedAttributes) => {
-    setIsShowParams(false);
-    dispatch(appendConditions(selectedAttributes));
-  };
-
   const handleConditionsChange = (nextConditions, meta = {}) => {
     dispatch(conditionsChange(nextConditions));
 
@@ -203,29 +187,10 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         <ConditionsEditor
           isFetching={isFetchingSegment}
           conditions={conditions}
+          isAttributesTreeFetching={areAttributesFetching}
           attributesTree={attributesTree}
           onChange={handleConditionsChange}
         />
-
-        <Params
-          isFetching={areAttributesFetching}
-          isVisible={isShowParams}
-          form={(
-            <ParamsForm
-              data={attributesTree}
-              onCancel={handleCloseParamsForm}
-              onSubmit={handleSubmitParams}
-            />
-          )}
-          onCloseForm={handleCloseParamsForm}
-        >
-          <Button
-            type="button"
-            onClick={handleClickShowParams}
-          >
-            + добавить параметр
-          </Button>
-        </Params>
       </div>
 
       <div className={styles.segmentsEditAside}>

@@ -1,16 +1,8 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-  equalities,
-} from '../constants';
-import {
-  getRandomString,
-  checkHasOptions,
-} from '../utils';
-import {
   attributesRequest,
   attributesData,
   attributesError,
-  appendConditions,
   conditionsChange,
 } from './actions';
 import NS from './ns';
@@ -54,32 +46,6 @@ const reducer = createReducer(initialState, {
       error: action.payload,
     },
   }),
-  [appendConditions]: (state, action) => {
-    if (!Array.isArray(action.payload) || action.payload.length < 1) {
-      return state;
-    }
-
-    const newConditions = action.payload.map((attribute) => ([
-      {
-        ...attribute,
-        equality: checkHasOptions(attribute.options)
-          ? equalities.in
-          : equalities.eq,
-        negation: false,
-        values: [],
-        datasetIds: [],
-        clientId: getRandomString(),
-      },
-    ]));
-
-    return {
-      ...state,
-      conditions: [
-        ...state.conditions,
-        ...newConditions,
-      ],
-    };
-  },
   [conditionsChange]: (state, action) => ({
     ...state,
     conditions: action.payload || [],

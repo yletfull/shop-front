@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Spinner from '@/components/Spinner';
+import Button from '@/components/Button';
 import { equalities } from '../../constants';
 import Condition from '../Condition';
+import AddAttributesModal from '../AddAttributesModal';
 import DropArea from './DropArea';
 import LogicOperator from './LogicOperator';
 import useModel from './use-model';
@@ -26,6 +28,7 @@ const propTypes = {
       }),
     ),
   ).isRequired,
+  isAttributesTreeFetching: PropTypes.bool,
   attributesTree: PropTypes.arrayOf(
     PropTypes.shape({
       group: PropTypes.string,
@@ -43,6 +46,7 @@ const propTypes = {
 };
 const defaultProps = {
   isFetching: false,
+  isAttributesTreeFetching: false,
   readOnly: false,
   onChange: () => {},
 };
@@ -50,11 +54,13 @@ const defaultProps = {
 const ConditionsEditor = function SegmentsEditConditionsEditor({
   isFetching,
   conditions,
+  isAttributesTreeFetching,
   attributesTree,
   readOnly,
   onChange,
 }) {
   const {
+    handleConditionsAppend,
     handleConditionPatch,
     handleConditionMove,
     handleConditionRemove,
@@ -62,15 +68,34 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
   const mapAttribute = useMapAttribute(attributesTree);
   const mapProfileTitle = useMapProfileTitle(attributesTree);
 
+  const [isAddModalOpened, setIsAddModalOpened] = useState(false);
+  const handleAddModalOpen = () => setIsAddModalOpened(true);
+  const handleAddModalClose = () => setIsAddModalOpened(false);
+  const handleAddModalSubmit = (attributeIds) => {
+    setIsAddModalOpened(false);
+
+    if (!Array.isArray(attributeIds) || !attributeIds.length) {
+      return;
+    }
+
+    const newAttributes = attributeIds
+      .map((id) => mapAttribute[id] || null)
+      .filter(Boolean);
+
+    if (newAttributes.length) {
+      handleConditionsAppend(newAttributes);
+    }
+  };
+
   return (
     <div className={styles.wrapper}>
       {isFetching && <Spinner layout="overlay" />}
 
-      <DndProvider backend={HTML5Backend}>
-        <header className={styles.header}>
-          labels
-        </header>
+      <header className={styles.header}>
+        labels
+      </header>
 
+      <DndProvider backend={HTML5Backend}>
         {conditions.reduce((groupAcc, group, groupIndex, groups) => {
           const groupKey = (key) => `group-${groupIndex}-${key}`;
 
@@ -155,6 +180,26 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
           ]);
         }, [])}
       </DndProvider>
+
+      {!readOnly && (
+        <footer className={styles.footer}>
+          <Button
+            className={styles.footerAddButton}
+            onClick={handleAddModalOpen}
+          >
+            + добавить параметры
+          </Button>
+
+          {isAddModalOpened && (
+            <AddAttributesModal
+              tree={attributesTree}
+              isTreeFetching={isAttributesTreeFetching}
+              onClose={handleAddModalClose}
+              onSubmit={handleAddModalSubmit}
+            />
+          )}
+        </footer>
+      )}
     </div>
   );
 };

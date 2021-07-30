@@ -11,6 +11,14 @@
   padding: .5rem 0;
 }
 
+.footer {
+  margin-top: 1.5rem;
+
+  &AddButton {
+    margin-left: 5%;
+  }
+}
+
 .logicOperator {
   color: $color-pink;
   font-size: .75em;

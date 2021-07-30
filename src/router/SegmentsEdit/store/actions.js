@@ -16,7 +16,6 @@ export const attributesData = createAction(`${NS}/attributes`);
 export const attributesError = createAction(`${NS}/attributesError`);
 
 export const conditionsChange = createAction(`${NS}/conditions/change`);
-export const appendConditions = createAction(`${NS}/conditions/append`);
 
 export const statisticsRequest = createAction(`${NS}/statistics/request`);
 export const statisticsData = createAction(`${NS}/statistics/data`);
