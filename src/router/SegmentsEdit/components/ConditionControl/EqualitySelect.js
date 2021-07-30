@@ -9,6 +9,7 @@ import {
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   debounceDelay: PropTypes.number,
   value: PropTypes.oneOf([
     equalities.eq,
@@ -18,6 +19,7 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  readOnly: false,
   debounceDelay: 700,
 };
 
@@ -40,6 +42,7 @@ const options = [
 ];
 
 const EqualitySelect = function SegmentConditionControlEqualitySelect({
+  readOnly,
   debounceDelay,
   value,
   onChange,
@@ -49,6 +52,10 @@ const EqualitySelect = function SegmentConditionControlEqualitySelect({
     setLocalValue(value);
   }, [value]);
   const handleChange = (e) => {
+    if (readOnly) {
+      return;
+    }
+
     setLocalValue(e.target.value || equalities.eq);
   };
   useEffect(() => {
@@ -68,12 +75,14 @@ const EqualitySelect = function SegmentConditionControlEqualitySelect({
           key={option.value}
           className={styles.pillsOption}
           title={option.title}
+          data-readonly={String(readOnly)}
         >
           <input
             className={styles.pillsOptionInput}
             type="radio"
             value={option.value}
             checked={localValue === option.value}
+            readOnly={readOnly}
             onChange={handleChange}
           />
           <span className={styles.pillsOptionLabel}>

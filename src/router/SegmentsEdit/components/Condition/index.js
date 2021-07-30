@@ -15,6 +15,7 @@ import useStatistics from './use-statistics';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   groupIndex: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   attributeId: PropTypes.number.isRequired,
@@ -37,6 +38,7 @@ const propTypes = {
   onRemove: PropTypes.func,
 };
 const defaultProps = {
+  readOnly: false,
   profileTitle: null,
   onChange: () => {},
   onRemove: () => {},
@@ -47,6 +49,7 @@ const getAttributeTitle = (attribute) => (
 );
 
 const Condition = function SegmentEditorCondition({
+  readOnly,
   groupIndex,
   index,
   attributeId,
@@ -102,18 +105,20 @@ const Condition = function SegmentEditorCondition({
       data-is-dragging={String(isDragging)}
     >
       <div className={styles.aside}>
-        <span
-          className={cx(
-            styles.control,
-            styles.controlDrag,
-          )}
-          onMouseOver={handleDragAreaMouseover}
-          onMouseLeave={handleDragAreaMouseleave}
-          onFocus={handleDragAreaMouseover}
-          onBlur={handleDragAreaMouseleave}
-        >
-          <IconBars />
-        </span>
+        {!readOnly && (
+          <span
+            className={cx(
+              styles.control,
+              styles.controlDrag,
+            )}
+            onMouseOver={handleDragAreaMouseover}
+            onMouseLeave={handleDragAreaMouseleave}
+            onFocus={handleDragAreaMouseover}
+            onBlur={handleDragAreaMouseleave}
+          >
+            <IconBars />
+          </span>
+        )}
       </div>
 
       <div className={styles.main}>
@@ -133,6 +138,7 @@ const Condition = function SegmentEditorCondition({
 
         <div className={styles.section}>
           <ConditionControl
+            readOnly={readOnly}
             type={attribute.type}
             options={attribute.options}
             negation={negation}
@@ -146,6 +152,7 @@ const Condition = function SegmentEditorCondition({
       </div>
 
       <ConditionDatasets
+        readOnly={readOnly}
         attributeName={getAttributeTitle(attribute)}
         value={datasetIds}
         options={attribute?.datasets || []}
@@ -159,17 +166,19 @@ const Condition = function SegmentEditorCondition({
       />
 
       <div className={styles.aside}>
-        <button
-          type="button"
-          className={cx(
-            styles.button,
-            styles.control,
-            styles.controlRemove,
-          )}
-          onClick={handleRemoveClick}
-        >
-          <IconTimes />
-        </button>
+        {!readOnly && (
+          <button
+            type="button"
+            className={cx(
+              styles.button,
+              styles.control,
+              styles.controlRemove,
+            )}
+            onClick={handleRemoveClick}
+          >
+            <IconTimes />
+          </button>
+        )}
       </div>
 
       <div className={styles.attributeOverlay} />

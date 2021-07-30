@@ -4,15 +4,18 @@ import IconExclamation from '@/icons/Exclamation';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   debounceDelay: PropTypes.number,
   value: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  readOnly: false,
   debounceDelay: 500,
 };
 
 const NegationToggle = function SegmentConditionControlNegationToggle({
+  readOnly,
   debounceDelay,
   value,
   onChange,
@@ -22,6 +25,10 @@ const NegationToggle = function SegmentConditionControlNegationToggle({
     setLocalValue(value);
   }, [value]);
   const handleChange = (e) => {
+    if (readOnly) {
+      return;
+    }
+
     setLocalValue(Boolean(e.target.checked));
   };
   useEffect(() => {
@@ -42,11 +49,13 @@ const NegationToggle = function SegmentConditionControlNegationToggle({
     <label
       className={styles.negationToggle}
       title={title}
+      data-readonly={String(readOnly)}
     >
       <input
         className={styles.negationToggleInput}
         type="checkbox"
         checked={localValue}
+        readOnly={readOnly}
         onChange={handleChange}
       />
       <span className={styles.negationToggleLabel}>

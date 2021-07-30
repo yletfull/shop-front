@@ -6,6 +6,7 @@ import Form from './Form';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  readOnly: PropTypes.bool,
   attributeName: PropTypes.string.isRequired,
   value: PropTypes.arrayOf(PropTypes.number).isRequired,
   options: PropTypes.arrayOf(
@@ -24,9 +25,11 @@ const propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 const defaultProps = {
+  readOnly: false,
 };
 
 const ConditionDatasets = function SegmentConditionDatasetsSelect({
+  readOnly,
   attributeName,
   value,
   options,
@@ -41,7 +44,7 @@ const ConditionDatasets = function SegmentConditionDatasetsSelect({
   const isAny = !Array.isArray(value) || !value.length;
 
   const handleFormSubmit = (nextValue) => {
-    if (serializeValues(nextValue) !== serializeValues(value)) {
+    if (!readOnly && serializeValues(nextValue) !== serializeValues(value)) {
       onChange(nextValue);
     }
 
@@ -63,10 +66,11 @@ const ConditionDatasets = function SegmentConditionDatasetsSelect({
       </span>
       {isModalShown && (
         <Modal
-          title={`Датасеты с параметром «${attributeName}»`}
+          title={`Датасеты параметра «${attributeName}»`}
           onClose={handleModalClose}
         >
           <Form
+            readOnly={readOnly}
             value={value}
             options={options}
             onReset={handleModalClose}
