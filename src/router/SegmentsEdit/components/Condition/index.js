@@ -145,14 +145,12 @@ const Condition = function SegmentEditorCondition({
         </div>
       </div>
 
-      <div>
-        <ConditionDatasets
-          attributeName={getAttributeTitle(attribute)}
-          value={datasetIds}
-          options={attribute?.datasets || []}
-          onChange={handleDatasetIdsChange}
-        />
-      </div>
+      <ConditionDatasets
+        attributeName={getAttributeTitle(attribute)}
+        value={datasetIds}
+        options={attribute?.datasets || []}
+        onChange={handleDatasetIdsChange}
+      />
 
       <ConditionStatistics
         {...statistics}

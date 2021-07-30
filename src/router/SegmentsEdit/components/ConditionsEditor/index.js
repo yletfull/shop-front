@@ -59,6 +59,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
   readOnly,
   onChange,
 }) {
+  const isEmpty = !Array.isArray(conditions) || !conditions.length;
   const {
     handleConditionsAppend,
     handleConditionPatch,
@@ -91,9 +92,29 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
     <div className={styles.wrapper}>
       {isFetching && <Spinner layout="overlay" />}
 
-      <header className={styles.header}>
-        labels
-      </header>
+      {!isEmpty && (
+        <header className={styles.header}>
+          <span className={styles.headerSpacer} />
+          <span
+            className={styles.headerTitle}
+            data-field="datasets"
+          >
+            Датасеты
+          </span>
+          <span
+            className={styles.headerTitle}
+            data-field="phones"
+          >
+            Телефоны
+          </span>
+          <span
+            className={styles.headerTitle}
+            data-field="emails"
+          >
+            E-mail
+          </span>
+        </header>
+      )}
 
       <DndProvider backend={HTML5Backend}>
         {conditions.reduce((groupAcc, group, groupIndex, groups) => {

@@ -8,7 +8,23 @@
 
 .header {
   display: flex;
-  padding: .5rem 0;
+  padding: .5rem 1rem 1rem 0;
+
+  &Spacer {
+    flex-grow: 1;
+  }
+
+  &Title {
+    font-size: .75rem;
+    font-weight: bold;
+    width: 7.5rem;
+
+    &[data-field='phones'],
+    &[data-field='emails'] {
+      padding-right: 1.75rem;
+      text-align: right;
+    }
+  }
 }
 
 .footer {

@@ -4,11 +4,13 @@
   align-items: center;
   background-color: $color-gray-lighter;
   display: inline-flex;
-  flex-grow: 1;
+  flex-grow: 0;
+  flex-shrink: 0;
   font-size: .75rem;
   height: 1.5rem;
   padding: 0 .5rem;
   position: relative;
+  width: 15rem;
 }
 
 .spinner {

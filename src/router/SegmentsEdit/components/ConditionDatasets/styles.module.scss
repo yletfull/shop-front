@@ -1,5 +1,12 @@
 @import '@/theme/include.scss';
 
+.wrapper {
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: 0 .5rem;
+  width: 7.5rem;
+}
+
 .button {
   @include button-reset();
 

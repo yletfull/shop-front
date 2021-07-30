@@ -50,15 +50,17 @@ const ConditionDatasets = function SegmentConditionDatasetsSelect({
 
   return (
     <Fragment>
-      <button
-        type="button"
-        className={styles.button}
-        onClick={handleModalOpen}
-      >
-        {isAny
-          ? 'любой'
-          : `${value.length} из ${options.length}`}
-      </button>
+      <span className={styles.wrapper}>
+        <button
+          type="button"
+          className={styles.button}
+          onClick={handleModalOpen}
+        >
+          {isAny
+            ? 'любой'
+            : `${value.length} из ${options.length}`}
+        </button>
+      </span>
       {isModalShown && (
         <Modal
           title={`Датасеты с параметром «${attributeName}»`}
