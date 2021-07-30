@@ -10,6 +10,9 @@ export const getDatesRange = (from, to, unit = 'd') => {
     return [];
   }
   const diff = dayjs(to).diff(dayjs(from), unit);
+  if (diff < 0) {
+    return [];
+  }
   return [...Array(diff + 1).keys()]
     .map((i) => dayjs(from).add(i, unit));
 };
