@@ -1,9 +1,8 @@
+/* eslint "no-unused-vars": "off" */
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
@@ -27,6 +26,8 @@ import {
 import {
   getAreAttributesFetching,
   getAttributesTree,
+  getMapAttribute,
+  getMapProfileTitle,
   getConditions,
 } from './store/selectors';
 import {
@@ -44,11 +45,7 @@ import {
   getSegmentName,
   getSegmentStatistics,
 } from './selectors';
-import LogicOperator from './components/LogicOperator';
-import DropArea from './components/DropArea';
-import Condition from './components/Condition';
-import AttributesConstructor from './AttributesConstructor';
-import AttributesLabels from './AttributesLabels';
+import ConditionsEditor from './components/ConditionsEditor';
 import Params from './Params';
 import ParamsForm from './ParamsForm';
 import SelectFilePlatform from './SelectFilePlatform';
@@ -80,6 +77,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
   const areAttributesFetching = useSelector(getAreAttributesFetching);
   const attributesTree = useSelector(getAttributesTree);
+  const mapAttribute = useSelector(getMapAttribute);
+  const mapProfileTitle = useSelector(getMapProfileTitle);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
   const isSubmittingSegment = useSelector(getIsSubmittingSegment);
@@ -223,92 +222,12 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   return (
     <div className={styles.segmentsEdit}>
       <div className={styles.segmentsEditMain}>
-        <DndProvider backend={HTML5Backend}>
-          <AttributesConstructor isFetching={isFetchingSegment}>
-            <AttributesLabels
-              isVisible={conditions.length > 0}
-              labels={['Датасеты', 'Телефонов']}
-            />
-            {conditions.reduce((groupAcc, group, groupIndex, groups) => {
-              const groupKey = (key) => `group-${groupIndex}-${key}`;
-
-              return ([
-                ...groupAcc,
-                (groupIndex > 0) && (
-                  <LogicOperator
-                    key={groupKey('and')}
-                    type="and"
-                  />
-                ),
-                (
-                  <DropArea
-                    key={groupKey('drop')}
-                    group={groupIndex}
-                    index={-1}
-                    className={cx(groupIndex === 0 && styles.dropAreaFirst)}
-                    align="middle"
-                    onDrop={handleConditionDrop}
-                  />
-                ),
-                ...group.reduce((acc, condition, conditionIndex) => {
-                  const key = (k) => `attribute-${condition.clientId}-${k}`;
-
-                  return ([
-                    ...acc,
-                    (conditionIndex > 0) && (
-                      <LogicOperator
-                        key={key('or')}
-                        type="or"
-                      />
-                    ),
-                    (
-                      <DropArea
-                        key={key('drop')}
-                        group={groupIndex}
-                        index={conditionIndex}
-                        align={conditionIndex === 0 ? 'start' : 'middle'}
-                        onDrop={handleConditionDrop}
-                      />
-                    ),
-                    (
-                      <Condition
-                        key={key('itself')}
-                        attributeId={condition.id}
-                        datasetIds={condition.datasetIds}
-                        negation={condition.negation}
-                        equality={condition.equality}
-                        values={condition.values}
-                        groupIndex={groupIndex}
-                        index={conditionIndex}
-                        onChange={handleConditionChange}
-                        onRemove={handleConditionRemove}
-                      />
-                    ),
-                    (conditionIndex === group.length - 1) && (
-                      <DropArea
-                        key={key('drop-end')}
-                        group={groupIndex}
-                        index={conditionIndex + 1}
-                        align="end"
-                        onDrop={handleConditionDrop}
-                      />
-                    ),
-                  ]);
-                }, []),
-                (groupIndex === groups.length - 1) && (
-                  <DropArea
-                    key={groupKey('drop-end')}
-                    group={groupIndex + 1}
-                    index={-1}
-                    className={styles.dropAreaLast}
-                    align="middle"
-                    onDrop={handleConditionDrop}
-                  />
-                ),
-              ]);
-            }, [])}
-          </AttributesConstructor>
-        </DndProvider>
+        <ConditionsEditor
+          isFetching={isFetchingSegment}
+          conditions={conditions}
+          mapAttribute={mapAttribute}
+          mapProfileTitle={mapProfileTitle}
+        />
 
         <Params
           isFetching={areAttributesFetching}
