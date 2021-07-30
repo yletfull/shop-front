@@ -1,4 +1,5 @@
 import React from 'react';
+import CropAlt from './CropAlt';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
@@ -60,6 +61,7 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(CropAlt)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}

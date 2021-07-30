@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import Button from '@/components/Button';
+import IconCrop from '@/icons/CropAlt';
 import IconLogo from '@/icons/Logo';
 import IconLogout from '@/icons/Logout';
 import IconVK from '@/icons/Vk';
@@ -10,6 +11,11 @@ import { authSignOut } from '@/store/auth/actions';
 import styles from './styles.module.scss';
 
 const menuItems = [
+  {
+    title: '',
+    to: '/not-found',
+    icon: (<IconCrop />),
+  },
   {
     title: titles.upload,
     to: patchs.upload,
