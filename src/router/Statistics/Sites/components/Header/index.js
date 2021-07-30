@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconArrowChart from '@/icons/ArrowChart';
+import IconChartLine from '@/icons/ChartLine';
 import IconRocket from '@/icons/Rocket';
 import { TableRow, TableCell } from '@/components/Table';
 import SortButton from '@/router/Statistics/components/SortButton';
@@ -72,7 +72,7 @@ const StatisticsSitesHeader = function StatisticsSitesHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -84,7 +84,7 @@ const StatisticsSitesHeader = function StatisticsSitesHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
       <TableCell
         nowrap
@@ -96,7 +96,7 @@ const StatisticsSitesHeader = function StatisticsSitesHeader({
         nowrap
         width="1"
       >
-        <IconArrowChart className={styles.chart} />
+        <IconChartLine className={styles.chart} />
       </TableCell>
     </TableRow>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from './SVGIconContainer';
 
-const CaretDown = function IconCaretDown(props) {
+const CaretDownSolid = function IconCaretDownSolid(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -13,4 +13,4 @@ const CaretDown = function IconCaretDown(props) {
   );
 };
 
-export default CaretDown;
+export default CaretDownSolid;

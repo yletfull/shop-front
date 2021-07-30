@@ -5,6 +5,9 @@ import Equals from './Equals';
 import GreaterThanEqual from './GreaterThanEqual';
 import LessThanEqual from './LessThanEqual';
 import BarsLight from './BarsLight';
+import CaretUpSolid from './CaretUpSolid';
+import CaretDownSolid from './CaretDownSolid';
+import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
@@ -29,15 +32,11 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
-import Analytics from './Analytics';
-import ArrowChart from './ArrowChart';
-import CaretDown from './CaretDown';
-import CaretUp from './CaretUp';
 import ExclamationTriangle from './ExclamationTriangle';
 import RetweetAlt from './RetweetAlt';
-import Rocket from './Rocket';
-import ThumbsDown from './ThumbsDown';
-import ThumbsUp from './ThumbsUp';
+import RocketSolid from './RocketSolid';
+import ThumbsDownSolid from './ThumbsDownSolid';
+import ThumbsUpSolid from './ThumbsUpSolid';
 
 export default {
   title: 'Components/Icons',
@@ -81,6 +80,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(GreaterThanEqual)}
     {renderIcon(LessThanEqual)}
     {renderIcon(BarsLight)}
+    {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
@@ -105,15 +105,13 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
-    {renderIcon(Analytics)}
-    {renderIcon(ArrowChart)}
-    {renderIcon(CaretDown)}
-    {renderIcon(CaretUp)}
     {renderIcon(ExclamationTriangle)}
     {renderIcon(RetweetAlt)}
-    {renderIcon(Rocket)}
-    {renderIcon(ThumbsDown)}
-    {renderIcon(ThumbsUp)}
+    {renderIcon(RocketSolid)}
+    {renderIcon(ThumbsDownSolid)}
+    {renderIcon(ThumbsUpSolid)}
+    {renderIcon(CaretUpSolid)}
+    {renderIcon(CaretDownSolid)}
   </div>
 );
 Icons.storyName = 'Icons';
