@@ -7,6 +7,7 @@ import { equalities } from '../../constants';
 import Condition from '../Condition';
 import DropArea from './DropArea';
 import LogicOperator from './LogicOperator';
+import useModel from './use-model';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -43,18 +44,11 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
   readOnly,
   onChange,
 }) {
-  const handleConditionDrop = (...payload) => {
-    console.log('drop', { payload });
-    onChange(payload);
-  };
-  const handleConditionChange = (...payload) => {
-    console.log('change', { payload });
-    onChange(payload);
-  };
-  const handleConditionRemove = (...payload) => {
-    console.log('remove', { payload });
-    onChange(payload);
-  };
+  const {
+    handleConditionPatch,
+    handleConditionMove,
+    handleConditionRemove,
+  } = useModel(conditions, onChange);
 
   return (
     <div className={styles.wrapper}>
@@ -83,7 +77,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                 index={-1}
                 isFirst={groupIndex === 0}
                 align="middle"
-                onDrop={handleConditionDrop}
+                onDrop={handleConditionMove}
               />
             ),
             ...group.reduce((acc, condition, conditionIndex) => {
@@ -105,7 +99,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                     group={groupIndex}
                     index={conditionIndex}
                     align={conditionIndex === 0 ? 'start' : 'middle'}
-                    onDrop={handleConditionDrop}
+                    onDrop={handleConditionMove}
                   />
                 ),
                 (
@@ -121,7 +115,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                     index={conditionIndex}
                     attribute={attribute}
                     profileTitle={profileTitle}
-                    onChange={handleConditionChange}
+                    onChange={handleConditionPatch}
                     onRemove={handleConditionRemove}
                   />
                 ),
@@ -131,7 +125,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                     group={groupIndex}
                     index={conditionIndex + 1}
                     align="end"
-                    onDrop={handleConditionDrop}
+                    onDrop={handleConditionMove}
                   />
                 ),
               ]);
@@ -143,7 +137,7 @@ const ConditionsEditor = function SegmentsEditConditionsEditor({
                 index={-1}
                 isLast
                 align="middle"
-                onDrop={handleConditionDrop}
+                onDrop={handleConditionMove}
               />
             ),
           ]);

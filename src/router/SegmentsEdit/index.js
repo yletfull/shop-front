@@ -1,4 +1,3 @@
-/* eslint "no-unused-vars": "off" */
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,9 +17,7 @@ import store from './store/reducer';
 import {
   fetchAttributes,
   appendConditions,
-  moveCondition,
-  patchCondition,
-  removeCondition,
+  conditionsChange,
   fetchStatistics,
 } from './store/actions';
 import {
@@ -194,28 +191,13 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     setIsShowParams(false);
     dispatch(appendConditions(selectedAttributes));
   };
-  const handleConditionChange = (position, changes) => {
-    dispatch(patchCondition({ position, changes }));
-    dispatch(fetchStatistics());
-  };
-  const handleConditionDrop = (target, source) => {
-    const prevGroup = [...(conditions[source[0]] || [])];
-    dispatch(moveCondition({ source, target }));
 
-    const [sourceGroup] = source || [];
-    const [targetGroup, targetIndex] = target || [];
+  const handleConditionsChange = (nextConditions, meta = {}) => {
+    dispatch(conditionsChange(nextConditions));
 
-    if (sourceGroup === targetGroup) {
-      return;
-    }
-
-    if (targetIndex === -1 && prevGroup.length === 1) {
+    if (meta.shouldRequestStatistics) {
       dispatch(fetchStatistics());
     }
-  };
-  const handleConditionRemove = (position) => {
-    dispatch(removeCondition(position));
-    dispatch(fetchStatistics());
   };
 
   /* eslint-disable jsx-a11y/anchor-has-content, jsx-a11y/anchor-is-valid */
@@ -227,6 +209,7 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           conditions={conditions}
           mapAttribute={mapAttribute}
           mapProfileTitle={mapProfileTitle}
+          onChange={handleConditionsChange}
         />
 
         <Params
