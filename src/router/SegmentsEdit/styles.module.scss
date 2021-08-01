@@ -1,24 +1,9 @@
 @import '@/theme/include.scss';
 
-.segmentsEdit {
-  align-items: stretch;
-  display: flex;
-
-  &Aside {
-    padding: 0 1.5rem;
-    width: 18rem;
-  }
-
-  &Error {
-    color: $color-red-darkest;
-    display: inline-block;
-    font-size: .75rem;
-    padding: 1rem 0 0;
-  }
-
-  &Main {
-    flex-grow: 1;
-  }
+.aside {
+  align-self: flex-start;
+  position: sticky;
+  top: 0;
 
   &Title {
     font-size: .875rem;
@@ -26,25 +11,12 @@
     margin: 0;
     padding: .5rem 0;
 
-    &_level3 {
+    &Small {
       font-size: .75rem;
     }
-  }
-}
 
-.dropArea {
-  &First.dropAreaFirst {
-    margin-top: -.75rem;
+    &:not(:first-child) {
+      margin-top: 1em;
+    }
   }
-
-  &Last.dropAreaLast {
-    margin-top: .75rem;
-  }
-}
-
-.conditionsGroup {
-  background-color: $color-gray-lighter;
-  border-radius: .5rem;
-  padding: .5rem 0;
-  position: relative;
 }

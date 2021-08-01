@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import Grid, { GridCell } from '@/components/Grid';
 import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
 import TotalStatistics from '@/features/Segments/components/TotalStatistics';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
 import SaveForm from '@/features/Segments/components/SaveForm';
-import { namespace as NS } from '@/features/Segments/constants';
-import reducer from './reducer';
-import store from './store/reducer';
+import reducer from './store/reducer';
 import {
   fetchAttributes,
   conditionsChange,
@@ -25,28 +22,12 @@ import {
   getStatistics,
   getStatisticsError,
 } from './store/selectors';
-import {
-  fetchSegment,
-  resetSegment,
-} from './actions';
-import {
-  getIsFetchingSegment,
-  getSegmentId,
-} from './selectors';
 import service from './service';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
+const SegmentsNew = function SegmentsNewPage() {
   useEffect(() => {
-    injectReducer(store.NS, store);
+    injectReducer(reducer.NS, reducer);
   }, []);
 
   const dispatch = useDispatch();
@@ -54,36 +35,18 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(fetchAttributes());
   }, [dispatch]);
 
-  const { id: paramsSegmentId } = useParams();
-
   const areAttributesFetching = useSelector(getAreAttributesFetching);
   const attributesTree = useSelector(getAttributesTree);
 
-  const isFetchingSegment = useSelector(getIsFetchingSegment);
   const conditions = useSelector(getConditions);
-  const segmentId = useSelector(getSegmentId);
   const isStatisticsFetching = useSelector(getIsStatisticsFetching);
   const statistics = useSelector(getStatistics);
   const statisticsError = useSelector(getStatisticsError);
 
-  const isNewSegment = typeof paramsSegmentId === 'undefined';
-
   useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
+    dispatch(setHeader('Новый сегмент'));
+  }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(setHeader(isNewSegment
-      ? 'Новый сегмент'
-      : `${defaultTitle} #${segmentId || paramsSegmentId}`));
-  }, [dispatch, defaultTitle, isNewSegment, paramsSegmentId, segmentId]);
-
-  useEffect(() => {
-    if (!isNewSegment) {
-      dispatch(fetchSegment(paramsSegmentId));
-    }
-    return () => dispatch(resetSegment());
-  }, [dispatch, isNewSegment, paramsSegmentId]);
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
@@ -120,19 +83,24 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
   const handleRetryStatisticsFetch = () => dispatch(fetchStatistics());
 
   return (
-    <div className={styles.segmentsEdit}>
-      <div className={styles.segmentsEditMain}>
+    <Grid>
+      <GridCell
+        columns={9}
+      >
         <ConditionsEditor
-          isFetching={isFetchingSegment}
+          isFetching={false}
           conditions={conditions}
           isAttributesTreeFetching={areAttributesFetching}
           attributesTree={attributesTree}
           onChange={handleConditionsChange}
         />
-      </div>
+      </GridCell>
 
-      <div className={styles.segmentsEditAside}>
-        <h2 className={styles.segmentsEditTitle}>
+      <GridCell
+        columns={3}
+        className={styles.aside}
+      >
+        <h2 className={styles.asideTitle}>
           Итоговая выборка
         </h2>
 
@@ -145,8 +113,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
         <h3
           className={cx(
-            styles.segmentsEditTitle,
-            styles.segmentsEditTitle_level3,
+            styles.asideTitle,
+            styles.asideTitleSmall,
           )}
         >
           Файлы для площадок
@@ -159,8 +127,8 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
 
         <h3
           className={cx(
-            styles.segmentsEditTitle,
-            styles.segmentsEditTitle_level3,
+            styles.asideTitle,
+            styles.asideTitleSmall,
           )}
         >
           Сохранение сегмента
@@ -171,12 +139,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
           error={saveError}
           onSubmit={handleSaveFormSubmit}
         />
-      </div>
-    </div>
+      </GridCell>
+    </Grid>
   );
 };
 
-SegmentsEdit.propTypes = propTypes;
-SegmentsEdit.defaultProps = defaultProps;
-
-export default SegmentsEdit;
+export default SegmentsNew;
