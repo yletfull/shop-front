@@ -9,7 +9,7 @@ import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Modal from '@/components/Modal';
-import Pagination from '@/components/PagePagination';
+import Pagination from '@/components/Pagination';
 import {
   namespace as NS,
   queryParams,
@@ -175,7 +175,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       <Controls>
         <ControlsLink
           icon={(<IconPlus />)}
-          to="/segments/edit"
+          to="/segments/new"
         >
           Новый
           <br />
@@ -200,11 +200,9 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
       />
 
       <Pagination
-        page={pagination.currentPage}
-        numberOfPages={pagination.totalPages || 1}
-        numberOfVisiblePages={Math.min(5, pagination.totalPages || 1)}
-        isDisabled={isFetching}
-        onChangePage={handleChangePage}
+        currentPage={pagination.currentPage}
+        pagesTotal={pagination.totalPages || 1}
+        onPageSelect={handleChangePage}
       />
 
       {Boolean(downloadedSegment) && (
