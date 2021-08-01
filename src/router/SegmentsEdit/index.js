@@ -5,9 +5,11 @@ import { useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
-import {
-  namespace as NS,
-} from './constants';
+import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
+import TotalStatistics from '@/features/Segments/components/TotalStatistics';
+import ExportFiles from '@/features/Segments/components/ExportFiles';
+import SaveForm from '@/features/Segments/components/SaveForm';
+import { namespace as NS } from '@/features/Segments/constants';
 import reducer from './reducer';
 import store from './store/reducer';
 import {
@@ -31,10 +33,6 @@ import {
   getIsFetchingSegment,
   getSegmentId,
 } from './selectors';
-import ConditionsEditor from './components/ConditionsEditor';
-import TotalStatistics from './components/TotalStatistics';
-import ExportFiles from './components/ExportFiles';
-import SaveForm from './components/SaveForm';
 import service from './service';
 import styles from './styles.module.scss';
 

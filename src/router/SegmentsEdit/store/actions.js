@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createAction } from '@reduxjs/toolkit';
 import {
   equalities,
-} from '../constants';
+} from '@/features/Segments/constants';
 import service from '../service';
 import {
   getConditions,

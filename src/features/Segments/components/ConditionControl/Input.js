@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   attributeTypes,
-} from '../../constants';
+} from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {

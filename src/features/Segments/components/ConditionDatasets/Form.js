@@ -8,7 +8,7 @@ import Button from '@/components/Button';
 import InputCheckbox from '@/components/InputCheckbox';
 import InputRadio from '@/components/InputRadio';
 import Table, { TableRow, TableCell } from '@/components/Table';
-import { mapStatisticsEntities } from '../../utils';
+import { mapStatisticsEntities } from '@/features/Segments/utils';
 import styles from './styles.module.scss';
 
 const propTypes = {

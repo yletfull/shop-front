@@ -1,6 +1,6 @@
 import {
   mapEntityTypes,
-} from './constants';
+} from '@/features/Segments/constants';
 
 export const formatStatisticEntities = (entities) => {
   const reduceStatisticsEntities = (acc, cur) => {

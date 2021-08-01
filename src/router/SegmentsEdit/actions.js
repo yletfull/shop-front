@@ -5,7 +5,7 @@ import {
   equalityTypes,
   namespace as NS,
   segmentProps,
-} from './constants';
+} from '@/features/Segments/constants';
 import {
   formatSegmentAttributesListForRequest,
   formatStatisticEntities,

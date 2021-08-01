@@ -2,7 +2,7 @@ import React from 'react';
 import {
   attributeTypes,
   equalities,
-} from '../../constants';
+} from '@/features/Segments/constants';
 import ConditionControl from './index';
 
 export default {

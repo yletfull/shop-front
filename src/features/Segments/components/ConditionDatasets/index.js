@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal from '@/components/Modal';
-import { serializeValues } from '../../utils';
+import { serializeValues } from '@/features/Segments/utils';
 import Form from './Form';
 import styles from './styles.module.scss';
 

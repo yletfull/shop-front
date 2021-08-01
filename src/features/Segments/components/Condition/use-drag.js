@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
-import { dndTypes } from '../../constants';
+import { dndTypes } from '@/features/Segments/constants';
 
 const useConditionDrag = function useDragSegmentConditionHook({
   groupIndex,

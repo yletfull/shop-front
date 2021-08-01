@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { segmentProps } from './constants';
+import { segmentProps } from '@/features/Segments/constants';
 import {
   requestParams,
   requestSegment,

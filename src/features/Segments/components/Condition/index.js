@@ -6,7 +6,7 @@ import IconTimes from '@/icons/TimesLight';
 import {
   equalities,
   statisticsFields,
-} from '../../constants';
+} from '@/features/Segments/constants';
 import ConditionControl from '../ConditionControl';
 import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';

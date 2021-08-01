@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { formatNumber } from '@/utils/format';
 import IconSync from '@/icons/Sync';
 import Spinner from '@/components/Spinner';
-import { mapStatisticsEntities } from '../../utils';
+import { mapStatisticsEntities } from '@/features/Segments/utils';
 import styles from './styles.module.scss';
 
 const propTypes = {

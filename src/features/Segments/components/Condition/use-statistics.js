@@ -1,8 +1,8 @@
 import { useEffect, useCallback } from 'react';
 import api from '@/api';
 import useService from '@/hooks/use-service';
-import { equalities } from '../../constants';
-import { mapStatisticsEntities } from '../../utils';
+import { equalities } from '@/features/Segments/constants';
+import { mapStatisticsEntities } from '@/features/Segments/utils';
 
 const apiUrl = 'api/v1/external/ctor/api/v1/segments/stats/';
 

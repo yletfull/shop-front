@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {
   equalities,
   attributeTypes,
-} from '../../constants';
+} from '@/features/Segments/constants';
 import { serializeValues } from '../../utils';
 import NegationToggle from './NegationToggle';
 import OptionsList from './OptionsList';

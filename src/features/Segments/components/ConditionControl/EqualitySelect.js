@@ -5,7 +5,7 @@ import IconLessThanEqual from '@/icons/LessThanEqual';
 import IconGreaterThanEqual from '@/icons/GreaterThanEqual';
 import {
   equalities,
-} from '../../constants';
+} from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {

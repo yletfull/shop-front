@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { namespace as NS, segmentProps } from './constants';
+import { namespace as NS, segmentProps } from '@/features/Segments/constants';
 
 export const getIsFetchingSegment = (state) => (
   state[NS]?.isFetchingSegment || false);
