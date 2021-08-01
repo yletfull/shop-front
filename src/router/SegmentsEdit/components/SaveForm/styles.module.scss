@@ -1,0 +1,16 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  // style
+}
+
+.row {
+  & + & {
+    margin-top: .5rem;
+  }
+}
+
+.submit {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
