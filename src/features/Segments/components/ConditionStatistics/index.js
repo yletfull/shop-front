@@ -11,18 +11,16 @@ const propTypes = {
     phone: PropTypes.number,
     email: PropTypes.number,
   }).isRequired,
-  fields: PropTypes.arrayOf(PropTypes.oneOf(['phone', 'email'])),
   error: PropTypes.objectOf(PropTypes.any),
   onReload: PropTypes.func,
 };
 const defaultProps = {
   isFetching: false,
-  fields: ['phone', 'email'],
   error: null,
   onReload: null,
 };
 
-const allowedFields = ['phone', 'email'];
+const fields = ['phone', 'email'];
 
 const getErrorMessage = (error) => (
   [
@@ -34,7 +32,6 @@ const getErrorMessage = (error) => (
 const ConditionStatistics = function SegmentConditionStatistics({
   isFetching,
   data,
-  fields,
   error,
   onReload,
 }) {
@@ -70,16 +67,14 @@ const ConditionStatistics = function SegmentConditionStatistics({
         </span>
       )}
 
-      {allowedFields
-        .filter((field) => fields.includes(field))
-        .map((field) => (
-          <span
-            key={field}
-            className={styles.value}
-          >
-            {formatNumber(data[field] || 0)}
-          </span>
-        ))}
+      {fields.map((field) => (
+        <span
+          key={field}
+          className={styles.value}
+        >
+          {formatNumber(data[field] || 0)}
+        </span>
+      ))}
     </span>
   );
 };

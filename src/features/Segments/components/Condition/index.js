@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import IconBars from '@/icons/BarsLight';
 import IconTimes from '@/icons/TimesLight';
-import {
-  equalities,
-  statisticsFields,
-} from '@/features/Segments/constants';
+import { equalities } from '@/features/Segments/constants';
 import ConditionControl from '../ConditionControl';
 import ConditionDatasets from '../ConditionDatasets';
 import ConditionStatistics from '../ConditionStatistics';
@@ -161,7 +158,6 @@ const Condition = function SegmentEditorCondition({
 
       <ConditionStatistics
         {...statistics}
-        fields={statisticsFields}
         onReload={handleStatisticsReload}
       />
 

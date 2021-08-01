@@ -1,6 +1,5 @@
 import api from '@/api';
-
-const baseUrl = 'api/v1/external/ctor/api/v1';
+import { apiBaseUrl } from '@/features/Segments/constants';
 
 export const downloadSegment = ({
   adsPlatform,
@@ -20,7 +19,7 @@ export const downloadSegment = ({
       splitFilesCount: splitFilesCount || null,
     };
     return api.get(
-      `${baseUrl}/segments/${segmentId}/export/`,
+      `${apiBaseUrl}/segments/${segmentId}/export/`,
       { params },
     );
   }
@@ -51,7 +50,7 @@ export const downloadSegment = ({
 
   return api
     .post(
-      `${baseUrl}/segments/export/`,
+      `${apiBaseUrl}/segments/export/`,
       body,
       {
         responseType: 'blob',

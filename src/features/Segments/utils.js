@@ -27,9 +27,21 @@ export const mapStatisticsEntities = (data) => {
   };
 };
 
+export const mapConditionsForRequest = (conditions) => conditions
+  .map((group) => (
+    group.map((condition) => ({
+      attributeId: condition.attributeId || condition.id,
+      datasetIds: condition.datasetIds,
+      negation: condition.negation,
+      type: condition.equality,
+      values: condition.values,
+    }))
+  ));
+
 export default {
   getRandomString,
   checkHasOptions,
   serializeValues,
   mapStatisticsEntities,
+  mapConditionsForRequest,
 };

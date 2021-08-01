@@ -1,10 +1,14 @@
 import { useEffect, useCallback } from 'react';
 import api from '@/api';
 import useService from '@/hooks/use-service';
-import { equalities } from '@/features/Segments/constants';
-import { mapStatisticsEntities } from '@/features/Segments/utils';
-
-const apiUrl = 'api/v1/external/ctor/api/v1/segments/stats/';
+import {
+  apiBaseUrl,
+  equalities,
+} from '@/features/Segments/constants';
+import {
+  mapStatisticsEntities,
+  mapConditionsForRequest,
+} from '@/features/Segments/utils';
 
 const useStatistics = function useStatisticsSegmentConditionHook({
   attribute = {},
@@ -16,21 +20,12 @@ const useStatistics = function useStatisticsSegmentConditionHook({
 } = {}) {
   const service = useCallback((condition, options = {}) => {
     const body = {
-      conditions: [
-        [{
-          attribute: condition.attribute || {},
-          datasetIds: condition.datasetIds,
-          type: condition.equality,
-          negation: condition.negation,
-          attributeId: condition.attributeId,
-          values: condition.values,
-        }],
-      ],
+      conditions: mapConditionsForRequest([[condition]]),
       title: condition?.attribute?.attributeName || 'tmp',
     };
 
     return api
-      .post(apiUrl, body, options)
+      .post(`${apiBaseUrl}/segments/stats/`, body, options)
       .then((response) => response.data.data)
       .then(mapStatisticsEntities);
   }, []);

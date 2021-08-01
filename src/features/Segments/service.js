@@ -1,10 +1,10 @@
 import api from '@/api';
-
-const baseUrl = 'api/v1/external/ctor/api/v1';
+import { apiBaseUrl } from './constants';
+import { mapConditionsForRequest } from './utils';
 
 const fetchAttributes = function segmentsServiceFetchAttributes() {
   return api
-    .get(`${baseUrl}/attributes/`)
+    .get(`${apiBaseUrl}/attributes/`)
     .then((response) => response?.data?.data?.groups || []);
 };
 const fetchSegment = function serviceFetchSegment(id) {
@@ -12,36 +12,8 @@ const fetchSegment = function serviceFetchSegment(id) {
     return Promise.reject(new Error('`id` not found'));
   }
   return api
-    .get(`${baseUrl}/segments/${id}/`)
+    .get(`${apiBaseUrl}/segments/${id}/`)
     .then((response) => response.data.data);
-};
-
-const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
-  id,
-  data,
-) {
-  const url = id
-    ? `${baseUrl}/segments/${id}/export/`
-    : `${baseUrl}/segments/export/`;
-  const params = Object.keys(data).reduce((acc, key) => {
-    if (key === 'segment') {
-      return acc;
-    }
-    if (Array.isArray(data[key])) {
-      return ({ ...acc, [key]: data[key].join() });
-    }
-    return ({ ...acc, [key]: data[key] });
-  }, {});
-  return api({
-    data: !id ? data : {},
-    params: id ? params : {},
-    url,
-    method: id ? 'get' : 'post',
-    responseType: 'blob',
-  })
-    .then((response) => window
-      .URL
-      .createObjectURL(new Blob([response.data], { type: 'application/zip' })));
 };
 
 const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
@@ -49,7 +21,7 @@ const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
   options = {},
 ) {
   return api
-    .post(`${baseUrl}/segments/stats/`, data, options)
+    .post(`${apiBaseUrl}/segments/stats/`, data, options)
     .then((response) => response.data.data);
 };
 
@@ -59,18 +31,10 @@ const fetchStatistics = function segmentServiceFetchStatistics(
 ) {
   return api
     .post(
-      `${baseUrl}/segments/stats/`,
+      `${apiBaseUrl}/segments/stats/`,
       {
         title: title || 'new-segment',
-        conditions: conditions.map((group) => (
-          group.map((condition) => ({
-            attributeId: condition.id,
-            type: condition.equality,
-            negation: condition.negation,
-            values: condition.values,
-            datasetIds: condition.datasetIds,
-          }))
-        )),
+        conditions: mapConditionsForRequest(conditions),
       },
       options,
     )
@@ -82,5 +46,4 @@ export default {
   fetchStatistics,
   fetchSegment,
   fetchSegmentStatistics,
-  getSegmentDownloadLink,
 };
