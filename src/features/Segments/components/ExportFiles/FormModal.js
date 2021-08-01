@@ -203,7 +203,7 @@ const FormModal = function SegmentsExportFilesFormModal({
                     component={FormikInput}
                     className={styles.formInput}
                   />
-                  {shouldSplit && 'файлов'}
+                  {shouldSplit && 'идентификаторов'}
                 </span>
               </div>
 

@@ -56,14 +56,12 @@ const ExportFiles = function SegmentsExportFiles({
     setError(null);
 
     try {
-      const result = await downloadSegment({
+      await downloadSegment({
         ...values,
         segmentId,
         conditions,
         adsPlatform: selectedPlatform,
       });
-
-      console.log(result);
 
       setIsSubmitting(false);
     } catch (err) {

@@ -1,5 +1,6 @@
 import api from '@/api';
 import { apiBaseUrl } from '@/features/Segments/constants';
+import { mapConditionsForRequest } from '@/features/Segments/utils';
 
 export const downloadSegment = ({
   adsPlatform,
@@ -7,37 +8,44 @@ export const downloadSegment = ({
   conditions,
   fileName,
   entityTypes,
-  sampleRowSize,
+  sampleRowsSize,
   splitFilesCount,
 }) => {
+  const responseType = 'blob';
+  const downloadFileFromResponse = (response) => {
+    const href = window.URL.createObjectURL(
+      new Blob([response.data], { type: 'application/zip' }),
+    );
+
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.download = `${fileName}.zip`;
+    link.href = href;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (segmentId) {
     const params = {
       adsPlatform,
       fileName,
       entityTypes: entityTypes.join(','),
-      sampleRowSize: sampleRowSize || null,
+      sampleRowsSize: sampleRowsSize || null,
       splitFilesCount: splitFilesCount || null,
     };
-    return api.get(
-      `${apiBaseUrl}/segments/${segmentId}/export/`,
-      { params },
-    );
+    return api
+      .get(
+        `${apiBaseUrl}/segments/${segmentId}/export/`,
+        { params, responseType },
+      )
+      .then(downloadFileFromResponse);
   }
 
-  const segment = segmentId
-    ? { id: segmentId, title: 'export-segment' }
-    : {
-      conditions: conditions.map((group) => (
-        group.map((condition) => ({
-          attributeId: condition.id,
-          type: condition.equality,
-          negation: condition.negation,
-          values: condition.values,
-          datasetIds: condition.datasetIds,
-        }))
-      )),
-      title: 'export-segment',
-    };
+  const segment = {
+    conditions: mapConditionsForRequest(conditions),
+    title: 'export-segment',
+  };
 
   const body = {
     fileName,
@@ -45,30 +53,16 @@ export const downloadSegment = ({
     entityTypes,
     segment,
     splitFilesCount: splitFilesCount || 0,
-    sampleRowSize: sampleRowSize || 0,
+    sampleRowsSize: sampleRowsSize || 0,
   };
 
   return api
     .post(
       `${apiBaseUrl}/segments/export/`,
       body,
-      {
-        responseType: 'blob',
-      },
+      { responseType },
     )
-    .then((response) => {
-      const href = window.URL.createObjectURL(
-        new Blob([response.data], { type: 'application/zip' }),
-      );
-
-      const link = document.createElement('a');
-      link.target = '_blank';
-      link.download = `${fileName}.zip`;
-      link.href = href;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+    .then(downloadFileFromResponse);
 };
 
 export default {
