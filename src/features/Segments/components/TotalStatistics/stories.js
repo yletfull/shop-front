@@ -2,7 +2,7 @@ import React from 'react';
 import TotalStatistics from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/TotalStatistics',
+  title: 'Features/Segments/components/TotalStatistics',
   component: TotalStatistics,
 };
 

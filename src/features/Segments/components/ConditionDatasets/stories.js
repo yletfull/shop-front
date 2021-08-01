@@ -2,7 +2,7 @@ import React from 'react';
 import ConditionDatasets from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/ConditionDatasets',
+  title: 'Features/Segments/components/ConditionDatasets',
   component: ConditionDatasets,
 };
 

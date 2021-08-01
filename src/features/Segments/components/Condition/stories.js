@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Condition from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/Condition',
+  title: 'Features/Segments/components/Condition',
   component: Condition,
   decorators: [
     (Story) => (

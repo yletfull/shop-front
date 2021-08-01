@@ -2,7 +2,7 @@ import React from 'react';
 import AddAttributesModal from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/AddAttributesModal',
+  title: 'Features/Segments/components/AddAttributesModal',
   component: AddAttributesModal,
 };
 

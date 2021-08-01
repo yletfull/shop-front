@@ -61,7 +61,7 @@ const filterTree = (tree, search) => {
     .filter(({ attributes }) => (attributes.length > 0));
 };
 
-const AddAttributesModal = function SegmentsEditAddAttributesModal({
+const AddAttributesModal = function SegmentsAddAttributesModal({
   tree,
   isTreeFetching,
   title,

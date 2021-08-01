@@ -6,7 +6,7 @@ import {
 import ConditionControl from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/ConditionControl',
+  title: 'Features/Segments/components/ConditionControl',
   component: ConditionControl,
   argTypes: {
     type: {

@@ -53,7 +53,7 @@ const defaultProps = {
   onChange: () => {},
 };
 
-const ConditionsEditor = function SegmentsEditConditionsEditor({
+const ConditionsEditor = function SegmentsConditionsEditor({
   isFetching,
   conditions,
   isAttributesTreeFetching,

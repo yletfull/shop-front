@@ -2,7 +2,7 @@ import React from 'react';
 import SaveForm from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/SaveForm',
+  title: 'Features/Segments/components/SaveForm',
   component: SaveForm,
 };
 

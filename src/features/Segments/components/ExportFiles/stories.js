@@ -2,7 +2,7 @@ import React from 'react';
 import ExportFiles from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/ExportFiles',
+  title: 'Features/Segments/components/ExportFiles',
   component: ExportFiles,
 };
 

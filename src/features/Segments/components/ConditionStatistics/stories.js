@@ -2,7 +2,7 @@ import React from 'react';
 import ConditionStatistics from './index';
 
 export default {
-  title: 'Features/SegmentsEdit/components/ConditionStatistics',
+  title: 'Features/Segments/components/ConditionStatistics',
   component: ConditionStatistics,
 };
 
