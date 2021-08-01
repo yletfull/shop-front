@@ -6,17 +6,20 @@ import { withFormikField } from '@/components/formik';
 import Input from '@/components/Input';
 import InputTextarea from '@/components/InputTextarea';
 import Button from '@/components/Button';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import ConfirmModal from './ConfirmModal';
 import styles from './styles.module.scss';
 
 const propTypes = {
   className: PropTypes.string,
   isSaving: PropTypes.bool,
+  error: PropTypes.objectOf(PropTypes.any),
   onSubmit: PropTypes.func,
 };
 const defaultProps = {
   className: '',
   isSaving: false,
+  error: null,
   onSubmit: () => {},
 };
 
@@ -30,6 +33,7 @@ const initialFormValues = {
 const SaveForm = function SegmentsSaveForm({
   className,
   isSaving,
+  error,
   onSubmit,
 }) {
   const [isConfirmShown, setIsConfirmShown] = useState(false);
@@ -81,6 +85,12 @@ const SaveForm = function SegmentsSaveForm({
                   component={FormikTextarea}
                 />
               </div>
+              {Boolean(error) && (
+                <ErrorMessageBlock
+                  className={styles.row}
+                  error={error}
+                />
+              )}
               <div className={styles.row}>
                 <Button
                   type="submit"

@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
@@ -26,18 +26,16 @@ import {
 import {
   fetchSegment,
   resetSegment,
-  saveSegment,
 } from './actions';
 import {
   getIsFetchingSegment,
-  getIsSubmittingSegment,
   getSegmentId,
-  getSegmentName,
 } from './selectors';
 import ConditionsEditor from './components/ConditionsEditor';
 import TotalStatistics from './components/TotalStatistics';
 import ExportFiles from './components/ExportFiles';
-import SaveForm from './SaveForm';
+import SaveForm from './components/SaveForm';
+import service from './service';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -58,17 +56,14 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     dispatch(fetchAttributes());
   }, [dispatch]);
 
-  const history = useHistory();
   const { id: paramsSegmentId } = useParams();
 
   const areAttributesFetching = useSelector(getAreAttributesFetching);
   const attributesTree = useSelector(getAttributesTree);
 
   const isFetchingSegment = useSelector(getIsFetchingSegment);
-  const isSubmittingSegment = useSelector(getIsSubmittingSegment);
   const conditions = useSelector(getConditions);
   const segmentId = useSelector(getSegmentId);
-  const segmentName = useSelector(getSegmentName);
   const isStatisticsFetching = useSelector(getIsStatisticsFetching);
   const statistics = useSelector(getStatistics);
   const statisticsError = useSelector(getStatisticsError);
@@ -92,16 +87,28 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
     return () => dispatch(resetSegment());
   }, [dispatch, isNewSegment, paramsSegmentId]);
 
-  const handleSubmitSaveForm = ({ fileName }) => {
-    if (!fileName) {
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState(null);
+  const handleSaveFormSubmit = async ({ title, description }) => {
+    if (!title || isSaving) {
       return;
     }
-    const onSuccessCallback = () => history.push('/segments');
-    dispatch(saveSegment({
-      attributes: conditions,
-      id: isNewSegment ? paramsSegmentId : null,
-      title: fileName,
-    }, onSuccessCallback));
+
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+
+      await service.saveSegment({
+        title,
+        description,
+        conditions,
+      });
+
+      setIsSaving(false);
+    } catch (error) {
+      setSaveError(error);
+      setIsSaving(false);
+    }
   };
 
   const handleConditionsChange = (nextConditions, meta = {}) => {
@@ -162,9 +169,9 @@ const SegmentsEdit = function SegmentsEdit({ defaultTitle }) {
         </h3>
 
         <SaveForm
-          isDisabled={isFetchingSegment || isSubmittingSegment}
-          name={segmentName}
-          onSubmit={handleSubmitSaveForm}
+          isSaving={isSaving}
+          error={saveError}
+          onSubmit={handleSaveFormSubmit}
         />
       </div>
     </div>
