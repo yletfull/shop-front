@@ -118,6 +118,7 @@ const SegmentsDetails = function SegmentsDetailsPage() {
         </h3>
 
         <ExportFiles
+          defaultFileName={meta?.title || ''}
           segmentId={meta?.id || pathId}
           statistics={statistics}
         />
