@@ -1,8 +1,6 @@
 import axios from 'axios';
 import { createAction } from '@reduxjs/toolkit';
-import {
-  equalities,
-} from '@/features/Segments/constants';
+import { equalities } from '../constants';
 import service from '../service';
 import {
   getConditions,

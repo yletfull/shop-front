@@ -8,12 +8,12 @@ import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
 import TotalStatistics from '@/features/Segments/components/TotalStatistics';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
 import SaveForm from '@/features/Segments/components/SaveForm';
-import reducer from './store/reducer';
+import reducer from '@/features/Segments/store/reducer';
 import {
   fetchAttributes,
   conditionsChange,
   fetchStatistics,
-} from './store/actions';
+} from '@/features/Segments/store/actions';
 import {
   getAreAttributesFetching,
   getAttributesTree,
@@ -21,7 +21,7 @@ import {
   getIsStatisticsFetching,
   getStatistics,
   getStatisticsError,
-} from './store/selectors';
+} from '@/features/Segments/store/selectors';
 import service from './service';
 import styles from './styles.module.scss';
 
