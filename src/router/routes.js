@@ -11,9 +11,9 @@ const AudiencesDetails = lazy(() => import(
   './AudiencesDetails'
 ));
 const SegmentsEdit = lazy(() => import(
-  /* webpackChunkName: 'segments-edit' */
+  /* webpackChunkName: 'segments-new-page' */
   /* webpackMode: 'lazy' */
-  './SegmentsEdit'
+  '@/features/Segments/pages/New'
 ));
 const SegmentsList = lazy(() => import(
   /* webpackChunkName: 'segments-list' */
