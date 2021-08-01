@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
@@ -50,6 +51,7 @@ const SegmentsNew = function SegmentsNewPage() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
+  const history = useHistory();
   const handleSaveFormSubmit = async ({ title, description }) => {
     if (!title || isSaving) {
       return;
@@ -59,13 +61,15 @@ const SegmentsNew = function SegmentsNewPage() {
       setIsSaving(true);
       setSaveError(null);
 
-      await service.saveSegment({
+      const { id } = await service.saveSegment({
         title,
         description,
         conditions,
       });
 
       setIsSaving(false);
+
+      history.replace(`/segments/details/${id}`);
     } catch (error) {
       setSaveError(error);
       setIsSaving(false);
