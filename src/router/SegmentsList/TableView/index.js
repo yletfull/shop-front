@@ -10,8 +10,8 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
+import ExportFiles from '@/features/Segments/components/ExportFiles';
 import {
-  segmentDownloadPlatforms,
   mapSegmentEntityTypes,
 } from '../constants';
 import styles from './styles.module.scss';
@@ -36,14 +36,12 @@ const propTypes = {
     lastVersionDate: PropTypes.string,
   })),
   isFetching: PropTypes.bool,
-  onClickDownload: PropTypes.func,
   onSubmitFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
   isFetching: false,
-  onClickDownload: () => {},
   onSubmitFilter: () => {},
 };
 
@@ -51,7 +49,6 @@ const TableView = function TableView({
   queryParams,
   data,
   isFetching,
-  onClickDownload,
   onSubmitFilter,
 }) {
   const query = useQuery();
@@ -63,13 +60,6 @@ const TableView = function TableView({
     version: query.get(queryParams?.searchVersion) || '',
   };
 
-  const handleClickDownloadButton = (e) => {
-    const { id, title, type } = e?.target?.dataset || {};
-    if (!id || !type) {
-      return;
-    }
-    onClickDownload({ id, title, type });
-  };
   const handleSubmitForm = (values) => {
     const {
       id: searchId,
@@ -196,7 +186,7 @@ const TableView = function TableView({
                 {isFetching && (
                   <tr>
                     <td colSpan="8">
-                      <Spinner />
+                      <Spinner layout="block" />
                     </td>
                   </tr>
                 )}
@@ -221,25 +211,12 @@ const TableView = function TableView({
                       {row.totalPhonesCount ? formatNumber(row.totalPhonesCount) : '-'}
                     </td>
                     <td>
-                      {[
-                        { label: 'VK', value: segmentDownloadPlatforms.vk },
-                        { label: 'FB', value: segmentDownloadPlatforms.fb },
-                        { label: 'MailRu', value: segmentDownloadPlatforms.mail },
-                        { label: 'Яндекс', value: segmentDownloadPlatforms.yandex },
-                      ].map(({ label, value }) => (
-                        <Button
-                          key={value}
-                          appearance="control"
-                          data-id={row.id}
-                          data-title={row.title}
-                          data-type={value}
-                          onClick={handleClickDownloadButton}
-                        >
-                          <span className={styles.tableViewDownloadLabel}>
-                            {label}
-                          </span>
-                        </Button>
-                      ))}
+                      <ExportFiles
+                        hideIcons
+                        defaultFileName={row.title}
+                        segmentId={row.id}
+                        statistics={row?.entityTypesTotal || []}
+                      />
                     </td>
                     <td>
                       {row.newEntityTypeTotals
