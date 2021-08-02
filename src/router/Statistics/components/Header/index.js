@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconChartLine from '@/icons/ChartLine';
-import IconRocket from '@/icons/Rocket';
+import IconRocketSolid from '@/icons/RocketSolid';
 import IconThumbsUpSolid from '@/icons/ThumbsUpSolid';
 import IconThumbsDownSolid from '@/icons/ThumbsDownSolid';
 import IconRetweetAlt from '@/icons/RetweetAlt';
@@ -68,7 +68,7 @@ const StatisticsHeader = function StatisticsHeader({
         nowrap
         width="1"
       >
-        <IconRocket />
+        <IconRocketSolid />
       </TableCell>
       <TableCell
         nowrap
