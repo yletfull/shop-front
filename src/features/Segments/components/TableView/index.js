@@ -8,7 +8,6 @@ import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
-import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
 import {
@@ -30,19 +29,16 @@ const propTypes = {
     versionCount: PropTypes.number,
     lastVersionDate: PropTypes.string,
   })),
-  isFetching: PropTypes.bool,
   onSubmitFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
-  isFetching: false,
   onSubmitFilter: () => {},
 };
 
 const TableView = function TableView({
   data,
-  isFetching,
   onSubmitFilter,
 }) {
   const query = useQuery();
@@ -166,15 +162,6 @@ const TableView = function TableView({
                   Посл. версия
                 </TableCell>
               </TableRow>
-
-              {isFetching && (
-                <TableRow>
-                  <TableCell colSpan="8">
-                    <Spinner layout="block" />
-                  </TableCell>
-                </TableRow>
-              )}
-
               {data.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell>
