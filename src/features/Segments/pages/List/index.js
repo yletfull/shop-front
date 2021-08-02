@@ -13,7 +13,6 @@ import {
   queryParams,
   segmentEntityTypes,
 } from './constants';
-import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import styles from './styles.module.scss';
 
@@ -128,7 +127,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
 
   return (
     <div className={styles.segmentsList}>
-      <Controls>
+      <div className={styles.segmentsListControls}>
         <ControlsLink
           icon={(<IconPlus />)}
           to="/segments/new"
@@ -145,7 +144,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           <br />
           пользователя
         </ControlsLink>
-      </Controls>
+      </div>
 
       <TableView
         isFetching={isFetching}

@@ -1,6 +1,11 @@
 @import '@/theme/include.scss';
 
 .segmentsList {
+  &Controls {
+    align-items: center;
+    display: flex;
+  }
+
   &Error {
     color: $color-red-darkest;
     display: inline-block;
