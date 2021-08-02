@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
 import InputCheckbox from '@/components/InputCheckbox';
 import WithSpinner from '@/components/WithSpinner';
-import ErrorMessage from '../components/ErrorMessage';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import { lines, linesLabels, linesFactors } from './constants';
 import Chart from './Chart';
 import service from './service';
@@ -81,7 +81,7 @@ const EntityDynamics = function EntityDynamics({
         isFetching={isFetching}
       >
         {error && (
-          <ErrorMessage error={error} />
+          <ErrorMessageBlock error={error} />
         )}
         {!error && data && (
           <Fragment>

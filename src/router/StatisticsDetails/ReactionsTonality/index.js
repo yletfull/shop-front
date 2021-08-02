@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import { colors } from '../constants';
-import ErrorMessage from '../components/ErrorMessage';
 import Chart from './Chart';
 import service from './service';
 import styles from './styles.module.scss';
@@ -66,7 +66,7 @@ const ReactionsTonality = function ReactionsTonality({
         isFetching={isFetching}
       >
         {error && (
-          <ErrorMessage error={error} />
+          <ErrorMessageBlock error={error} />
         )}
         {!error && data && (
           <Chart
