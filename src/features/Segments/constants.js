@@ -26,3 +26,27 @@ export const entityTypes = {
   phones: 'PHONE',
   emails: 'EMAIL',
 };
+
+export const segmentEntityTypes = {
+  emails: 'EMAIL',
+  phones: 'PHONE',
+};
+export const mapSegmentEntityTypes = {
+  [segmentEntityTypes.emails]: 'E-mail',
+  [segmentEntityTypes.phones]: 'Телеф.',
+};
+
+export const segmentDownloadPlatforms = {
+  vk: 'VK',
+  fb: 'FACEBOOK',
+  mail: 'MAIL_RU',
+  yandex: 'YANDEX',
+};
+
+export const queryParams = {
+  searchId: 'id',
+  searchName: 'title',
+  searchNewEntities: 'isNewEntityAvailable',
+  searchVersion: 'versionCountFrom',
+  page: 'page',
+};

@@ -2,12 +2,6 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/external/ctor/api/v1';
 
-const fetchSegments = function serviceFetchSegments(params) {
-  return api
-    .get(`${baseUrl}/segments/`, { params })
-    .then((response) => response.data);
-};
-
 const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
   id,
   params,
@@ -25,6 +19,5 @@ const getSegmentDownloadLink = function serviceGetSegmentDownloadLink(
 };
 
 export default {
-  fetchSegments,
   getSegmentDownloadLink,
 };

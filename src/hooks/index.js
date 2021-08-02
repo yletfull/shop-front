@@ -1,3 +1,4 @@
+export { default as useQueryParams } from './use-query-params';
 export { default as useDebounce } from './use-debounce';
 export { default as useElementSize } from './use-element-size';
 export { default as useKeyPress } from './use-key-press';
