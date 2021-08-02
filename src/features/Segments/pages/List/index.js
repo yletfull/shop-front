@@ -10,10 +10,7 @@ import Pagination from '@/components/Pagination';
 import ControlsLink from '@/features/Segments/components/ControlsLink';
 import TableView from '@/features/Segments/components/TableView';
 import service from '@/features/Segments/service';
-import {
-  queryParams,
-  segmentEntityTypes,
-} from './constants';
+import { queryParams, segmentEntityTypes } from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
