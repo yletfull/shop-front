@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { useQuery } from '@/hooks';
-import { injectReducer } from '@/store';
+import { useQuery, useService } from '@/hooks';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Pagination from '@/components/Pagination';
+import service from '@/features/Segments/service';
 import {
-  namespace as NS,
   queryParams,
+  segmentEntityTypes,
 } from './constants';
-import reducer from './reducer';
-import {
-  fetchSegments,
-} from './actions';
-import {
-  getTableData,
-  getPagination,
-  getIsFetchingData,
-} from './selectors';
 import Controls from './Controls';
 import ControlsLink from './ControlsLink';
 import TableView from './TableView';
@@ -40,9 +31,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   const history = useHistory();
   const query = useQuery();
 
-  const isFetching = useSelector(getIsFetchingData);
-  const tableData = useSelector(getTableData);
-  const pagination = useSelector(getPagination);
+  const { fetch, data, isFetching } = useService({
+    initialData: {
+      data: [],
+      meta: {},
+    },
+    service: service.fetchSegmentsList,
+  });
 
   const querySearchName = query.get(queryParams.searchName) || '';
   const querySearchId = query.get(queryParams.searchId) || '';
@@ -55,30 +50,60 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   ] = useState(query.get(queryParams.page) || 1);
 
   useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
-
-  useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
   useEffect(() => {
-    dispatch(fetchSegments({
+    fetch({
       currentPage: queryCurrentPage,
       id: querySearchId,
       title: querySearchName,
       isNewEntityAvailable: querySearchNewEntities,
       versionCountFrom: querySearchVersion,
       versionCountTo: querySearchVersion,
-    }));
+    });
   }, [
-    dispatch,
+    fetch,
     queryCurrentPage,
     querySearchId,
     querySearchName,
     querySearchNewEntities,
     querySearchVersion,
   ]);
+
+  const tableData = useMemo(() => {
+    const mapTableData = (d) => {
+      let totalEmailsCount = 0;
+      let totalPhonesCount = 0;
+
+      const { entityTypesTotal } = d || {};
+
+      if (entityTypesTotal && Array.isArray(entityTypesTotal)) {
+        entityTypesTotal.forEach(({ entityType, total }) => {
+          switch (entityType) {
+            case segmentEntityTypes.emails:
+              totalEmailsCount = total;
+              break;
+            case segmentEntityTypes.phones:
+              totalPhonesCount = total;
+              break;
+            default:
+              break;
+          }
+        });
+      }
+
+      return ({
+        ...d,
+        totalEmailsCount,
+        totalPhonesCount,
+      });
+    };
+
+    return data.data.map(mapTableData);
+  }, [data]);
+
+  const pagination = data?.meta?.pagination || {};
 
   const handleChangePage = (page) => {
     setQueryCurrentPage(page);
