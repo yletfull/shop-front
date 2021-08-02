@@ -17,6 +17,7 @@ const shape = {
 const propTypes = {
   dateStart: PropTypes.string.isRequired,
   dateEnd: PropTypes.string.isRequired,
+  entity: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -63,6 +64,7 @@ const defaultProps = {
 const StatisticsList = function StatisticsList({
   dateStart,
   dateEnd,
+  entity,
   list,
   pagination,
   sort,
@@ -122,7 +124,7 @@ const StatisticsList = function StatisticsList({
                   dateStart={dateStart}
                   dateEnd={dateEnd}
                   key={item.id}
-                  entity="tasks"
+                  entity={entity}
                   id={item.id}
                   index={item.index}
                   indexDiff={item.indexDiff}
