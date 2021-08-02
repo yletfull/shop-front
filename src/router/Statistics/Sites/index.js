@@ -42,6 +42,7 @@ const StatisticsSitesScreen = function StatisticsSitesScreen() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    query.set('currentPage', 1);
     query.set('search', filter.search);
     history.push({ search: query.toString() });
   };

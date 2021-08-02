@@ -36,6 +36,7 @@ const StatisticsSpheres = function StatisticsSpheresScreen() {
   };
 
   const handleFormSubmit = (values) => {
+    query.set('currentPage', 1);
     query.set('search', values.search);
     history.push({ search: query.toString() });
   };

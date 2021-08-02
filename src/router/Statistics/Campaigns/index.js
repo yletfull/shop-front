@@ -36,6 +36,7 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
   };
 
   const handleFormSubmit = (values) => {
+    query.set('currentPage', 1);
     query.set('search', values.search);
     history.push({ search: query.toString() });
   };
