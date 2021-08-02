@@ -7,6 +7,7 @@ import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Pagination from '@/components/Pagination';
+import WithSpinner from '@/components/WithSpinner';
 import ControlsLink from '@/features/Segments/components/ControlsLink';
 import TableView from '@/features/Segments/components/TableView';
 import service from '@/features/Segments/service';
@@ -123,39 +124,45 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.segmentsList}>
-      <div className={styles.segmentsListControls}>
-        <ControlsLink
-          icon={(<IconPlus />)}
-          to="/segments/new"
-        >
-          Новый
-          <br />
-          сегмент
-        </ControlsLink>
-        <ControlsLink
-          icon={(<IconSearch />)}
-          to="/"
-        >
-          Найти
-          <br />
-          пользователя
-        </ControlsLink>
+    <WithSpinner
+      layout="block"
+      isFetching={isFetching}
+      className={styles.spinnerOverlay}
+    >
+      <div className={styles.segmentsList}>
+        <div className={styles.segmentsListControls}>
+          <ControlsLink
+            icon={(<IconPlus />)}
+            to="/segments/new"
+          >
+            Новый
+            <br />
+            сегмент
+          </ControlsLink>
+          <ControlsLink
+            icon={(<IconSearch />)}
+            to="/"
+          >
+            Найти
+            <br />
+            пользователя
+          </ControlsLink>
+        </div>
+
+        <TableView
+          isFetching={isFetching}
+          queryParams={queryParams}
+          data={tableData}
+          onSubmitFilter={handleSubmitTableFilterForm}
+        />
+
+        <Pagination
+          currentPage={pagination.currentPage}
+          pagesTotal={pagination.totalPages || 1}
+          onPageSelect={handleChangePage}
+        />
       </div>
-
-      <TableView
-        isFetching={isFetching}
-        queryParams={queryParams}
-        data={tableData}
-        onSubmitFilter={handleSubmitTableFilterForm}
-      />
-
-      <Pagination
-        currentPage={pagination.currentPage}
-        pagesTotal={pagination.totalPages || 1}
-        onPageSelect={handleChangePage}
-      />
-    </div>
+    </WithSpinner>
   );
 };
 
