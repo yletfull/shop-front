@@ -4,7 +4,7 @@ import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
 import { useService } from '@/hooks';
 import WidthSpinner from '@/components/WithSpinner';
-import ErrorMessage from '../components/ErrorMessage';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import Header from '../components/Header';
 import FilterRow from '../components/FilterRow';
 import TableRow from '../components/TableRow';
@@ -85,7 +85,7 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
         isFetching={isFetching}
       />
       {error && (
-        <ErrorMessage
+        <ErrorMessageBlock
           key="error-message"
           error={error}
         />
