@@ -88,6 +88,7 @@ const StatisticsPlatforms = function StatisticsPlatformsScreen() {
       <StatisticsList
         dateStart={dateStart}
         dateEnd={dateEnd}
+        entity="platforms"
         list={list}
         pagination={meta?.pagination}
         sort={meta?.sort}

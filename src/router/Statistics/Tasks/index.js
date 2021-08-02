@@ -88,6 +88,7 @@ const StatisticsTasks = function StatisticsTasksScreen() {
       <StatisticsList
         dateStart={dateStart}
         dateEnd={dateEnd}
+        entity="tasks"
         list={list}
         pagination={meta?.pagination}
         sort={meta?.sort}
