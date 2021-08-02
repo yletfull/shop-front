@@ -1,5 +1,9 @@
 @import '@/theme/include.scss';
 
+.wrapper {
+  position: relative;
+}
+
 .segmentsList {
   &Controls {
     align-items: center;
