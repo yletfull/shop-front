@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Table from '@/components/Table';
 import Pagination from '@/components/Pagination';
+import EmptyTableRow from '../EmptyTableRow';
 import Header from './components/Header';
 import FilterRow from './components/FilterRow';
 import TableRow from './components/TableRow';
-import EmptyTableRow from './components/EmptyTableRow';
 
 const countOptions = [10, 20, 30];
 
