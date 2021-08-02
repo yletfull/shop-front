@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { useQuery, useService } from '@/hooks';
+import { useQueryParams, useService } from '@/hooks';
 import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
@@ -11,7 +10,7 @@ import WithSpinner from '@/components/WithSpinner';
 import ControlsLink from '@/features/Segments/components/ControlsLink';
 import TableView from '@/features/Segments/components/TableView';
 import service from '@/features/Segments/service';
-import { queryParams, segmentEntityTypes } from '@/features/Segments/constants';
+import { segmentEntityTypes } from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -25,8 +24,7 @@ const defaultProps = {
 const SegmentsList = function SegmentsList({ defaultTitle }) {
   const dispatch = useDispatch();
 
-  const history = useHistory();
-  const query = useQuery();
+  const [params, setParams] = useQueryParams();
 
   const { fetch, data, isFetching } = useService({
     initialData: {
@@ -36,37 +34,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     service: service.fetchSegmentsList,
   });
 
-  const querySearchName = query.get(queryParams.searchName) || '';
-  const querySearchId = query.get(queryParams.searchId) || '';
-  const querySearchNewEntities = query.get(queryParams.searchNewEntities) || '';
-  const querySearchVersion = query.get(queryParams.searchVersion) || '';
-
-  const [
-    queryCurrentPage,
-    setQueryCurrentPage,
-  ] = useState(query.get(queryParams.page) || 1);
-
   useEffect(() => {
     dispatch(setHeader(defaultTitle));
   }, [dispatch, defaultTitle]);
 
   useEffect(() => {
-    fetch({
-      currentPage: queryCurrentPage,
-      id: querySearchId,
-      title: querySearchName,
-      isNewEntityAvailable: querySearchNewEntities,
-      versionCountFrom: querySearchVersion,
-      versionCountTo: querySearchVersion,
-    });
-  }, [
-    fetch,
-    queryCurrentPage,
-    querySearchId,
-    querySearchName,
-    querySearchNewEntities,
-    querySearchVersion,
-  ]);
+    fetch(params);
+  }, [fetch, params]);
 
   const tableData = useMemo(() => {
     const mapTableData = (d) => {
@@ -100,12 +74,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     return data.data.map(mapTableData);
   }, [data]);
 
-  const pagination = data?.meta?.pagination || {};
+  const { pagination } = data?.meta || {};
 
-  const handleChangePage = (page) => {
-    setQueryCurrentPage(page);
-    query.set(queryParams.page, String(page));
-    history.push({ search: query.toString() });
+  const handleChangePage = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ currentPage: value });
   };
   const handleSubmitTableFilterForm = ({
     searchId,
@@ -113,14 +88,15 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     searchNewEntities,
     searchVersion,
   }) => {
-    query.set(queryParams.searchId, String(searchId || ''));
-    query.set(queryParams.searchName, String(searchName || ''));
-    query.set(
-      queryParams.searchNewEntities,
-      String(['0', '1'].includes(searchNewEntities) ? searchNewEntities : ''),
-    );
-    query.set(queryParams.searchVersion, String(searchVersion || ''));
-    history.push({ search: query.toString() });
+    setParams({
+      id: String(searchId),
+      title: searchName,
+      isNewEntityAvailable: String(['0', '1'].includes(searchNewEntities)
+        ? searchNewEntities
+        : ''),
+      versionCountFrom: String(searchVersion),
+      versionCountTo: String(searchVersion),
+    });
   };
 
   return (
@@ -151,14 +127,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
 
         <TableView
           isFetching={isFetching}
-          queryParams={queryParams}
           data={tableData}
           onSubmitFilter={handleSubmitTableFilterForm}
         />
 
         <Pagination
-          currentPage={pagination.currentPage}
-          pagesTotal={pagination.totalPages || 1}
+          currentPage={pagination?.currentPage || 1}
+          pagesTotal={pagination?.totalPages || 1}
           onPageSelect={handleChangePage}
         />
       </div>

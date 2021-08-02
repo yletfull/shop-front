@@ -47,6 +47,6 @@ export const queryParams = {
   searchId: 'id',
   searchName: 'title',
   searchNewEntities: 'isNewEntityAvailable',
-  searchVersion: 'versionCount',
+  searchVersion: 'versionCountFrom',
   page: 'page',
 };

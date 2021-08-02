@@ -11,16 +11,13 @@ import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
-import { mapSegmentEntityTypes } from '@/features/Segments/constants';
+import {
+  queryParams,
+  mapSegmentEntityTypes,
+} from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  queryParams: PropTypes.shape({
-    searchId: PropTypes.string,
-    searchName: PropTypes.string,
-    searchNewEntities: PropTypes.string,
-    searchVersion: PropTypes.string,
-  }).isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string,
@@ -44,7 +41,6 @@ const defaultProps = {
 };
 
 const TableView = function TableView({
-  queryParams,
   data,
   isFetching,
   onSubmitFilter,
