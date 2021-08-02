@@ -7,13 +7,13 @@ import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import Pagination from '@/components/Pagination';
+import ControlsLink from '@/features/Segments/components/ControlsLink';
 import TableView from '@/features/Segments/components/TableView';
 import service from '@/features/Segments/service';
 import {
   queryParams,
   segmentEntityTypes,
 } from './constants';
-import ControlsLink from './ControlsLink';
 import styles from './styles.module.scss';
 
 const propTypes = {
