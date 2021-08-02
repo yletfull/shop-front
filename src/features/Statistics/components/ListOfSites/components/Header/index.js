@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconChartLine from '@/icons/ChartLine';
-import IconRocket from '@/icons/Rocket';
+import IconRocketSolid from '@/icons/RocketSolid';
 import { TableRow, TableCell } from '@/components/Table';
-import SortButton from '@/router/Statistics/components/SortButton';
+import SortButton from '@/features/Statistics/components/SortButton';
 import styles from './styles.module.scss';
 
 const directions = {
@@ -53,7 +53,7 @@ const StatisticsSitesHeader = function StatisticsSitesHeader({
         nowrap
         width="1"
       >
-        <IconRocket />
+        <IconRocketSolid />
       </TableCell>
       <TableCell
         nowrap

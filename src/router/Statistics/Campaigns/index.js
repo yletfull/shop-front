@@ -1,14 +1,9 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import Table from '@/components/Table';
-import Pagination from '@/components/Pagination';
+import StatisticsList from '@/features/Statistics/components/List';
 import { useService } from '@/hooks';
 import WidthSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import Header from '../components/Header';
-import FilterRow from '../components/FilterRow';
-import TableRow from '../components/TableRow';
-import EmptyTableRow from '../components/EmptyTableRow';
 import service from '../service';
 import styles from '../styles.module.scss';
 
@@ -40,9 +35,9 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
     history.push({ search: query.toString() });
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    query.set('search', filter.search);
+  const handleFormSubmit = (values) => {
+    query.set('currentPage', 1);
+    query.set('search', values.search);
     history.push({ search: query.toString() });
   };
 
@@ -75,7 +70,7 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
 
   const { data, meta } = response?.data || {};
 
-  const list = data || [];
+  const list = data || null;
 
   return (
     <div className={styles.page}>
@@ -90,60 +85,19 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
           error={error}
         />
       )}
-      <form
-        key="form"
-        onSubmit={handleFormSubmit}
-      >
-        <Table
-          header={(
-            <Fragment>
-              <FilterRow
-                values={filter}
-                onChange={handleFilterChange}
-              />
-              <Header
-                sortDir={meta?.sort?.sortDir}
-                sortField={meta?.sort?.sortField}
-                onSortChange={handleSortChange}
-              />
-            </Fragment>
-          )}
-        >
-          {list.map((item) => (
-            <TableRow
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-              key={item.id}
-              entity="campaigns"
-              id={item.id}
-              index={item.index}
-              indexDiff={item.indexDiff}
-              name={item.name}
-              impressions={item.impressions}
-              clicks={item.clicks}
-              ctr={item.ctr}
-              positiveReactions={item.positiveReactions}
-              negativeReactions={item.negativeReactions}
-              repostsReactions={item.repostsReactions}
-              totalReactions={item.totalReactions}
-            />
-          ))}
-          {(!isFetching && list.length === 0) && (
-            <EmptyTableRow colSpan={17} />
-          )}
-        </Table>
-      </form>
-      {meta?.pagination && (
-        <Pagination
-          key="pagination"
-          pagesTotal={meta.pagination.totalPages}
-          currentPage={meta.pagination.currentPage}
-          count={meta.pagination.perPage}
-          countOptions={countOptions}
-          onPageSelect={handlePageSelect}
-          onCountSelect={handleCountSelect}
-        />
-      )}
+      <StatisticsList
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+        list={list}
+        pagination={meta?.pagination}
+        sort={meta?.sort}
+        filter={filter}
+        onFilterChange={handleFilterChange}
+        onPageSelect={handlePageSelect}
+        onCountSelect={handleCountSelect}
+        onSortChange={handleSortChange}
+        onFormSubmit={handleFormSubmit}
+      />
     </div>
   );
 };
