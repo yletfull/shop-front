@@ -12,7 +12,7 @@ import love from '@/images/facebook/love.svg';
 import sad from '@/images/facebook/sad.svg';
 import wow from '@/images/facebook/wow.svg';
 import WithSpinner from '@/components/WithSpinner';
-import ErrorMessage from '../components/ErrorMessage';
+import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import ReactionType from '../components/ReactionType';
 import service from '../service';
 import Chart from './Chart';
@@ -67,7 +67,7 @@ const ReactionsFacebook = function ReactionsFacebook({
         isFetching={isFetching}
       >
         {error
-          ? <ErrorMessage error={error} />
+          ? <ErrorMessageBlock error={error} />
           : (
             <div>
               <Chart
