@@ -13,6 +13,8 @@ import service from '@/features/Segments/service';
 import { segmentEntityTypes } from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
+const countOptions = [10, 20, 30];
+
 const propTypes = {
   defaultTitle: PropTypes.string,
 };
@@ -82,6 +84,17 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     }
     setParams({ currentPage: value });
   };
+
+  const handleCountSelect = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({
+      currentPage: 1,
+      perPage: value,
+    });
+  };
+
   const handleSubmitTableFilterForm = ({
     searchId,
     searchName,
@@ -100,11 +113,14 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   };
 
   return (
-    <WithSpinner
-      layout="block"
-      isFetching={isFetching}
-      className={styles.spinnerOverlay}
+    <div
+      className={styles.wrapper}
     >
+      <WithSpinner
+        layout="overlay"
+        isFetching={isFetching}
+        className={styles.spinnerOverlay}
+      />
       <div className={styles.segmentsList}>
         <div className={styles.segmentsListControls}>
           <ControlsLink
@@ -134,11 +150,13 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
         <Pagination
           currentPage={pagination?.currentPage || 1}
           pagesTotal={pagination?.totalPages || 1}
+          count={pagination?.perPage || countOptions[0]}
+          countOptions={countOptions}
           onPageSelect={handleChangePage}
-          onCountSelect={() => {}}
+          onCountSelect={handleCountSelect}
         />
       </div>
-    </WithSpinner>
+    </div>
   );
 };
 
