@@ -170,7 +170,7 @@ const TableView = function TableView({
                   <TableCell>
                     <Link
                       title={row.title}
-                      to={`/segments/edit/${row.id}`}
+                      to={`/segments/details/${row.id}`}
                     >
                       {row.title}
                     </Link>
