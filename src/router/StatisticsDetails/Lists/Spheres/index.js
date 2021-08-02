@@ -1,15 +1,10 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory, useLocation } from 'react-router-dom';
-import Table from '@/components/Table';
-import Pagination from '@/components/Pagination';
 import { useService } from '@/hooks';
+import StatisticsList from '@/features/Statistics/components/List';
 import WidthSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import Header from '../components/Header';
-import FilterRow from '../components/FilterRow';
-import TableRow from '../components/TableRow';
-import EmptyTableRow from '../components/EmptyTableRow';
 import service from '../service';
 import styles from '../styles.module.scss';
 
@@ -93,60 +88,20 @@ const StatisticsSpheres = function StatisticsSpheresScreen({
           error={error}
         />
       )}
-      <form
-        key="form"
-        onSubmit={handleFormSubmit}
-      >
-        <Table
-          header={(
-            <Fragment>
-              <FilterRow
-                values={filter}
-                onChange={handleFilterChange}
-              />
-              <Header
-                sortDir={meta?.sort?.sortDir}
-                sortField={meta?.sort?.sortField}
-                onSortChange={handleSortChange}
-              />
-            </Fragment>
-          )}
-        >
-          {list.map((item) => (
-            <TableRow
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-              key={item.id}
-              entity="spheres"
-              id={item.id}
-              index={item.index}
-              indexDiff={item.indexDiff}
-              name={item.name}
-              impressions={item.impressions}
-              clicks={item.clicks}
-              ctr={item.ctr}
-              positiveReactions={item.positiveReactions}
-              negativeReactions={item.negativeReactions}
-              repostsReactions={item.repostsReactions}
-              totalReactions={item.totalReactions}
-            />
-          ))}
-          {(!isFetching && list.length === 0) && (
-            <EmptyTableRow colSpan={17} />
-          )}
-        </Table>
-      </form>
-      {meta?.pagination && (
-        <Pagination
-          key="pagination"
-          pagesTotal={meta.pagination.totalPages}
-          currentPage={meta.pagination.currentPage}
-          count={meta.pagination.perPage}
-          countOptions={countOptions}
-          onPageSelect={handlePageSelect}
-          onCountSelect={handleCountSelect}
-        />
-      )}
+      <StatisticsList
+        dateStart={dateStart}
+        dateEnd={dateEnd}
+        entity="spheres"
+        list={list}
+        pagination={meta?.pagination}
+        sort={meta?.sort}
+        filter={filter}
+        onFilterChange={handleFilterChange}
+        onPageSelect={handlePageSelect}
+        onCountSelect={handleCountSelect}
+        onSortChange={handleSortChange}
+        onFormSubmit={handleFormSubmit}
+      />
     </div>
   );
 };
