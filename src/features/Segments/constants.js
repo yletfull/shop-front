@@ -26,3 +26,12 @@ export const entityTypes = {
   phones: 'PHONE',
   emails: 'EMAIL',
 };
+
+export const segmentEntityTypes = {
+  emails: 'EMAIL',
+  phones: 'PHONE',
+};
+export const mapSegmentEntityTypes = {
+  [segmentEntityTypes.emails]: 'E-mail',
+  [segmentEntityTypes.phones]: 'Телеф.',
+};

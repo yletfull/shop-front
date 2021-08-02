@@ -11,9 +11,7 @@ import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
-import {
-  mapSegmentEntityTypes,
-} from '../constants';
+import { mapSegmentEntityTypes } from '@/features/Segments/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
