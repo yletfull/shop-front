@@ -85,7 +85,7 @@ const TableView = function TableView({
               <TableRow>
                 <TableCell
                   data-purpose="filter"
-                  width="80"
+                  width="50"
                 >
                   <Field
                     name="id"
@@ -141,28 +141,28 @@ const TableView = function TableView({
               </TableRow>
 
               <TableRow type="header">
-                <TableCell>
+                <TableCell data-purpose="header">
                   ID
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Название
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   E-mail
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Телефонов
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Файлы
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Доступны новые идентиф.
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Версий
                 </TableCell>
-                <TableCell>
+                <TableCell data-purpose="header">
                   Посл. версия
                 </TableCell>
               </TableRow>

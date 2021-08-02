@@ -2,12 +2,18 @@
 
 .tableView {
   & td {
+    vertical-align: middle;
+
     &[data-purpose='filter'] {
       padding-right: 0;
 
       &:first-child {
         padding-left: 0;
       }
+    }
+
+    &[data-purpose='header'] {
+      white-space: nowrap;
     }
   }
 
