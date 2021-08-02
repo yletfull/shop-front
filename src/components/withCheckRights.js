@@ -42,7 +42,7 @@ const withCheckRights = function withCheckRights(Component) {
 
     return (
       <Component
-        readonly={!abilities[section]?.[action]}
+        readOnly={!abilities[section]?.[action]}
         {...props}
       />
     );
