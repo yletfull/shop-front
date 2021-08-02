@@ -135,6 +135,7 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
           currentPage={pagination?.currentPage || 1}
           pagesTotal={pagination?.totalPages || 1}
           onPageSelect={handleChangePage}
+          onCountSelect={() => {}}
         />
       </div>
     </WithSpinner>
