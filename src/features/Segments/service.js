@@ -25,6 +25,12 @@ const fetchSegmentStatistics = function serviceFetchSegmentStatistics(
     .then((response) => response.data.data);
 };
 
+const fetchSegmentsList = function serviceFetchSegmentsList(params) {
+  return api
+    .get(`${apiBaseUrl}/segments/`, { params })
+    .then((response) => response.data);
+};
+
 const fetchStatistics = function segmentServiceFetchStatistics(
   { conditions, title },
   options = {},
@@ -46,4 +52,5 @@ export default {
   fetchStatistics,
   fetchSegment,
   fetchSegmentStatistics,
+  fetchSegmentsList,
 };

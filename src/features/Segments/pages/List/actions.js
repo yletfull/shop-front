@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
+import service from '../../service';
 import { namespace as NS } from './constants';
 import { getMeta } from './selectors';
-import service from './service';
 
 export const requestData = createAction(`${NS}/request`);
 export const updateData = createAction(`${NS}/updateData`);
@@ -12,7 +12,7 @@ export const fetchSegments = (params) => async (dispatch) => {
   dispatch(updateMeta({}));
   dispatch(requestData());
   try {
-    const response = await service.fetchSegments(params);
+    const response = await service.fetchSegmentsList(params);
     const { data, meta } = response || {};
     dispatch(updateData(data || []));
     dispatch(updateMeta(meta || {}));
