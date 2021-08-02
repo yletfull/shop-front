@@ -23,7 +23,7 @@ const SegmentsNew = lazy(() => import(
 const SegmentsList = lazy(() => import(
   /* webpackChunkName: 'segments-list' */
   /* webpackMode: 'lazy' */
-  './SegmentsList'
+  '@/features/Segments/pages/List'
 ));
 const SegmentsUser = lazy(() => import(
   /* webpackChunkName: 'segments-user' */
