@@ -6,7 +6,7 @@ import IconThumbsUpSolid from '@/icons/ThumbsUpSolid';
 import IconThumbsDownSolid from '@/icons/ThumbsDownSolid';
 import IconRetweetAlt from '@/icons/RetweetAlt';
 import { TableRow, TableCell } from '@/components/Table';
-import SortButton from '../SortButton';
+import SortButton from '@/features/Statistics/components/SortButton';
 import styles from './styles.module.scss';
 
 const directions = {
