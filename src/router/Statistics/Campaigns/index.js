@@ -88,6 +88,7 @@ const StatisticsСampaigns = function StatisticsСampaignsScreen() {
       <StatisticsList
         dateStart={dateStart}
         dateEnd={dateEnd}
+        entity="campaigns"
         list={list}
         pagination={meta?.pagination}
         sort={meta?.sort}

@@ -88,6 +88,7 @@ const StatisticsSpheres = function StatisticsSpheresScreen() {
       <StatisticsList
         dateStart={dateStart}
         dateEnd={dateEnd}
+        entity="spheres"
         list={list}
         pagination={meta?.pagination}
         sort={meta?.sort}
