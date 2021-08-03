@@ -1,10 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { injectReducer } from '@/store';
-import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
+import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
 import {
   queryParams,
@@ -27,15 +26,7 @@ import CommonInfoCard from './CommonInfoCard';
 import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
+const AudiencesDetails = function AudiencesDetails() {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
@@ -50,7 +41,7 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   const [compareFilter, setCompareFilter] = useState({
     [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
   });
-  const [pageTitle, setPageTitle] = useState(defaultTitle || '');
+  const [pageTitle, setPageTitle] = useState();
 
   useEffect(() => {
     injectReducer(NS, reducer);
@@ -62,11 +53,6 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
       setPageTitle(`Аудитория «${title}»`);
     }
   }, [audienceDetails]);
-
-  useEffect(() => {
-    dispatch(setHeader(pageTitle));
-    return () => dispatch(setHeader(''));
-  }, [dispatch, pageTitle]);
 
   useEffect(() => {
     dispatch(fetchAudienceDetails(audienceId));
@@ -84,41 +70,46 @@ const AudiencesDetails = function AudiencesDetails({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.audienceDetails}>
-      {isFetchingAudienceDetails && (
-        <Spinner />
+    <AppMain
+      header={(
+        <div className={styles.header_title}>
+          {pageTitle}
+        </div>
       )}
+    >
+      <div className={styles.audienceDetails}>
+        {isFetchingAudienceDetails && (
+          <Spinner />
+        )}
 
-      {!isFetchingAudienceDetails && (
-        <Fragment>
-          <CommonInfo data={audienceDetails}>
-            <CommonInfoCard
-              label="Телефоны"
-              count={audienceDetails.phoneEntities || 0}
+        {!isFetchingAudienceDetails && (
+          <Fragment>
+            <CommonInfo data={audienceDetails}>
+              <CommonInfoCard
+                label="Телефоны"
+                count={audienceDetails.phoneEntities || 0}
+              />
+              <CommonInfoCard
+                label="E-mail"
+                count={audienceDetails.emailEntities || 0}
+              />
+            </CommonInfo>
+
+            <h2 className={styles.audienceDetailsHeader}>
+              Сравнение с глобальной аудиторией
+            </h2>
+
+            <ComparisonTable
+              isFetching={isFetchingAudienceCompare}
+              data={audienceCompare}
+              name={audienceDetails?.title || ''}
+              onFilter={handleFilterComparisonTable}
             />
-            <CommonInfoCard
-              label="E-mail"
-              count={audienceDetails.emailEntities || 0}
-            />
-          </CommonInfo>
-
-          <h2 className={styles.audienceDetailsHeader}>
-            Сравнение с глобальной аудиторией
-          </h2>
-
-          <ComparisonTable
-            isFetching={isFetchingAudienceCompare}
-            data={audienceCompare}
-            name={audienceDetails?.title || ''}
-            onFilter={handleFilterComparisonTable}
-          />
-        </Fragment>
-      )}
-    </div>
+          </Fragment>
+        )}
+      </div>
+    </AppMain>
   );
 };
-
-AudiencesDetails.propTypes = propTypes;
-AudiencesDetails.defaultProps = defaultProps;
 
 export default AudiencesDetails;
