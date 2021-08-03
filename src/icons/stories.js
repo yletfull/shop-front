@@ -5,6 +5,13 @@ import Equals from './Equals';
 import GreaterThanEqual from './GreaterThanEqual';
 import LessThanEqual from './LessThanEqual';
 import BarsLight from './BarsLight';
+import TvAlt from './TvAlt';
+import Cog from './Cog';
+import SignalStream from './SignalStream';
+import RubleSign from './RubleSign';
+import Tasks from './Tasks';
+import Analytics from './Analytics';
+import CropAlt from './CropAlt';
 import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
@@ -78,6 +85,13 @@ export const Icons = ({ color, size }) => (
     {renderIcon(GreaterThanEqual)}
     {renderIcon(LessThanEqual)}
     {renderIcon(BarsLight)}
+    {renderIcon(TvAlt)}
+    {renderIcon(Cog)}
+    {renderIcon(SignalStream)}
+    {renderIcon(RubleSign)}
+    {renderIcon(Tasks)}
+    {renderIcon(Analytics)}
+    {renderIcon(CropAlt)}
     {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}

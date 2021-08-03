@@ -1,12 +1,20 @@
 @import '@/theme/include.scss';
 
-.wrapper {
+.appHeader {
   align-items: center;
   display: flex;
-  margin: 0 auto 1.85rem;
+  margin: -1rem auto;
   max-width: 100%;
+  padding: 1rem 0;
   width: 100%;
   z-index: 10;
+
+  &Link {
+    color: $color-primary-darkest;
+    display: inline-block;
+    font-size: .75rem;
+    margin-right: 1rem;
+  }
 }
 
 .title {
