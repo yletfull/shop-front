@@ -5,7 +5,7 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import styles from './styles.module.scss';
 
-const Upload = function UploadScreen() {
+const Login = function LoginScreen() {
   const dispatch = useDispatch();
 
   const [login, setLogin] = useState('');
@@ -75,4 +75,4 @@ const Upload = function UploadScreen() {
   );
 };
 
-export default Upload;
+export default Login;
