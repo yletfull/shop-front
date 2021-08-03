@@ -1,4 +1,11 @@
 import React from 'react';
+import TvAlt from './TvAlt';
+import Cog from './Cog';
+import SignalStream from './SignalStream';
+import RubleSign from './RubleSign';
+import Tasks from './Tasks';
+import Analytics from './Analytics';
+import CropAlt from './CropAlt';
 import ChartLine from './ChartLine';
 import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
@@ -66,6 +73,13 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(TvAlt)}
+    {renderIcon(Cog)}
+    {renderIcon(SignalStream)}
+    {renderIcon(RubleSign)}
+    {renderIcon(Tasks)}
+    {renderIcon(Analytics)}
+    {renderIcon(CropAlt)}
     {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
