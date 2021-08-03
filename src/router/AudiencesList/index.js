@@ -55,7 +55,6 @@ const AudiencesList = function AudiencesList() {
   }, []);
 
   useEffect(() => {
-    console.log('Request Params', requestParams);
     dispatch(fetchAudiencesList(requestParams));
   }, [dispatch, requestParams]);
 
