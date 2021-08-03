@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { injectReducer } from '@/store';
 import { useQuery } from '@/hooks';
 import AppMain from '@/components/AppMain';
-import PagePagination from '@/components/PagePagination';
+import Pagination from '@/components/Pagination';
 import {
   queryParams,
   mapQueryParams,
@@ -21,6 +21,8 @@ import {
 } from './selectors';
 import TableView from './TableView';
 import styles from './styles.module.scss';
+
+const countOptions = [10, 20, 30];
 
 const AudiencesList = function AudiencesList() {
   const dispatch = useDispatch();
@@ -83,6 +85,16 @@ const AudiencesList = function AudiencesList() {
     changeQueryParams(params);
   };
 
+  const handleCountSelect = (value) => {
+    const params = {
+      ...requestParams,
+      perPage: value,
+      currentPage: 1,
+    };
+    setRequestParams(params);
+    changeQueryParams(params);
+  };
+
   return (
     <AppMain
       header={(
@@ -98,13 +110,17 @@ const AudiencesList = function AudiencesList() {
           onFilter={handleFilterTable}
         />
 
-        <PagePagination
-          page={pagination.currentPage || 1}
-          numberOfPages={pagination.totalPages || 1}
-          numberOfVisiblePages={5}
-          isDisabled={isFetching}
-          onChangePage={handleChangePage}
-        />
+        {pagination && (
+          <Pagination
+            key="pagination"
+            pagesTotal={pagination.totalPages}
+            currentPage={pagination.currentPage}
+            count={pagination.perPage}
+            countOptions={countOptions}
+            onPageSelect={handleChangePage}
+            onCountSelect={handleCountSelect}
+          />
+        )}
       </div>
     </AppMain>
   );
