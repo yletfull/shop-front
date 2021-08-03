@@ -19,71 +19,72 @@ import { patchs, titles } from '@/router/routes';
 import { authSignOut } from '@/store/auth/actions';
 import styles from './styles.module.scss';
 
+const urlNotFound = '/not-found';
 const menuItems = {
   top: [
     {
-      key: 'not-found-0',
+      key: 'segments',
       section: rights.sections.segment,
-      title: '',
-      to: '/not-found',
+      title: titles.segments,
+      to: patchs.segments || urlNotFound,
       icon: (<IconCrop />),
     },
     {
-      key: 'not-found-1',
+      key: 'audiences',
       section: '',
-      title: '',
-      to: '/not-found',
+      title: titles.audiencesList,
+      to: patchs.audiencesList || urlNotFound,
       icon: (<IconUsers />),
     },
     {
-      key: patchs.upload,
+      key: 'upload',
       section: '',
       title: titles.upload,
-      to: patchs.upload,
+      to: patchs.upload || urlNotFound,
       icon: (<IconVK />),
     },
     {
-      key: 'not-found-3',
+      key: 'statistics',
       section: rights.sections.stats,
-      title: '',
-      to: '/not-found',
+      title: titles.statistics,
+      to: patchs.statistics || urlNotFound,
       icon: (<IconAnalytics />),
     },
     {
-      key: 'not-found-4',
+      key: 'tasks',
       section: rights.sections.task,
       title: '',
-      to: '/not-found',
+      to: urlNotFound,
       icon: (<IconTasks />),
     },
     {
-      key: 'not-found-5',
+      key: 'money',
       section: '',
       title: '',
-      to: '/not-found',
+      to: urlNotFound,
       icon: (<IconRubleSign />),
     },
     {
-      key: 'not-found-6',
+      key: 'stream',
       section: '',
       title: '',
-      to: '/not-found',
+      to: urlNotFound,
       icon: (<IconSignalStream />),
     },
   ],
   bottom: [
     {
-      key: 'not-found-7',
+      key: 'settings',
       section: '',
       title: '',
-      to: '/not-found',
+      to: urlNotFound,
       icon: (<IconCog />),
     },
     {
-      key: 'not-found-8',
+      key: 'tv',
       section: '',
       title: '',
-      to: '/not-found',
+      to: urlNotFound,
       icon: (<IconTvAlt />),
     },
   ],
@@ -96,6 +97,7 @@ const AppAside = function AppAside() {
     dispatch(authSignOut());
   };
 
+  const filterAvailablePages = ({ to }) => to && to !== urlNotFound;
   const LinkWithCheckRights = withCheckRights(NavLink);
 
   return (
@@ -105,34 +107,38 @@ const AppAside = function AppAside() {
           <IconLogo />
         </div>
         <div className={styles.menuItems}>
-          {menuItems.top.map(({ key, icon, section, title, to }) => (
-            <LinkWithCheckRights
-              key={key}
-              section={section}
-              to={to}
-              title={title}
-              className={styles.menuItem}
-              activeClassName={styles.menuItemActive}
-            >
-              {icon}
-            </LinkWithCheckRights>
-          ))}
+          {menuItems.top
+            .filter(filterAvailablePages)
+            .map(({ key, icon, section, title, to }) => (
+              <LinkWithCheckRights
+                key={key}
+                section={section}
+                to={to}
+                title={title}
+                className={styles.menuItem}
+                activeClassName={styles.menuItemActive}
+              >
+                {icon}
+              </LinkWithCheckRights>
+            ))}
         </div>
       </div>
       <div className={styles.appAsideBottom}>
         <div className={styles.menuItems}>
-          {menuItems.bottom.map(({ key, icon, section, title, to }) => (
-            <LinkWithCheckRights
-              key={key}
-              section={section}
-              to={to}
-              title={title}
-              className={styles.menuItem}
-              activeClassName={styles.menuItemActive}
-            >
-              {icon}
-            </LinkWithCheckRights>
-          ))}
+          {menuItems.bottom
+            .filter(filterAvailablePages)
+            .map(({ key, icon, section, title, to }) => (
+              <LinkWithCheckRights
+                key={key}
+                section={section}
+                to={to}
+                title={title}
+                className={styles.menuItem}
+                activeClassName={styles.menuItemActive}
+              >
+                {icon}
+              </LinkWithCheckRights>
+            ))}
         </div>
         <Button
           appearance="control"
