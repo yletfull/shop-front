@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { useQueryParams, useService } from '@/hooks';
-import { setHeader } from '@/store/ui/actions';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
+import AppMain from '@/components/AppMain';
+import PageHeader from '@/components/PageHeader';
 import Pagination from '@/components/Pagination';
 import WithSpinner from '@/components/WithSpinner';
 import ControlsLink from '@/features/Segments/components/ControlsLink';
@@ -15,17 +14,10 @@ import styles from './styles.module.scss';
 
 const countOptions = [10, 20, 30];
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
+const propTypes = {};
+const defaultProps = {};
 
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const SegmentsList = function SegmentsList({ defaultTitle }) {
-  const dispatch = useDispatch();
-
+const SegmentsList = function SegmentsList() {
   const [params, setParams] = useQueryParams();
 
   const { fetch, data, isFetching } = useService({
@@ -35,10 +27,6 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
     },
     service: service.fetchSegmentsList,
   });
-
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
 
   useEffect(() => {
     fetch(params);
@@ -113,47 +101,55 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.segmentsList}>
-      <div className={styles.segmentsListControls}>
-        <ControlsLink
-          icon={(<IconPlus />)}
-          to="/segments/new"
-        >
-          Новый
-          <br />
-          сегмент
-        </ControlsLink>
-        <ControlsLink
-          icon={(<IconSearch />)}
-          to="/segments/user"
-        >
-          Найти
-          <br />
-          пользователя
-        </ControlsLink>
-      </div>
-      <div className={styles.wrapper}>
-        <WithSpinner
-          layout="overlay"
-          isFetching={isFetching}
-          className={styles.spinnerOverlay}
-        />
-        <TableView
-          isFetching={isFetching}
-          data={tableData}
-          onSubmitFilter={handleSubmitTableFilterForm}
-        />
+    <AppMain
+      header={(
+        <PageHeader>
+          Сегменты
+        </PageHeader>
+      )}
+    >
+      <div className={styles.segmentsList}>
+        <div className={styles.segmentsListControls}>
+          <ControlsLink
+            icon={(<IconPlus />)}
+            to="/segments/new"
+          >
+            Новый
+            <br />
+            сегмент
+          </ControlsLink>
+          <ControlsLink
+            icon={(<IconSearch />)}
+            to="/segments/user"
+          >
+            Найти
+            <br />
+            пользователя
+          </ControlsLink>
+        </div>
+        <div className={styles.wrapper}>
+          <WithSpinner
+            layout="overlay"
+            isFetching={isFetching}
+            className={styles.spinnerOverlay}
+          />
+          <TableView
+            isFetching={isFetching}
+            data={tableData}
+            onSubmitFilter={handleSubmitTableFilterForm}
+          />
 
-        <Pagination
-          currentPage={pagination?.currentPage || 1}
-          pagesTotal={pagination?.totalPages || 1}
-          count={pagination?.perPage || countOptions[0]}
-          countOptions={countOptions}
-          onPageSelect={handleChangePage}
-          onCountSelect={handleCountSelect}
-        />
+          <Pagination
+            currentPage={pagination?.currentPage || 1}
+            pagesTotal={pagination?.totalPages || 1}
+            count={pagination?.perPage || countOptions[0]}
+            countOptions={countOptions}
+            onPageSelect={handleChangePage}
+            onCountSelect={handleCountSelect}
+          />
+        </div>
       </div>
-    </div>
+    </AppMain>
   );
 };
 

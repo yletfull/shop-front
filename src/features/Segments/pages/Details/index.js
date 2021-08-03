@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
-import { setHeader } from '@/store/ui/actions';
+import AppMain from '@/components/AppMain';
 import Grid, { GridCell } from '@/components/Grid';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
+import PageHeader from '@/components/PageHeader';
 import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
 import TotalStatistics from '@/features/Segments/components/TotalStatistics';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
@@ -44,13 +45,10 @@ const SegmentsDetails = function SegmentsDetailsPage() {
   const statistics = useSelector(getStatistics);
   const statisticsError = useSelector(getStatisticsError);
 
-  useEffect(() => {
-    dispatch(setHeader('Детали сегмента'));
-  }, [dispatch]);
-
   const [isFetching, setIsFetching] = useState(false);
   const [meta, setMeta] = useState({});
   const [error, setError] = useState(null);
+  const [header, setHeader] = useState('Детали сегмента');
 
   const pathParams = useParams();
   const pathId = pathParams.id;
@@ -65,7 +63,7 @@ const SegmentsDetails = function SegmentsDetailsPage() {
 
         dispatch(conditionsChange(saved.conditions));
         dispatch(fetchStatistics());
-        dispatch(setHeader(`Детали сегмента «${saved.title}»`));
+        setHeader(`Детали сегмента «${saved.title}»`);
         setMeta(saved);
         setIsFetching(false);
       } catch (thrown) {
@@ -80,73 +78,82 @@ const SegmentsDetails = function SegmentsDetailsPage() {
   const handleRetryStatisticsFetch = () => dispatch(fetchStatistics());
 
   return (
-    <Grid>
-      <GridCell
-        columns={9}
-      >
-        <ConditionsEditor
-          readOnly
-          isFetching={isFetching || areAttributesFetching}
-          conditions={conditions}
-          isAttributesTreeFetching={areAttributesFetching}
-          attributesTree={attributesTree}
-        />
-      </GridCell>
-
-      <GridCell
-        columns={3}
-        className={styles.aside}
-      >
-        <h2 className={styles.asideTitle}>
-          Итоговая выборка
-        </h2>
-
-        <TotalStatistics
-          isFetching={isStatisticsFetching}
-          data={statistics}
-          error={statisticsError}
-          onRetry={handleRetryStatisticsFetch}
-        />
-
-        <h3
-          className={cx(
-            styles.asideTitle,
-            styles.asideTitleSmall,
-          )}
+    <AppMain
+      backTo="/segments"
+      header={(
+        <PageHeader>
+          {header || 'Детали сегмента'}
+        </PageHeader>
+      )}
+    >
+      <Grid>
+        <GridCell
+          columns={9}
         >
-          Файлы для площадок
-        </h3>
-
-        <ExportFiles
-          defaultFileName={meta?.title || ''}
-          segmentId={meta?.id || pathId}
-          statistics={statistics}
-        />
-
-        {Boolean(meta?.description) && (
-          <Fragment>
-            <h3
-              className={cx(
-                styles.asideTitle,
-                styles.asideTitleSmall,
-              )}
-            >
-              Описание сегмента
-            </h3>
-
-            <div className={styles.asideMeta}>
-              {meta.description}
-            </div>
-          </Fragment>
-        )}
-
-        {Boolean(error) && (
-          <ErrorMessageBlock
-            error={error}
+          <ConditionsEditor
+            readOnly
+            isFetching={isFetching || areAttributesFetching}
+            conditions={conditions}
+            isAttributesTreeFetching={areAttributesFetching}
+            attributesTree={attributesTree}
           />
-        )}
-      </GridCell>
-    </Grid>
+        </GridCell>
+
+        <GridCell
+          columns={3}
+          className={styles.aside}
+        >
+          <h2 className={styles.asideTitle}>
+            Итоговая выборка
+          </h2>
+
+          <TotalStatistics
+            isFetching={isStatisticsFetching}
+            data={statistics}
+            error={statisticsError}
+            onRetry={handleRetryStatisticsFetch}
+          />
+
+          <h3
+            className={cx(
+              styles.asideTitle,
+              styles.asideTitleSmall,
+            )}
+          >
+            Файлы для площадок
+          </h3>
+
+          <ExportFiles
+            defaultFileName={meta?.title || ''}
+            segmentId={meta?.id || pathId}
+            statistics={statistics}
+          />
+
+          {Boolean(meta?.description) && (
+            <Fragment>
+              <h3
+                className={cx(
+                  styles.asideTitle,
+                  styles.asideTitleSmall,
+                )}
+              >
+                Описание сегмента
+              </h3>
+
+              <div className={styles.asideMeta}>
+                {meta.description}
+              </div>
+            </Fragment>
+          )}
+
+          {Boolean(error) && (
+            <ErrorMessageBlock
+              error={error}
+            />
+          )}
+        </GridCell>
+      </Grid>
+    </AppMain>
   );
 };
 
