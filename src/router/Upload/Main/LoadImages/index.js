@@ -10,6 +10,7 @@ import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import Indicator from '@/components/Indicator';
+import Table, { TableCell, TableRow } from '@/components/Table';
 import {
   fetchImages, fetchDocuments, setUploadedImages, uploadImages,
 } from '@/store/upload/actions';
@@ -170,163 +171,161 @@ const LoadImagesTable = function LoadImagesTableScreen() {
   return (
     <div>
       <Header />
-      <table>
-        <tbody>
-          <tr filter="">
-            <td>
-              <Input
-                value={filter.num}
-                onInput={handleNumInput}
-                fullwidth
-                placeholder="№ строки"
-              />
-            </td>
-            <td colSpan="2">
-              <Input
-                value={filter.title}
-                onInput={handleTitleInput}
-                fullwidth
-                placeholder="Title"
-              />
-            </td>
-            <td>
-              <Select
-                value={filter.adFormat}
-                options={selectorMocksOptions}
-                resetText="Не выбрано"
-                placeholder="Ad_format"
-                onChange={handleAdFormatChange}
-                className={styles.select}
-                fullwidth
-              />
-            </td>
-            <td colSpan="4">
-              <Select
-                value={filter.banner}
-                options={selectorMocksOptions}
-                onChange={handleBannerChange}
-                resetText="Не выбрано"
-                placeholder="Banner"
-                className={styles.select}
-                fullwidth
-              />
-            </td>
-            <td>
-              <Button
-                onClick={handleFilterSubmit}
-                className={styles.filterSubmit}
-              >
-                Найти
-              </Button>
-            </td>
-          </tr>
+      <Table>
+        <TableRow filter="">
+          <TableCell>
+            <Input
+              value={filter.num}
+              onInput={handleNumInput}
+              fullwidth
+              placeholder="№ строки"
+            />
+          </TableCell>
+          <TableCell colSpan="2">
+            <Input
+              value={filter.title}
+              onInput={handleTitleInput}
+              fullwidth
+              placeholder="Title"
+            />
+          </TableCell>
+          <TableCell>
+            <Select
+              value={filter.adFormat}
+              options={selectorMocksOptions}
+              resetText="Не выбрано"
+              placeholder="Ad_format"
+              onChange={handleAdFormatChange}
+              className={styles.select}
+              fullwidth
+            />
+          </TableCell>
+          <TableCell colSpan="4">
+            <Select
+              value={filter.banner}
+              options={selectorMocksOptions}
+              onChange={handleBannerChange}
+              resetText="Не выбрано"
+              placeholder="Banner"
+              className={styles.select}
+              fullwidth
+            />
+          </TableCell>
+          <TableCell>
+            <Button
+              onClick={handleFilterSubmit}
+              className={styles.filterSubmit}
+            >
+              Найти
+            </Button>
+          </TableCell>
+        </TableRow>
 
-          <tr header="">
-            <td>
-              Image name
-            </td>
-            <td>
-              № строки
-            </td>
-            <td>
-              Title
-            </td>
-            <td>
-              Ad_format
-            </td>
-            <td>
-              Banner
-            </td>
-            <td>
-              File
-            </td>
-            <td />
-            <td />
-            <td>
-              Size
-            </td>
-          </tr>
+        <TableRow type="header">
+          <TableCell>
+            Image name
+          </TableCell>
+          <TableCell>
+            № строки
+          </TableCell>
+          <TableCell>
+            Title
+          </TableCell>
+          <TableCell>
+            Ad_format
+          </TableCell>
+          <TableCell>
+            Banner
+          </TableCell>
+          <TableCell>
+            File
+          </TableCell>
+          <TableCell />
+          <TableCell />
+          <TableCell>
+            Size
+          </TableCell>
+        </TableRow>
 
-          {imagesList.length
-            ? imagesList.map((image, ind) => (
-              <tr
-                content=""
-                key={ind}
-              >
-                <td>
-                  {image.imageName || '-'}
-                </td>
-                <td>
-                  {image.rowIndex || '-'}
-                </td>
-                <td>
-                  {image.campaignName || '-'}
-                </td>
-                <td>
-                  {image.adFormat || '-'}
-                </td>
-                <td>
-                  {image.imageFile ? '400x400' : '-'}
-                </td>
-                <td>
-                  {image.imageFile
-                    && (
-                      <img
-                        src={`/api/v1/document/${image.imageFile.id}/raw`}
-                        className={cx(styles.icon, styles.tableFileIcon)}
-                        alt="upload"
-                      />
-                    )}
-                </td>
-                <td>
-                  {image.imageFile
-                    && (
-                      <Button
-                        appearance="control"
-                        className={styles.tdButton}
-                        disabled
-                      >
-
-                        <TimesIcon className="red" />
-                      </Button>
-                    )}
-                </td>
-                <td>
-                  <Button
-                    appearance="control"
-                    disabled={fileIsLoading === image.imageName}
-                    data-filename={image.imageName}
-                    onClick={handleSelectFileButtonClick}
-                  >
-                    <UploadIcon />
-                  </Button>
-                </td>
-                <td>
-                  <div className={styles.indicatorWrapper}>
-                    {image.imageFile
-                      && (
-                        <span>
-                          480x480
-                        </span>
-                      )}
-
-                    <Indicator
-                      className={styles.indicator}
-                      color={image.imageFile ? 'green' : 'red'}
+        {imagesList.length
+          ? imagesList.map((image, ind) => (
+            <TableRow
+              content=""
+              key={ind}
+            >
+              <TableCell>
+                {image.imageName || '-'}
+              </TableCell>
+              <TableCell>
+                {image.rowIndex || '-'}
+              </TableCell>
+              <TableCell>
+                {image.campaignName || '-'}
+              </TableCell>
+              <TableCell>
+                {image.adFormat || '-'}
+              </TableCell>
+              <TableCell>
+                {image.imageFile ? '400x400' : '-'}
+              </TableCell>
+              <TableCell>
+                {image.imageFile
+                  && (
+                    <img
+                      src={`/api/v1/document/${image.imageFile.id}/raw`}
+                      className={cx(styles.icon, styles.tableFileIcon)}
+                      alt="upload"
                     />
-                  </div>
-                </td>
-              </tr>
-            ))
-            : (
-              <tr content="">
-                <td colSpan="9">
-                  Изображения не найдены
-                </td>
-              </tr>
-            )}
-        </tbody>
-      </table>
+                  )}
+              </TableCell>
+              <TableCell>
+                {image.imageFile
+                  && (
+                    <Button
+                      appearance="control"
+                      className={styles.tdButton}
+                      disabled
+                    >
+
+                      <TimesIcon className="red" />
+                    </Button>
+                  )}
+              </TableCell>
+              <TableCell>
+                <Button
+                  appearance="control"
+                  disabled={fileIsLoading === image.imageName}
+                  data-filename={image.imageName}
+                  onClick={handleSelectFileButtonClick}
+                >
+                  <UploadIcon />
+                </Button>
+              </TableCell>
+              <TableCell>
+                <div className={styles.indicatorWrapper}>
+                  {image.imageFile
+                    && (
+                      <span>
+                        480x480
+                      </span>
+                    )}
+
+                  <Indicator
+                    className={styles.indicator}
+                    color={image.imageFile ? 'green' : 'red'}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))
+          : (
+            <TableRow content="">
+              <TableCell colSpan="9">
+                Изображения не найдены
+              </TableCell>
+            </TableRow>
+          )}
+      </Table>
       <input
         type="file"
         id="fileInput"
