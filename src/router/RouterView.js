@@ -1,5 +1,5 @@
 import React, { Fragment, Suspense } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Redirect, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 import {
@@ -14,7 +14,7 @@ const RouterView = function RouterView() {
   const abilities = useSelector(getAbilitiesBySection);
   const hasUnlimitedAccess = useSelector(getHasUnlimitedAccess);
 
-  const checkRights = ({ rights }) => {
+  const pages = routes.filter(({ rights }) => {
     if (hasUnlimitedAccess) {
       return true;
     }
@@ -23,36 +23,42 @@ const RouterView = function RouterView() {
       return true;
     }
     return false;
-  };
+  });
 
   return (
     <Suspense fallback={(<Spinner />)}>
       <Switch>
-        {routes
-          .filter(checkRights)
-          .map(({ exact, path, title, Component }) => (
-            <Route
-              key={`h_${path}`}
-              path={path}
-              exact={Boolean(exact)}
-            >
-              {(props) => (
-                <Fragment>
-                  <Helmet defaultTitle="Вконтакт">
-                    {title && (
-                      <title>
-                        {title}
-                      </title>
-                    )}
-                  </Helmet>
-                  <Component
-                    defaultTitle={title}
-                    {...props}
-                  />
-                </Fragment>
-              )}
-            </Route>
-          ))}
+        {pages[0]?.path && (
+          <Route
+            path="/"
+            exact
+          >
+            <Redirect to={pages[0]?.path} />
+          </Route>
+        )}
+        {pages.map(({ exact, path, title, Component }) => (
+          <Route
+            key={`h_${path}`}
+            path={path}
+            exact={Boolean(exact)}
+          >
+            {(props) => (
+              <Fragment>
+                <Helmet defaultTitle="Вконтакт">
+                  {title && (
+                    <title>
+                      {title}
+                    </title>
+                  )}
+                </Helmet>
+                <Component
+                  defaultTitle={title}
+                  {...props}
+                />
+              </Fragment>
+            )}
+          </Route>
+        ))}
         <Route
           key="__any-route"
           path="*"
