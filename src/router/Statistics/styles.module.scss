@@ -1,7 +1,21 @@
 @import '@/theme/include.scss';
 
+.header {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+
+  &_title {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+}
+
+.navigation {
+  margin-top: 1rem;
+}
+
 .page {
-  padding-top: 2rem;
   position: relative;
 }
 
@@ -11,8 +25,4 @@
 
 .spinnerOverlay {
   background-color: rgba($color-gray-lightest, .5);
-}
-
-.dateInputs {
-  margin-bottom: 1em;
 }

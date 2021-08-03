@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import cx from 'classnames';
 import { useService } from '@/hooks';
-import { setHeader } from '@/store/ui/actions';
+import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
 import DateInputs from './components/DateInputs';
 import RouterView from './RouterView';
@@ -11,16 +10,7 @@ import { paths, titles } from './routes';
 import styles from './styles.module.scss';
 import service from './service';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const Statistics = function StatisticsScreen({ defaultTitle }) {
-  const dispatch = useDispatch();
+const Statistics = function StatisticsScreen() {
   const history = useHistory();
 
   const locationSearch = useLocation().search;
@@ -47,10 +37,6 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
   };
 
   useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
-
-  useEffect(() => {
     fetch();
   }, [fetch]);
 
@@ -72,41 +58,57 @@ const Statistics = function StatisticsScreen({ defaultTitle }) {
   }, [locationSearch, history, dateStart, dateEnd]);
 
   return (
-    <WithSpinner
-      layout="block"
-      isFetching={isFetching}
-      className={styles.spinnerOverlay}
+    <AppMain
+      header={(
+        <div
+          className={styles.header}
+        >
+          <div
+            className={styles.header_title}
+          >
+            Статистика
+          </div>
+          <DateInputs
+            className={styles.dateInputs}
+            min={datestart}
+            max={dateend}
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+            onSubmit={handleDateInputsSubmit}
+          />
+        </div>
+      )}
     >
-      <DateInputs
-        className={styles.dateInputs}
-        min={datestart}
-        max={dateend}
-        dateStart={dateStart}
-        dateEnd={dateEnd}
-        onSubmit={handleDateInputsSubmit}
-      />
-      <div className="nav-links-wrapper">
-        {Object.keys(paths)
-          .map((key) => (
-            <NavLink
-              key={key}
-              to={{
-                pathname: paths[key],
-                search: searchQuery.toString(),
-              }}
-              className="link-class_nav"
-              activeClassName="active-link-class_nav"
-            >
-              {titles[key]}
-            </NavLink>
-          ))}
-      </div>
-      <RouterView />
-    </WithSpinner>
+      <WithSpinner
+        layout="block"
+        isFetching={isFetching}
+        className={styles.spinnerOverlay}
+      >
+        <div
+          className={cx([
+            styles.navigation,
+            'nav-links-wrapper',
+          ])}
+        >
+          {Object.keys(paths)
+            .map((key) => (
+              <NavLink
+                key={key}
+                to={{
+                  pathname: paths[key],
+                  search: searchQuery.toString(),
+                }}
+                className="link-class_nav"
+                activeClassName="active-link-class_nav"
+              >
+                {titles[key]}
+              </NavLink>
+            ))}
+        </div>
+        <RouterView />
+      </WithSpinner>
+    </AppMain>
   );
 };
-
-Statistics.propTypes = propTypes;
-Statistics.defaultProps = defaultProps;
 
 export default Statistics;
