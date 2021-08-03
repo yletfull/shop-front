@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   NavLink,
   Redirect,
@@ -10,8 +9,9 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import PageHeader from '@/components/PageHeader';
+import AppMain from '@/components/AppMain';
 import { injectReducer } from '@/store';
-import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
 import { formatNumber } from '@/utils/format';
 import {
@@ -32,15 +32,10 @@ import SearchForm from './SearchForm';
 import Segments from './Segments';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
+const propTypes = {};
+const defaultProps = {};
 
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const SegmentsUser = function SegmentsUser({ defaultTitle }) {
+const SegmentsUser = function SegmentsUser() {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
@@ -59,10 +54,6 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   useEffect(() => {
     injectReducer(NS, reducer);
   }, []);
-
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
 
   useEffect(() => {
     if (!entity) {
@@ -99,53 +90,62 @@ const SegmentsUser = function SegmentsUser({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.segmentsUser}>
-      <SearchForm
-        user={entity || ''}
-        onSubmit={handleSearchFormSubmit}
-      />
+    <AppMain
+      backTo="/segments"
+      header={(
+        <PageHeader>
+          Поиск пользователя
+        </PageHeader>
+      )}
+    >
+      <div className={styles.segmentsUser}>
+        <SearchForm
+          user={entity || ''}
+          onSubmit={handleSearchFormSubmit}
+        />
 
-      <div className={styles.segmentsUserTabs}>
-        <NavLink
-          activeClassName={styles.segmentsUserLink_active}
-          className={styles.segmentsUserLink}
-          to={`${url}/${links.attributes}${search}`}
-        >
-          Атрибуты
-        </NavLink>
-        <NavLink
-          activeClassName={styles.segmentsUserLink_active}
-          className={styles.segmentsUserLink}
-          to={`${url}/${links.segments}${search}`}
-        >
-          Сегменты
-          &nbsp;
-          {Boolean(segmentsCount) && (
-            <span className={styles.segmentsUserLinkCount}>
-              {formatNumber(segmentsCount)}
-            </span>
-          )}
-        </NavLink>
+        <div className={styles.segmentsUserTabs}>
+          <NavLink
+            activeClassName={styles.segmentsUserLink_active}
+            className={styles.segmentsUserLink}
+            to={`${url}/${links.attributes}${search}`}
+          >
+            Атрибуты
+          </NavLink>
+          <NavLink
+            activeClassName={styles.segmentsUserLink_active}
+            className={styles.segmentsUserLink}
+            to={`${url}/${links.segments}${search}`}
+          >
+            Сегменты
+            &nbsp;
+            {Boolean(segmentsCount) && (
+              <span className={styles.segmentsUserLinkCount}>
+                {formatNumber(segmentsCount)}
+              </span>
+            )}
+          </NavLink>
+        </div>
+
+        <Switch>
+          <Route
+            path={path}
+            exact
+          >
+            <Redirect to={`${url}/${links.attributes}`} />
+          </Route>
+          <Route path={`${url}/${links.attributes}`}>
+            <Attributes />
+          </Route>
+          <Route path={`${url}/${links.segments}`}>
+            <Segments
+              onChangePage={handleChangeSegmentsPage}
+              onSubmitFilter={handleSubmitFilter}
+            />
+          </Route>
+        </Switch>
       </div>
-
-      <Switch>
-        <Route
-          path={path}
-          exact
-        >
-          <Redirect to={`${url}/${links.attributes}`} />
-        </Route>
-        <Route path={`${url}/${links.attributes}`}>
-          <Attributes />
-        </Route>
-        <Route path={`${url}/${links.segments}`}>
-          <Segments
-            onChangePage={handleChangeSegmentsPage}
-            onSubmitFilter={handleSubmitFilter}
-          />
-        </Route>
-      </Switch>
-    </div>
+    </AppMain>
   );
 };
 
