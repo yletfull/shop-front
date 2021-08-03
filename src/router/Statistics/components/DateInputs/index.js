@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import dayjs from '@/utils/day';
+import { formatDate } from '@/utils/format';
 import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
 import Input from '@/components/Input';
-import Button from '@/components/Button';
 import styles from './styles.module.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const isValidDate = (date) => dayjs(date).isValid();
 
 const propTypes = {
   min: PropTypes.string,
@@ -37,33 +38,29 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   onSubmit,
   ...props
 }) {
-  const [params, setParams] = useState({
-    dateStart,
-    dateEnd,
-  });
-
-  const canShiftToThePast = dayjs(params.dateStart).diff(dayjs(min)) > 0;
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(params.dateEnd)) > 0;
-
-  const updateParams = (newValue) => {
-    setParams({
-      ...params,
-      ...newValue,
-    });
-  };
+  const canShiftToThePast = dayjs(dateStart).diff(dayjs(min)) > 0;
+  const canShiftToTheFuture = dayjs(max).diff(dayjs(dateEnd)) > 0;
 
   const today = dayjs().format(DATE_FORMAT);
 
-  const handleParamsChange = (key) => (e) => {
-    updateParams({ [key]: e.target.value });
+  const handleParamsChange = (e) => {
+    const { name, value } = e?.target || {};
+    if (!name) {
+      return;
+    }
+    onSubmit({
+      dateStart,
+      dateEnd,
+      [name]: formatDate(value, DATE_FORMAT),
+    });
   };
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
       return;
     }
-    const minDate = dayjs(params.dateStart);
-    const maxDate = dayjs(params.dateEnd);
+    const minDate = dayjs(dateStart);
+    const maxDate = dayjs(dateEnd);
     const shift = Math.max(1, maxDate.diff(minDate, 'day'));
 
     const newDateStart = dayjs(Math.max(
@@ -76,7 +73,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       dayjs(max).valueOf(),
     )).format(DATE_FORMAT);
 
-    updateParams({
+    onSubmit({
       dateStart: newDateStart,
       dateEnd: newDateEnd,
     });
@@ -86,8 +83,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     if (!canShiftToTheFuture) {
       return;
     }
-    const minDate = dayjs(params.dateStart);
-    const maxDate = dayjs(params.dateEnd);
+    const minDate = dayjs(dateStart);
+    const maxDate = dayjs(dateEnd);
     const todayDate = dayjs(today);
     const shift = Math.max(
       1,
@@ -96,15 +93,10 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         todayDate.diff(maxDate, 'day'),
       ),
     );
-    updateParams({
+    onSubmit({
       dateStart: minDate.add(shift, 'day').format(DATE_FORMAT),
       dateEnd: maxDate.add(shift, 'day').format(DATE_FORMAT),
     });
-  };
-
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(params);
   };
 
   return (
@@ -113,7 +105,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         styles.form,
         className,
       ])}
-      onSubmit={handleFormSubmit}
       {...props}
     >
       <button
@@ -129,22 +120,26 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <Input
           min={min}
-          max={params.dateEnd}
+          max={max}
           name="dateStart"
           type="date"
-          value={params.dateStart}
-          onChange={handleParamsChange('dateStart')}
+          value={(isValidDate(dateStart)
+            ? formatDate(dateStart, DATE_FORMAT)
+            : min || formatDate(dayjs(), DATE_FORMAT))}
+          onChange={handleParamsChange}
         />
         &nbsp;
         -
         &nbsp;
         <Input
-          min={params.dateStart}
+          min={min}
           max={max}
           name="dateEnd"
           type="date"
-          value={params.dateEnd}
-          onChange={handleParamsChange('dateEnd')}
+          value={(isValidDate(dateEnd)
+            ? formatDate(dateEnd, DATE_FORMAT)
+            : max || formatDate(dayjs(), DATE_FORMAT))}
+          onChange={handleParamsChange}
         />
       </div>
       <button
@@ -155,12 +150,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <IconChevronRight />
       </button>
-      <Button
-        type="submit"
-        className={styles.submit}
-      >
-        Поиск
-      </Button>
     </form>
   );
 };
