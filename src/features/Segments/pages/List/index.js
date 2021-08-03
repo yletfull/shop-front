@@ -3,6 +3,7 @@ import { useQueryParams, useService } from '@/hooks';
 import IconPlus from '@/icons/Plus';
 import IconSearch from '@/icons/Search';
 import AppMain from '@/components/AppMain';
+import PageHeader from '@/components/PageHeader';
 import Pagination from '@/components/Pagination';
 import WithSpinner from '@/components/WithSpinner';
 import ControlsLink from '@/features/Segments/components/ControlsLink';
@@ -102,9 +103,9 @@ const SegmentsList = function SegmentsList() {
   return (
     <AppMain
       header={(
-        <span>
+        <PageHeader>
           Сегменты
-        </span>
+        </PageHeader>
       )}
     >
       <div className={styles.segmentsList}>
