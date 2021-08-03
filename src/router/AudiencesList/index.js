@@ -86,10 +86,8 @@ const AudiencesList = function AudiencesList() {
   return (
     <AppMain
       header={(
-        <div
-          className={styles.header_title}
-        >
-          Статистика
+        <div className={styles.header_title}>
+          Аудитория
         </div>
       )}
     >
