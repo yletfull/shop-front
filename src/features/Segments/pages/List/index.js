@@ -113,34 +113,31 @@ const SegmentsList = function SegmentsList({ defaultTitle }) {
   };
 
   return (
-    <div
-      className={styles.wrapper}
-    >
-      <WithSpinner
-        layout="overlay"
-        isFetching={isFetching}
-        className={styles.spinnerOverlay}
-      />
-      <div className={styles.segmentsList}>
-        <div className={styles.segmentsListControls}>
-          <ControlsLink
-            icon={(<IconPlus />)}
-            to="/segments/new"
-          >
-            Новый
-            <br />
-            сегмент
-          </ControlsLink>
-          <ControlsLink
-            icon={(<IconSearch />)}
-            to="/"
-          >
-            Найти
-            <br />
-            пользователя
-          </ControlsLink>
-        </div>
-
+    <div className={styles.segmentsList}>
+      <div className={styles.segmentsListControls}>
+        <ControlsLink
+          icon={(<IconPlus />)}
+          to="/segments/new"
+        >
+          Новый
+          <br />
+          сегмент
+        </ControlsLink>
+        <ControlsLink
+          icon={(<IconSearch />)}
+          to="/segments/user"
+        >
+          Найти
+          <br />
+          пользователя
+        </ControlsLink>
+      </div>
+      <div className={styles.wrapper}>
+        <WithSpinner
+          layout="overlay"
+          isFetching={isFetching}
+          className={styles.spinnerOverlay}
+        />
         <TableView
           isFetching={isFetching}
           data={tableData}
