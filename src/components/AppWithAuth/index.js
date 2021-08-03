@@ -2,8 +2,16 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import api from '@/api';
-import { authCheck, authLogout } from '@/store/auth/actions';
-import { getIsAuthorized, getIsFetching } from '@/store/auth/selectors';
+import {
+  authCheck,
+  authLogout,
+  fetchUserAbilities,
+} from '@/store/auth/actions';
+import {
+  getIsAuthorized,
+  getIsFetching,
+  getUser,
+} from '@/store/auth/selectors';
 import LoginPage from '@/components/Login';
 import Spinner from '@/components/Spinner';
 
@@ -17,8 +25,10 @@ const defaultProps = {
 
 const WithAuth = function WithAuth({ children }) {
   const dispatch = useDispatch();
+
   const isAuthorized = useSelector(getIsAuthorized);
   const isFetching = useSelector(getIsFetching);
+  const user = useSelector(getUser);
 
   useEffect(() => {
     dispatch(authCheck());
@@ -35,6 +45,14 @@ const WithAuth = function WithAuth({ children }) {
       api.interceptors.response.eject(logoutInterceptor);
     };
   }, [dispatch]);
+
+  useEffect(() => {
+    const { id } = user || {};
+    if (!id) {
+      return;
+    }
+    dispatch(fetchUserAbilities(id));
+  }, [dispatch, user]);
 
   if (isFetching) {
     return (

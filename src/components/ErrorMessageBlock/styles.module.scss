@@ -1,0 +1,27 @@
+@import '@/theme/include.scss';
+
+.error {
+  background-color: rgba($color-red-darker, .1);
+  border: thin solid;
+  color: $color-red-darker;
+  display: flex;
+  padding: 1em;
+}
+
+.icon {
+  font-size: 2.5em;
+  margin-right: .25em;
+
+  &Wrapper {
+    flex-basis: 3em;
+  }
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+.message {
+  font-size: .875em;
+}

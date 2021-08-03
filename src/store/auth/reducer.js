@@ -5,6 +5,9 @@ import {
   authLogout,
   authError,
   isFetching,
+
+  isFetchingAbilities,
+  updateAbilities,
 } from './actions';
 
 const initialState = {
@@ -12,6 +15,9 @@ const initialState = {
   user: null,
   error: null,
   isFetching: false,
+
+  abilities: [],
+  isFetchingAbilities: false,
 };
 
 const reducer = createReducer(initialState, {
@@ -32,6 +38,16 @@ const reducer = createReducer(initialState, {
   [isFetching]: (state, action) => ({
     ...state,
     isFetching: action.payload,
+  }),
+
+  [isFetchingAbilities]: (state) => ({
+    ...state,
+    isFetchingAbilities: true,
+  }),
+  [updateAbilities]: (state, action) => ({
+    ...state,
+    abilities: action.payload || [],
+    isFetchingAbilities: false,
   }),
 });
 

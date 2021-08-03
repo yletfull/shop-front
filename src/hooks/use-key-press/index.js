@@ -1,29 +1,42 @@
 import { useEffect } from 'react';
 
-// FIXME: re-init on key, handler or event change
-const useKeyPress = function useKeyPressHook(
+const useKeyPress = function useKeyPressHook({
   key,
   handler,
   event = 'keydown',
-) {
-  const keyPressHandler = (e) => {
-    if (e.key === key) {
-      handler();
-    }
-  };
-
-  /* eslint-disable react-hooks/exhaustive-deps */
+  ref = window,
+}) {
   useEffect(() => {
     if (!['keydown', 'keyup'].includes(event)) {
       return;
     }
 
-    window.addEventListener(event, keyPressHandler);
-    return () => {
-      window.removeEventListener(event, keyPressHandler);
+    const element = ref.current || ref;
+
+    if (!element) {
+      return;
+    }
+
+    const keyPressHandler = (e) => {
+      if (!key) {
+        return handler(e);
+      }
+
+      if (Array.isArray(key) && key.includes(e.key)) {
+        return handler(e);
+      }
+
+      if (e.key === key) {
+        return handler(e);
+      }
     };
-  }, []);
-  /* eslint-enable react-hooks/exhaustive-deps */
+
+    element.addEventListener(event, keyPressHandler);
+
+    return () => {
+      element.removeEventListener(event, keyPressHandler);
+    };
+  }, [key, handler, event, ref]);
 };
 
 export default useKeyPress;
