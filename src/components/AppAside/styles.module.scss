@@ -1,6 +1,8 @@
 @import '@/theme/include.scss';
 
-.wrapper {
+$menu-item-padding: 1rem;
+
+.appAside {
   align-items: center;
   bottom: 0;
   display: flex;
@@ -8,17 +10,46 @@
   justify-content: space-between;
   left: 0;
   overflow: auto;
-  padding: $app-top-padding 1rem 1em;
   position: fixed;
   top: 0;
-}
+  width: 3.5rem;
 
-.menuItems {
-  & > *:first-child {
-    margin-top: 2.5rem;
+  &Bottom,
+  &Top {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
   }
 
-  & > *:not(:first-child) {
-    margin-top: 1rem;
+  &Button {
+    border-radius: .375rem;
+    min-height: $menu-item-padding * 3;
+    padding: $menu-item-padding;
+
+    &:hover {
+      background-color: $color-gray-lighter;
+    }
+  }
+
+  &Logo {
+    margin-bottom: .5rem;
+    padding: $menu-item-padding;
+  }
+}
+
+.menuItem {
+  align-items: center;
+  border-radius: .375rem;
+  color: $color-gray-darker;
+  display: flex;
+  justify-content: center;
+  padding: $menu-item-padding;
+
+  &:hover {
+    background-color: $color-gray-lighter;
+  }
+
+  &Active {
+    color: $color-pink;
   }
 }
