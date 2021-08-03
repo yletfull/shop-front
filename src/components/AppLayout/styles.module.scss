@@ -6,7 +6,7 @@
   margin: 0 auto;
   max-width: 100%;
   min-height: 100vh;
-  padding: $app-top-padding 1.25rem;
+  padding: 0 0 1rem;
   width: 100%;
 }
 
@@ -25,5 +25,5 @@
 .main {
   display: flex;
   flex-direction: column;
-  padding-left: 4.65rem;
+  padding: 3.75rem 1rem 0 5rem;
 }

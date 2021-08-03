@@ -1,4 +1,13 @@
 import React from 'react';
+import TvAlt from './TvAlt';
+import Cog from './Cog';
+import SignalStream from './SignalStream';
+import RubleSign from './RubleSign';
+import Tasks from './Tasks';
+import Analytics from './Analytics';
+import CropAlt from './CropAlt';
+import ChartLine from './ChartLine';
+import TimesLight from './TimesLight';
 import AngleDown from './AngleDown';
 import ChevronDown from './ChevronDown';
 import ChevronLeft from './ChevronLeft';
@@ -22,6 +31,11 @@ import Users from './Users';
 import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
+import ExclamationTriangle from './ExclamationTriangle';
+import RetweetAlt from './RetweetAlt';
+import RocketSolid from './RocketSolid';
+import ThumbsDownSolid from './ThumbsDownSolid';
+import ThumbsUpSolid from './ThumbsUpSolid';
 
 export default {
   title: 'Components/Icons',
@@ -59,6 +73,15 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(TvAlt)}
+    {renderIcon(Cog)}
+    {renderIcon(SignalStream)}
+    {renderIcon(RubleSign)}
+    {renderIcon(Tasks)}
+    {renderIcon(Analytics)}
+    {renderIcon(CropAlt)}
+    {renderIcon(ChartLine)}
+    {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
     {renderIcon(ChevronDown)}
     {renderIcon(ChevronLeft)}
@@ -82,6 +105,11 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vent)}
     {renderIcon(Vk)}
     {renderIcon(Warning)}
+    {renderIcon(ExclamationTriangle)}
+    {renderIcon(RetweetAlt)}
+    {renderIcon(RocketSolid)}
+    {renderIcon(ThumbsDownSolid)}
+    {renderIcon(ThumbsUpSolid)}
   </div>
 );
 Icons.storyName = 'Icons';

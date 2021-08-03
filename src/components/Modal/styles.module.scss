@@ -1,0 +1,88 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background: $color-gray-darkest;
+  background: rgba($color-black, .75);
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  padding: 2rem;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.overlay {
+  background: $color-gray-darkest;
+  background: rgba($color-black, .25);
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: opacity .2s;
+  z-index: 1;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: $color-gray-lighter;
+  border-radius: 1rem;
+  margin: 2rem auto;
+  max-width: 100%;
+  padding: 1.5rem;
+  position: relative;
+  z-index: 2;
+
+  &_size {
+    &-small {
+      width: 20rem;
+    }
+
+    &-medium {
+      width: 35rem;
+    }
+
+    &-large {
+      width: 50rem;
+    }
+  }
+
+  &CloseButton {
+    @include button-reset();
+
+    color: $color-primary;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.5rem;
+    height: 1.5rem;
+    margin-left: 1rem;
+    padding: 0 .25rem;
+    transition: color .2s;
+
+    &:hover,
+    &:focus {
+      color: $color-primary-lighter;
+    }
+  }
+
+  &Header {
+    align-items: center;
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    min-height: 1.75rem;
+
+    &Title {
+      flex-grow: 1;
+      flex-shrink: 1;
+      line-height: 1.5rem;
+    }
+  }
+}
