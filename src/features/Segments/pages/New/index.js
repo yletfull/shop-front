@@ -4,8 +4,10 @@ import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
 import { setHeader } from '@/store/ui/actions';
+import AppMain from '@/components/AppMain';
 import Grid, { GridCell } from '@/components/Grid';
 import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
+import PageHeader from '@/components/PageHeader';
 import TotalStatistics from '@/features/Segments/components/TotalStatistics';
 import ExportFiles from '@/features/Segments/components/ExportFiles';
 import SaveForm from '@/features/Segments/components/SaveForm';
@@ -87,64 +89,73 @@ const SegmentsNew = function SegmentsNewPage() {
   const handleRetryStatisticsFetch = () => dispatch(fetchStatistics());
 
   return (
-    <Grid>
-      <GridCell
-        columns={9}
-      >
-        <ConditionsEditor
-          isFetching={false}
-          conditions={conditions}
-          isAttributesTreeFetching={areAttributesFetching}
-          attributesTree={attributesTree}
-          onChange={handleConditionsChange}
-        />
-      </GridCell>
-
-      <GridCell
-        columns={3}
-        className={styles.aside}
-      >
-        <h2 className={styles.asideTitle}>
-          Итоговая выборка
-        </h2>
-
-        <TotalStatistics
-          isFetching={isStatisticsFetching}
-          data={statistics}
-          error={statisticsError}
-          onRetry={handleRetryStatisticsFetch}
-        />
-
-        <h3
-          className={cx(
-            styles.asideTitle,
-            styles.asideTitleSmall,
-          )}
+    <AppMain
+      backTo="/segments"
+      header={(
+        <PageHeader>
+          Новый сегмент
+        </PageHeader>
+      )}
+    >
+      <Grid>
+        <GridCell
+          columns={9}
         >
-          Файлы для площадок
-        </h3>
+          <ConditionsEditor
+            isFetching={false}
+            conditions={conditions}
+            isAttributesTreeFetching={areAttributesFetching}
+            attributesTree={attributesTree}
+            onChange={handleConditionsChange}
+          />
+        </GridCell>
 
-        <ExportFiles
-          conditions={conditions}
-          statistics={statistics}
-        />
-
-        <h3
-          className={cx(
-            styles.asideTitle,
-            styles.asideTitleSmall,
-          )}
+        <GridCell
+          columns={3}
+          className={styles.aside}
         >
-          Сохранение сегмента
-        </h3>
+          <h2 className={styles.asideTitle}>
+            Итоговая выборка
+          </h2>
 
-        <SaveForm
-          isSaving={isSaving}
-          error={saveError}
-          onSubmit={handleSaveFormSubmit}
-        />
-      </GridCell>
-    </Grid>
+          <TotalStatistics
+            isFetching={isStatisticsFetching}
+            data={statistics}
+            error={statisticsError}
+            onRetry={handleRetryStatisticsFetch}
+          />
+
+          <h3
+            className={cx(
+              styles.asideTitle,
+              styles.asideTitleSmall,
+            )}
+          >
+            Файлы для площадок
+          </h3>
+
+          <ExportFiles
+            conditions={conditions}
+            statistics={statistics}
+          />
+
+          <h3
+            className={cx(
+              styles.asideTitle,
+              styles.asideTitleSmall,
+            )}
+          >
+            Сохранение сегмента
+          </h3>
+
+          <SaveForm
+            isSaving={isSaving}
+            error={saveError}
+            onSubmit={handleSaveFormSubmit}
+          />
+        </GridCell>
+      </Grid>
+    </AppMain>
   );
 };
 
