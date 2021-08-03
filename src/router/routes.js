@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import { sections } from '@/constants/rights';
 
 const AudiencesList = lazy(() => import(
   /* webpackChunkName: 'audiences-list' */
@@ -106,11 +107,28 @@ export default [
     Component: SegmentsDetails,
     path: patchs.segmentsDetails,
     title: titles.segmentsDetails,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
   },
   {
     Component: SegmentsUser,
     path: patchs.segmentsUser,
     title: titles.segmentsUser,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
+  },
+  {
+    Component: SegmentsList,
+    path: patchs.segments,
+    title: titles.segments,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
   },
   {
     Component: SegmentsList,

@@ -15,7 +15,7 @@ const propTypes = {
 };
 const defaultProps = {
   as: '',
-  layout: 'inline',
+  layout: 'block',
   className: '',
   spinnerClassName: '',
 };

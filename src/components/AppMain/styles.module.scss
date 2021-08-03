@@ -1,0 +1,10 @@
+@import '@/theme/include.scss';
+
+$header-height: 3.75rem;
+
+.appMain {
+  &Header {
+    height: $header-height;
+    margin-top: (-1) * $header-height;
+  }
+}
