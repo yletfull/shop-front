@@ -171,9 +171,9 @@ const LoadImagesTable = function LoadImagesTableScreen() {
   return (
     <div>
       <Header />
-      <Table>
-        <TableRow filter="">
-          <TableCell>
+      <Table className={styles.loadImagesTable}>
+        <TableRow>
+          <TableCell data-purpose="filter">
             <Input
               value={filter.num}
               onInput={handleNumInput}
@@ -181,7 +181,10 @@ const LoadImagesTable = function LoadImagesTableScreen() {
               placeholder="№ строки"
             />
           </TableCell>
-          <TableCell colSpan="2">
+          <TableCell
+            colSpan="2"
+            data-purpose="filter"
+          >
             <Input
               value={filter.title}
               onInput={handleTitleInput}
@@ -189,7 +192,7 @@ const LoadImagesTable = function LoadImagesTableScreen() {
               placeholder="Title"
             />
           </TableCell>
-          <TableCell>
+          <TableCell data-purpose="filter">
             <Select
               value={filter.adFormat}
               options={selectorMocksOptions}
@@ -200,24 +203,27 @@ const LoadImagesTable = function LoadImagesTableScreen() {
               fullwidth
             />
           </TableCell>
-          <TableCell colSpan="4">
-            <Select
-              value={filter.banner}
-              options={selectorMocksOptions}
-              onChange={handleBannerChange}
-              resetText="Не выбрано"
-              placeholder="Banner"
-              className={styles.select}
-              fullwidth
-            />
-          </TableCell>
-          <TableCell>
-            <Button
-              onClick={handleFilterSubmit}
-              className={styles.filterSubmit}
-            >
-              Найти
-            </Button>
+          <TableCell
+            colSpan="5"
+            data-purpose="filter"
+          >
+            <span className={styles.loadImagesTableCell}>
+              <Select
+                value={filter.banner}
+                options={selectorMocksOptions}
+                onChange={handleBannerChange}
+                resetText="Не выбрано"
+                placeholder="Banner"
+                className={styles.select}
+                fullwidth
+              />
+              <Button
+                onClick={handleFilterSubmit}
+                className={styles.loadImagesTableButton}
+              >
+                Найти
+              </Button>
+            </span>
           </TableCell>
         </TableRow>
 
