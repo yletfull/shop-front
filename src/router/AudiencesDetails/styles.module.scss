@@ -1,5 +1,11 @@
 @import '@/theme/include.scss';
 
+.header {
+  &_title {
+    font-weight: bold;
+  }
+}
+
 .audienceDetails {
   &Header {
     font-size: 1rem;

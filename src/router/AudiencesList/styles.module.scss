@@ -1,5 +1,7 @@
 @import '@/theme/include.scss';
 
-.audienceList {
-  // write some styles
+.header {
+  &_title {
+    font-weight: bold;
+  }
 }

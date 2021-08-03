@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { injectReducer } from '@/store';
-import { setHeader } from '@/store/ui/actions';
 import { useQuery } from '@/hooks';
+import AppMain from '@/components/AppMain';
 import PagePagination from '@/components/PagePagination';
 import {
   queryParams,
@@ -23,15 +22,7 @@ import {
 import TableView from './TableView';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const AudiencesList = function AudiencesList({ defaultTitle }) {
+const AudiencesList = function AudiencesList() {
   const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
@@ -66,10 +57,6 @@ const AudiencesList = function AudiencesList({ defaultTitle }) {
     dispatch(fetchAudiencesList(requestParams));
   }, [dispatch, requestParams]);
 
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
-
   const changeQueryParams = (values) => {
     Object.values(queryParams)
       .forEach((key) => {
@@ -97,25 +84,30 @@ const AudiencesList = function AudiencesList({ defaultTitle }) {
   };
 
   return (
-    <div className={styles.audienceList}>
-      <TableView
-        data={tableData}
-        isFetching={isFetching}
-        onFilter={handleFilterTable}
-      />
+    <AppMain
+      header={(
+        <div className={styles.header_title}>
+          Аудитория
+        </div>
+      )}
+    >
+      <div className={styles.audienceList}>
+        <TableView
+          data={tableData}
+          isFetching={isFetching}
+          onFilter={handleFilterTable}
+        />
 
-      <PagePagination
-        page={pagination.currentPage || 1}
-        numberOfPages={pagination.totalPages || 1}
-        numberOfVisiblePages={5}
-        isDisabled={isFetching}
-        onChangePage={handleChangePage}
-      />
-    </div>
+        <PagePagination
+          page={pagination.currentPage || 1}
+          numberOfPages={pagination.totalPages || 1}
+          numberOfVisiblePages={5}
+          isDisabled={isFetching}
+          onChangePage={handleChangePage}
+        />
+      </div>
+    </AppMain>
   );
 };
-
-AudiencesList.propTypes = propTypes;
-AudiencesList.defaultProps = defaultProps;
 
 export default AudiencesList;
