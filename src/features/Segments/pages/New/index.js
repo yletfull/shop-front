@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import cx from 'classnames';
 import { injectReducer } from '@/store';
-import { setHeader } from '@/store/ui/actions';
 import AppMain from '@/components/AppMain';
 import Grid, { GridCell } from '@/components/Grid';
 import ConditionsEditor from '@/features/Segments/components/ConditionsEditor';
@@ -45,11 +44,6 @@ const SegmentsNew = function SegmentsNewPage() {
   const isStatisticsFetching = useSelector(getIsStatisticsFetching);
   const statistics = useSelector(getStatistics);
   const statisticsError = useSelector(getStatisticsError);
-
-  useEffect(() => {
-    dispatch(setHeader('Новый сегмент'));
-  }, [dispatch]);
-
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState(null);
