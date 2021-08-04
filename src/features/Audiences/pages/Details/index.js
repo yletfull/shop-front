@@ -5,6 +5,7 @@ import { injectReducer } from '@/store';
 import { useQuery } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
+import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import {
   queryParams,
   mapQueryParams,
@@ -21,7 +22,6 @@ import {
   getFormattedAudienceCompare,
   getFormattedAudienceDetails,
 } from './selectors';
-import CommonInfo from './CommonInfo';
 import CommonInfoCard from './CommonInfoCard';
 import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
