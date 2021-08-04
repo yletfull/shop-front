@@ -6,6 +6,7 @@ import { useQuery } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
+import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
 import {
   queryParams,
   mapQueryParams,
@@ -22,7 +23,6 @@ import {
   getFormattedAudienceCompare,
   getFormattedAudienceDetails,
 } from './selectors';
-import CommonInfoCard from './CommonInfoCard';
 import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
 
