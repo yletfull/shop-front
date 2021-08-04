@@ -78,6 +78,7 @@ const Statistics = function StatisticsScreen() {
             dateEnd={dateEnd}
             onChange={handleDateInputsSubmit}
             onShift={handleDateInputsSubmit}
+            onSelect={handleDateInputsSubmit}
           />
         </div>
       )}
