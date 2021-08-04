@@ -33,15 +33,42 @@
 
 .dropdown {
   background-color: $color-white;
-  border-radius: .5rem;
+  border-radius: .25rem;
   box-shadow: 0 0 .125rem 0 rgba($color-black, .5);
-  padding: .5rem;
+  padding: .375rem .75rem .5rem;
   position: absolute;
 }
 
 .quickOptions {
+  position: relative;
+
   &_button {
     margin-left: .5em;
     min-width: unset;
+  }
+
+  &_dropdown {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    min-width: 10rem;
+    right: 0;
+    top: calc(100% + .25rem);
+    z-index: 10;
+  }
+
+  &_item {
+    @include button-reset();
+
+    color: $color-primary;
+    font-size: .875em;
+
+    & + & {
+      margin-top: .5em;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
