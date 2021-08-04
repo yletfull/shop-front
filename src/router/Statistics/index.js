@@ -76,7 +76,8 @@ const Statistics = function StatisticsScreen() {
             max={dateend}
             dateStart={dateStart}
             dateEnd={dateEnd}
-            onSubmit={handleDateInputsSubmit}
+            onChange={handleDateInputsSubmit}
+            onShift={handleDateInputsSubmit}
           />
         </div>
       )}

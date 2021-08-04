@@ -12,12 +12,12 @@
 .arrow {
   @include button-reset();
 
+  border-radius: .25em;
   color: $color-primary-darkest;
   padding: .5em;
 
   &:hover {
     background-color: $color-gray-lighter;
-    border-radius: .25em;
   }
 
   &:disabled {
@@ -29,4 +29,19 @@
 
 .submit {
   margin-left: .5rem;
+}
+
+.dropdown {
+  background-color: $color-white;
+  border-radius: .5rem;
+  box-shadow: 0 0 .125rem 0 rgba($color-black, .5);
+  padding: .5rem;
+  position: absolute;
+}
+
+.quickOptions {
+  &_button {
+    margin-left: .5em;
+    min-width: unset;
+  }
 }

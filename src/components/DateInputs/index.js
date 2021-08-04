@@ -1,15 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import dayjs from '@/utils/day';
 import { formatDate } from '@/utils/format';
 import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
+import IconHistory from '@/icons/History';
 import Input from '@/components/Input';
+import Button from '@/components/Button';
+import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const isValidDate = (date) => dayjs(date).isValid();
+
+// const quickFilterOptions = [
+//   { text: 'вчера', unit: 'day', shift: 1 },
+// ];
 
 const propTypes = {
   min: PropTypes.string,
@@ -39,6 +46,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   onChange,
   ...props
 }) {
+  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
   const canShiftToThePast = dayjs(dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(dateEnd)) > 0;
 
@@ -101,6 +109,10 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     });
   };
 
+  const handleQuickOptionsClick = () => {
+    setShouldShowDropdown(shouldShowDropdown);
+  };
+
   return (
     <form
       className={cx([
@@ -152,6 +164,17 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <IconChevronRight />
       </button>
+      <div className={styles.quickOptions}>
+        <Button
+          className={styles.quickOptions_button}
+          onClick={handleQuickOptionsClick}
+        >
+          <IconHistory />
+        </Button>
+        <Dropdown>
+          1
+        </Dropdown>
+      </div>
     </form>
   );
 };
