@@ -21,9 +21,10 @@ const quickFilterOptions = [
 
 const propTypes = {
   min: PropTypes.string,
-  max: PropTypes.string,
-  dateStart: PropTypes.string,
-  dateEnd: PropTypes.string,
+  values: PropTypes.shape({
+    dateStart: PropTypes.string,
+    dateEnd: PropTypes.string,
+  }),
   className: PropTypes.string,
   onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
@@ -32,28 +33,29 @@ const propTypes = {
 
 const defaultProps = {
   min: '',
-  max: '',
-  dateStart: '',
-  dateEnd: '',
+  values: {
+    dateStart: '',
+    dateEnd: '',
+  },
   className: '',
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
   min,
-  max,
-  dateStart,
-  dateEnd,
+  values,
   className,
   onShift,
   onChange,
   onSelect,
   ...props
 }) {
-  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
-  const canShiftToThePast = dayjs(dateStart).diff(dayjs(min)) > 0;
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(dateEnd)) > 0;
-
   const today = dayjs().format(DATE_FORMAT);
+  const max = today;
+
+  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
+  const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
+  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
+
 
   const handleParamsChange = (e) => {
     const { name, value } = e?.target || {};
@@ -62,8 +64,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     }
 
     onChange({
-      dateStart,
-      dateEnd,
+      ...values,
       [name]: formatDate(value, DATE_FORMAT),
     });
   };
@@ -72,17 +73,17 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     if (!canShiftToThePast) {
       return;
     }
-    const minDate = dayjs(dateStart);
-    const maxDate = dayjs(dateEnd);
-    const shift = Math.max(1, maxDate.diff(minDate, 'day'));
+    const dateStart = dayjs(values.dateStart);
+    const dateEnd = dayjs(values.dateEnd);
+    const shift = Math.max(1, dateEnd.diff(dateStart, 'day'));
 
     const newDateStart = dayjs(Math.max(
-      minDate.subtract(shift, 'day').valueOf(),
+      dateStart.subtract(shift, 'day').valueOf(),
       dayjs(min).valueOf(),
     )).format(DATE_FORMAT);
 
     const newDateEnd = dayjs(Math.min(
-      maxDate.subtract(shift, 'day').valueOf(),
+      dateEnd.subtract(shift, 'day').valueOf(),
       dayjs(max).valueOf(),
     )).format(DATE_FORMAT);
 
@@ -96,25 +97,23 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     if (!canShiftToTheFuture) {
       return;
     }
-    const minDate = dayjs(dateStart);
-    const maxDate = dayjs(dateEnd);
+    const dateStart = dayjs(values.dateStart);
+    const dateEnd = dayjs(values.dateEnd);
     const todayDate = dayjs(today);
     const shift = Math.max(
       1,
       Math.min(
-        maxDate.diff(minDate, 'day'),
-        todayDate.diff(maxDate, 'day'),
+        dateEnd.diff(dateStart, 'day'),
+        todayDate.diff(dateEnd, 'day'),
       ),
     );
     onShift({
-      dateStart: minDate.add(shift, 'day').format(DATE_FORMAT),
-      dateEnd: maxDate.add(shift, 'day').format(DATE_FORMAT),
+      dateStart: dateStart.add(shift, 'day').format(DATE_FORMAT),
+      dateEnd: dateEnd.add(shift, 'day').format(DATE_FORMAT),
     });
   };
 
-  const hideDropdown = () => {
-    setShouldShowDropdown(false);
-  };
+  const hideDropdown = () => setShouldShowDropdown(false);
 
   const handleQuickOptionsClick = () => {
     setShouldShowDropdown(!shouldShowDropdown);
@@ -166,8 +165,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateStart"
           type="date"
-          value={(isValidDate(dateStart)
-            ? formatDate(dateStart, DATE_FORMAT)
+          value={(isValidDate(values.dateStart)
+            ? formatDate(values.dateStart, DATE_FORMAT)
             : min || formatDate(dayjs(), DATE_FORMAT))}
           onChange={handleParamsChange}
         />
@@ -179,8 +178,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateEnd"
           type="date"
-          value={(isValidDate(dateEnd)
-            ? formatDate(dateEnd, DATE_FORMAT)
+          value={(isValidDate(values.dateEnd)
+            ? formatDate(values.dateEnd, DATE_FORMAT)
             : max || formatDate(dayjs(), DATE_FORMAT))}
           onChange={handleParamsChange}
         />
