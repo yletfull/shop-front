@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
-import DateInputs from './components/DateInputs';
+import DateInputs from '@/components/DateInputs';
 import RouterView from './RouterView';
 import { paths, titles } from './routes';
 import styles from './styles.module.scss';
