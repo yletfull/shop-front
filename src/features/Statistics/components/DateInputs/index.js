@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { useOnClickOutside } from '@/hooks';
 import dayjs from '@/utils/day';
 import { formatDate } from '@/utils/format';
 import IconChevronLeft from '@/icons/ChevronLeft';
@@ -49,10 +50,15 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   onSelect,
   ...props
 }) {
+  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
+
+  const hideDropdown = () => setShouldShowDropdown(false);
+
+  const quickOptionsRef = useRef(null);
+  useOnClickOutside(quickOptionsRef, hideDropdown);
+
   const today = dayjs().format(DATE_FORMAT);
   const max = today;
-
-  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
 
@@ -112,8 +118,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       dateEnd: dateEnd.add(shift, 'day').format(DATE_FORMAT),
     });
   };
-
-  const hideDropdown = () => setShouldShowDropdown(false);
 
   const handleQuickOptionsClick = () => {
     setShouldShowDropdown(!shouldShowDropdown);
@@ -192,7 +196,10 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <IconChevronRight />
       </button>
-      <div className={styles.quickOptions}>
+      <div
+        ref={quickOptionsRef}
+        className={styles.quickOptions}
+      >
         <Button
           className={styles.quickOptions_button}
           onClick={handleQuickOptionsClick}
