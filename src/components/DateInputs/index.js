@@ -17,7 +17,8 @@ const propTypes = {
   dateStart: PropTypes.string,
   dateEnd: PropTypes.string,
   className: PropTypes.string,
-  onSubmit: PropTypes.func,
+  onShift: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -26,7 +27,6 @@ const defaultProps = {
   dateStart: '',
   dateEnd: '',
   className: '',
-  onSubmit: null,
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
@@ -35,7 +35,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   dateStart,
   dateEnd,
   className,
-  onSubmit,
+  onShift,
+  onChange,
   ...props
 }) {
   const canShiftToThePast = dayjs(dateStart).diff(dayjs(min)) > 0;
@@ -48,7 +49,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     if (!name) {
       return;
     }
-    onSubmit({
+
+    onChange({
       dateStart,
       dateEnd,
       [name]: formatDate(value, DATE_FORMAT),
@@ -73,7 +75,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       dayjs(max).valueOf(),
     )).format(DATE_FORMAT);
 
-    onSubmit({
+    onShift({
       dateStart: newDateStart,
       dateEnd: newDateEnd,
     });
@@ -93,7 +95,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         todayDate.diff(maxDate, 'day'),
       ),
     );
-    onSubmit({
+    onShift({
       dateStart: minDate.add(shift, 'day').format(DATE_FORMAT),
       dateEnd: maxDate.add(shift, 'day').format(DATE_FORMAT),
     });
