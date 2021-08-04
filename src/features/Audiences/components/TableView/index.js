@@ -10,11 +10,7 @@ import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import {
-  entityTypes,
-  mapQueryParams,
-  queryParams,
-} from '@/features/Audiences/constants';
+import { entityTypes } from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -48,20 +44,9 @@ const TableView = function TableView({
 }) {
   const query = useQuery();
 
-  const getLocalFromQuery = () => {
-    const key = mapQueryParams[queryParams.searchLocal];
-    if (!query.has(key)) {
-      return '';
-    }
-    return query.get(key) === 'true'
-      ? '1'
-      : '0';
-  };
-
   const initialFormValues = {
-    [mapQueryParams[queryParams.searchName]]: query
-      .get(mapQueryParams[queryParams.searchName]) || '',
-    [mapQueryParams[queryParams.searchLocal]]: getLocalFromQuery(),
+    title: query.get('title') || '',
+    isLocal: query.get('isLocal') || '',
   };
 
   const rows = useMemo(() => {
@@ -93,17 +78,12 @@ const TableView = function TableView({
   }, [data]);
 
   const handleSubmitForm = (values) => {
-    const keyName = mapQueryParams[queryParams.searchName];
-    const keyLocal = mapQueryParams[queryParams.searchLocal];
-    const {
-      [keyName]: title,
-      [keyLocal]: local,
-    } = values || {};
-    const params = { [keyName]: title };
-    if ([0, 1].map(String).includes(local)) {
-      params[keyLocal] = Boolean(Number(local));
-    }
-    onFilter(params);
+    onFilter({
+      title: values.title || '',
+      isLocal: ['true', 'false'].includes(values.isLocal)
+        ? values.isLocal
+        : '',
+    });
   };
 
   const FormikInput = withFormikField(Input);
@@ -126,7 +106,7 @@ const TableView = function TableView({
                     data-purpose="filter"
                   >
                     <Field
-                      name={mapQueryParams[queryParams.searchName]}
+                      name="title"
                       placeholder="Название"
                       className={styles.tableViewInput}
                       component={FormikInput}
@@ -139,14 +119,14 @@ const TableView = function TableView({
                   >
                     <span className={styles.tableViewCell}>
                       <Field
-                        name={mapQueryParams[queryParams.searchLocal]}
+                        name="isLocal"
                         placeholder="Тип"
                         resetText="Сбросить"
                         className={styles.tableViewInput}
-                        value={values[mapQueryParams[queryParams.searchLocal]]}
+                        value={values.isLocal}
                         options={[
-                          { text: 'Глобальная', value: '0' },
-                          { text: 'Локальная', value: '1' },
+                          { text: 'Глобальная', value: 'false' },
+                          { text: 'Локальная', value: 'true' },
                         ]}
                         component={FormikSelect}
                         fullwidth
