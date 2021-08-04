@@ -14,9 +14,10 @@ import styles from './styles.module.scss';
 const DATE_FORMAT = 'YYYY-MM-DD';
 const isValidDate = (date) => dayjs(date).isValid();
 
-// const quickFilterOptions = [
-//   { text: 'вчера', unit: 'day', shift: 1 },
-// ];
+const quickFilterOptions = [
+  { text: 'вчера', unit: 'day', shift: 1 },
+  { text: 'предыдущая неделя', unit: 'week', shift: 1 },
+];
 
 const propTypes = {
   min: PropTypes.string,
@@ -26,6 +27,7 @@ const propTypes = {
   className: PropTypes.string,
   onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
@@ -44,6 +46,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   className,
   onShift,
   onChange,
+  onSelect,
   ...props
 }) {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
@@ -109,8 +112,34 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     });
   };
 
+  const hideDropdown = () => {
+    setShouldShowDropdown(false);
+  };
+
   const handleQuickOptionsClick = () => {
-    setShouldShowDropdown(shouldShowDropdown);
+    setShouldShowDropdown(!shouldShowDropdown);
+  };
+
+  const handleQuickSelect = (e) => {
+    e.preventDefault();
+
+    const { unit, shift } = e.target.dataset;
+
+    if (!unit || !shift) {
+      return;
+    }
+
+    onSelect({
+      dateStart: dayjs()
+        .startOf(unit)
+        .subtract(shift, unit)
+        .format(DATE_FORMAT),
+      dateEnd: dayjs()
+        .endOf(unit)
+        .subtract(shift, unit)
+        .format(DATE_FORMAT),
+    });
+    hideDropdown();
   };
 
   return (
@@ -171,9 +200,24 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         >
           <IconHistory />
         </Button>
-        <Dropdown>
-          1
-        </Dropdown>
+        {shouldShowDropdown && (
+          <Dropdown
+            className={styles.quickOptions_dropdown}
+            onClick={handleQuickSelect}
+          >
+            {quickFilterOptions.map(({ text, unit, shift }) => (
+              <button
+                key={`${unit}-${shift}`}
+                type="button"
+                className={cx([styles.quickOptions_item, 'link'])}
+                data-shift={shift}
+                data-unit={unit}
+              >
+                {text}
+              </button>
+            ))}
+          </Dropdown>
+        )}
       </div>
     </form>
   );
