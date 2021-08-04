@@ -8,7 +8,10 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import { queryParams, mapQueryParams } from '../constants';
+import {
+  queryParams,
+  mapQueryParams,
+} from '@/features/Audiences/pages/Details/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {

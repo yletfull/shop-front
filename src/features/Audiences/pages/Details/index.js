@@ -7,6 +7,7 @@ import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
+import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
 import {
   queryParams,
   mapQueryParams,
@@ -23,7 +24,6 @@ import {
   getFormattedAudienceCompare,
   getFormattedAudienceDetails,
 } from './selectors';
-import ComparisonTable from './ComparisonTable';
 import styles from './styles.module.scss';
 
 const AudiencesDetails = function AudiencesDetails() {
