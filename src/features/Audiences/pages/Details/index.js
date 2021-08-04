@@ -1,14 +1,16 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import service from '@/features/Audiences/service';
 import { injectReducer } from '@/store';
-import { useQuery } from '@/hooks';
+import { useQuery, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
 import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
 import {
+  entityTypes,
   queryParams,
   mapQueryParams,
   namespace as NS,
@@ -16,13 +18,10 @@ import {
 import reducer from './reducer';
 import {
   fetchAudienceCompare,
-  fetchAudienceDetails,
 } from './actions';
 import {
   getIsFetchingAudienceCompare,
-  getIsFetchingAudienceDetails,
   getFormattedAudienceCompare,
-  getFormattedAudienceDetails,
 } from './selectors';
 import styles from './styles.module.scss';
 
@@ -33,10 +32,42 @@ const AudiencesDetails = function AudiencesDetails() {
 
   const { id: audienceId } = useParams();
 
+  const {
+    fetch: fetchDetails,
+    data: details,
+    isFetching: isFetchingDetails,
+  } = useService({
+    initialData: { data: [], meta: {} },
+    service: service.fetchAudienceDetails,
+  });
+
+  useEffect(() => {
+    fetchDetails(audienceId);
+  }, [fetchDetails, audienceId]);
+
+  const audienceDetails = useMemo(() => {
+    const { entityTypeTotals } = details || {};
+    if (!entityTypeTotals || !Array.isArray(entityTypeTotals)) {
+      return details;
+    }
+    const mapEntityTypeKey = {
+      [entityTypes.phones]: 'phones',
+      [entityTypes.emails]: 'emails',
+    };
+    const { emails, phones } = entityTypeTotals
+      .reduce((acc, { entityType, total }) => ({
+        ...acc,
+        [mapEntityTypeKey[entityType]]: total,
+      }), {});
+    return ({
+      emailEntities: emails || 0,
+      phoneEntities: phones || 0,
+      ...details,
+    });
+  }, [details]);
+
   const isFetchingAudienceCompare = useSelector(getIsFetchingAudienceCompare);
-  const isFetchingAudienceDetails = useSelector(getIsFetchingAudienceDetails);
   const audienceCompare = useSelector(getFormattedAudienceCompare);
-  const audienceDetails = useSelector(getFormattedAudienceDetails);
 
   const [compareFilter, setCompareFilter] = useState({
     [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
@@ -53,10 +84,6 @@ const AudiencesDetails = function AudiencesDetails() {
       setPageTitle(`Аудитория «${title}»`);
     }
   }, [audienceDetails]);
-
-  useEffect(() => {
-    dispatch(fetchAudienceDetails(audienceId));
-  }, [dispatch, audienceId]);
 
   useEffect(() => {
     dispatch(fetchAudienceCompare(audienceId, compareFilter));
@@ -78,11 +105,11 @@ const AudiencesDetails = function AudiencesDetails() {
       )}
     >
       <div className={styles.audienceDetails}>
-        {isFetchingAudienceDetails && (
+        {isFetchingDetails && (
           <Spinner />
         )}
 
-        {!isFetchingAudienceDetails && (
+        {!isFetchingDetails && (
           <Fragment>
             <CommonInfo data={audienceDetails}>
               <CommonInfoCard
