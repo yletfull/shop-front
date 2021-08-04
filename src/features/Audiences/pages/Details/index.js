@@ -1,8 +1,6 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import service from '@/features/Audiences/service';
-import { injectReducer } from '@/store';
 import { useQuery, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
@@ -12,21 +10,12 @@ import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
 import {
   entityTypes,
   queryParams,
+  mapEntityTypes,
   mapQueryParams,
-  namespace as NS,
 } from './constants';
-import reducer from './reducer';
-import {
-  fetchAudienceCompare,
-} from './actions';
-import {
-  getIsFetchingAudienceCompare,
-  getFormattedAudienceCompare,
-} from './selectors';
 import styles from './styles.module.scss';
 
 const AudiencesDetails = function AudiencesDetails() {
-  const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
 
@@ -37,8 +26,17 @@ const AudiencesDetails = function AudiencesDetails() {
     data: details,
     isFetching: isFetchingDetails,
   } = useService({
-    initialData: { data: [], meta: {} },
+    initialData: {},
     service: service.fetchAudienceDetails,
+  });
+
+  const {
+    fetch: fetchCompare,
+    data: compare,
+    isFetching: isFetchingCompare,
+  } = useService({
+    initialData: {},
+    service: service.fetchAudienceCompare,
   });
 
   useEffect(() => {
@@ -66,17 +64,49 @@ const AudiencesDetails = function AudiencesDetails() {
     });
   }, [details]);
 
-  const isFetchingAudienceCompare = useSelector(getIsFetchingAudienceCompare);
-  const audienceCompare = useSelector(getFormattedAudienceCompare);
+  const audienceCompare = useMemo(() => Object.keys(compare)
+    .map((key) => compare[key]
+      .map((d) => {
+        const result = [];
+        const { comparedEntityTypes, name, total } = d || {};
+
+        if (total && Object.keys(total).length > 0) {
+          result.push({
+            name,
+            key: `${key}-total`,
+            isTotal: true,
+            ...total,
+          });
+        }
+
+        if (comparedEntityTypes && Array.isArray(comparedEntityTypes)) {
+          result.push(comparedEntityTypes
+            .map((entity) => {
+              const { entityType, value } = entity || {};
+              return ({
+                key: `${key}-${entityType}`,
+                isTotal: false,
+                name: mapEntityTypes[entityType] || '',
+                ...value,
+              });
+            }));
+        }
+
+        return result
+          .reduce((acc, cur) => {
+            if (Array.isArray(cur)) {
+              return ([...acc, ...cur]);
+            }
+            return ([...acc, cur]);
+          }, []);
+      })
+      .reduce((acc, cur) => ([...acc, ...cur]), []))
+    .reduce((acc, cur) => ([...acc, ...cur]), []), [compare]);
 
   const [compareFilter, setCompareFilter] = useState({
     [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
   });
   const [pageTitle, setPageTitle] = useState();
-
-  useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
 
   useEffect(() => {
     const { title } = audienceDetails || {};
@@ -86,8 +116,8 @@ const AudiencesDetails = function AudiencesDetails() {
   }, [audienceDetails]);
 
   useEffect(() => {
-    dispatch(fetchAudienceCompare(audienceId, compareFilter));
-  }, [dispatch, audienceId, compareFilter]);
+    fetchCompare(audienceId, compareFilter);
+  }, [fetchCompare, audienceId, compareFilter]);
 
   const handleFilterComparisonTable = (values) => {
     const { [mapQueryParams[queryParams.search]]: search } = values || {};
@@ -127,7 +157,7 @@ const AudiencesDetails = function AudiencesDetails() {
             </h2>
 
             <ComparisonTable
-              isFetching={isFetchingAudienceCompare}
+              isFetching={isFetchingCompare}
               data={audienceCompare}
               name={audienceDetails?.title || ''}
               onFilter={handleFilterComparisonTable}
