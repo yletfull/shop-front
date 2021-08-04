@@ -9,7 +9,7 @@ const AudiencesList = lazy(() => import(
 const AudiencesDetails = lazy(() => import(
   /* webpackChunkName: 'audiences-details' */
   /* webpackMode: 'lazy' */
-  './AudiencesDetails'
+  '@/features/Audiences/pages/Details'
 ));
 const SegmentsDetails = lazy(() => import(
   /* webpackChunkName: 'segments-details' */
