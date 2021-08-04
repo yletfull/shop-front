@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const useQueryParams = function useQueryParamsHook() {
   const history = useHistory();
   const { search } = useLocation();
 
-  const [params, setParams] = useState({});
-
-  useEffect(() => {
+  const params = useMemo(() => {
     if (!search) {
-      return;
+      return ({});
     }
-    setParams([...new URLSearchParams(search)]
-      .reduce((acc, cur) => ({ ...acc, [cur[0]]: cur[1] }), {}));
+    return [...new URLSearchParams(search)]
+      .reduce((acc, cur) => ({ ...acc, [cur[0]]: cur[1] }), {});
   }, [search]);
 
   const setQueryParams = (values) => {
