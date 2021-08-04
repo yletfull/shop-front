@@ -1,37 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { injectReducer } from '@/store';
-import { useQuery } from '@/hooks';
+import service from '@/features/Audiences/service';
+import { useQuery, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import PagePagination from '@/components/PagePagination';
-import {
-  queryParams,
-  mapQueryParams,
-  namespace as NS,
-} from '@/features/Audiences/constants';
-import reducer from './reducer';
-import {
-  fetchAudiencesList,
-} from './actions';
-import {
-  getAudiencesPagination,
-  getFormattedAudienceList,
-  getIsFetchingAudiencesList,
-} from './selectors';
+import { queryParams, mapQueryParams } from '@/features/Audiences/constants';
 import TableView from '@/features/Audiences/components/TableView';
 import styles from './styles.module.scss';
 
 const AudiencesList = function AudiencesList() {
-  const dispatch = useDispatch();
   const history = useHistory();
   const query = useQuery();
 
-  const isFetching = useSelector(getIsFetchingAudiencesList);
-  const pagination = useSelector(getAudiencesPagination);
-  const tableData = useSelector(getFormattedAudienceList);
-
-  const [requestParams, setRequestParams] = useState(Object.values(queryParams)
+  const [params, setRequestParams] = useState(Object.values(queryParams)
     .reduce((acc, cur) => {
       if (!query.has(cur)) {
         return acc;
@@ -48,14 +29,17 @@ const AudiencesList = function AudiencesList() {
       });
     }, {}));
 
-  useEffect(() => {
-    injectReducer(NS, reducer);
-  }, []);
+  const { fetch, data, isFetching } = useService({
+    initialData: { data: [], meta: {} },
+    service: service.fetchAudiencesList,
+  });
 
   useEffect(() => {
-    console.log('Request Params', requestParams);
-    dispatch(fetchAudiencesList(requestParams));
-  }, [dispatch, requestParams]);
+    fetch(params);
+  }, [fetch, params]);
+
+  const { data: tableData, meta: tableMeta } = data || {};
+  const { pagination } = tableMeta || {};
 
   const changeQueryParams = (values) => {
     Object.values(queryParams)
@@ -72,15 +56,15 @@ const AudiencesList = function AudiencesList() {
   };
 
   const handleChangePage = (value) => {
-    const params = { ...requestParams, currentPage: value || 1 };
-    setRequestParams(params);
-    changeQueryParams(params);
+    const rparams = { ...params, currentPage: value || 1 };
+    setRequestParams(rparams);
+    changeQueryParams(rparams);
   };
 
   const handleFilterTable = (values) => {
-    const params = { ...requestParams, ...values };
-    setRequestParams(params);
-    changeQueryParams(params);
+    const rparams = { ...params, ...values };
+    setRequestParams(rparams);
+    changeQueryParams(rparams);
   };
 
   return (
@@ -99,8 +83,8 @@ const AudiencesList = function AudiencesList() {
         />
 
         <PagePagination
-          page={pagination.currentPage || 1}
-          numberOfPages={pagination.totalPages || 1}
+          page={pagination?.currentPage || 1}
+          numberOfPages={pagination?.totalPages || 1}
           numberOfVisiblePages={5}
           isDisabled={isFetching}
           onChangePage={handleChangePage}

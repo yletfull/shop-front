@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { Link } from 'react-router-dom';
@@ -10,16 +10,26 @@ import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import { queryParams, mapQueryParams } from '@/features/Audiences/constants';
+import {
+  entityTypes,
+  mapQueryParams,
+  queryParams,
+} from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     loadedAt: PropTypes.string,
     local: PropTypes.bool,
     title: PropTypes.string,
-    emails: PropTypes.number,
-    phones: PropTypes.number,
+    entityTypeTotals: PropTypes.arrayOf(PropTypes.shape({
+      entityType: PropTypes.string,
+      total: PropTypes.number,
+    })),
   })),
   isFetching: PropTypes.bool,
   onFilter: PropTypes.func,
@@ -53,6 +63,34 @@ const TableView = function TableView({
       .get(mapQueryParams[queryParams.searchName]) || '',
     [mapQueryParams[queryParams.searchLocal]]: getLocalFromQuery(),
   };
+
+  const rows = useMemo(() => {
+    const mapEntityTotals = (entities) => {
+      if (!entities || !Array.isArray(entities)) {
+        return ([]);
+      }
+      return entities.reduce((acc, { entityType, total }) => {
+        const mapEntities = {
+          [entityTypes.emails]: 'emals',
+          [entityTypes.phones]: 'phones',
+        };
+        if (!entityType) {
+          return acc;
+        }
+        return ({
+          ...acc,
+          [mapEntities[entityType] || entityType]: total,
+        });
+      }, {});
+    };
+
+    return data
+      .map((item) => ({
+        key: `${item.title}-${item.loadedAt}`,
+        ...item,
+        ...mapEntityTotals(item.entityTypeTotals),
+      }));
+  }, [data]);
 
   const handleSubmitForm = (values) => {
     const keyName = mapQueryParams[queryParams.searchName];
@@ -151,7 +189,7 @@ const TableView = function TableView({
               </TableRow>
             )}
 
-            {!isFetching && Array.isArray(data) && data.map((row) => (
+            {!isFetching && Array.isArray(data) && rows.map((row) => (
               <TableRow key={row.id || row.key}>
                 <TableCell>
                   <Link
