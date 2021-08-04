@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { Link } from 'react-router-dom';
@@ -10,16 +10,22 @@ import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import { queryParams, mapQueryParams } from '../constants';
+import { entityTypes } from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     loadedAt: PropTypes.string,
     local: PropTypes.bool,
     title: PropTypes.string,
-    emails: PropTypes.number,
-    phones: PropTypes.number,
+    entityTypeTotals: PropTypes.arrayOf(PropTypes.shape({
+      entityType: PropTypes.string,
+      total: PropTypes.number,
+    })),
   })),
   isFetching: PropTypes.bool,
   onFilter: PropTypes.func,
@@ -38,34 +44,46 @@ const TableView = function TableView({
 }) {
   const query = useQuery();
 
-  const getLocalFromQuery = () => {
-    const key = mapQueryParams[queryParams.searchLocal];
-    if (!query.has(key)) {
-      return '';
-    }
-    return query.get(key) === 'true'
-      ? '1'
-      : '0';
+  const initialFormValues = {
+    title: query.get('title') || '',
+    isLocal: query.get('isLocal') || '',
   };
 
-  const initialFormValues = {
-    [mapQueryParams[queryParams.searchName]]: query
-      .get(mapQueryParams[queryParams.searchName]) || '',
-    [mapQueryParams[queryParams.searchLocal]]: getLocalFromQuery(),
-  };
+  const rows = useMemo(() => {
+    const mapEntityTotals = (entities) => {
+      if (!entities || !Array.isArray(entities)) {
+        return ([]);
+      }
+      return entities.reduce((acc, { entityType, total }) => {
+        const mapEntities = {
+          [entityTypes.emails]: 'emals',
+          [entityTypes.phones]: 'phones',
+        };
+        if (!entityType) {
+          return acc;
+        }
+        return ({
+          ...acc,
+          [mapEntities[entityType] || entityType]: total,
+        });
+      }, {});
+    };
+
+    return data
+      .map((item) => ({
+        key: `${item.title}-${item.loadedAt}`,
+        ...item,
+        ...mapEntityTotals(item.entityTypeTotals),
+      }));
+  }, [data]);
 
   const handleSubmitForm = (values) => {
-    const keyName = mapQueryParams[queryParams.searchName];
-    const keyLocal = mapQueryParams[queryParams.searchLocal];
-    const {
-      [keyName]: title,
-      [keyLocal]: local,
-    } = values || {};
-    const params = { [keyName]: title };
-    if ([0, 1].map(String).includes(local)) {
-      params[keyLocal] = Boolean(Number(local));
-    }
-    onFilter(params);
+    onFilter({
+      title: values.title || '',
+      isLocal: ['true', 'false'].includes(values.isLocal)
+        ? values.isLocal
+        : '',
+    });
   };
 
   const FormikInput = withFormikField(Input);
@@ -88,7 +106,7 @@ const TableView = function TableView({
                     data-purpose="filter"
                   >
                     <Field
-                      name={mapQueryParams[queryParams.searchName]}
+                      name="title"
                       placeholder="Название"
                       className={styles.tableViewInput}
                       component={FormikInput}
@@ -101,14 +119,14 @@ const TableView = function TableView({
                   >
                     <span className={styles.tableViewCell}>
                       <Field
-                        name={mapQueryParams[queryParams.searchLocal]}
+                        name="isLocal"
                         placeholder="Тип"
                         resetText="Сбросить"
                         className={styles.tableViewInput}
-                        value={values[mapQueryParams[queryParams.searchLocal]]}
+                        value={values.isLocal}
                         options={[
-                          { text: 'Глобальная', value: '0' },
-                          { text: 'Локальная', value: '1' },
+                          { text: 'Глобальная', value: 'false' },
+                          { text: 'Локальная', value: 'true' },
                         ]}
                         component={FormikSelect}
                         fullwidth
@@ -151,7 +169,7 @@ const TableView = function TableView({
               </TableRow>
             )}
 
-            {!isFetching && Array.isArray(data) && data.map((row) => (
+            {!isFetching && Array.isArray(data) && rows.map((row) => (
               <TableRow key={row.id || row.key}>
                 <TableCell>
                   <Link
