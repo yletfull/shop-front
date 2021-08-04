@@ -9,7 +9,7 @@ import {
   queryParams,
   mapQueryParams,
   namespace as NS,
-} from './constants';
+} from '@/features/Audiences/constants';
 import reducer from './reducer';
 import {
   fetchAudiencesList,
@@ -19,7 +19,7 @@ import {
   getFormattedAudienceList,
   getIsFetchingAudiencesList,
 } from './selectors';
-import TableView from './TableView';
+import TableView from '@/features/Audiences/components/TableView';
 import styles from './styles.module.scss';
 
 const AudiencesList = function AudiencesList() {

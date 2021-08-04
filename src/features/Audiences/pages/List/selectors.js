@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import {
   entityTypes,
   namespace as NS,
-} from './constants';
+} from '@/features/Audiences/constants';
 
 export const getAudiencesList = (state) => (
   state[NS]?.audiencesList || []);

@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { namespace as NS } from './constants';
+import { namespace as NS } from '@/features/Audiences/constants';
 import service from './service';
 
 export const requestAudiencesList = createAction(`${NS}/request`);

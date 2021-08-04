@@ -10,7 +10,7 @@ import Input from '@/components/Input';
 import Select from '@/components/Select';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import { queryParams, mapQueryParams } from '../constants';
+import { queryParams, mapQueryParams } from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
