@@ -1,6 +1,7 @@
 import React from 'react';
-import CaretDownSolid from './CaretDownSolid';
+import History from './History';
 import CaretUpSolid from './CaretUpSolid';
+import CaretDownSolid from './CaretDownSolid';
 import TvAlt from './TvAlt';
 import Cog from './Cog';
 import SignalStream from './SignalStream';
@@ -77,6 +78,7 @@ export const Icons = ({ color, size }) => (
     {/* hygen-inject */}
     {renderIcon(CaretDownSolid)}
     {renderIcon(CaretUpSolid)}
+    {renderIcon(History)}
     {renderIcon(TvAlt)}
     {renderIcon(Cog)}
     {renderIcon(SignalStream)}
