@@ -72,8 +72,10 @@ const Statistics = function StatisticsScreen() {
             className={styles.dateInputs}
             min={datestart}
             max={dateend}
-            dateStart={dateStart}
-            dateEnd={dateEnd}
+            values={{
+              dateStart,
+              dateEnd,
+            }}
             onChange={handleDateInputsSubmit}
             onShift={handleDateInputsSubmit}
             onSelect={handleDateInputsSubmit}
