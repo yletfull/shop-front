@@ -21,6 +21,8 @@ const AudiencesDetails = function AudiencesDetails() {
 
   const { id: audienceId } = useParams();
 
+  const [pageTitle, setPageTitle] = useState('Аудитория');
+
   const {
     fetch: fetchDetails,
     data: details,
@@ -40,28 +42,31 @@ const AudiencesDetails = function AudiencesDetails() {
   });
 
   useEffect(() => {
+    const { title } = details || {};
+    if (title) {
+      setPageTitle(`Аудитория «${title}»`);
+    }
+  }, [details]);
+
+  useEffect(() => {
     fetchDetails(audienceId);
   }, [fetchDetails, audienceId]);
 
-  const audienceDetails = useMemo(() => {
+  const totalEntities = useMemo(() => {
+    const initialTotal = { emails: 0, phones: 0 };
     const { entityTypeTotals } = details || {};
     if (!entityTypeTotals || !Array.isArray(entityTypeTotals)) {
-      return details;
+      return initialTotal;
     }
     const mapEntityTypeKey = {
       [entityTypes.phones]: 'phones',
       [entityTypes.emails]: 'emails',
     };
-    const { emails, phones } = entityTypeTotals
+    return entityTypeTotals
       .reduce((acc, { entityType, total }) => ({
         ...acc,
         [mapEntityTypeKey[entityType]]: total,
-      }), {});
-    return ({
-      emailEntities: emails || 0,
-      phoneEntities: phones || 0,
-      ...details,
-    });
+      }), initialTotal);
   }, [details]);
 
   const audienceCompare = useMemo(() => Object.keys(compare)
@@ -106,14 +111,6 @@ const AudiencesDetails = function AudiencesDetails() {
   const [compareFilter, setCompareFilter] = useState({
     [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
   });
-  const [pageTitle, setPageTitle] = useState();
-
-  useEffect(() => {
-    const { title } = audienceDetails || {};
-    if (title) {
-      setPageTitle(`Аудитория «${title}»`);
-    }
-  }, [audienceDetails]);
 
   useEffect(() => {
     fetchCompare(audienceId, compareFilter);
@@ -141,14 +138,14 @@ const AudiencesDetails = function AudiencesDetails() {
 
         {!isFetchingDetails && (
           <Fragment>
-            <CommonInfo data={audienceDetails}>
+            <CommonInfo data={details}>
               <CommonInfoCard
                 label="Телефоны"
-                count={audienceDetails.phoneEntities || 0}
+                count={totalEntities.phones || 0}
               />
               <CommonInfoCard
                 label="E-mail"
-                count={audienceDetails.emailEntities || 0}
+                count={totalEntities.emails || 0}
               />
             </CommonInfo>
 
@@ -159,7 +156,7 @@ const AudiencesDetails = function AudiencesDetails() {
             <ComparisonTable
               isFetching={isFetchingCompare}
               data={audienceCompare}
-              name={audienceDetails?.title || ''}
+              name={details?.title || ''}
               onFilter={handleFilterComparisonTable}
             />
           </Fragment>
