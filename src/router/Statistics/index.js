@@ -57,8 +57,6 @@ const Statistics = function StatisticsScreen() {
     history.push({ search: newQuery.toString() });
   }, [locationSearch, history, dateStart, dateEnd]);
 
-  console.log(dateStart, dateEnd);
-
   return (
     <AppMain
       header={(
