@@ -1,26 +1,18 @@
 import React, { Fragment, useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import service from '@/features/Audiences/service';
-import { useQuery, useService } from '@/hooks';
+import { useQueryParams, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
 import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
-import {
-  entityTypes,
-  queryParams,
-  mapEntityTypes,
-  mapQueryParams,
-} from './constants';
+import { entityTypes, mapEntityTypes } from './constants';
 import styles from './styles.module.scss';
 
 const AudiencesDetails = function AudiencesDetails() {
-  const history = useHistory();
-  const query = useQuery();
-
   const { id: audienceId } = useParams();
-
+  const [params, setParams] = useQueryParams();
   const [pageTitle, setPageTitle] = useState('Аудитория');
 
   const {
@@ -49,8 +41,18 @@ const AudiencesDetails = function AudiencesDetails() {
   }, [details]);
 
   useEffect(() => {
+    if (!audienceId) {
+      return;
+    }
     fetchDetails(audienceId);
   }, [fetchDetails, audienceId]);
+
+  useEffect(() => {
+    if (!audienceId) {
+      return;
+    }
+    fetchCompare({ id: audienceId, params });
+  }, [fetchCompare, audienceId, params]);
 
   const totalEntities = useMemo(() => {
     const initialTotal = { emails: 0, phones: 0 };
@@ -71,14 +73,15 @@ const AudiencesDetails = function AudiencesDetails() {
 
   const audienceCompare = useMemo(() => Object.keys(compare)
     .map((key) => compare[key]
-      .map((d) => {
+      .map((d, i) => {
+        const generateKey = (name, index) => `${name}-${index}`;
         const result = [];
         const { comparedEntityTypes, name, total } = d || {};
 
         if (total && Object.keys(total).length > 0) {
           result.push({
             name,
-            key: `${key}-total`,
+            key: generateKey(`${key}-${name}-total`, i),
             isTotal: true,
             ...total,
           });
@@ -86,10 +89,10 @@ const AudiencesDetails = function AudiencesDetails() {
 
         if (comparedEntityTypes && Array.isArray(comparedEntityTypes)) {
           result.push(comparedEntityTypes
-            .map((entity) => {
+            .map((entity, index) => {
               const { entityType, value } = entity || {};
               return ({
-                key: `${key}-${entityType}`,
+                key: generateKey(`${key}-${name}-${entityType}-${i}`, index),
                 isTotal: false,
                 name: mapEntityTypes[entityType] || '',
                 ...value,
@@ -107,21 +110,6 @@ const AudiencesDetails = function AudiencesDetails() {
       })
       .reduce((acc, cur) => ([...acc, ...cur]), []))
     .reduce((acc, cur) => ([...acc, ...cur]), []), [compare]);
-
-  const [compareFilter, setCompareFilter] = useState({
-    [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
-  });
-
-  useEffect(() => {
-    fetchCompare(audienceId, compareFilter);
-  }, [fetchCompare, audienceId, compareFilter]);
-
-  const handleFilterComparisonTable = (values) => {
-    const { [mapQueryParams[queryParams.search]]: search } = values || {};
-    query.set(queryParams.search, search);
-    setCompareFilter({ [mapQueryParams[queryParams.search]]: search || '' });
-    history.push({ search: query.toString() });
-  };
 
   return (
     <AppMain
@@ -157,7 +145,7 @@ const AudiencesDetails = function AudiencesDetails() {
               isFetching={isFetchingCompare}
               data={audienceCompare}
               name={details?.title || ''}
-              onFilter={handleFilterComparisonTable}
+              onFilter={setParams}
             />
           </Fragment>
         )}
