@@ -8,7 +8,6 @@ import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Select from '@/components/Select';
-import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
 import { entityTypes } from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
@@ -27,19 +26,16 @@ const propTypes = {
       total: PropTypes.number,
     })),
   })),
-  isFetching: PropTypes.bool,
   onFilter: PropTypes.func,
 };
 
 const defaultProps = {
   data: [],
-  isFetching: false,
   onFilter: () => {},
 };
 
 const TableView = function TableView({
   data,
-  isFetching,
   onFilter,
 }) {
   const query = useQuery();
@@ -161,15 +157,7 @@ const TableView = function TableView({
               </Fragment>
             )}
           >
-            {isFetching && (
-              <TableRow>
-                <TableCell colSpan="5">
-                  <Spinner />
-                </TableCell>
-              </TableRow>
-            )}
-
-            {!isFetching && Array.isArray(data) && rows.map((row) => (
+            {Array.isArray(data) && rows.map((row) => (
               <TableRow key={row.id || row.key}>
                 <TableCell>
                   <Link
