@@ -26,6 +26,11 @@ const SegmentsUser = lazy(() => import(
   /* webpackMode: 'lazy' */
   './SegmentsUser'
 ));
+const Settings = lazy(() => import(
+  /* webpackChunkName: 'settings' */
+  /* webpackMode: 'lazy' */
+  '@/features/Settings/pages/Main'
+));
 const Upload = lazy(() => import(
   /* webpackChunkName: 'upload' */
   /* webpackMode: 'lazy' */
@@ -43,6 +48,7 @@ export const patchs = {
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
   segmentsUser: '/segments/user/',
+  settings: '/settings',
   upload: '/upload',
   users: '/users',
 };
@@ -55,6 +61,7 @@ export const titles = {
   segments: 'Сегменты',
   segmentsDetails: 'Сегмент',
   segmentsUser: 'Портрет пользователя',
+  settings: 'Настройки',
 };
 
 export default [
@@ -113,5 +120,10 @@ export default [
     Component: AudiencesDetails,
     path: patchs.audiencesDetails,
     title: titles.audiencesDetails,
+  },
+  {
+    Component: Settings,
+    path: patchs.settings,
+    title: titles.settings,
   },
 ];
