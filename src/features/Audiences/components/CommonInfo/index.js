@@ -41,7 +41,7 @@ const CommonInfo = function CommonInfo({
                 Дата загрузки
               </td>
               <td>
-                {formatDate(loadedAt)}
+                {loadedAt ? formatDate(loadedAt) : '-'}
               </td>
             </tr>
             <tr>

@@ -1,12 +1,8 @@
 @import '@/theme/include.scss';
 
-.header {
-  &_title {
-    font-weight: bold;
-  }
-}
-
 .audienceDetails {
+  position: relative;
+
   &Header {
     font-size: 1rem;
     margin-top: 2rem;

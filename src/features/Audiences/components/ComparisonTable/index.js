@@ -103,7 +103,7 @@ const ComparisonTable = function ComparisonTable({
             {isFetching && (
               <TableRow>
                 <TableCell colSpan="5">
-                  <Spinner />
+                  <Spinner layout="block" />
                 </TableCell>
               </TableRow>
             )}

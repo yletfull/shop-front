@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import service from '@/features/Audiences/service';
 import { useQueryParams, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
-import Spinner from '@/components/Spinner';
+import AppHeader from '@/components/AppHeader';
+import WithSpinner from '@/components/WithSpinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
 import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
@@ -113,43 +114,39 @@ const AudiencesDetails = function AudiencesDetails() {
 
   return (
     <AppMain
+      className={styles.audienceDetails}
       header={(
-        <div className={styles.header_title}>
+        <AppHeader>
           {pageTitle}
-        </div>
+        </AppHeader>
       )}
     >
-      <div className={styles.audienceDetails}>
-        {isFetchingDetails && (
-          <Spinner />
-        )}
+      <WithSpinner
+        isFetching={isFetchingDetails}
+        layout="overlay"
+      />
 
-        {!isFetchingDetails && (
-          <Fragment>
-            <CommonInfo data={details}>
-              <CommonInfoCard
-                label="Телефоны"
-                count={totalEntities.phones || 0}
-              />
-              <CommonInfoCard
-                label="E-mail"
-                count={totalEntities.emails || 0}
-              />
-            </CommonInfo>
+      <CommonInfo data={details}>
+        <CommonInfoCard
+          label="Телефоны"
+          count={totalEntities.phones || 0}
+        />
+        <CommonInfoCard
+          label="E-mail"
+          count={totalEntities.emails || 0}
+        />
+      </CommonInfo>
 
-            <h2 className={styles.audienceDetailsHeader}>
-              Сравнение с глобальной аудиторией
-            </h2>
+      <h2 className={styles.audienceDetailsHeader}>
+        Сравнение с глобальной аудиторией
+      </h2>
 
-            <ComparisonTable
-              isFetching={isFetchingCompare}
-              data={audienceCompare}
-              name={details?.title || ''}
-              onFilter={setParams}
-            />
-          </Fragment>
-        )}
-      </div>
+      <ComparisonTable
+        isFetching={isFetchingCompare}
+        data={audienceCompare}
+        name={details?.title || ''}
+        onFilter={setParams}
+      />
     </AppMain>
   );
 };
