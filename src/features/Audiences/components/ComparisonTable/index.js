@@ -8,7 +8,6 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Spinner from '@/components/Spinner';
 import Table, { TableCell, TableRow } from '@/components/Table';
-import { queryParams, mapQueryParams } from '../constants';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -41,7 +40,7 @@ const ComparisonTable = function ComparisonTable({
   const query = useQuery();
 
   const initialFormValues = {
-    [mapQueryParams[queryParams.search]]: query.get(queryParams.search) || '',
+    searchText: query.get('searchText') || '',
   };
 
   const FormikInput = withFormikField(Input);
@@ -50,6 +49,8 @@ const ComparisonTable = function ComparisonTable({
     <Formik
       initialValues={initialFormValues}
       onSubmit={onFilter}
+      validateOnBlur={false}
+      validateOnChange={false}
     >
       {() => (
         <Form>
@@ -64,7 +65,7 @@ const ComparisonTable = function ComparisonTable({
                   >
                     <span className={styles.comparisonTableCell}>
                       <Field
-                        name={mapQueryParams[queryParams.search]}
+                        name="searchText"
                         className={styles.comparisonTableInput}
                         component={FormikInput}
                         fullwidth
@@ -102,7 +103,7 @@ const ComparisonTable = function ComparisonTable({
             {isFetching && (
               <TableRow>
                 <TableCell colSpan="5">
-                  <Spinner />
+                  <Spinner layout="block" />
                 </TableCell>
               </TableRow>
             )}
