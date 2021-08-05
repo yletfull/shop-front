@@ -1,6 +1,13 @@
 import React from 'react';
-import { NavLink, useRouteMatch } from 'react-router-dom';
+import {
+  NavLink,
+  Switch,
+  Route,
+  Redirect,
+  useRouteMatch,
+} from 'react-router-dom';
 import { sections } from '@/features/Settings/constants';
+import routes from '@/features/Settings/routes';
 import PageHeader from '@/components/PageHeader';
 import AppMain from '@/components/AppMain';
 import styles from './styles.module.scss';
@@ -19,7 +26,7 @@ const Settings = function Settings() {
         </PageHeader>
       )}
     >
-      <div className={styles.settingSelect}>
+      <div className={styles.settingsSelect}>
         {sections.map(({ key, label, to }) => (
           <NavLink
             key={key}
@@ -31,6 +38,18 @@ const Settings = function Settings() {
           </NavLink>
         ))}
       </div>
+
+      <Switch>
+        {routes.map(({ path, Component }) => (
+          <Route
+            key={`settings-${path}`}
+            path={`${url}/${path}`}
+          >
+            <Component />
+          </Route>
+        ))}
+        <Redirect to={routes[0].path} />
+      </Switch>
     </AppMain>
   );
 };
