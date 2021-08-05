@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import dayjs from '@/utils/day';
-import WithSpinner from '@/components/WithSpinner';
 import AppMain from '@/components/AppMain';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
@@ -28,7 +27,7 @@ const StatisticsDetails = function StatisticsDetails() {
   const locationSearch = location.search;
   const query = new URLSearchParams(locationSearch);
 
-  const { fetch, data, isFetching } = useService({
+  const { fetch, data } = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
@@ -84,173 +83,169 @@ const StatisticsDetails = function StatisticsDetails() {
 
 
   return (
-    <WithSpinner
-      isFetching={isFetching}
-    >
-      <AppMain
-        header={(
+    <AppMain
+      header={(
+        <div
+          className={styles.header}
+        >
           <div
-            className={styles.header}
+            className={styles.header_title}
           >
-            <div
-              className={styles.header_title}
+            Статистика по задаче
+          </div>
+          <div className={styles.statisticsDetailsHeader}>
+            <EntitySelect
+              selected={String(entityId)}
+              onChange={handleChangeSelectedEntity}
+            />
+            &nbsp;
+            <DateInputs
+              className={styles.dateInputs}
+              min={datestart}
+              values={{
+                dateStart,
+                dateEnd,
+              }}
+              onChange={handleDateInputsSubmit}
+              onShift={handleDateInputsSubmit}
+              onSelect={handleDateInputsSubmit}
+            />
+          </div>
+        </div>
+      )}
+    >
+      <div className={styles.statisticsDetails}>
+        {entityType && entityId && (
+          <div className={styles.statisticsDetailsCharts}>
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Открутки
+                </span>
+              )}
             >
-              Статистика по задаче
-            </div>
-            <div className={styles.statisticsDetailsHeader}>
-              <EntitySelect
-                selected={String(entityId)}
-                onChange={handleChangeSelectedEntity}
+              <EntityDynamics
+                dateStart={dateStart}
+                dateEnd={dateEnd}
               />
-              &nbsp;
-              <DateInputs
-                className={styles.dateInputs}
-                min={datestart}
-                values={{
-                  dateStart,
-                  dateEnd,
-                }}
-                onChange={handleDateInputsSubmit}
-                onShift={handleDateInputsSubmit}
-                onSelect={handleDateInputsSubmit}
+            </ChartContainer>
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Лайки
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.tonality?.positive || 'transparent',
+                    }}
+                  />
+                  &nbsp;
+                  / Дизлайки
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.tonality?.negative || 'transparent',
+                    }}
+                  />
+                </span>
+              )}
+            >
+              <ReactionsTonality
+                dateStart={dateStart}
+                dateEnd={dateEnd}
               />
-            </div>
+            </ChartContainer>
+
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Репосты
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.commentsAndReposts?.reposts || 'transparent',
+                    }}
+                  />
+                  &nbsp;
+                  / Комментарии
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.commentsAndReposts?.comments || 'transparent',
+                    }}
+                  />
+                </span>
+              )}
+            >
+              <ReactionsComments
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+                colors={colors.commentsAndReposts}
+              />
+            </ChartContainer>
+
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Всего соцреакций
+                </span>
+              )}
+            >
+              <ReactionsTotal
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Facebook
+                </span>
+              )}
+            >
+              <ReactionsFacebook
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  vk
+                </span>
+              )}
+            >
+              <ReactionsVkontakte
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+            <ChartContainer
+              header={(
+                <span className={styles.statisticsDetailsChartHeader}>
+                  Instagram
+                </span>
+              )}
+            >
+              <ReactionsInstagram
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
           </div>
         )}
-      >
-        <div className={styles.statisticsDetails}>
-          {entityType && entityId && (
-            <div className={styles.statisticsDetailsCharts}>
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Открутки
-                  </span>
-                )}
-              >
-                <EntityDynamics
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Лайки
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.tonality?.positive || 'transparent',
-                      }}
-                    />
-                    &nbsp;
-                    / Дизлайки
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.tonality?.negative || 'transparent',
-                      }}
-                    />
-                  </span>
-                )}
-              >
-                <ReactionsTonality
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Репосты
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.commentsAndReposts?.reposts || 'transparent',
-                      }}
-                    />
-                    &nbsp;
-                    / Комментарии
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.commentsAndReposts?.comments || 'transparent',
-                      }}
-                    />
-                  </span>
-                )}
-              >
-                <ReactionsComments
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                  colors={colors.commentsAndReposts}
-                />
-              </ChartContainer>
-
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Всего соцреакций
-                  </span>
-                )}
-              >
-                <ReactionsTotal
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Facebook
-                  </span>
-                )}
-              >
-                <ReactionsFacebook
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    vk
-                  </span>
-                )}
-              >
-                <ReactionsVkontakte
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Instagram
-                  </span>
-                )}
-              >
-                <ReactionsInstagram
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-            </div>
-          )}
-          {entityType && (
-            <Lists
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-            />
-          )}
-        </div>
-      </AppMain>
-    </WithSpinner>
+        {entityType && (
+          <Lists
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+          />
+        )}
+      </div>
+    </AppMain>
   );
 };
 
