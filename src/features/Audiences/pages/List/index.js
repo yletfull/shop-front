@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import service from '@/features/Audiences/service';
 import { useQueryParams, useService } from '@/hooks';
-import AppHeader from '@/components/AppHeader';
 import AppMain from '@/components/AppMain';
+import PageHeader from '@/components/PageHeader';
 import WithSpinner from '@/components/WithSpinner';
 import PagePagination from '@/components/PagePagination';
 import TableView from '@/features/Audiences/components/TableView';
@@ -34,9 +34,9 @@ const AudiencesList = function AudiencesList() {
     <AppMain
       className={styles.audienceList}
       header={(
-        <AppHeader>
+        <PageHeader>
           Аудитория
-        </AppHeader>
+        </PageHeader>
       )}
     >
       <WithSpinner

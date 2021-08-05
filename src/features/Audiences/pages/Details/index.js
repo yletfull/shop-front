@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import service from '@/features/Audiences/service';
 import { useQueryParams, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
-import AppHeader from '@/components/AppHeader';
+import PageHeader from '@/components/PageHeader';
 import WithSpinner from '@/components/WithSpinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
@@ -117,9 +117,9 @@ const AudiencesDetails = function AudiencesDetails() {
       backTo="/audiences"
       className={styles.audienceDetails}
       header={(
-        <AppHeader>
+        <PageHeader>
           {pageTitle}
-        </AppHeader>
+        </PageHeader>
       )}
     >
       <WithSpinner
