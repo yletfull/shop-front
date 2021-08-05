@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useQuery } from '@/hooks';
+import dayjs from '@/utils/day';
+import WithSpinner from '@/components/WithSpinner';
 import AppMain from '@/components/AppMain';
-import { colors, queryParams } from './constants';
+import DateInputs from '@/features/Statistics/components/DateInputs';
+import { useService } from '@/hooks';
+import { colors } from './constants';
 import Lists from './Lists';
 import ChartContainer from './ChartContainer';
-import EntityDateRange from './EntityDateRange';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import ReactionsComments from './ReactionsComments';
@@ -14,39 +16,36 @@ import ReactionsTotal from './ReactionsTotal';
 import ReactionsFacebook from './ReactionsFacebook';
 import ReactionsVkontakte from './ReactionsVkontakte';
 import ReactionsInstagram from './ReactionsInstagram';
+import service from './service';
 import styles from './styles.module.scss';
 
 const StatisticsDetails = function StatisticsDetails() {
+  const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
-  const query = useQuery();
+  const { entityType, id: entityId } = useParams();
   const location = useLocation();
 
-  const { entityType, id: entityId } = useParams();
+  const locationSearch = location.search;
+  const query = new URLSearchParams(locationSearch);
 
-  const [params, setParams] = useState({
-    dateStart: query.get(queryParams.dateStart) || '',
-    dateEnd: query.get(queryParams.dateEnd) || '',
+  const { fetch, data, isFetching } = useService({
+    initialData: [],
+    service: service.fetchPeriods,
   });
 
-  const handleChangeDateRange = (values) => {
-    const { dateStart, dateEnd } = values || {};
-    if (!dateStart || !dateEnd) {
-      return;
-    }
-    setParams({ ...params, dateStart, dateEnd });
-    query.set(queryParams.dateStart, dateStart);
-    query.set(queryParams.dateEnd, dateEnd);
+  const { datestart } = data[0] || {};
+
+  const dateStart = query.get('dateStart') || today;
+  const dateEnd = query.get('dateEnd') || today;
+
+  const searchQuery = new URLSearchParams('');
+  searchQuery.set('dateEnd', dateEnd);
+  searchQuery.set('dateStart', dateStart);
+
+  const handleDateInputsSubmit = (dates) => {
+    query.set('dateStart', dates.dateStart);
+    query.set('dateEnd', dates.dateEnd);
     history.push({ search: query.toString() });
-  };
-  const handleChangeDateRangeLimits = (values) => {
-    console.log('=============== Change Limits', values);
-    if (!values || !values.dateStart || !values.dateEnd) {
-      return;
-    }
-    setParams({
-      dateStart: values.dateStart,
-      dateEnd: values.dateEnd,
-    });
   };
 
   const handleChangeSelectedEntity = (value) => {
@@ -62,165 +61,196 @@ const StatisticsDetails = function StatisticsDetails() {
     history.push(`${path}/${value}`);
   };
 
+  useEffect(() => {
+    fetch();
+  }, [fetch]);
+
+  useEffect(() => {
+    const newQuery = new URLSearchParams(locationSearch);
+    const queryDateStart = newQuery.get('dateStart');
+    const queryDateEnd = newQuery.get('dateEnd');
+    if ((queryDateStart && queryDateEnd)
+    || !(dateStart && dateEnd)) {
+      return;
+    }
+    if (!queryDateEnd) {
+      newQuery.set('dateEnd', dateEnd);
+    }
+    if (!queryDateStart) {
+      newQuery.set('dateStart', dateStart);
+    }
+    history.push({ search: newQuery.toString() });
+  }, [locationSearch, history, dateStart, dateEnd]);
+
+
   return (
-    <AppMain
-      header={(
-        <div
-          className={styles.header}
-        >
-          <div
-            className={styles.header_title}
-          >
-            Статистика по задаче
-          </div>
-          <div className={styles.statisticsDetailsHeader}>
-            <EntitySelect
-              selected={String(entityId)}
-              onChange={handleChangeSelectedEntity}
-            />
-            &nbsp;
-            <EntityDateRange
-              dateStart={params.dateStart}
-              dateEnd={params.dateEnd}
-              onChange={handleChangeDateRange}
-              onChangeLimits={handleChangeDateRangeLimits}
-            />
-          </div>
-        </div>
-      )}
+    <WithSpinner
+      isFetching={isFetching}
     >
-      <div className={styles.statisticsDetails}>
-        {entityType && entityId && (
-          <div className={styles.statisticsDetailsCharts}>
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Открутки
-                </span>
-              )}
+      <AppMain
+        header={(
+          <div
+            className={styles.header}
+          >
+            <div
+              className={styles.header_title}
             >
-              <EntityDynamics
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
+              Статистика по задаче
+            </div>
+            <div className={styles.statisticsDetailsHeader}>
+              <EntitySelect
+                selected={String(entityId)}
+                onChange={handleChangeSelectedEntity}
               />
-            </ChartContainer>
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Лайки
-                  &nbsp;
-                  <span
-                    className={styles.statisticsDetailsChartRectangle}
-                    style={{
-                      background: colors?.tonality?.positive || 'transparent',
-                    }}
-                  />
-                  &nbsp;
-                  / Дизлайки
-                  &nbsp;
-                  <span
-                    className={styles.statisticsDetailsChartRectangle}
-                    style={{
-                      background: colors?.tonality?.negative || 'transparent',
-                    }}
-                  />
-                </span>
-              )}
-            >
-              <ReactionsTonality
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
+              &nbsp;
+              <DateInputs
+                className={styles.dateInputs}
+                min={datestart}
+                values={{
+                  dateStart,
+                  dateEnd,
+                }}
+                onChange={handleDateInputsSubmit}
+                onShift={handleDateInputsSubmit}
+                onSelect={handleDateInputsSubmit}
               />
-            </ChartContainer>
-
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Репосты
-                  &nbsp;
-                  <span
-                    className={styles.statisticsDetailsChartRectangle}
-                    style={{
-                      background: colors?.commentsAndReposts?.reposts || 'transparent',
-                    }}
-                  />
-                  &nbsp;
-                  / Комментарии
-                  &nbsp;
-                  <span
-                    className={styles.statisticsDetailsChartRectangle}
-                    style={{
-                      background: colors?.commentsAndReposts?.comments || 'transparent',
-                    }}
-                  />
-                </span>
-              )}
-            >
-              <ReactionsComments
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
-                colors={colors.commentsAndReposts}
-              />
-            </ChartContainer>
-
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Всего соцреакций
-                </span>
-              )}
-            >
-              <ReactionsTotal
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
-              />
-            </ChartContainer>
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Facebook
-                </span>
-              )}
-            >
-              <ReactionsFacebook
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
-              />
-            </ChartContainer>
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  vk
-                </span>
-              )}
-            >
-              <ReactionsVkontakte
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
-              />
-            </ChartContainer>
-            <ChartContainer
-              header={(
-                <span className={styles.statisticsDetailsChartHeader}>
-                  Instagram
-                </span>
-              )}
-            >
-              <ReactionsInstagram
-                dateStart={params.dateStart}
-                dateEnd={params.dateEnd}
-              />
-            </ChartContainer>
+            </div>
           </div>
         )}
-        {entityType && (
-          <Lists
-            dateStart={params.dateStart}
-            dateEnd={params.dateEnd}
-          />
-        )}
-      </div>
-    </AppMain>
+      >
+        <div className={styles.statisticsDetails}>
+          {entityType && entityId && (
+            <div className={styles.statisticsDetailsCharts}>
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Открутки
+                  </span>
+                )}
+              >
+                <EntityDynamics
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Лайки
+                    &nbsp;
+                    <span
+                      className={styles.statisticsDetailsChartRectangle}
+                      style={{
+                        background: colors?.tonality?.positive || 'transparent',
+                      }}
+                    />
+                    &nbsp;
+                    / Дизлайки
+                    &nbsp;
+                    <span
+                      className={styles.statisticsDetailsChartRectangle}
+                      style={{
+                        background: colors?.tonality?.negative || 'transparent',
+                      }}
+                    />
+                  </span>
+                )}
+              >
+                <ReactionsTonality
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Репосты
+                    &nbsp;
+                    <span
+                      className={styles.statisticsDetailsChartRectangle}
+                      style={{
+                        background: colors?.commentsAndReposts?.reposts || 'transparent',
+                      }}
+                    />
+                    &nbsp;
+                    / Комментарии
+                    &nbsp;
+                    <span
+                      className={styles.statisticsDetailsChartRectangle}
+                      style={{
+                        background: colors?.commentsAndReposts?.comments || 'transparent',
+                      }}
+                    />
+                  </span>
+                )}
+              >
+                <ReactionsComments
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                  colors={colors.commentsAndReposts}
+                />
+              </ChartContainer>
+
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Всего соцреакций
+                  </span>
+                )}
+              >
+                <ReactionsTotal
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Facebook
+                  </span>
+                )}
+              >
+                <ReactionsFacebook
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    vk
+                  </span>
+                )}
+              >
+                <ReactionsVkontakte
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+              <ChartContainer
+                header={(
+                  <span className={styles.statisticsDetailsChartHeader}>
+                    Instagram
+                  </span>
+                )}
+              >
+                <ReactionsInstagram
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+            </div>
+          )}
+          {entityType && (
+            <Lists
+              dateStart={dateStart}
+              dateEnd={dateEnd}
+            />
+          )}
+        </div>
+      </AppMain>
+    </WithSpinner>
   );
 };
 
