@@ -7,7 +7,7 @@ import Spinner from '@/components/Spinner';
 import CommonInfo from '@/features/Audiences/components/CommonInfo';
 import CommonInfoCard from '@/features/Audiences/components/CommonInfoCard';
 import ComparisonTable from '@/features/Audiences/components/ComparisonTable';
-import { entityTypes, mapEntityTypes } from './constants';
+import { entityTypes, mapEntityTypes } from '@/features/Audiences/constants';
 import styles from './styles.module.scss';
 
 const AudiencesDetails = function AudiencesDetails() {
