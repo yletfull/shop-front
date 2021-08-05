@@ -114,6 +114,7 @@ const AudiencesDetails = function AudiencesDetails() {
 
   return (
     <AppMain
+      backTo="/audiences"
       className={styles.audienceDetails}
       header={(
         <AppHeader>
