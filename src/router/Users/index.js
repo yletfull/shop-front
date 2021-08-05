@@ -1,28 +1,18 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import { NavLink, Switch, Route, Redirect } from 'react-router-dom';
-import { setHeader } from '@/store/ui/actions';
+import AppMain from '@/components/AppMain';
 import routes, { patchs } from './routes';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
-
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const Users = function UsersScreen({ defaultTitle }) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
-
+const Users = function UsersScreen() {
   return (
-    <div>
+    <AppMain
+      header={(
+        <div className={styles.title}>
+          Пользователи
+        </div>
+      )}
+    >
       <div className={styles.navItemsWrapper}>
         <NavLink
           to={`${patchs.usersList}`}
@@ -52,11 +42,8 @@ const Users = function UsersScreen({ defaultTitle }) {
         ))}
         <Redirect to={routes[0].path} />
       </Switch>
-    </div>
+    </AppMain>
   );
 };
-
-Users.propTypes = propTypes;
-Users.defaultProps = defaultProps;
 
 export default Users;

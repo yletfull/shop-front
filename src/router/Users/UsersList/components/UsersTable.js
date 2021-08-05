@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { formatDate } from '@/utils/format';
-import Spinner from '@/components/Spinner';
 import { fetchUsers } from '@/store/users/actions';
 import Button from '@/components/Button';
 import { getUsersList } from '@/store/users/selectors';
 import IconPlus from '@/icons/Plus';
+import Table, { TableRow, TableCell } from '@/components/Table';
+import WithSpinner from '@/components/WithSpinner';
 import styles from './styles.module.scss';
 import AddUserPopup from './AddUserPopup';
 
@@ -34,10 +35,6 @@ const userTable = function UsersScreen() {
     setAddUserPopupIsOpen(false);
   };
 
-  if (isFetching) {
-    return <Spinner />;
-  }
-
   return (
     <div>
       <div className={styles.headerWrapper}>
@@ -52,66 +49,70 @@ const userTable = function UsersScreen() {
           </span>
         </Button>
       </div>
-      <table>
-        <tbody>
-          <tr header="">
-            <td>
+      <div className={styles.wrapper}>
+        <WithSpinner
+          className={styles.spinnerOverlay}
+          layout="overlay"
+          isFetching={isFetching}
+        />
+        <Table>
+          <TableRow type="header">
+            <TableCell>
               Идентификатор
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Логин
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               e-mail
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Телефон
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Дата создания
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Дата обновления
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
           {users?.length
             ? users.map((user) => (
-              <tr
+              <TableRow
                 key={user.id}
                 content=""
               >
-                <td>
+                <TableCell>
                   <Link to={(location) => ({ location, pathname: `/users/list/${user.id}/details` })}>
                     {user.id || '-'}
                   </Link>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {user.login || '-'}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {user.email || '-'}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {user.phone || '-'}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {formatDate(user.createdAt, 'YYYY:MM:DD HH:mm:ss')}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {formatDate(user.uploadAt, 'YYYY:MM:DD HH:mm:ss')}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))
             : (
-              <tr content="">
-                <td colSpan="8">
+              <TableRow content="">
+                <TableCell colSpan="8">
                   Пользователи не найдены
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-        </tbody>
-      </table>
-
+        </Table>
+      </div>
       {addUserPopupIsOpen
         && <AddUserPopup onClose={handleAddUserClosePopup} />}
 

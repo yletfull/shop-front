@@ -10,9 +10,9 @@ import dayjs from '@/utils/day';
 import Tag from '@/components/Tag';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
+import Table, { TableRow, TableCell } from '@/components/Table';
 import TimesCircleIcon from '@/icons/TimesCircle';
 import { getAllRoles, getUserRoles, getUserDetails, getUserSetRoleError } from '@/store/users/selectors';
-
 import styles from './styles.module.scss';
 
 
@@ -111,134 +111,137 @@ const Details = function RolesDetailsScreen() {
   }
 
   return (
-    <div>
-      <table>
-        <tbody>
-          <tr content="">
-            <td>
-              Идентификатор
-            </td>
-            <td>
-              {userDetails.id || '-'}
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              Логин
-            </td>
-            <td>
-              {userDetails.login || '-'}
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              E-mail
-            </td>
-            <td>
-              {userDetails.email || '-'}
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              Телефон
-            </td>
-            <td>
-              {userDetails.phone || '-'}
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              Создан
-            </td>
-            <td>
-              {dayjs(userDetails.createdAt).format('YYYY:MM:DD HH:mm:ss')}
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              Обновлен
-            </td>
-            <td>
-              {dayjs(userDetails.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
-            </td>
-          </tr>
-
-
-          <tr content="">
-            <td>
-              Роли:
-            </td>
-            <td>
-              <div className={styles.tagsWrapper}>
-                {userRoles?.length
-                  ? userRoles.map((role, ind) => (
-                    <div
-                      className={styles.roleItem}
-                      key={ind}
-                    >
-                      <Tag text={role.title} />
-                      <Button
-                        appearance="control"
-                        className={styles.removeRoleButton}
-                        onClick={handleRemoveRoleButtonClick}
-                        data-rolename={role.name}
-                        disabled={removeRoleButtonDisabled}
-                      >
-                        <TimesCircleIcon />
-                      </Button>
-                    </div>
-                  ))
-                  : (
-                    <span>
-                      -
-                    </span>
-                  )}
-              </div>
-            </td>
-          </tr>
-
-          <tr content="">
-            <td>
-              Добавить роль
-            </td>
-            <td>
-              <form
-                className={styles.addRoleForm}
-                onSubmit={handleSubmitRole}
-              >
-                <Select
-                  value={selectedRole}
-                  options={getAllRolesOptions(allRoles)}
-                  onChange={handleRoleChange}
-                  resetText="Не выбрано"
-                  placeholder="Выбрать роль"
-                  className={styles.select}
-                  disabled={!allRoles?.length}
-                />
-                <Button
-                  type="submit"
-                  className={styles.addRoleButton}
-                  disabled={addRoleButtonDisabled}
+    <Table className={styles.table}>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Идентификатор
+        </TableCell>
+        <TableCell>
+          {userDetails.id || '-'}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Логин
+        </TableCell>
+        <TableCell>
+          {userDetails.login || '-'}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          E-mail
+        </TableCell>
+        <TableCell>
+          {userDetails.email || '-'}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Телефон
+        </TableCell>
+        <TableCell>
+          {userDetails.phone || '-'}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Создан
+        </TableCell>
+        <TableCell>
+          {dayjs(userDetails.createdAt).format('YYYY:MM:DD HH:mm:ss')}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Обновлен
+        </TableCell>
+        <TableCell>
+          {dayjs(userDetails.uploadAt).format('YYYY:MM:DD HH:mm:ss')}
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Роли:
+        </TableCell>
+        <TableCell>
+          <div className={styles.tagsWrapper}>
+            {userRoles?.length
+              ? userRoles.map((role, ind) => (
+                <div
+                  className={styles.roleItem}
+                  key={ind}
                 >
-                  Добавить роль
-                </Button>
-                {userSetRoleError.current && (
-                  <p className={cx('red', styles.addRoleError)}>
-                    Произошла ошибка
-                  </p>
-                )}
-              </form>
-            </td>
-          </tr>
-
-        </tbody>
-      </table>
-    </div>
+                  <Tag text={role.title} />
+                  <Button
+                    appearance="control"
+                    className={styles.removeRoleButton}
+                    onClick={handleRemoveRoleButtonClick}
+                    data-rolename={role.name}
+                    disabled={removeRoleButtonDisabled}
+                  >
+                    <TimesCircleIcon />
+                  </Button>
+                </div>
+              ))
+              : (
+                <span>
+                  -
+                </span>
+              )}
+          </div>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell
+          className={styles.title}
+        >
+          Добавить роль
+        </TableCell>
+        <TableCell>
+          <form
+            className={styles.addRoleForm}
+            onSubmit={handleSubmitRole}
+          >
+            <Select
+              value={selectedRole}
+              options={getAllRolesOptions(allRoles)}
+              onChange={handleRoleChange}
+              resetText="Не выбрано"
+              placeholder="Выбрать роль"
+              className={styles.select}
+              disabled={!allRoles?.length}
+            />
+            <Button
+              type="submit"
+              className={styles.addRoleButton}
+              disabled={addRoleButtonDisabled}
+            >
+              Добавить роль
+            </Button>
+            {userSetRoleError.current && (
+              <p className={cx('red', styles.addRoleError)}>
+                Произошла ошибка
+              </p>
+            )}
+          </form>
+        </TableCell>
+      </TableRow>
+    </Table>
   );
 };
 
