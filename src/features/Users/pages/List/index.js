@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import { useQueryParams, useService } from '@/hooks';
 import Controls, { ControlsLink } from '@/components/Controls';
 import PagePagination from '@/components/PagePagination';
@@ -12,6 +13,7 @@ const propTypes = {};
 const defaultProps = {};
 
 const UsersList = function UsersList() {
+  const { url } = useRouteMatch();
   const [params, setParams] = useQueryParams();
 
   const { fetch, data, isFetching } = useService({
@@ -40,7 +42,7 @@ const UsersList = function UsersList() {
       <Controls className={styles.usersListControls}>
         <ControlsLink
           icon={(<IconPlus />)}
-          to="/"
+          to={`${url}/new`}
         >
           Добавить
           <br />

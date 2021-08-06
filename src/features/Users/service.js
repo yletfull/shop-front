@@ -1,6 +1,21 @@
 import api from '@/api';
 import { apiBaseUrl } from './constants';
 
+export const createUser = function serviceCreateUser(data) {
+  return api
+    .post(`${apiBaseUrl}/user`, { data })
+    .then((response) => response.data);
+};
+
+export const removeUser = function serviceRemoveUser(id) {
+  if (!id) {
+    return;
+  }
+  return api
+    .delete(`${apiBaseUrl}/user/${encodeURIComponent(id)}`)
+    .then((response) => response.data);
+};
+
 export const fetchUsersList = function serviceFetchUsersList(params) {
   return api
     .get(`${apiBaseUrl}/users`, { params })
@@ -8,5 +23,7 @@ export const fetchUsersList = function serviceFetchUsersList(params) {
 };
 
 export default {
+  createUser,
+  removeUser,
   fetchUsersList,
 };
