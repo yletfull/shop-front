@@ -19,7 +19,7 @@ const defaultProps = {
   onSubmit: () => {},
 };
 
-const UserForm = function UserForm({
+const CreateUserForm = function CreateUserForm({
   isDisabled,
   onCancel,
   onRemove,
@@ -36,54 +36,54 @@ const UserForm = function UserForm({
 
   return (
     <form
-      className={styles.userForm}
+      className={styles.createUserForm}
       onSubmit={handleSubmitForm}
     >
       <label>
-        <span className={styles.userFormLabel}>
+        <span className={styles.createUserFormLabel}>
           Логин:
         </span>
         <Input
           name="login"
           placeholder="Логин"
-          className={styles.userFormInput}
+          className={styles.createUserFormInput}
           disabled={isDisabled}
         />
       </label>
       <label>
-        <span className={styles.userFormLabel}>
+        <span className={styles.createUserFormLabel}>
           E-mail:
         </span>
         <Input
           name="email"
           placeholder="E-mail"
-          className={styles.userFormInput}
+          className={styles.createUserFormInput}
           disabled={isDisabled}
         />
       </label>
       <label>
-        <span className={styles.userFormLabel}>
+        <span className={styles.createUserFormLabel}>
           Телефон:
         </span>
         <Input
           name="phone"
           placeholder="Телефон"
-          className={styles.userFormInput}
+          className={styles.createUserFormInput}
           disabled={isDisabled}
         />
       </label>
 
-      <div className={styles.userFormRow}>
+      <div className={styles.createUserFormRow}>
         <Button
           type="submit"
-          className={styles.userFormButton}
+          className={styles.createUserFormButton}
           disabled={isDisabled}
         >
           Cоздать
         </Button>
         <Button
           appearance="secondary"
-          className={styles.userFormButton}
+          className={styles.createUserFormButton}
           onClick={onCancel}
         >
           Отмена
@@ -91,7 +91,7 @@ const UserForm = function UserForm({
         {userId && (
           <Button
             appearance="secondary"
-            className={styles.userFormButton}
+            className={styles.createUserFormButton}
             onClick={onRemove}
           >
             Удалить
@@ -102,7 +102,7 @@ const UserForm = function UserForm({
   );
 };
 
-UserForm.propTypes = propTypes;
-UserForm.defaultProps = defaultProps;
+CreateUserForm.propTypes = propTypes;
+CreateUserForm.defaultProps = defaultProps;
 
-export default UserForm;
+export default CreateUserForm;

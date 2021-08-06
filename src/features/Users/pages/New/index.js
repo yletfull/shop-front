@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
-import UserForm from '@/features/Users/components/UserForm';
+import CreateUserForm from '@/features/Users/components/CreateUserForm';
 import service from '@/features/Users/service';
 import styles from './styles.module.scss';
 
@@ -31,7 +31,7 @@ const New = function New() {
   return (
     <div className={styles.usersNew}>
       <div className={styles.userNewSection}>
-        <UserForm
+        <CreateUserForm
           isDisabled={isSubmitting}
           onCancel={handleCancelUserForm}
           onSubmit={handleSubmitUserForm}
