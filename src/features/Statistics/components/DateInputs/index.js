@@ -65,7 +65,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const handleParamsChange = (e) => {
     const { name, value } = e?.target || {};
-    if (!name) {
+    console.log('handleParamsChange', value);
+    if (!name || !value) {
       return;
     }
 
@@ -123,6 +124,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setShouldShowDropdown(!shouldShowDropdown);
   };
 
+  const handleDateKeydown = (e) => e.preventDefault();
+
   const handleQuickSelect = (e) => {
     e.preventDefault();
 
@@ -173,6 +176,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
             ? formatDate(values.dateStart, DATE_FORMAT)
             : min || formatDate(dayjs(), DATE_FORMAT))}
           onChange={handleParamsChange}
+          onKeyDown={handleDateKeydown}
         />
         &nbsp;
         -
@@ -186,6 +190,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
             ? formatDate(values.dateEnd, DATE_FORMAT)
             : max || formatDate(dayjs(), DATE_FORMAT))}
           onChange={handleParamsChange}
+          onKeyDown={handleDateKeydown}
         />
       </div>
       <button
