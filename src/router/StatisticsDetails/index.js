@@ -122,11 +122,7 @@ const StatisticsDetails = function StatisticsDetails() {
           {entityType && entityId && (
             <div className={styles.statisticsDetailsCharts}>
               <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Открутки
-                  </span>
-                )}
+                header="Открутки"
               >
                 <EntityDynamics
                   dateStart={dateStart}
@@ -135,7 +131,7 @@ const StatisticsDetails = function StatisticsDetails() {
               </ChartContainer>
               <ChartContainer
                 header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
+                  <span>
                     Лайки
                     &nbsp;
                     <span
@@ -164,7 +160,7 @@ const StatisticsDetails = function StatisticsDetails() {
 
               <ChartContainer
                 header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
+                  <span>
                     Репосты
                     &nbsp;
                     <span
@@ -193,11 +189,7 @@ const StatisticsDetails = function StatisticsDetails() {
               </ChartContainer>
 
               <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Всего соцреакций
-                  </span>
-                )}
+                header="Всего соцреакций"
               >
                 <ReactionsTotal
                   dateStart={dateStart}
@@ -205,11 +197,7 @@ const StatisticsDetails = function StatisticsDetails() {
                 />
               </ChartContainer>
               <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Facebook
-                  </span>
-                )}
+                header="Facebook"
               >
                 <ReactionsFacebook
                   dateStart={dateStart}
@@ -217,11 +205,7 @@ const StatisticsDetails = function StatisticsDetails() {
                 />
               </ChartContainer>
               <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    vk
-                  </span>
-                )}
+                header="vk"
               >
                 <ReactionsVkontakte
                   dateStart={dateStart}
@@ -229,11 +213,7 @@ const StatisticsDetails = function StatisticsDetails() {
                 />
               </ChartContainer>
               <ChartContainer
-                header={(
-                  <span className={styles.statisticsDetailsChartHeader}>
-                    Instagram
-                  </span>
-                )}
+                header="Instagram"
               >
                 <ReactionsInstagram
                   dateStart={dateStart}
