@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useQueryParams, useService } from '@/hooks';
+import Controls, { ControlsLink } from '@/components/Controls';
 import PagePagination from '@/components/PagePagination';
 import WithSpinner from '@/components/WithSpinner';
+import IconPlus from '@/icons/Plus';
 import service from '@/features/Users/service';
 import TableView from '@/features/Users/components/TableView';
 import styles from './styles.module.scss';
@@ -34,6 +36,18 @@ const UsersList = function UsersList() {
         layout="overlay"
         isFetching={isFetching}
       />
+
+      <Controls className={styles.usersListControls}>
+        <ControlsLink
+          icon={(<IconPlus />)}
+          to="/"
+        >
+          Добавить
+          <br />
+          пользователя
+        </ControlsLink>
+      </Controls>
+
       <TableView
         data={tableData}
       />
