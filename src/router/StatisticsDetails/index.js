@@ -7,7 +7,7 @@ import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
 import { colors } from './constants';
 import Lists from './Lists';
-import ChartContainer from './ChartContainer';
+import ChartContainer from './components/ChartContainer';
 import EntityDynamics from './EntityDynamics';
 import EntitySelect from './EntitySelect';
 import ReactionsComments from './ReactionsComments';
