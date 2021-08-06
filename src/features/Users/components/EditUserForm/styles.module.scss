@@ -1,6 +1,6 @@
 @import '@/theme/include.scss';
 
-.createUserForm {
+.editUserForm {
   padding: 2rem 0;
 
   &,
@@ -16,6 +16,16 @@
   &Button {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+
+    &[data-type='remove'] {
+      background-color: $color-pink;
+      border-color: $color-pink;
+
+      &:hover {
+        background-color: $color-red;
+        border-color: $color-red;
+      }
+    }
 
     & + & {
       margin-left: 1rem;

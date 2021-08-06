@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useParams } from 'react-router-dom';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import styles from './styles.module.scss';
@@ -8,25 +7,20 @@ import styles from './styles.module.scss';
 const propTypes = {
   isDisabled: PropTypes.bool,
   onCancel: PropTypes.func,
-  onRemove: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   isDisabled: false,
   onCancel: () => {},
-  onRemove: () => {},
   onSubmit: () => {},
 };
 
 const CreateUserForm = function CreateUserForm({
   isDisabled,
   onCancel,
-  onRemove,
   onSubmit,
 }) {
-  const { id: userId } = useParams();
-
   const handleSubmitForm = (e) => {
     e.preventDefault();
     const values = Array.from(new FormData(e.target).entries())
@@ -88,15 +82,6 @@ const CreateUserForm = function CreateUserForm({
         >
           Отмена
         </Button>
-        {userId && (
-          <Button
-            appearance="secondary"
-            className={styles.createUserFormButton}
-            onClick={onRemove}
-          >
-            Удалить
-          </Button>
-        )}
       </div>
     </form>
   );

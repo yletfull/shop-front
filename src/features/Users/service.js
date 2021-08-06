@@ -3,7 +3,7 @@ import { apiBaseUrl } from './constants';
 
 export const createUser = function serviceCreateUser(data) {
   return api
-    .post(`${apiBaseUrl}/user`, { data })
+    .post(`${apiBaseUrl}/users`, { data })
     .then((response) => response.data);
 };
 
@@ -31,9 +31,19 @@ export const removeUser = function serviceRemoveUser(id) {
     .then((response) => response.data);
 };
 
+export const updateUser = function serviceUpdateUser({ id, data }) {
+  if (!id) {
+    return;
+  }
+  return api
+    .patch(`${apiBaseUrl}/user/${encodeURIComponent(id)}`, { data })
+    .then((response) => response.data);
+};
+
 export default {
   createUser,
   fetchUser,
   fetchUsersList,
   removeUser,
+  updateUser,
 };

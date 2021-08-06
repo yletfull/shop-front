@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
 import CreateUserForm from '@/features/Users/components/CreateUserForm';
@@ -12,14 +12,25 @@ const New = function New() {
   const { url } = useRouteMatch();
   const history = useHistory();
 
+  const getBaseUrl = useCallback(() => {
+    const index = url.lastIndexOf('/');
+    return url.slice(0, index);
+  }, [url]);
+
   const {
+    data,
     fetch: createUser,
     isFetching: isSubmitting,
   } = useService({ service: service.createUser });
 
+  useEffect(() => {
+    if (data) {
+      history.push(getBaseUrl());
+    }
+  }, [history, getBaseUrl, data]);
+
   const handleCancelUserForm = () => {
-    const index = url.lastIndexOf('/');
-    history.push(url.slice(0, index));
+    history.push(getBaseUrl());
   };
   const handleSubmitUserForm = (values) => {
     if (!values.login) {

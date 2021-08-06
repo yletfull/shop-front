@@ -1,4 +1,5 @@
 import UsersDetails from '@/features/Users/pages/Details';
+import UsersEdit from '@/features/Users/pages/Edit';
 import UsersList from '@/features/Users/pages/List';
 import UsersNew from '@/features/Users/pages/New';
 import RolesList from '@/features/Roles/pages/List';
@@ -12,6 +13,10 @@ export default [
   {
     Component: UsersDetails,
     path: paths.usersDetails || '',
+  },
+  {
+    Component: UsersEdit,
+    path: paths.usersEdit || '',
   },
   {
     Component: UsersList,
