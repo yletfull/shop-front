@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import axios from 'axios';
 
 const useService = function useServiceHook({
@@ -44,6 +44,14 @@ const useService = function useServiceHook({
       }
     }
   }, [autoCancel, service]);
+
+  useEffect(() => (
+    () => {
+      cancel();
+      setIsFetching(false);
+      setError(null);
+    }
+  ), []);
 
   return {
     fetch,

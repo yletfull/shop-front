@@ -2,6 +2,10 @@ import api from '@/api';
 
 const baseUrl = 'api/v1/statistics';
 
+const fetchPeriods = () => api
+  .get('/api/v1/statistics/periods')
+  .then((data) => data?.data?.data);
+
 const fetchReactionsComments = function serviceFetchReactionsComments({
   entityType,
   entityId,
@@ -55,6 +59,7 @@ const fetchReactionsByPlatform = function serviceFetchReactionsByPlatform({
 };
 
 export default {
+  fetchPeriods,
   fetchReactionsComments,
   fetchReactionsTotal,
   fetchReactionsByPlatform,

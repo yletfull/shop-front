@@ -11,9 +11,6 @@ const fetchСampaigns = generateFetchList('campaigns');
 const fetchPlatforms = generateFetchList('platforms');
 const fetchSites = generateFetchList('sites');
 const fetchSpheres = generateFetchList('spheres');
-const fetchPeriods = () => api
-  .get('/api/v1/statistics/periods')
-  .then((data) => data?.data?.data);
 
 export default {
   fetchTasks,
@@ -21,5 +18,4 @@ export default {
   fetchPlatforms,
   fetchSites,
   fetchSpheres,
-  fetchPeriods,
 };
