@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useRouteMatch } from 'react-router-dom';
 import { formatDate } from '@/utils/format';
 import Table, { TableCell, TableRow } from '@/components/Table';
 import styles from './styles.module.scss';
@@ -21,8 +21,11 @@ const defaultProps = {
 };
 
 const TableView = function TableView({ data }) {
+  const { url } = useRouteMatch();
+
   const dateFormat = 'YYYY:MM:DD HH:mm:ss';
   const getShortId = (id) => id.slice(0, 8);
+
   return (
     <div className={styles.tableView}>
       <Table>
@@ -64,7 +67,7 @@ const TableView = function TableView({ data }) {
               {!row.id && '-'}
               {row.id && (
                 <Link
-                  to="/"
+                  to={`${url}/details/${row.id}`}
                   title={row.id}
                 >
                   {getShortId(row.id)}

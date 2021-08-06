@@ -1,12 +1,14 @@
 export const paths = {
   usersList: 'users',
   usersNew: 'users/new',
+  usersDetails: 'users/details/:id',
   rolesList: 'roles',
 };
 
 export const titles = {
   usersList: 'Пользователи',
   usersNew: 'Новый пользователь',
+  usersDetails: 'Пользователь',
   rolesList: 'Роли',
 };
 
