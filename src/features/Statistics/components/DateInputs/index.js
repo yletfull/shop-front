@@ -65,7 +65,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const handleParamsChange = (e) => {
     const { name, value } = e?.target || {};
-    console.log('handleParamsChange', value);
     if (!name || !value) {
       return;
     }
