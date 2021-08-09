@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
+import AddRoleForm from '@/features/Users/components/AddRoleForm';
 import EditUserForm from '@/features/Users/components/EditUserForm';
 import RolesList from '@/features/Users/components/RolesList';
 import service from '@/features/Users/service';
@@ -15,7 +16,11 @@ const Edit = function Edit() {
   const { url } = useRouteMatch();
   const { id: userId } = useParams();
 
-  const { fetch, data: user, isFetching } = useService({
+  const {
+    fetch: fetchUser,
+    data: user,
+    isFetching: isFetchingUser,
+  } = useService({
     initialData: {},
     service: service.fetchUser,
   });
@@ -25,8 +30,8 @@ const Edit = function Edit() {
     data: roles,
     isFetching: isFetchingRoles,
   } = useService({
-    initialData: {},
-    service: service.fetchRolesList,
+    initialData: [],
+    service: service.fetchUserRolesList,
   });
 
   const {
@@ -45,15 +50,9 @@ const Edit = function Edit() {
     if (!userId) {
       return;
     }
-    fetch(userId);
-  }, [fetch, userId]);
-
-  useEffect(() => {
-    if (!userId) {
-      return;
-    }
+    fetchUser(userId);
     fetchRoles(userId);
-  }, [fetchRoles, userId]);
+  }, [fetchUser, fetchRoles, userId]);
 
   const openUsersList = useCallback(() => {
     const index = url.indexOf('/edit');
@@ -80,6 +79,12 @@ const Edit = function Edit() {
     }
   }, [removeUserResponse, openUsersList]);
 
+  const handleRemoveRole = (roleId) => {
+    if (!roleId) {
+      return;
+    }
+    console.log(roleId);
+  };
   const handleRemoveUserForm = () => {
     if (!userId) {
       return;
@@ -94,13 +99,13 @@ const Edit = function Edit() {
     <div className={styles.userEdit}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetching || isFetchingRoles}
+        isFetching={isFetchingUser || isFetchingRoles}
       />
 
       <div className={styles.userEditSection}>
         <EditUserForm
           data={user}
-          isDisabled={isFetching || isSubmitting || isSubmittingRemove}
+          isDisabled={isFetchingUser || isSubmitting || isSubmittingRemove}
           onCancel={openUsersList}
           onRemove={handleRemoveUserForm}
           onSubmit={handleSubmitUserForm}
@@ -109,7 +114,11 @@ const Edit = function Edit() {
       <div className={styles.userEditSection}>
         <RolesList
           data={roles}
-          isEditable={false}
+          onRemove={handleRemoveRole}
+          isEditable
+        />
+        <AddRoleForm
+          data={roles}
         />
       </div>
     </div>

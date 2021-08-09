@@ -85,7 +85,6 @@ const Details = function Details() {
       <div className={styles.userDetailsSection}>
         <RolesList
           data={roles}
-          isEditable={false}
         />
       </div>
     </div>

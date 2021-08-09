@@ -1,5 +1,10 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.userEdit {
+  display: flex;
+
+  &Section {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
 }
