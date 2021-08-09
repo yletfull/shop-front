@@ -9,8 +9,8 @@ const directions = {
 };
 
 const directionsReverse = {
-  asc: 'desc',
-  desc: 'asc',
+  [directions.asc]: directions.desc,
+  [directions.desc]: directions.asc,
 };
 
 const propTypes = {
