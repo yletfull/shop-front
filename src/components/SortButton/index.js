@@ -18,6 +18,7 @@ const propTypes = {
   isActive: PropTypes.bool,
   field: PropTypes.string,
   direction: PropTypes.string,
+  className: PropTypes.string,
   onClick: PropTypes.func,
 };
 
@@ -26,6 +27,7 @@ const defaultProps = {
   isActive: false,
   field: '',
   direction: '',
+  className: '',
   onClick: () => {},
 };
 
@@ -34,7 +36,9 @@ const SortButton = function SortButton({
   isActive,
   field,
   direction,
+  className,
   onClick,
+  ...props
 }) {
   const handleImpressionsClick = () => {
     if (!direction || !field) {
@@ -49,10 +53,12 @@ const SortButton = function SortButton({
 
   return (
     <button
+      {...props}
       type="button"
       className={cx([
         { [styles.button_active]: isActive },
         styles.button,
+        className,
       ])}
       onClick={handleImpressionsClick}
     >
