@@ -20,19 +20,8 @@ const logout = function serviceAuthLogout() {
     .then((response) => response.data.data);
 };
 
-const fetchAbilities = function serviceAuthFetchAbilities(userId) {
-  if (!userId) {
-    return ([]);
-  }
-  return api
-    .get(`${baseUrl}/user/${encodeURIComponent(userId)}/abilities`)
-    .then((response) => response.data.data);
-};
-
 export default {
   check,
   login,
   logout,
-
-  fetchAbilities,
 };

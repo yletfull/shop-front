@@ -5,13 +5,10 @@ import api from '@/api';
 import {
   authCheck,
   authLogout,
-  fetchUserAbilities,
 } from '@/store/auth/actions';
 import {
   getIsAuthorized,
   getIsFetching,
-  getIsFetchingAbilities,
-  getUser,
 } from '@/store/auth/selectors';
 import LoginPage from '@/components/Login';
 import Spinner from '@/components/Spinner';
@@ -29,8 +26,6 @@ const WithAuth = function WithAuth({ children }) {
 
   const isAuthorized = useSelector(getIsAuthorized);
   const isFetching = useSelector(getIsFetching);
-  const isFetchingUserAbilities = useSelector(getIsFetchingAbilities);
-  const user = useSelector(getUser);
 
   useEffect(() => {
     dispatch(authCheck());
@@ -48,15 +43,7 @@ const WithAuth = function WithAuth({ children }) {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    const { id } = user || {};
-    if (!id) {
-      return;
-    }
-    dispatch(fetchUserAbilities(id));
-  }, [dispatch, user]);
-
-  if (isFetching || isFetchingUserAbilities) {
+  if (isFetching) {
     return (
       <Spinner />
     );
