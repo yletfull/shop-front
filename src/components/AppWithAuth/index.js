@@ -8,7 +8,6 @@ import {
   fetchUserAbilities,
 } from '@/store/auth/actions';
 import {
-  getAbilities,
   getIsAuthorized,
   getIsFetching,
   getIsFetchingAbilities,
@@ -28,7 +27,6 @@ const defaultProps = {
 const WithAuth = function WithAuth({ children }) {
   const dispatch = useDispatch();
 
-  const abilities = useSelector(getAbilities);
   const isAuthorized = useSelector(getIsAuthorized);
   const isFetching = useSelector(getIsFetching);
   const isFetchingUserAbilities = useSelector(getIsFetchingAbilities);
@@ -58,7 +56,7 @@ const WithAuth = function WithAuth({ children }) {
     dispatch(fetchUserAbilities(id));
   }, [dispatch, user]);
 
-  if (isFetching || abilities.length === 0 || isFetchingUserAbilities) {
+  if (isFetching || isFetchingUserAbilities) {
     return (
       <Spinner />
     );
