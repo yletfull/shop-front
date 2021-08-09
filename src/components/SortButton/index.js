@@ -17,7 +17,10 @@ const propTypes = {
   children: PropTypes.node,
   isActive: PropTypes.bool,
   field: PropTypes.string,
-  direction: PropTypes.string,
+  direction: PropTypes.oneOf([
+    directions.asc,
+    directions.desc,
+  ]),
   className: PropTypes.string,
   onClick: PropTypes.func,
 };
@@ -26,7 +29,7 @@ const defaultProps = {
   children: '',
   isActive: false,
   field: '',
-  direction: '',
+  direction: null,
   className: '',
   onClick: () => {},
 };
