@@ -29,7 +29,7 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const StatisticsSortButton = function StatisticsSortButton({
+const SortButton = function SortButton({
   children,
   isActive,
   field,
@@ -79,7 +79,7 @@ const StatisticsSortButton = function StatisticsSortButton({
   );
 };
 
-StatisticsSortButton.propTypes = propTypes;
-StatisticsSortButton.defaultProps = defaultProps;
+SortButton.propTypes = propTypes;
+SortButton.defaultProps = defaultProps;
 
-export default StatisticsSortButton;
+export default SortButton;

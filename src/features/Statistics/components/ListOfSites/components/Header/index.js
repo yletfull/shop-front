@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import IconChartLine from '@/icons/ChartLine';
 import IconRocketSolid from '@/icons/RocketSolid';
 import { TableRow, TableCell } from '@/components/Table';
-import SortButton from '@/features/Statistics/components/SortButton';
+import SortButton from '@/components/SortButton';
 import styles from './styles.module.scss';
 
 const directions = {
