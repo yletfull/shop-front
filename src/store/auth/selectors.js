@@ -10,14 +10,14 @@ export const getError = (state) => (
 export const getUser = (state) => (
   state[NS]?.user || null);
 
-export const getIsFetchingAbilities = (state) => (
-  state[NS]?.isFetchingAbilities || false);
-export const getAbilities = (state) => (
-  state[NS]?.abilities || []);
-
 export const getIsAuthorized = createSelector(
   [getUser],
   (user) => user && Object.keys(user).length > 0,
+);
+
+export const getAbilities = createSelector(
+  [getUser],
+  (user) => user?.abilities?.data || [],
 );
 export const getHasUnlimitedAccess = createSelector(
   [getAbilities],
