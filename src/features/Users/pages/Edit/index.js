@@ -3,6 +3,7 @@ import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
 import EditUserForm from '@/features/Users/components/EditUserForm';
+import RolesList from '@/features/Users/components/RolesList';
 import service from '@/features/Users/service';
 import styles from './styles.module.scss';
 
@@ -17,6 +18,15 @@ const Edit = function Edit() {
   const { fetch, data: user, isFetching } = useService({
     initialData: {},
     service: service.fetchUser,
+  });
+
+  const {
+    fetch: fetchRoles,
+    data: roles,
+    isFetching: isFetchingRoles,
+  } = useService({
+    initialData: {},
+    service: service.fetchRolesList,
   });
 
   const {
@@ -37,6 +47,13 @@ const Edit = function Edit() {
     }
     fetch(userId);
   }, [fetch, userId]);
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    fetchRoles(userId);
+  }, [fetchRoles, userId]);
 
   const openUsersList = useCallback(() => {
     const index = url.indexOf('/edit');
@@ -77,7 +94,7 @@ const Edit = function Edit() {
     <div className={styles.userEdit}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetching}
+        isFetching={isFetching || isFetchingRoles}
       />
 
       <div className={styles.userEditSection}>
@@ -90,7 +107,10 @@ const Edit = function Edit() {
         />
       </div>
       <div className={styles.userEditSection}>
-        Roles
+        <RolesList
+          data={roles}
+          isEditable={false}
+        />
       </div>
     </div>
   );

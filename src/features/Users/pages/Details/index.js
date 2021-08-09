@@ -4,6 +4,7 @@ import { useService } from '@/hooks';
 import Button from '@/components/Button';
 import WithSpinner from '@/components/WithSpinner';
 import service from '@/features/Users/service';
+import RolesList from '@/features/Users/components/RolesList';
 import UserDetails from '@/features/Users/components/UserDetails';
 import styles from './styles.module.scss';
 
@@ -15,17 +16,31 @@ const Details = function Details() {
   const { url } = useRouteMatch();
   const { id: userId } = useParams();
 
-  const { fetch, data, isFetching } = useService({
+  const {
+    data: user,
+    fetch: fetchUser,
+    isFetching: isFetchingUser,
+  } = useService({
     initialData: {},
     service: service.fetchUser,
+  });
+
+  const {
+    data: roles,
+    fetch: fetchRoles,
+    isFetching: isFetchingRoles,
+  } = useService({
+    initialData: [],
+    service: service.fetchRolesList,
   });
 
   useEffect(() => {
     if (!userId) {
       return;
     }
-    fetch(userId);
-  }, [fetch, userId]);
+    fetchUser(userId);
+    fetchRoles(userId);
+  }, [fetchUser, fetchRoles, userId]);
 
   const getBaseUrl = () => {
     const index = url.indexOf('/details');
@@ -43,12 +58,12 @@ const Details = function Details() {
     <div className={styles.userDetails}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetching}
+        isFetching={isFetchingUser || isFetchingRoles}
       />
 
       <div className={styles.userDetailsSection}>
         <UserDetails
-          data={data}
+          data={user}
         />
 
         <div className={styles.userDetailsRow}>
@@ -68,7 +83,10 @@ const Details = function Details() {
         </div>
       </div>
       <div className={styles.userDetailsSection}>
-        Roles
+        <RolesList
+          data={roles}
+          isEditable={false}
+        />
       </div>
     </div>
   );

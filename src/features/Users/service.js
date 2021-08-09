@@ -7,6 +7,15 @@ export const createUser = function serviceCreateUser(data) {
     .then((response) => response.data);
 };
 
+export const fetchRolesList = function serviceFetchRolesList(id) {
+  if (!id) {
+    return;
+  }
+  return api
+    .get(`${apiBaseUrl}/user/${encodeURIComponent(id)}/roles`)
+    .then((response) => response.data.data);
+};
+
 export const fetchUser = function serviceFetchUser(id) {
   if (!id) {
     return;
@@ -41,6 +50,7 @@ export const updateUser = function serviceUpdateUser({ id, data }) {
 
 export default {
   createUser,
+  fetchRolesList,
   fetchUser,
   fetchUsersList,
   removeUser,
