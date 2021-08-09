@@ -15,17 +15,17 @@ export const getIsAuthorized = createSelector(
   (user) => user && Object.keys(user).length > 0,
 );
 
-export const getAbilities = createSelector(
+export const getPermissions = createSelector(
   [getUser],
   (user) => user?.abilities?.data || [],
 );
 export const getHasUnlimitedAccess = createSelector(
-  [getAbilities],
-  (abilities) => abilities.map(({ name }) => name).includes('*'),
+  [getPermissions],
+  (permissions) => permissions.map(({ name }) => name).includes('*'),
 );
-export const getAbilitiesBySection = createSelector(
-  [getAbilities],
-  (abilities) => abilities
+export const getPermissionsBySection = createSelector(
+  [getPermissions],
+  (permissions) => permissions
     .reduce((acc, cur) => {
       const { id, name } = cur || {};
       if (!name || !id) {

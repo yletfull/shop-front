@@ -3,7 +3,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 import {
-  getAbilitiesBySection,
+  getPermissionsBySection,
   getHasUnlimitedAccess,
 } from '@/store/auth/selectors';
 import Spinner from '@/components/Spinner';
@@ -11,7 +11,7 @@ import NotFound from './NotFound';
 import routes from './routes';
 
 const RouterView = function RouterView() {
-  const abilities = useSelector(getAbilitiesBySection);
+  const permissions = useSelector(getPermissionsBySection);
   const hasUnlimitedAccess = useSelector(getHasUnlimitedAccess);
 
   const pages = routes.filter(({ rights }) => {
@@ -19,7 +19,7 @@ const RouterView = function RouterView() {
       return true;
     }
     const { section } = rights || {};
-    if (section && abilities[section]) {
+    if (section && permissions[section]) {
       return true;
     }
     return false;

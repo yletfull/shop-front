@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import {
   getHasUnlimitedAccess,
-  getAbilitiesBySection,
+  getPermissionsBySection,
 } from '@/store/auth/selectors';
 
 const propTypes = {
@@ -30,11 +30,11 @@ const withCheckRights = function withCheckRights(Component) {
     section,
     ...props
   }) {
-    const abilities = useSelector(getAbilitiesBySection);
+    const permissions = useSelector(getPermissionsBySection);
     const hasUnlimitedAccess = useSelector(getHasUnlimitedAccess);
 
     const isAvailable = hasUnlimitedAccess
-      || (section && action && abilities[section]);
+      || (section && action && permissions[section]);
 
     if (!isAvailable) {
       return null;
@@ -42,7 +42,7 @@ const withCheckRights = function withCheckRights(Component) {
 
     return (
       <Component
-        readOnly={!abilities[section]?.[action]}
+        readOnly={!permissions[section]?.[action]}
         {...props}
       />
     );
