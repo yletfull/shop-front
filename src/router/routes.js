@@ -149,6 +149,10 @@ export default [
     Component: Statistics,
     path: patchs.statistics,
     title: titles.statistics,
+    rights: {
+      section: sections.stats,
+      actions: [],
+    },
   },
   {
     Component: StatisticsDetails,
