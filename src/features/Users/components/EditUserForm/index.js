@@ -49,7 +49,7 @@ const EditUserForm = function EditUserForm({
         </span>
         <Input
           name="login"
-          value={data.login || ''}
+          defaultValue={data.login || ''}
           className={styles.editUserFormInput}
           disabled
         />
@@ -61,7 +61,7 @@ const EditUserForm = function EditUserForm({
         <Input
           name="email"
           placeholder="E-mail"
-          value={data.email || ''}
+          defaultValue={data.email || ''}
           className={styles.editUserFormInput}
           disabled={isDisabled}
         />
@@ -73,7 +73,7 @@ const EditUserForm = function EditUserForm({
         <Input
           name="phone"
           placeholder="Телефон"
-          value={data.phone || ''}
+          defaultValue={data.phone || ''}
           className={styles.editUserFormInput}
           disabled={isDisabled}
         />

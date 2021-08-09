@@ -36,8 +36,7 @@ export const updateUser = function serviceUpdateUser({ id, data }) {
     return;
   }
   return api
-    .patch(`${apiBaseUrl}/user/${encodeURIComponent(id)}`, { data })
-    .then((response) => response.data);
+    .patch(`${apiBaseUrl}/user/${encodeURIComponent(id)}`, { data });
 };
 
 export default {

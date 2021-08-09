@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
@@ -22,11 +22,13 @@ const Edit = function Edit() {
   const {
     fetch: updateUser,
     isFetching: isSubmitting,
+    data: updateUserResponse,
   } = useService({ service: service.updateUser });
 
   const {
     fetch: removeUser,
     isFetching: isSubmittingRemove,
+    data: removeUserResponse,
   } = useService({ service: service.removeUser });
 
   useEffect(() => {
@@ -36,23 +38,39 @@ const Edit = function Edit() {
     fetch(userId);
   }, [fetch, userId]);
 
-  const getBaseUrl = () => {
+  const openUsersList = useCallback(() => {
     const index = url.indexOf('/edit');
-    return url.slice(0, index);
-  };
+    history.push(url.slice(0, index) || '/');
+  }, [history, url]);
 
-  const handleCancelUserForm = () => {
-    history.push(getBaseUrl());
-  };
+  useEffect(() => {
+    const { status } = updateUserResponse || {};
+    if (!status) {
+      return;
+    }
+    if (status === 200) {
+      openUsersList();
+    }
+  }, [updateUserResponse, openUsersList]);
+
+  useEffect(() => {
+    const { status } = removeUserResponse || {};
+    if (!status) {
+      return;
+    }
+    if (status === 204) {
+      openUsersList();
+    }
+  }, [removeUserResponse, openUsersList]);
+
   const handleRemoveUserForm = () => {
     if (!userId) {
       return;
     }
     removeUser(userId);
   };
-  const handleSubmitUserForm = (values) => {
-    console.log(values);
-    console.log(updateUser);
+  const handleSubmitUserForm = (data) => {
+    updateUser({ data, id: userId });
   };
 
   return (
@@ -66,7 +84,7 @@ const Edit = function Edit() {
         <EditUserForm
           data={user}
           isDisabled={isFetching || isSubmitting || isSubmittingRemove}
-          onCancel={handleCancelUserForm}
+          onCancel={openUsersList}
           onRemove={handleRemoveUserForm}
           onSubmit={handleSubmitUserForm}
         />
