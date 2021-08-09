@@ -9,15 +9,19 @@ const directions = {
 };
 
 const directionsReverse = {
-  asc: 'desc',
-  desc: 'asc',
+  [directions.asc]: directions.desc,
+  [directions.desc]: directions.asc,
 };
 
 const propTypes = {
   children: PropTypes.node,
   isActive: PropTypes.bool,
   field: PropTypes.string,
-  direction: PropTypes.string,
+  direction: PropTypes.oneOf([
+    directions.asc,
+    directions.desc,
+  ]),
+  className: PropTypes.string,
   onClick: PropTypes.func,
 };
 
@@ -25,16 +29,19 @@ const defaultProps = {
   children: '',
   isActive: false,
   field: '',
-  direction: '',
+  direction: null,
+  className: '',
   onClick: () => {},
 };
 
-const StatisticsSortButton = function StatisticsSortButton({
+const SortButton = function SortButton({
   children,
   isActive,
   field,
   direction,
+  className,
   onClick,
+  ...props
 }) {
   const handleImpressionsClick = () => {
     if (!direction || !field) {
@@ -49,10 +56,12 @@ const StatisticsSortButton = function StatisticsSortButton({
 
   return (
     <button
+      {...props}
       type="button"
       className={cx([
         { [styles.button_active]: isActive },
         styles.button,
+        className,
       ])}
       onClick={handleImpressionsClick}
     >
@@ -79,7 +88,7 @@ const StatisticsSortButton = function StatisticsSortButton({
   );
 };
 
-StatisticsSortButton.propTypes = propTypes;
-StatisticsSortButton.defaultProps = defaultProps;
+SortButton.propTypes = propTypes;
+SortButton.defaultProps = defaultProps;
 
-export default StatisticsSortButton;
+export default SortButton;
