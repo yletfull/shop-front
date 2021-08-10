@@ -35,6 +35,7 @@ const StatisticsDetails = lazy(() => import(
   /* webpackChunkName: 'statistics-details' */
   /* webpackMode: 'lazy' */
   './StatisticsDetails'
+));
 const Settings = lazy(() => import(
   /* webpackChunkName: 'settings' */
   /* webpackMode: 'lazy' */
