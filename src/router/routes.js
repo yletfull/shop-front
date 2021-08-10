@@ -88,6 +88,10 @@ export default [
       title: titles.main,
     },
     title: titles.upload,
+    rights: {
+      section: sections.campaign,
+      actions: [],
+    },
   },
   {
     path: patchs.users,
