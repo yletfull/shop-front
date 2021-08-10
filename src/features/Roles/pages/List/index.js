@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useQueryParams, useService } from '@/hooks';
 import Controls, { ControlsLink } from '@/components/Controls';
+import PagePagination from '@/components/PagePagination';
 import WithSpinner from '@/components/WithSpinner';
 import IconPlus from '@/icons/Plus';
 import service from '@/features/Roles/service';
@@ -13,7 +14,7 @@ const defaultProps = {};
 
 const RolesList = function RolesList() {
   const { url } = useRouteMatch();
-  const [params] = useQueryParams();
+  const [params, setParams] = useQueryParams();
 
   const {
     fetch: fetchRolesList,
@@ -24,11 +25,16 @@ const RolesList = function RolesList() {
     service: service.fetchRolesList,
   });
 
-  const { data: tableData } = rolesList || {};
+  const { data: tableData, meta: tableMeta } = rolesList || {};
+  const { pagination } = tableMeta || {};
 
   useEffect(() => {
     fetchRolesList(params);
   }, [fetchRolesList, params]);
+
+  const handleChangePage = (value) => {
+    setParams({ ...params, currentPage: value || 1 });
+  };
 
   return (
     <div className={styles.rolesList}>
@@ -36,6 +42,7 @@ const RolesList = function RolesList() {
         layout="overlay"
         isFetching={isFetchingRolesList}
       />
+
       <Controls className={styles.rolesListControls}>
         <ControlsLink
           icon={(<IconPlus />)}
@@ -46,8 +53,16 @@ const RolesList = function RolesList() {
           роль
         </ControlsLink>
       </Controls>
+
       <TableView
         data={tableData || []}
+      />
+      <PagePagination
+        page={pagination?.currentPage || 1}
+        numberOfPages={pagination?.totalPages || 1}
+        numberOfVisiblePages={5}
+        isDisabled={isFetchingRolesList}
+        onChangePage={handleChangePage}
       />
     </div>
   );
