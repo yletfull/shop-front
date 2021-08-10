@@ -70,10 +70,11 @@ build_storybook:
       - dist/*
 
 dockerize:
-  image: docker:latest
+  image: gitlab.ubic.tech:4567/docker/docker:stable
   cache: {}
   services:
-    - docker:dind
+    - name: gitlab.ubic.tech:4567/docker/dind/docker:dind
+      alias: docker
   stage: dockerize
   only:
     - tags
