@@ -26,12 +26,12 @@ const Details = function Details() {
   });
 
   const {
-    data: roles,
-    fetch: fetchRoles,
-    isFetching: isFetchingRoles,
+    data: userRoles,
+    fetch: fetchUserRoles,
+    isFetching: isFetchingUserRoles,
   } = useService({
     initialData: [],
-    service: service.fetchRolesList,
+    service: service.fetchUserRolesList,
   });
 
   useEffect(() => {
@@ -39,8 +39,8 @@ const Details = function Details() {
       return;
     }
     fetchUser(userId);
-    fetchRoles(userId);
-  }, [fetchUser, fetchRoles, userId]);
+    fetchUserRoles(userId);
+  }, [fetchUser, fetchUserRoles, userId]);
 
   const getBaseUrl = () => {
     const index = url.indexOf('/details');
@@ -58,7 +58,7 @@ const Details = function Details() {
     <div className={styles.userDetails}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetchingUser || isFetchingRoles}
+        isFetching={isFetchingUser || isFetchingUserRoles}
       />
 
       <div className={styles.userDetailsSection}>
@@ -84,7 +84,7 @@ const Details = function Details() {
       </div>
       <div className={styles.userDetailsSection}>
         <RolesList
-          data={roles}
+          data={userRoles}
         />
       </div>
     </div>
