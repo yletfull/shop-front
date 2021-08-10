@@ -1,0 +1,19 @@
+@import '@/theme/include.scss';
+
+.userDetails {
+  display: flex;
+
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+
+  &Section {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+}

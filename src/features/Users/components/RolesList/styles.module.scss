@@ -1,0 +1,22 @@
+@import '@/theme/include.scss';
+
+.rolesList {
+  font-size: .875rem;
+  padding: 1.5rem 0 1rem 1rem;
+
+  &Button {
+    color: $color-pink;
+    font-size: .75rem;
+  }
+
+  &Row {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: .25rem 0;
+  }
+
+  &Title {
+    display: inline-block;
+  }
+}
