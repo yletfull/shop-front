@@ -35,6 +35,10 @@ const StatisticsDetails = lazy(() => import(
   /* webpackChunkName: 'statistics-details' */
   /* webpackMode: 'lazy' */
   './StatisticsDetails'
+const Settings = lazy(() => import(
+  /* webpackChunkName: 'settings' */
+  /* webpackMode: 'lazy' */
+  '@/features/Settings/pages/Main'
 ));
 const Upload = lazy(() => import(
   /* webpackChunkName: 'upload' */
@@ -60,6 +64,7 @@ export const patchs = {
   segmentsNew: '/segments/new',
   segmentsUser: '/segments/user/',
   statisticsDetails: '/statistics/details/:entityType/:id?',
+  settings: '/settings',
   upload: '/upload',
   users: '/users',
   statistics: '/statistics/lists',
@@ -76,6 +81,7 @@ export const titles = {
   segmentsUser: 'Портрет пользователя',
   statistics: 'Статистика',
   statisticsDetails: 'Статистика',
+  settings: 'Настройки',
 };
 
 export default [
@@ -164,6 +170,15 @@ export default [
     title: titles.statisticsDetails,
     rights: {
       section: sections.stats,
+      actions: [],
+    },
+  },
+  {
+    Component: Settings,
+    path: patchs.settings,
+    title: titles.settings,
+    rights: {
+      section: sections.user,
       actions: [],
     },
   },
