@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Spinner from '@/components/Spinner';
 import Button from '@/components/Button';
 import { fetchAllRoles } from '@/store/users/actions';
 import { getAllRoles } from '@/store/users/selectors';
+import Table, { TableRow, TableCell } from '@/components/Table';
+import WithSpinner from '@/components/WithSpinner';
 import AddRolePopup from './AddRolePopup';
 import styles from './styles.module.scss';
 
@@ -33,16 +34,9 @@ const RolesTable = function UsersScreen() {
     setAddRolePopupIsOpen(false);
   };
 
-  if (isFetching) {
-    return <Spinner />;
-  }
-
   return (
     <div>
       <div className={styles.headerWrapper}>
-        <p>
-          Список ролей
-        </p>
         <Button
           className={styles.editAbilitiesButton}
           appearance="control"
@@ -54,47 +48,52 @@ const RolesTable = function UsersScreen() {
         </Button>
       </div>
 
-      <table>
-        <tbody>
-          <tr header="">
-            <td>
+      <div className={styles.wrapper}>
+        <WithSpinner
+          className={styles.spinnerOverlay}
+          layout="overlay"
+          isFetching={isFetching}
+        />
+        <Table>
+          <TableRow type="header">
+            <TableCell>
               Идентификатор
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Имя
-            </td>
-            <td>
+            </TableCell>
+            <TableCell>
               Наименование
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
           {roles?.length
             ? roles.map((role) => (
-              <tr
+              <TableRow
                 key={role.id}
                 content=""
               >
-                <td>
+                <TableCell>
                   <Link to={(location) => ({ location, pathname: `/users/roles/${role.name}/details` })}>
                     {role.id || '-'}
                   </Link>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {role.name || '-'}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {role.title || '-'}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             ))
             : (
-              <tr content="">
-                <td colSpan="8">
+              <TableRow content="">
+                <TableCell colSpan="8">
                   Роли не найдены
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )}
-        </tbody>
-      </table>
+        </Table>
+      </div>
 
       {addRolePopupIsOpen
         && <AddRolePopup onClose={handleAddRoleClosePopup} />}

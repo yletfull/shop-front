@@ -1,5 +1,9 @@
 @import '@/theme/include.scss';
 
+.title {
+  font-weight: bold;
+}
+
 .navItemsWrapper {
   display: flex;
   flex-direction: row;

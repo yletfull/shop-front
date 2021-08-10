@@ -1,5 +1,13 @@
 @import '@/theme/include.scss';
 
+.wrapper {
+  position: relative;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lightest, .5);
+}
+
 .headerWrapper {
   align-items: center;
   display: flex;

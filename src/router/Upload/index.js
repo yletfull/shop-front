@@ -1,30 +1,24 @@
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { setHeader } from '@/store/ui/actions';
+import React from 'react';
+import AppMain from '@/components/AppMain';
+import PageHeader from '@/components/PageHeader';
 import Header from './Header';
 import Main from './Main';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
+const propTypes = {};
+const defaultProps = {};
 
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const Upload = function UploadScreen({ defaultTitle }) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
-
+const Upload = function UploadScreen() {
   return (
-    <Fragment>
+    <AppMain
+      header={(
+        <PageHeader>
+          Вконтакт
+        </PageHeader>
+      )}
+    >
       <Header />
       <Main />
-    </Fragment>
+    </AppMain>
   );
 };
 
