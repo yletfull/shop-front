@@ -3,6 +3,7 @@ export const paths = {
   usersNew: 'users/new',
   usersDetails: 'users/details/:id',
   usersEdit: 'users/edit/:id',
+  rolesDetails: 'roles/details/:name',
   rolesList: 'roles',
 };
 
@@ -11,6 +12,7 @@ export const titles = {
   usersNew: 'Новый пользователь',
   usersDetails: 'Пользователь',
   usersEdit: 'Редактирование пользователя',
+  rolesDetails: 'Роль',
   rolesList: 'Роли',
 };
 
