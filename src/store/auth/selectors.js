@@ -10,22 +10,22 @@ export const getError = (state) => (
 export const getUser = (state) => (
   state[NS]?.user || null);
 
-export const getIsFetchingAbilities = (state) => (
-  state[NS]?.isFetchingAbilities || false);
-export const getAbilities = (state) => (
-  state[NS]?.abilities || []);
-
 export const getIsAuthorized = createSelector(
   [getUser],
   (user) => user && Object.keys(user).length > 0,
 );
-export const getHasUnlimitedAccess = createSelector(
-  [getAbilities],
-  (abilities) => abilities.map(({ name }) => name).includes('*'),
+
+export const getPermissions = createSelector(
+  [getUser],
+  (user) => user?.abilities?.data || [],
 );
-export const getAbilitiesBySection = createSelector(
-  [getAbilities],
-  (abilities) => abilities
+export const getHasUnlimitedAccess = createSelector(
+  [getPermissions],
+  (permissions) => permissions.map(({ name }) => name).includes('*'),
+);
+export const getPermissionsBySection = createSelector(
+  [getPermissions],
+  (permissions) => permissions
     .reduce((acc, cur) => {
       const { id, name } = cur || {};
       if (!name || !id) {
