@@ -7,6 +7,9 @@ export const formatDate = (value, format = 'DD.MM.YYYY') => {
   return value;
 };
 
+export const formatToDate = (date) => dayjs(date).toDate();
+export const formatToUnix = (date) => dayjs(date).unix();
+
 export const formatNumber = (value) => Number(value).toLocaleString('ru-RU');
 
 export const formatPercent = (value) => {

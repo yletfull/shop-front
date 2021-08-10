@@ -1,0 +1,51 @@
+@use 'sass:math';
+
+@import '@/theme/include.scss';
+
+$gap: 1em;
+
+.header {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+
+  &_title {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+}
+
+.statisticsDetails {
+  &Chart {
+    &Header {
+      display: inline-block;
+      text-align: center;
+      width: 100%;
+    }
+
+    &Rectangle {
+      display: inline-block;
+      height: .5rem;
+      width: .5rem;
+    }
+  }
+
+  &Charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $gap;
+
+    & > * {
+      &:first-child {
+        flex-basis: 100%;
+      }
+
+      flex-basis: calc(33% - #{math.div($gap, 2)});
+      flex-grow: 1;
+    }
+  }
+
+  &Header {
+    display: flex;
+  }
+}

@@ -13,7 +13,7 @@ const defaultProps = {
   className: '',
 };
 
-const StatisticsDateInputs = function StatisticsDateInputs({
+const StatisticsDateInputsDropdown = function StatisticsDateInputsDropdown({
   children,
   className,
   ...props
@@ -28,7 +28,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   );
 };
 
-StatisticsDateInputs.propTypes = propTypes;
-StatisticsDateInputs.defaultProps = defaultProps;
+StatisticsDateInputsDropdown.propTypes = propTypes;
+StatisticsDateInputsDropdown.defaultProps = defaultProps;
 
-export default StatisticsDateInputs;
+export default StatisticsDateInputsDropdown;
