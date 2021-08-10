@@ -1,4 +1,10 @@
 import React from 'react';
+import Check from './Check';
+import Exclamation from './Exclamation';
+import Equals from './Equals';
+import GreaterThanEqual from './GreaterThanEqual';
+import LessThanEqual from './LessThanEqual';
+import BarsLight from './BarsLight';
 import History from './History';
 import CaretUpSolid from './CaretUpSolid';
 import CaretDownSolid from './CaretDownSolid';
@@ -76,8 +82,12 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
-    {renderIcon(CaretDownSolid)}
-    {renderIcon(CaretUpSolid)}
+    {renderIcon(Check)}
+    {renderIcon(Exclamation)}
+    {renderIcon(Equals)}
+    {renderIcon(GreaterThanEqual)}
+    {renderIcon(LessThanEqual)}
+    {renderIcon(BarsLight)}
     {renderIcon(History)}
     {renderIcon(TvAlt)}
     {renderIcon(Cog)}
@@ -116,6 +126,8 @@ export const Icons = ({ color, size }) => (
     {renderIcon(RocketSolid)}
     {renderIcon(ThumbsDownSolid)}
     {renderIcon(ThumbsUpSolid)}
+    {renderIcon(CaretUpSolid)}
+    {renderIcon(CaretDownSolid)}
   </div>
 );
 Icons.storyName = 'Icons';

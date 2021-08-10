@@ -12,14 +12,19 @@ const AudiencesDetails = lazy(() => import(
   './AudiencesDetails'
 ));
 const SegmentsDetails = lazy(() => import(
-  /* webpackChunkName: 'segments-details' */
+  /* webpackChunkName: 'segments-details-page' */
   /* webpackMode: 'lazy' */
-  './SegmentsDetails'
+  '@/features/Segments/pages/Details'
+));
+const SegmentsNew = lazy(() => import(
+  /* webpackChunkName: 'segments-new-page' */
+  /* webpackMode: 'lazy' */
+  '@/features/Segments/pages/New'
 ));
 const SegmentsList = lazy(() => import(
   /* webpackChunkName: 'segments-list' */
   /* webpackMode: 'lazy' */
-  './SegmentsList'
+  '@/features/Segments/pages/List'
 ));
 const SegmentsUser = lazy(() => import(
   /* webpackChunkName: 'segments-user' */
@@ -41,16 +46,23 @@ const Users = lazy(() => import(
   /* webpackMode: 'lazy' */
   './Users'
 ));
+const Statistics = lazy(() => import(
+  /* webpackChunkName: 'statistics' */
+  /* webpackMode: 'lazy' */
+  './Statistics'
+));
 
 export const patchs = {
   audiencesList: '/audiences',
   audiencesDetails: '/audiences/details/:id',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
+  segmentsNew: '/segments/new',
   segmentsUser: '/segments/user/',
   statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
   users: '/users',
+  statistics: '/statistics/lists',
 };
 
 export const titles = {
@@ -59,9 +71,11 @@ export const titles = {
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
-  segmentsDetails: 'Сегмент',
+  segmentsDetails: 'Детали сегмента',
+  segmentsNew: 'Новый сегмент',
   segmentsUser: 'Портрет пользователя',
   statisticsDetails: 'Статистика',
+  statistics: 'Статистика',
 };
 
 export default [
@@ -83,6 +97,11 @@ export default [
       title: titles.users,
     },
     title: titles.users,
+  },
+  {
+    Component: SegmentsNew,
+    path: patchs.segmentsNew,
+    title: titles.segmentsNew,
   },
   {
     Component: SegmentsDetails,
@@ -112,6 +131,11 @@ export default [
     },
   },
   {
+    Component: SegmentsList,
+    path: patchs.segments,
+    title: titles.segments,
+  },
+  {
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
@@ -125,6 +149,11 @@ export default [
     Component: StatisticsDetails,
     path: patchs.statisticsDetails,
     title: titles.statisticsDetails,
+  },
+  {
+    Component: Statistics,
+    path: patchs.statistics,
+    title: titles.statistics,
     rights: {
       section: sections.stats,
       actions: [],

@@ -1,8 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit';
+/* eslint-disable import/prefer-default-export */
 import NS from './namespace';
 
-export const getState = (state) => state[NS] || {};
-export const getHeader = createSelector(
-  [getState],
-  (state) => state.header,
-);
+export const getHeader = (state) => state[NS]?.header;

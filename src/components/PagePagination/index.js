@@ -55,30 +55,34 @@ const PagePagination = function PagePagination({
     let isVisibleRightDelimiter = false;
     const half = Math.floor(numberOfVisiblePages / 2);
 
-    if (page <= half) {
+    pages = [
+      1,
+      ...[...Array(Math.max(numberOfVisiblePages - 2, 0)).keys()]
+        .map((i) => i + 1)
+        .map((i) => i + (page - half)),
+      numberOfPages,
+    ];
+
+    if (page >= numberOfVisiblePages) {
+      pages = [
+        ...[...Array(numberOfVisiblePages - 1).keys()]
+          .map((i) => i + 1),
+        numberOfPages,
+      ];
+    } else if (page < half) {
       isVisibleRightDelimiter = true;
       pages = [
         ...[...Array(numberOfVisiblePages - 1).keys()]
           .map((i) => i + 1),
         numberOfPages,
       ];
-    } else if (page >= (numberOfPages - half)) {
+    } else if (page > (numberOfPages - half)) {
       isVisibleLeftDelimiter = true;
       pages = [
         1,
         ...[...Array(numberOfVisiblePages - 1).keys()]
           .map((i) => i + 1)
           .map((i) => i + (numberOfPages - numberOfVisiblePages) + 1),
-      ];
-    } else {
-      isVisibleLeftDelimiter = true;
-      isVisibleRightDelimiter = true;
-      pages = [
-        1,
-        ...[...Array(numberOfVisiblePages - 2).keys()]
-          .map((i) => i + 1)
-          .map((i) => i + (page - half)),
-        numberOfPages,
       ];
     }
 
@@ -116,7 +120,7 @@ const PagePagination = function PagePagination({
     if (!pageNumber || pageNumber === String(page)) {
       return;
     }
-    onChangePage(pageNumber);
+    onChangePage(Number(pageNumber));
   };
 
   console.log(count, countOptions, onChangeCount);
