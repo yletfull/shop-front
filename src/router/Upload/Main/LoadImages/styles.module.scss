@@ -8,6 +8,31 @@
   }
 }
 
+.loadImages {
+  &Table {
+    & td {
+      &[data-purpose='filter'] {
+        padding-right: 0;
+
+        &:first-child {
+          padding-left: 0;
+        }
+      }
+    }
+
+    &Button {
+      margin-left: .75rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    &Cell {
+      align-items: center;
+      display: flex;
+    }
+  }
+}
+
 .indicatorWrapper {
   align-items: center;
   display: flex;

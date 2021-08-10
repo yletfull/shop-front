@@ -1,0 +1,16 @@
+@import '@/theme/include.scss';
+
+.chartContainer {
+  background: $color-gray-lighter;
+  border-radius: .375rem;
+  margin: 1rem 0 0 0;
+  padding: 1rem 1.5rem;
+
+  &Header {
+    font-size: .75rem;
+    font-weight: bold;
+    line-height: .875rem;
+    padding-bottom: 1rem;
+    text-align: center;
+  }
+}

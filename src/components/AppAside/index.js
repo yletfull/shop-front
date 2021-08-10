@@ -38,7 +38,7 @@ const menuItems = {
     },
     {
       key: 'upload',
-      section: '',
+      section: rights.sections.campaign,
       title: titles.upload,
       to: patchs.upload || urlNotFound,
       icon: (<IconVK />),

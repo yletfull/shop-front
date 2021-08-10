@@ -1,0 +1,26 @@
+@import '@/theme/include.scss';
+
+.commonInfo {
+  display: flex;
+
+  &Column {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    &:last-child {
+      display: flex;
+    }
+  }
+
+  &Table {
+    font-size: .75rem;
+    line-height: 2rem;
+
+    & td {
+      &:first-child {
+        color: $color-gray-darker;
+        padding-right: 4rem;
+      }
+    }
+  }
+}

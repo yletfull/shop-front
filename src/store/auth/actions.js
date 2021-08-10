@@ -7,24 +7,6 @@ export const authLogout = createAction(`${NS}/logout`);
 export const authError = createAction(`${NS}/setError`);
 export const isFetching = createAction(`${NS}/isFetching`);
 
-export const isFetchingAbilities = createAction(`${NS}/request/abilities`);
-export const updateAbilities = createAction(`${NS}/update/abilities`);
-
-export const fetchUserAbilities = (userId) => async (dispatch) => {
-  if (!userId) {
-    dispatch(updateAbilities([]));
-    return;
-  }
-  dispatch(isFetchingAbilities());
-  try {
-    const response = await service.fetchAbilities(userId);
-    dispatch(updateAbilities(response));
-  } catch (error) {
-    dispatch(updateAbilities([]));
-    console.error(error);
-  }
-};
-
 export const setIsFetching = (value) => (dispatch) => {
   dispatch(isFetching(value));
 };
@@ -61,5 +43,4 @@ export const authSignIn = ({
 export const authSignOut = () => async (dispatch) => {
   await service.logout();
   dispatch(authLogout());
-  dispatch(updateAbilities([]));
 };

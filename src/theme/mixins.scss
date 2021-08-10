@@ -34,17 +34,13 @@
         color: $color-primary-darkest;
         font-size: .75rem;
         line-height: 2.5rem;
-        padding: 0 .5rem;
+        padding: 0 .5rem 0 0;
       }
 
       & > td {
         &[data-purpose='filter'] {
           padding-bottom: .5rem;
           padding-top: .5rem;
-
-          &:first-child {
-            padding-left: 0;
-          }
 
           &:last-child {
             padding-right: 0;

@@ -1,0 +1,166 @@
+@import '@/theme/include.scss';
+
+@mixin hidden-input () {
+  appearance: none;
+  display: inline-block;
+  height: 100%;
+  left: 0;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.wrapper {
+  display: inline-flex;
+  max-width: 100%;
+
+  & > * + * {
+    margin-left: .5rem;
+  }
+}
+
+.negationToggle {
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 1.5rem;
+  position: relative;
+
+  &Input {
+    @include hidden-input();
+  }
+
+  &Label {
+    align-items: center;
+    background-color: $color-white;
+    border: thin solid $color-gray-darker;
+    border-radius: .25rem;
+    color: $color-gray-darker;
+    display: inline-flex;
+    font-size: .75rem;
+    height: 100%;
+    justify-content: center;
+    padding: 0 .5rem;
+    text-align: center;
+    transition:
+      background-color .2s,
+      color .2s;
+  }
+
+  &[data-readonly='true'] &Label {
+    background-color: transparent;
+  }
+
+  &:not([data-readonly='true']):hover &Label,
+  &Input:not(:read-only):focus + &Label {
+    background-color: $color-gray;
+    color: $color-black;
+  }
+
+  &Input:checked + &Label {
+    background-color: $color-primary;
+    color: $color-white;
+  }
+
+  &:not([data-readonly='true']):hover &Input:checked + &Label,
+  &Input:not(:read-only):focus:checked + &Label {
+    background-color: $color-primary-lighter;
+    color: $color-white;
+  }
+}
+
+.options {
+  padding-top: .25rem;
+
+  &Item {
+    & + & {
+      margin-top: .125rem;
+    }
+  }
+}
+
+.input {
+  background-color: $color-white;
+  border: thin solid $color-gray-darker;
+  border-radius: .25rem;
+  color: inherit;
+  flex-grow: 0;
+  flex-shrink: 1;
+  font-family: inherit;
+  font-size: .75rem;
+  height: 2em;
+  line-height: 2;
+  min-width: 0;
+  padding: 0 .5rem;
+
+  &:read-only {
+    background-color: transparent;
+  }
+
+  &:not(:read-only):focus {
+    border-color: $color-primary;
+    outline: none;
+  }
+
+  &[type='number'] {
+    appearance: none;
+    min-width: 8ch;
+    padding-right: 0;
+  }
+}
+
+.pills {
+  border: thin solid $color-gray-darker;
+  border-radius: .25rem;
+  display: inline-block;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: 1.5rem;
+  overflow: hidden;
+
+  &Option {
+    display: inline-block;
+    height: 100%;
+    position: relative;
+
+    & + & {
+      border-left: thin solid $color-gray-darker;
+    }
+
+    &Input {
+      @include hidden-input();
+    }
+
+    &Label {
+      align-items: center;
+      background-color: $color-white;
+      color: $color-gray-darker;
+      display: inline-flex;
+      font-size: .75rem;
+      height: 100%;
+      justify-content: center;
+      padding: 0 .5rem;
+      text-align: center;
+      transition:
+        background-color .2s,
+        color .2s;
+    }
+
+    &[data-readonly='true'] &Label {
+      background-color: transparent;
+    }
+
+    &:not([data-readonly='true']):hover &Label,
+    &:not([data-readonly='true']) &Input:focus + &Label {
+      background-color: $color-gray;
+      color: $color-black;
+    }
+
+    &Input:checked + &Label {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+  }
+}

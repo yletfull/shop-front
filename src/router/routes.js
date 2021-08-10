@@ -4,22 +4,27 @@ import { sections } from '@/constants/rights';
 const AudiencesList = lazy(() => import(
   /* webpackChunkName: 'audiences-list' */
   /* webpackMode: 'lazy' */
-  './AudiencesList'
+  '@/features/Audiences/pages/List'
 ));
 const AudiencesDetails = lazy(() => import(
   /* webpackChunkName: 'audiences-details' */
   /* webpackMode: 'lazy' */
-  './AudiencesDetails'
+  '@/features/Audiences/pages/Details'
 ));
 const SegmentsDetails = lazy(() => import(
-  /* webpackChunkName: 'segments-details' */
+  /* webpackChunkName: 'segments-details-page' */
   /* webpackMode: 'lazy' */
-  './SegmentsDetails'
+  '@/features/Segments/pages/Details'
+));
+const SegmentsNew = lazy(() => import(
+  /* webpackChunkName: 'segments-new-page' */
+  /* webpackMode: 'lazy' */
+  '@/features/Segments/pages/New'
 ));
 const SegmentsList = lazy(() => import(
   /* webpackChunkName: 'segments-list' */
   /* webpackMode: 'lazy' */
-  './SegmentsList'
+  '@/features/Segments/pages/List'
 ));
 const SegmentsUser = lazy(() => import(
   /* webpackChunkName: 'segments-user' */
@@ -31,6 +36,11 @@ const Settings = lazy(() => import(
   /* webpackMode: 'lazy' */
   '@/features/Settings/pages/Main'
 ));
+const StatisticsDetails = lazy(() => import(
+  /* webpackChunkName: 'statistics-details' */
+  /* webpackMode: 'lazy' */
+  './StatisticsDetails'
+));
 const Upload = lazy(() => import(
   /* webpackChunkName: 'upload' */
   /* webpackMode: 'lazy' */
@@ -41,16 +51,24 @@ const Users = lazy(() => import(
   /* webpackMode: 'lazy' */
   './Users'
 ));
+const Statistics = lazy(() => import(
+  /* webpackChunkName: 'statistics' */
+  /* webpackMode: 'lazy' */
+  './Statistics'
+));
 
 export const patchs = {
   audiencesList: '/audiences',
   audiencesDetails: '/audiences/details/:id',
   segments: '/segments',
   segmentsDetails: '/segments/details/:id',
+  segmentsNew: '/segments/new',
   segmentsUser: '/segments/user/',
   settings: '/settings',
+  statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
   users: '/users',
+  statistics: '/statistics/lists',
 };
 
 export const titles = {
@@ -59,9 +77,12 @@ export const titles = {
   upload: 'Загрузка',
   users: 'Пользователи',
   segments: 'Сегменты',
-  segmentsDetails: 'Сегмент',
+  segmentsDetails: 'Детали сегмента',
+  segmentsNew: 'Новый сегмент',
   segmentsUser: 'Портрет пользователя',
   settings: 'Настройки',
+  statisticsDetails: 'Статистика',
+  statistics: 'Статистика',
 };
 
 export default [
@@ -74,6 +95,10 @@ export default [
       title: titles.main,
     },
     title: titles.upload,
+    rights: {
+      section: sections.campaign,
+      actions: [],
+    },
   },
   {
     path: patchs.users,
@@ -83,6 +108,11 @@ export default [
       title: titles.users,
     },
     title: titles.users,
+  },
+  {
+    Component: SegmentsNew,
+    path: patchs.segmentsNew,
+    title: titles.segmentsNew,
   },
   {
     Component: SegmentsDetails,
@@ -112,6 +142,7 @@ export default [
     },
   },
   {
+    exact: true,
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
@@ -127,6 +158,20 @@ export default [
     title: titles.settings,
     rights: {
       section: sections.user,
+      actions: [],
+    },
+  },
+  {
+    Component: StatisticsDetails,
+    path: patchs.statisticsDetails,
+    title: titles.statisticsDetails,
+  },
+  {
+    Component: Statistics,
+    path: patchs.statistics,
+    title: titles.statistics,
+    rights: {
+      section: sections.stats,
       actions: [],
     },
   },
