@@ -1,0 +1,10 @@
+@import '@/theme/include.scss';
+
+.audienceDetails {
+  position: relative;
+
+  &Header {
+    font-size: 1rem;
+    margin-top: 2rem;
+  }
+}

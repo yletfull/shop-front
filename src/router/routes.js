@@ -4,12 +4,12 @@ import { sections } from '@/constants/rights';
 const AudiencesList = lazy(() => import(
   /* webpackChunkName: 'audiences-list' */
   /* webpackMode: 'lazy' */
-  './AudiencesList'
+  '@/features/Audiences/pages/List'
 ));
 const AudiencesDetails = lazy(() => import(
   /* webpackChunkName: 'audiences-details' */
   /* webpackMode: 'lazy' */
-  './AudiencesDetails'
+  '@/features/Audiences/pages/Details'
 ));
 const SegmentsDetails = lazy(() => import(
   /* webpackChunkName: 'segments-details-page' */
@@ -135,11 +135,7 @@ export default [
     },
   },
   {
-    Component: SegmentsList,
-    path: patchs.segments,
-    title: titles.segments,
-  },
-  {
+    exact: true,
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
