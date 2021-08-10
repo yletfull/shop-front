@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useQueryParams, useService } from '@/hooks';
+import Button from '@/components/Button';
 import WithSpinner from '@/components/WithSpinner';
 import service from '@/features/Roles/service';
+import RolePermissions from '@/features/Roles/components/RolePermissions';
 import styles from './styles.module.scss';
 
 const propTypes = {};
 const defaultProps = {};
 
 const Details = function Details() {
+  const history = useHistory();
+  const { url } = useRouteMatch();
   const { name: roleName } = useParams();
 
   const [params] = useQueryParams();
@@ -22,6 +26,8 @@ const Details = function Details() {
     service: service.fetchRole,
   });
 
+  const { data: permissions } = rolePermissions || {};
+
   useEffect(() => {
     fetchRolePermissions({
       params,
@@ -29,14 +35,44 @@ const Details = function Details() {
     });
   }, [fetchRolePermissions, roleName, params]);
 
-  console.log(rolePermissions);
+  const getBaseUrl = () => {
+    const index = url.indexOf('/details');
+    return url.slice(0, index);
+  };
+
+  const handleClickBackButton = () => {
+    history.push(getBaseUrl());
+  };
+  const handleClickEditButton = () => {
+    history.push(`${getBaseUrl()}/edit/${roleName}`);
+  };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.rolesDetails}>
       <WithSpinner
         layout="overlay"
         isFetching={isFetchingRolePermissions}
       />
+
+      <RolePermissions
+        data={permissions}
+      />
+
+      <div className={styles.rolesDetailsRow}>
+        <Button
+          className={styles.rolesDetailsButton}
+          onClick={handleClickEditButton}
+        >
+          Редактировать
+        </Button>
+        <Button
+          appearance="secondary"
+          className={styles.rolesDetailsButton}
+          onClick={handleClickBackButton}
+        >
+          К списку
+        </Button>
+      </div>
     </div>
   );
 };

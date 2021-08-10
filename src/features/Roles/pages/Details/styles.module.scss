@@ -1,5 +1,16 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.rolesDetails {
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+
+  &Row {
+    padding: 1rem 0;
+  }
 }
