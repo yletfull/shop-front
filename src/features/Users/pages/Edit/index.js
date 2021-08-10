@@ -31,6 +31,15 @@ const Edit = function Edit() {
     isFetching: isFetchingRoles,
   } = useService({
     initialData: [],
+    service: service.fetchRoles,
+  });
+
+  const {
+    fetch: fetchUserRoles,
+    data: userRoles,
+    isFetching: isFetchingUserRoles,
+  } = useService({
+    initialData: [],
     service: service.fetchUserRolesList,
   });
 
@@ -47,12 +56,16 @@ const Edit = function Edit() {
   } = useService({ service: service.removeUser });
 
   useEffect(() => {
+    fetchRoles();
+  }, [fetchRoles]);
+
+  useEffect(() => {
     if (!userId) {
       return;
     }
     fetchUser(userId);
-    fetchRoles(userId);
-  }, [fetchUser, fetchRoles, userId]);
+    fetchUserRoles(userId);
+  }, [fetchUser, fetchUserRoles, userId]);
 
   const openUsersList = useCallback(() => {
     const index = url.indexOf('/edit');
@@ -91,6 +104,13 @@ const Edit = function Edit() {
     }
     removeUser(userId);
   };
+  const handleSubmitAddRoleForm = (values) => {
+    const { role } = values || {};
+    if (!role) {
+      return;
+    }
+    console.log(role);
+  };
   const handleSubmitUserForm = (data) => {
     updateUser({ data, id: userId });
   };
@@ -99,7 +119,7 @@ const Edit = function Edit() {
     <div className={styles.userEdit}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetchingUser || isFetchingRoles}
+        isFetching={isFetchingUser || isFetchingUserRoles}
       />
 
       <div className={styles.userEditSection}>
@@ -113,12 +133,15 @@ const Edit = function Edit() {
       </div>
       <div className={styles.userEditSection}>
         <RolesList
-          data={roles}
+          data={userRoles}
           onRemove={handleRemoveRole}
           isEditable
         />
         <AddRoleForm
-          data={roles}
+          roles={roles}
+          selected={userRoles}
+          isDisabled={isFetchingRoles}
+          onSubmit={handleSubmitAddRoleForm}
         />
       </div>
     </div>

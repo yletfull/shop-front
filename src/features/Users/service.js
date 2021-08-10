@@ -7,6 +7,12 @@ export const createUser = function serviceCreateUser(data) {
     .then((response) => response.data);
 };
 
+export const fetchRoles = function serviceFetchRoles() {
+  return api
+    .get(`${apiBaseUrl}/rbac/roles`)
+    .then((response) => response.data.data);
+};
+
 export const fetchUser = function serviceFetchUser(id) {
   if (!id) {
     return;
@@ -50,6 +56,7 @@ export const updateUser = function serviceUpdateUser({ id, data }) {
 
 export default {
   createUser,
+  fetchRoles,
   fetchUser,
   fetchUserRolesList,
   fetchUsersList,
