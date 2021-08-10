@@ -1,6 +1,9 @@
 @import '@/theme/include.scss';
 
 .rolesList {
-  padding-top: 1rem;
   position: relative;
+
+  &Controls {
+    padding-top: 1rem;
+  }
 }

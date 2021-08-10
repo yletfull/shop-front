@@ -5,6 +5,7 @@ export const paths = {
   usersEdit: 'users/edit/:id',
   rolesDetails: 'roles/details/:name',
   rolesList: 'roles',
+  rolesNew: 'roles/new',
 };
 
 export const titles = {
@@ -14,6 +15,7 @@ export const titles = {
   usersEdit: 'Редактирование пользователя',
   rolesDetails: 'Роль',
   rolesList: 'Роли',
+  rolesNew: 'Новая роль',
 };
 
 export const sections = [
