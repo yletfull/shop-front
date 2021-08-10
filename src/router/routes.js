@@ -125,5 +125,9 @@ export default [
     Component: Settings,
     path: patchs.settings,
     title: titles.settings,
+    rights: {
+      section: sections.user,
+      actions: [],
+    },
   },
 ];

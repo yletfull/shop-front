@@ -75,9 +75,9 @@ const menuItems = {
   bottom: [
     {
       key: 'settings',
-      section: '',
-      title: '',
-      to: urlNotFound,
+      section: rights.sections.user,
+      title: titles.settings,
+      to: patchs.settings || urlNotFound,
       icon: (<IconCog />),
     },
     {

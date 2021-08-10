@@ -48,7 +48,13 @@ const Settings = function Settings() {
             <Component />
           </Route>
         ))}
-        <Redirect to={routes[0].path} />
+        <Route
+          key="settings-main"
+          path={url}
+          exact
+        >
+          <Redirect to={`${url}/${routes[3].path}`} />
+        </Route>
       </Switch>
     </AppMain>
   );
