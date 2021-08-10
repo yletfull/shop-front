@@ -1,0 +1,28 @@
+@import '@/theme/include.scss';
+
+.header {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+
+  &_title {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+}
+
+.navigation {
+  margin-top: 1rem;
+}
+
+.page {
+  position: relative;
+}
+
+.error {
+  margin-bottom: 1rem;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lightest, .5);
+}

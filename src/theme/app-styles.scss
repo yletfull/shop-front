@@ -171,6 +171,11 @@ a {
   }
 }
 
+.nav-links-wrapper {
+  display: flex;
+  margin-bottom: .5rem;
+}
+
 .active-link-class {
   color: $color-primary;
 
