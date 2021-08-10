@@ -1,4 +1,10 @@
 import React from 'react';
+import Check from './Check';
+import Exclamation from './Exclamation';
+import Equals from './Equals';
+import GreaterThanEqual from './GreaterThanEqual';
+import LessThanEqual from './LessThanEqual';
+import BarsLight from './BarsLight';
 import TvAlt from './TvAlt';
 import Cog from './Cog';
 import SignalStream from './SignalStream';
@@ -73,6 +79,12 @@ export const Icons = ({ color, size }) => (
     }}
   >
     {/* hygen-inject */}
+    {renderIcon(Check)}
+    {renderIcon(Exclamation)}
+    {renderIcon(Equals)}
+    {renderIcon(GreaterThanEqual)}
+    {renderIcon(LessThanEqual)}
+    {renderIcon(BarsLight)}
     {renderIcon(TvAlt)}
     {renderIcon(Cog)}
     {renderIcon(SignalStream)}
