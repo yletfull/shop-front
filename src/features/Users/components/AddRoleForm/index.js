@@ -4,15 +4,17 @@ import Button from '@/components/Button';
 import Select from '@/components/Select';
 import styles from './styles.module.scss';
 
-const roleType = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string,
-  title: PropTypes.string,
-};
-
 const propTypes = {
-  roles: PropTypes.arrayOf(roleType),
-  selected: PropTypes.arrayOf(roleType),
+  roles: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    title: PropTypes.string,
+  })),
+  selected: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string,
+    title: PropTypes.string,
+  })),
   isDisabled: PropTypes.bool,
   onSubmit: PropTypes.func,
 };
@@ -33,15 +35,19 @@ const AddRoleForm = function AddRoleForm({
   const [role, setRole] = useState('');
 
   const selectedNames = selected
-    .map((role) => role.name);
+    .map(({ name }) => name);
   const selectOptions = roles
-    .filter((role) => Boolean(role.name)
-      && !selectedNames.includes(role.name))
-    .map((role) => ({
-      text: role.title,
-      value: role.name,
+    .filter(({ name }) => Boolean(name)
+      && !selectedNames.includes(name))
+    .map(({ title, name }) => ({
+      text: title,
+      value: name,
     }));
 
+  const handleChangeRole = (e) => {
+    const { value } = e?.target || {};
+    setRole(value);
+  };
   const handleSubmitForm = (e) => {
     e.preventDefault();
     const values = Array.from(new FormData(e.target).entries())
@@ -60,7 +66,8 @@ const AddRoleForm = function AddRoleForm({
         options={selectOptions}
         placeholder="Выберите роль"
         disabled={isDisabled}
-        onChange={setRole}
+        onChange={handleChangeRole}
+        fullwidth
       />
       <Button
         type="submit"

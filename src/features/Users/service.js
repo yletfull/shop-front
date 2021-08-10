@@ -54,6 +54,14 @@ export const updateUser = function serviceUpdateUser({ id, data }) {
     .patch(`${apiBaseUrl}/user/${encodeURIComponent(id)}`, { data });
 };
 
+export const updateUserRoles = function serviceUpdateUserRoles({ id, data }) {
+  if (!id) {
+    return;
+  }
+  return api
+    .patch(`${apiBaseUrl}/user/${encodeURIComponent(id)}/roles`, { ...data });
+};
+
 export default {
   createUser,
   fetchRoles,
@@ -62,4 +70,5 @@ export default {
   fetchUsersList,
   removeUser,
   updateUser,
+  updateUserRoles,
 };

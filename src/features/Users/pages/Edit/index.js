@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
@@ -15,6 +15,8 @@ const Edit = function Edit() {
   const history = useHistory();
   const { url } = useRouteMatch();
   const { id: userId } = useParams();
+
+  const [currentRoles, setCurrentRoles] = useState([]);
 
   const {
     fetch: fetchUser,
@@ -45,9 +47,15 @@ const Edit = function Edit() {
 
   const {
     fetch: updateUser,
-    isFetching: isSubmitting,
+    isFetching: isSubmittingUser,
     data: updateUserResponse,
   } = useService({ service: service.updateUser });
+
+  const {
+    fetch: updateUserRoles,
+    isFetcing: isSubmittingUserRoles,
+    data: updateUserRolesResponse,
+  } = useService({ service: service.updateUserRoles });
 
   const {
     fetch: removeUser,
@@ -73,14 +81,15 @@ const Edit = function Edit() {
   }, [history, url]);
 
   useEffect(() => {
-    const { status } = updateUserResponse || {};
-    if (!status) {
+    const { status: userResponseStatus } = updateUserResponse || {};
+    const { status: userRolesResponseStatus } = updateUserRolesResponse || {};
+    if (!userResponseStatus || !userRolesResponseStatus) {
       return;
     }
-    if (status === 200) {
+    if (userResponseStatus === 200 && userRolesResponseStatus === 204) {
       openUsersList();
     }
-  }, [updateUserResponse, openUsersList]);
+  }, [updateUserResponse, updateUserRolesResponse, openUsersList]);
 
   useEffect(() => {
     const { status } = removeUserResponse || {};
@@ -92,11 +101,19 @@ const Edit = function Edit() {
     }
   }, [removeUserResponse, openUsersList]);
 
+  useEffect(() => {
+    setCurrentRoles(userRoles);
+  }, [userRoles]);
+
   const handleRemoveRole = (roleId) => {
     if (!roleId) {
       return;
     }
-    console.log(roleId);
+    const index = currentRoles.findIndex(({ id }) => id === roleId);
+    setCurrentRoles([
+      ...currentRoles.slice(0, index),
+      ...currentRoles.slice(index + 1),
+    ]);
   };
   const handleRemoveUserForm = () => {
     if (!userId) {
@@ -109,10 +126,18 @@ const Edit = function Edit() {
     if (!role) {
       return;
     }
-    console.log(role);
+    const roleDescription = roles.find(({ name }) => name === role);
+    if (!roleDescription) {
+      return;
+    }
+    setCurrentRoles([...currentRoles, roleDescription]);
   };
   const handleSubmitUserForm = (data) => {
     updateUser({ data, id: userId });
+    updateUserRoles({
+      id: userId,
+      data: currentRoles.map(({ name }) => name),
+    });
   };
 
   return (
@@ -125,7 +150,10 @@ const Edit = function Edit() {
       <div className={styles.userEditSection}>
         <EditUserForm
           data={user}
-          isDisabled={isFetchingUser || isSubmitting || isSubmittingRemove}
+          isDisabled={isFetchingUser
+            || isSubmittingUser
+            || isSubmittingUserRoles
+            || isSubmittingRemove}
           onCancel={openUsersList}
           onRemove={handleRemoveUserForm}
           onSubmit={handleSubmitUserForm}
@@ -133,13 +161,13 @@ const Edit = function Edit() {
       </div>
       <div className={styles.userEditSection}>
         <RolesList
-          data={userRoles}
+          data={currentRoles}
           onRemove={handleRemoveRole}
           isEditable
         />
         <AddRoleForm
           roles={roles}
-          selected={userRoles}
+          selected={currentRoles}
           isDisabled={isFetchingRoles}
           onSubmit={handleSubmitAddRoleForm}
         />
