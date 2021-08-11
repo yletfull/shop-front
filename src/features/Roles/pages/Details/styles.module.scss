@@ -1,0 +1,25 @@
+@import '@/theme/include.scss';
+
+.roleDetails {
+  font-size: .75rem;
+
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+
+  &Row {
+    padding: 1rem 0;
+  }
+
+  &Title {
+    display: inline-block;
+    font-size: .875rem;
+    line-height: 2rem;
+    padding-top: 1rem;
+  }
+}

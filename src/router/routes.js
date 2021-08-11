@@ -31,15 +31,15 @@ const SegmentsUser = lazy(() => import(
   /* webpackMode: 'lazy' */
   './SegmentsUser'
 ));
-const StatisticsDetails = lazy(() => import(
-  /* webpackChunkName: 'statistics-details' */
-  /* webpackMode: 'lazy' */
-  './StatisticsDetails'
-));
 const Settings = lazy(() => import(
   /* webpackChunkName: 'settings' */
   /* webpackMode: 'lazy' */
   '@/features/Settings/pages/Main'
+));
+const StatisticsDetails = lazy(() => import(
+  /* webpackChunkName: 'statistics-details' */
+  /* webpackMode: 'lazy' */
+  './StatisticsDetails'
 ));
 const Upload = lazy(() => import(
   /* webpackChunkName: 'upload' */
@@ -64,8 +64,8 @@ export const patchs = {
   segmentsDetails: '/segments/details/:id',
   segmentsNew: '/segments/new',
   segmentsUser: '/segments/user/',
-  statisticsDetails: '/statistics/details/:entityType/:id?',
   settings: '/settings',
+  statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
   users: '/users',
   statistics: '/statistics/lists',
@@ -80,9 +80,9 @@ export const titles = {
   segmentsDetails: 'Детали сегмента',
   segmentsNew: 'Новый сегмент',
   segmentsUser: 'Портрет пользователя',
-  statistics: 'Статистика',
-  statisticsDetails: 'Статистика',
   settings: 'Настройки',
+  statisticsDetails: 'Статистика',
+  statistics: 'Статистика',
 };
 
 export default [
@@ -142,37 +142,15 @@ export default [
     },
   },
   {
-    Component: SegmentsList,
-    path: patchs.segments,
-    title: titles.segments,
-  },
-  {
     Component: AudiencesDetails,
     path: patchs.audiencesDetails,
     title: titles.audiencesDetails,
   },
   {
+    exact: true,
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
-  },
-  {
-    Component: Statistics,
-    path: patchs.statistics,
-    title: titles.statistics,
-    rights: {
-      section: sections.stats,
-      actions: [],
-    },
-  },
-  {
-    Component: StatisticsDetails,
-    path: patchs.statisticsDetails,
-    title: titles.statisticsDetails,
-    rights: {
-      section: sections.stats,
-      actions: [],
-    },
   },
   {
     Component: Settings,
@@ -180,6 +158,20 @@ export default [
     title: titles.settings,
     rights: {
       section: sections.user,
+      actions: [],
+    },
+  },
+  {
+    Component: StatisticsDetails,
+    path: patchs.statisticsDetails,
+    title: titles.statisticsDetails,
+  },
+  {
+    Component: Statistics,
+    path: patchs.statistics,
+    title: titles.statistics,
+    rights: {
+      section: sections.stats,
       actions: [],
     },
   },
