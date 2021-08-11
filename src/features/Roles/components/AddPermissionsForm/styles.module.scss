@@ -1,0 +1,39 @@
+@import '@/theme/include.scss';
+
+.addPermissionsForm {
+  font-size: .75rem;
+
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  &Controls {
+    padding: 1rem 0;
+  }
+
+  &Label {
+    display: inline-block;
+    padding: .25rem 0;
+    width: 100%;
+
+    & > input {
+      margin-right: .5rem;
+    }
+  }
+
+  &List {
+    max-height: 30rem;
+    overflow-x: auto;
+  }
+
+  &Section {
+    padding: .25rem 0;
+
+    &Title {
+      color: $color-gray-darker;
+      display: block;
+      padding: .25rem 0;
+    }
+  }
+}

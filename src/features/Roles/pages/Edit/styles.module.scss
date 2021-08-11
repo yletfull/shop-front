@@ -1,5 +1,11 @@
 @import '@/theme/include.scss';
 
-.wrapper {
-  // write some styles
+.rolesEdit {
+  display: flex;
+  position: relative;
+
+  &Column {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
 }
