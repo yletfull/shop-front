@@ -99,6 +99,7 @@ const EditRoleForm = function EditRoleForm({
               </Button>
               <Button
                 appearance="secondary"
+                data-action="cancel"
                 className={styles.editRoleFormButton}
                 onClick={onCancel}
               >
@@ -106,6 +107,7 @@ const EditRoleForm = function EditRoleForm({
               </Button>
               <Button
                 appearance="secondary"
+                data-action="remove"
                 className={styles.editRoleFormButton}
                 onClick={onDelete}
               >
