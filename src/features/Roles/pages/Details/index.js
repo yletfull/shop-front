@@ -18,22 +18,36 @@ const Details = function Details() {
   const [params] = useQueryParams();
 
   const {
+    fetch: fetchRole,
+    data: role,
+    isFetching: isFetchingRole,
+  } = useService({
+    initialData: { data: {}, meta: {} },
+    service: service.fetchRole,
+  });
+
+  const {
     fetch: fetchRolePermissions,
     data: rolePermissions,
     isFetching: isFetchingRolePermissions,
   } = useService({
     initialData: { data: [], meta: {} },
-    service: service.fetchRole,
+    service: service.fetchRolePermissions,
   });
 
   const { data: permissions } = rolePermissions || {};
+  const { title } = role?.data || {};
 
   useEffect(() => {
-    fetchRolePermissions({
-      params,
-      name: roleName,
-    });
-  }, [fetchRolePermissions, roleName, params]);
+    const fetch = async () => {
+      const requestParams = { params, name: roleName };
+      await Promise.all([
+        fetchRole(requestParams),
+        fetchRolePermissions(requestParams),
+      ]);
+    };
+    fetch();
+  }, [fetchRole, fetchRolePermissions, roleName, params]);
 
   const getBaseUrl = () => {
     const index = url.indexOf('/details');
@@ -48,26 +62,30 @@ const Details = function Details() {
   };
 
   return (
-    <div className={styles.rolesDetails}>
+    <div className={styles.roleDetails}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetchingRolePermissions}
+        isFetching={isFetchingRole || isFetchingRolePermissions}
       />
+
+      <span className={styles.roleDetailsTitle}>
+        {`Роль: ${title}`}
+      </span>
 
       <RolePermissions
         data={permissions}
       />
 
-      <div className={styles.rolesDetailsRow}>
+      <div className={styles.roleDetailsRow}>
         <Button
-          className={styles.rolesDetailsButton}
+          className={styles.roleDetailsButton}
           onClick={handleClickEditButton}
         >
           Редактировать
         </Button>
         <Button
           appearance="secondary"
-          className={styles.rolesDetailsButton}
+          className={styles.roleDetailsButton}
           onClick={handleClickBackButton}
         >
           К списку

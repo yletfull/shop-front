@@ -1,6 +1,8 @@
 @import '@/theme/include.scss';
 
-.rolesDetails {
+.roleDetails {
+  font-size: .75rem;
+
   &Button {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
@@ -12,5 +14,12 @@
 
   &Row {
     padding: 1rem 0;
+  }
+
+  &Title {
+    display: inline-block;
+    font-size: .875rem;
+    line-height: 2rem;
+    padding-top: 1rem;
   }
 }

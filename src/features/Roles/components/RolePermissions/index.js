@@ -22,13 +22,14 @@ const RolePermissions = function RolePermissions({
 }) {
   return (
     <div className={styles.rolePermissions}>
-      {data.map((permission) => (
-        <div
-          key={permission.name || permission.id}
+      {data.map((d, index) => (
+        <span
+          key={d.name || d.id}
           className={styles.rolePermissionsRow}
         >
-          {permission.title}
-        </div>
+          {`${index + 1}. `}
+          {d.title || '-'}
+        </span>
       ))}
     </div>
   );
