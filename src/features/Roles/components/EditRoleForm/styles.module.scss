@@ -1,7 +1,8 @@
 @import '@/theme/include.scss';
 
-.editPermissionsForm {
+.editRoleForm {
   font-size: .75rem;
+  padding: 1rem 0;
 
   &Button {
     padding-left: 1.5rem;
@@ -18,7 +19,7 @@
 
   &Empty {
     color: $color-gray-darker;
-    padding: .5rem 0 0;
+    padding: 1.5rem 0 0;
     text-align: center;
   }
 

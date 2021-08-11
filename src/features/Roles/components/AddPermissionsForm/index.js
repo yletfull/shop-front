@@ -50,11 +50,12 @@ const AddPermissionsForm = function AddPermissionsForm({
     });
   }, {});
 
-  const handleSubmitForm = (values) => {
+  const handleSubmitForm = (values, { resetForm }) => {
     const { permissions: addedPermissions } = values || {};
     if (!addedPermissions) {
       return;
     }
+    resetForm();
     onSubmit(data.filter((d) => addedPermissions.includes(d.name)));
   };
 

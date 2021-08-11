@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import { withFormikField } from '@/components/formik';
 import Button from '@/components/Button';
-import Checkbox from '@/components/Checkbox';
+import Input from '@/components/Input';
 import IconTimes from '@/icons/TimesLight';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
+  permissions: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
@@ -16,6 +16,7 @@ const propTypes = {
     name: PropTypes.string,
     title: PropTypes.string,
   })),
+  title: PropTypes.string,
   onCancel: PropTypes.func,
   onDelete: PropTypes.func,
   onRemove: PropTypes.func,
@@ -23,15 +24,17 @@ const propTypes = {
 };
 
 const defaultProps = {
-  data: [],
+  permissions: [],
+  title: '',
   onCancel: () => {},
   onDelete: () => {},
   onRemove: () => {},
   onSubmit: () => {},
 };
 
-const EditPermissionsForm = function EditPermissionsForm({
-  data,
+const EditRoleForm = function EditRoleForm({
+  permissions,
+  title,
   onCancel,
   onDelete,
   onRemove,
@@ -42,38 +45,42 @@ const EditPermissionsForm = function EditPermissionsForm({
     onRemove(value);
   };
 
-  const FormikCheckbox = withFormikField(Checkbox);
+  const FormikInput = withFormikField(Input);
 
   return (
     <Formik
-      initialValues={{ permissions: data }}
+      initialValues={{ title, permissions }}
       onSubmit={onSubmit}
+      enableReinitialize
     >
       {() => (
-        <Form className={styles.editPermissionsForm}>
-          {data.length === 0 && (
-            <div className={styles.editPermissionsFormEmpty}>
+        <Form className={styles.editRoleForm}>
+          <Field
+            name="title"
+            component={FormikInput}
+            className={styles.editRoleFormInput}
+            fullwidth
+          />
+
+          {permissions.length === 0 && (
+            <div className={styles.editRoleFormEmpty}>
               Нет разрешений
             </div>
           )}
 
-          <div className={styles.editPermissionsFormList}>
-            {data.map((d) => (
+          <div className={styles.editRoleFormList}>
+            {permissions.map((d, index) => (
               <div
                 key={d.name || d.id}
-                className={styles.editPermissionsFormRow}
+                className={styles.editRoleFormRow}
               >
-                <label className={styles.editPermissionsFormLabel}>
-                  <Field
-                    name="permissions"
-                    value={d.name}
-                    component={FormikCheckbox}
-                  />
+                <span className={styles.editRoleFormLabel}>
+                  {`${index + 1}. `}
                   {d.title}
-                </label>
+                </span>
                 <Button
                   appearance="control"
-                  className={styles.editPermissionsFormRemove}
+                  className={styles.editRoleFormRemove}
                   value={d.name}
                   onClick={handleClickRemoveButton}
                 >
@@ -82,24 +89,24 @@ const EditPermissionsForm = function EditPermissionsForm({
               </div>
             ))}
           </div>
-          {data.length > 0 && (
-            <div className={styles.editPermissionsFormControls}>
+          {permissions.length > 0 && (
+            <div className={styles.editRoleFormControls}>
               <Button
                 type="submit"
-                className={styles.editPermissionsFormButton}
+                className={styles.editRoleFormButton}
               >
                 Сохранить
               </Button>
               <Button
                 appearance="secondary"
-                className={styles.editPermissionsFormButton}
+                className={styles.editRoleFormButton}
                 onClick={onCancel}
               >
                 Отменить
               </Button>
               <Button
                 appearance="secondary"
-                className={styles.editPermissionsFormButton}
+                className={styles.editRoleFormButton}
                 onClick={onDelete}
               >
                 Удалить
@@ -112,7 +119,7 @@ const EditPermissionsForm = function EditPermissionsForm({
   );
 };
 
-EditPermissionsForm.propTypes = propTypes;
-EditPermissionsForm.defaultProps = defaultProps;
+EditRoleForm.propTypes = propTypes;
+EditRoleForm.defaultProps = defaultProps;
 
-export default EditPermissionsForm;
+export default EditRoleForm;
