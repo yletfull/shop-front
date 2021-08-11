@@ -4,7 +4,7 @@ import { useQueryParams, useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
 import service from '@/features/Roles/service';
 import AddPermissionsForm from '@/features/Roles/components/AddPermissionsForm';
-import RolePermissions from '@/features/Roles/components/RolePermissions';
+import EditPermissionsForm from '@/features/Roles/components/EditPermissionsForm';
 import styles from './styles.module.scss';
 
 const propTypes = {};
@@ -15,9 +15,9 @@ const Edit = function Edit() {
   const [params] = useQueryParams();
 
   const {
-    fetch: fetchRolePermissions,
+    fetch: fetchEditPermissionsForm,
     data: rolePermissions,
-    isFetching: isFetchingRolePermissions,
+    isFetching: isFetchingEditPermissionsForm,
   } = useService({
     initialData: { data: [], meta: {} },
     service: service.fetchRole,
@@ -42,16 +42,20 @@ const Edit = function Edit() {
       const requestParams = { params, name: roleName };
       await Promise.all([
         fetchAllPermissions(requestParams),
-        fetchRolePermissions(requestParams),
+        fetchEditPermissionsForm(requestParams),
       ]);
     };
     fetch();
-  }, [fetchAllPermissions, fetchRolePermissions, roleName, params]);
+  }, [fetchAllPermissions, fetchEditPermissionsForm, roleName, params]);
 
   useEffect(() => {
     setSelectedPermissions(permissions);
   }, [permissions]);
 
+  const handleRemovePermission = (value) => {
+    setSelectedPermissions(selectedPermissions
+      .filter((d) => d.name !== value));
+  };
   const handleSubmitAddPermissionsForm = (values) => {
     if (!values || !Array.isArray(values)) {
       return;
@@ -63,12 +67,13 @@ const Edit = function Edit() {
     <div className={styles.rolesEdit}>
       <WithSpinner
         layout="overlay"
-        isFetching={isFetchingAllPermissions || isFetchingRolePermissions}
+        isFetching={isFetchingAllPermissions || isFetchingEditPermissionsForm}
       />
 
       <div className={styles.rolesEditColumn}>
-        <RolePermissions
+        <EditPermissionsForm
           data={selectedPermissions}
+          onRemove={handleRemovePermission}
         />
       </div>
       <div className={styles.rolesEditColumn}>

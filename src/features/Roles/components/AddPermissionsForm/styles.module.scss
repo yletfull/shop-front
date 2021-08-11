@@ -13,9 +13,8 @@
   }
 
   &Label {
-    display: inline-block;
-    padding: .25rem 0;
-    width: 100%;
+    display: block;
+    line-height: 2rem;
 
     & > input {
       margin-right: .5rem;
