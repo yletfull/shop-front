@@ -1,21 +1,23 @@
 export const paths = {
-  usersList: 'users',
-  usersNew: 'users/new',
-  usersDetails: 'users/details/:id',
-  usersEdit: 'users/edit/:id',
   rolesDetails: 'roles/details/:name',
+  rolesEdit: 'roles/edit/:name',
   rolesList: 'roles',
   rolesNew: 'roles/new',
+  usersDetails: 'users/details/:id',
+  usersEdit: 'users/edit/:id',
+  usersList: 'users',
+  usersNew: 'users/new',
 };
 
 export const titles = {
-  usersList: 'Пользователи',
-  usersNew: 'Новый пользователь',
-  usersDetails: 'Пользователь',
-  usersEdit: 'Редактирование пользователя',
   rolesDetails: 'Роль',
+  rolesEdit: 'Редактирование роли',
   rolesList: 'Роли',
   rolesNew: 'Новая роль',
+  usersDetails: 'Пользователь',
+  usersEdit: 'Редактирование пользователя',
+  usersList: 'Пользователи',
+  usersNew: 'Новый пользователь',
 };
 
 export const sections = [
