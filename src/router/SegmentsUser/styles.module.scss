@@ -1,9 +1,43 @@
 @import '@/theme/include.scss';
 
 .segmentsUser {
-  //
-}
+  &Link {
+    color: $color-primary-darkest;
+    display: inline-block;
+    font-size: .75rem;
+    line-height: 2.5em;
+    position: relative;
 
-.heading {
-  @include heading();
+    &:hover {
+      color: $color-black;
+    }
+
+    &_active {
+      color: $color-black;
+
+      &::after {
+        background: $color-red;
+        border-radius: .125rem;
+        content: '';
+        display: block;
+        height: .25rem;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 100%;
+      }
+    }
+
+    & + & {
+      margin-left: 2rem;
+    }
+
+    &Count {
+      font-weight: bold;
+    }
+  }
+
+  &Tabs {
+    padding: 0 0 1.5rem 0;
+  }
 }

@@ -1,69 +1,151 @@
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { setHeader } from '@/store/ui/actions';
-import CommonInfo from './CommonInfo';
+import React, { useEffect, useState } from 'react';
+import {
+  NavLink,
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import PageHeader from '@/components/PageHeader';
+import AppMain from '@/components/AppMain';
+import { injectReducer } from '@/store';
+import { useQuery } from '@/hooks';
+import { formatNumber } from '@/utils/format';
+import {
+  queryParams,
+  links,
+  namespace as NS,
+} from './constants';
+import {
+  fetchAttributes,
+  fetchSegments,
+} from './actions';
+import reducer from './reducer';
+import {
+  getSegmentsCount,
+} from './selectors';
+import Attributes from './Attributes';
 import SearchForm from './SearchForm';
-import UserAttributes from './UserAttributes';
-import UserSegments from './UserSegments';
+import Segments from './Segments';
 import styles from './styles.module.scss';
 
-const propTypes = {
-  defaultTitle: PropTypes.string,
-};
+const propTypes = {};
+const defaultProps = {};
 
-const defaultProps = {
-  defaultTitle: '',
-};
-
-const SegmentsUser = function SegmentsUser({ defaultTitle }) {
+const SegmentsUser = function SegmentsUser() {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useQuery();
+  const { search } = useLocation();
+  const { path, url } = useRouteMatch();
+
+  const segmentsCount = useSelector(getSegmentsCount);
+
+  const [entity, setEntity] = useState(query.get(queryParams.user) || '');
+  const [params, setParams] = useState({
+    currentPage: query.get(queryParams.page) || 1,
+    id: query.get(queryParams.segmentId) || '',
+    title: query.get(queryParams.segmentName) || '',
+  });
 
   useEffect(() => {
-    dispatch(setHeader(defaultTitle));
-  }, [dispatch, defaultTitle]);
+    injectReducer(NS, reducer);
+  }, []);
 
-  const user = '';
-  const userAttributes = [];
-  const userSegments = [];
+  useEffect(() => {
+    if (!entity) {
+      return;
+    }
+    dispatch(fetchAttributes(entity));
+  }, [dispatch, entity]);
 
-  const handleSearchFormSubmit = (userName) => {
-    console.log('Search Form Submit', userName);
+  useEffect(() => {
+    if (!entity) {
+      return;
+    }
+    dispatch(fetchSegments(entity, params));
+  }, [dispatch, entity, params]);
+
+  const handleChangeSegmentsPage = (page) => {
+    if (!page) {
+      return;
+    }
+    setParams({ ...params, currentPage: page });
+  };
+  const handleSearchFormSubmit = (values) => {
+    const { user } = values || {};
+    setEntity(user);
+    query.set(queryParams.user, user);
+    history.push({ search: query.toString() });
+  };
+  const handleSubmitFilter = (values) => {
+    setParams({
+      ...params,
+      id: values[queryParams.segmentId] || '',
+      title: values[queryParams.segmentName] || '',
+    });
   };
 
   return (
-    <div className={styles.segmentsUser}>
-      <SearchForm
-        inputValue={user}
-        onSubmit={handleSearchFormSubmit}
-      />
-      {!user && (
-        <Fragment>
-          <CommonInfo
-            segmentsCount={0}
-            uploadsCount={0}
-            lastUpdateDate=""
-            lastUptateIdentifier=""
-          />
-
-          <h2 className={styles.heading}>
-            Атрибуты пользователя
-          </h2>
-
-          <UserAttributes
-            data={userAttributes}
-          />
-
-          <h2 className={styles.heading}>
-            Сегменты, в которые входит пользователь
-          </h2>
-
-          <UserSegments
-            data={userSegments}
-          />
-        </Fragment>
+    <AppMain
+      backTo="/segments"
+      header={(
+        <PageHeader>
+          Поиск пользователя
+        </PageHeader>
       )}
-    </div>
+    >
+      <div className={styles.segmentsUser}>
+        <SearchForm
+          user={entity || ''}
+          onSubmit={handleSearchFormSubmit}
+        />
+
+        <div className={styles.segmentsUserTabs}>
+          <NavLink
+            activeClassName={styles.segmentsUserLink_active}
+            className={styles.segmentsUserLink}
+            to={`${url}/${links.attributes}${search}`}
+          >
+            Атрибуты
+          </NavLink>
+          <NavLink
+            activeClassName={styles.segmentsUserLink_active}
+            className={styles.segmentsUserLink}
+            to={`${url}/${links.segments}${search}`}
+          >
+            Сегменты
+            &nbsp;
+            {Boolean(segmentsCount) && (
+              <span className={styles.segmentsUserLinkCount}>
+                {formatNumber(segmentsCount)}
+              </span>
+            )}
+          </NavLink>
+        </div>
+
+        <Switch>
+          <Route
+            path={path}
+            exact
+          >
+            <Redirect to={`${url}/${links.attributes}`} />
+          </Route>
+          <Route path={`${url}/${links.attributes}`}>
+            <Attributes />
+          </Route>
+          <Route path={`${url}/${links.segments}`}>
+            <Segments
+              onChangePage={handleChangeSegmentsPage}
+              onSubmitFilter={handleSubmitFilter}
+            />
+          </Route>
+        </Switch>
+      </div>
+    </AppMain>
   );
 };
 

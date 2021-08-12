@@ -16,4 +16,8 @@ export const security = axios.create({
   baseURL: [baseURL, securityPrefix].join('/').replace(/\/+/gm, '/'),
 });
 
+export const withBase = function apiWithBaseHelper(input) {
+  return `${baseURL}${input.replace(/^\//, '')}`;
+};
+
 export default api;
