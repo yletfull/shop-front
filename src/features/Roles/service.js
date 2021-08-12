@@ -1,6 +1,11 @@
 import api from '@/api';
 import { apiBaseUrl } from './constants';
 
+const createRole = function serviceCreateRole(data) {
+  return api
+    .post(`${apiBaseUrl}/role`, { data });
+};
+
 const fetchPermissions = function serviceFetchPermissions(params) {
   return api
     .get(`${apiBaseUrl}/abilities`, { params })
@@ -54,6 +59,7 @@ const updateRole = function serviceUpdateRole({ name, title, permissions }) {
 };
 
 export default {
+  createRole,
   fetchPermissions,
   fetchRole,
   fetchRolePermissions,
