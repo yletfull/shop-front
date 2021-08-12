@@ -5,6 +5,7 @@ import WithSpinner from '@/components/WithSpinner';
 import service from '@/features/Roles/service';
 import CreateRoleForm from '@/features/Roles/components/CreateRoleForm';
 import AddPermissionsForm from '@/features/Roles/components/AddPermissionsForm';
+import EditPermissions from '@/features/Roles/components/EditPermissions';
 import styles from './styles.module.scss';
 
 const propTypes = {};
@@ -43,7 +44,7 @@ const New = function New() {
 
   useEffect(() => {
     const { status } = createRoleResponse || {};
-    if (!status || status !== 200) {
+    if (!status || status !== 201) {
       return;
     }
     openRolesList();
@@ -54,11 +55,20 @@ const New = function New() {
   const handleCancelCreateRole = () => {
     openRolesList();
   };
+  const handleRemovePermission = (value) => {
+    setSelectedPermissions(selectedPermissions
+      .filter(({ name }) => name !== value));
+  };
   const handleSubmitCreateRole = (values) => {
-    console.log('Submit Role', values);
-    if (0) {
-      createRole(values);
+    const { name: roleName, title: roleTitle } = values || {};
+    if (!roleName) {
+      return;
     }
+    createRole({
+      roleName,
+      roleTitle,
+      abilities: selectedPermissions.map(({ name }) => name),
+    });
   };
   const handleSelectedPermissions = (values) => {
     if (!values || !Array.isArray(values)) {
@@ -79,7 +89,12 @@ const New = function New() {
           isDisabled={isSubmittingRole}
           onCancel={handleCancelCreateRole}
           onSubmit={handleSubmitCreateRole}
-        />
+        >
+          <EditPermissions
+            data={selectedPermissions}
+            onRemove={handleRemovePermission}
+          />
+        </CreateRoleForm>
       </div>
       <div className={styles.roleNewColumn}>
         <AddPermissionsForm
