@@ -4,9 +4,11 @@ import { useQueryParams, useService } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import PageHeader from '@/components/PageHeader';
 import WithSpinner from '@/components/WithSpinner';
-import PagePagination from '@/components/PagePagination';
+import Pagination from '@/components/Pagination';
 import TableView from '@/features/Audiences/components/TableView';
 import styles from './styles.module.scss';
+
+const countOptions = [10, 20, 30];
 
 const AudiencesList = function AudiencesList() {
   const [params, setParams] = useQueryParams();
@@ -24,7 +26,16 @@ const AudiencesList = function AudiencesList() {
   const { pagination } = tableMeta || {};
 
   const handleChangePage = (value) => {
-    setParams({ ...params, currentPage: value || 1 });
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ ...params, currentPage: value });
+  };
+  const handleCountSelect = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ ...params, perPage: value });
   };
   const handleFilterTable = (values) => {
     setParams({ ...params, ...values });
@@ -32,30 +43,32 @@ const AudiencesList = function AudiencesList() {
 
   return (
     <AppMain
-      className={styles.audienceList}
       header={(
         <PageHeader>
-          Аудитория
+          Аудитории
         </PageHeader>
       )}
     >
-      <WithSpinner
-        layout="overlay"
-        isFetching={isFetching}
-      />
+      <div className={styles.audiencesList}>
+        <WithSpinner
+          layout="overlay"
+          isFetching={isFetching}
+        />
 
-      <TableView
-        data={tableData}
-        onFilter={handleFilterTable}
-      />
+        <TableView
+          data={tableData}
+          onFilter={handleFilterTable}
+        />
 
-      <PagePagination
-        page={pagination?.currentPage || 1}
-        numberOfPages={pagination?.totalPages || 1}
-        numberOfVisiblePages={5}
-        isDisabled={isFetching}
-        onChangePage={handleChangePage}
-      />
+        <Pagination
+          currentPage={pagination?.currentPage || 1}
+          pagesTotal={pagination?.totalPages || 1}
+          count={pagination?.perPage || countOptions[0]}
+          countOptions={countOptions}
+          onPageSelect={handleChangePage}
+          onCountSelect={handleCountSelect}
+        />
+      </div>
     </AppMain>
   );
 };
