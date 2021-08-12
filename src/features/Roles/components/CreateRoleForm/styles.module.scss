@@ -1,0 +1,29 @@
+@import '@/theme/include.scss';
+
+.createRoleForm {
+  font-size: .75rem;
+  padding: 1rem 0;
+
+  &Button {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+
+  &Label {
+    color: $color-gray-darker;
+    display: inline-block;
+    line-height: 1rem;
+  }
+
+  &Row {
+    padding: .25rem 0;
+
+    & + & {
+      margin-top: .5rem;
+    }
+  }
+}
