@@ -46,11 +46,6 @@ const Upload = lazy(() => import(
   /* webpackMode: 'lazy' */
   './Upload'
 ));
-const Users = lazy(() => import(
-  /* webpackChunkName: 'users' */
-  /* webpackMode: 'lazy' */
-  './Users'
-));
 const Statistics = lazy(() => import(
   /* webpackChunkName: 'statistics' */
   /* webpackMode: 'lazy' */
@@ -67,7 +62,6 @@ export const patchs = {
   settings: '/settings',
   statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
-  users: '/users',
   statistics: '/statistics/lists',
 };
 
@@ -75,7 +69,6 @@ export const titles = {
   audiencesList: 'Аудитории',
   audiencesDetails: 'Описание аудитории',
   upload: 'Загрузка',
-  users: 'Пользователи',
   segments: 'Сегменты',
   segmentsDetails: 'Детали сегмента',
   segmentsNew: 'Новый сегмент',
@@ -99,15 +92,6 @@ export default [
       section: sections.campaign,
       actions: [],
     },
-  },
-  {
-    path: patchs.users,
-    redirect: patchs.users,
-    Component: Users,
-    meta: {
-      title: titles.users,
-    },
-    title: titles.users,
   },
   {
     Component: SegmentsNew,
