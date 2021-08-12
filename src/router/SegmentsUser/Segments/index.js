@@ -6,7 +6,7 @@ import { useQuery } from '@/hooks';
 import { formatDate, formatNumber } from '@/utils/format';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
-import Pagination from '@/components/PagePagination';
+import Pagination from '@/components/Pagination';
 import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
 import { queryParams } from '../constants';
@@ -17,17 +17,22 @@ import {
 } from '../selectors';
 import styles from './styles.module.scss';
 
+const countOptions = [10, 20, 30];
+
 const propTypes = {
   onChangePage: PropTypes.func,
+  onChangeCountSelect: PropTypes.func,
   onSubmitFilter: PropTypes.func,
 };
 const defaultProps = {
   onChangePage: () => {},
+  onChangeCountSelect: () => {},
   onSubmitFilter: () => {},
 };
 
 const Segments = function Segments({
   onChangePage,
+  onChangeCountSelect,
   onSubmitFilter,
 }) {
   const history = useHistory();
@@ -59,6 +64,14 @@ const Segments = function Segments({
     query.set(queryParams.page, page);
     history.push({ search: query.toString() });
     onChangePage(page);
+  };
+  const handleCountSelect = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    query.set('perPage', value);
+    history.push({ search: query.toString() });
+    onChangeCountSelect(value);
   };
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -166,14 +179,14 @@ const Segments = function Segments({
         </Table>
       </form>
 
-      {pagination && (
-        <Pagination
-          isDisabled={isFetching}
-          page={pagination.currentPage || 1}
-          numberOfPages={pagination.totalPages || 1}
-          onChangePage={handleChangePage}
-        />
-      )}
+      <Pagination
+        currentPage={pagination?.currentPage || 1}
+        pagesTotal={pagination?.totalPages || 1}
+        count={pagination?.perPage || countOptions[0]}
+        countOptions={countOptions}
+        onPageSelect={handleChangePage}
+        onCountSelect={handleCountSelect}
+      />
     </div>
   );
 };

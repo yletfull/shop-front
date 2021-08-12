@@ -75,6 +75,12 @@ const SegmentsUser = function SegmentsUser() {
     }
     setParams({ ...params, currentPage: page });
   };
+  const handleChangeCountSelect = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ ...params, perPage: value });
+  };
   const handleSearchFormSubmit = (values) => {
     const { user } = values || {};
     setEntity(user);
@@ -140,6 +146,7 @@ const SegmentsUser = function SegmentsUser() {
           <Route path={`${url}/${links.segments}`}>
             <Segments
               onChangePage={handleChangeSegmentsPage}
+              onChangeCountSelect={handleChangeCountSelect}
               onSubmitFilter={handleSubmitFilter}
             />
           </Route>
