@@ -18,8 +18,16 @@
     }
 
     &Button {
+      height: auto;
       margin-left: -.5rem;
       margin-right: .25rem;
+      padding-bottom: .125rem;
+      padding-top: .125rem;
+
+      &:hover:not(:disabled),
+      &:focus:not(:disabled) {
+        background-color: transparent;
+      }
     }
 
     &Cell {
