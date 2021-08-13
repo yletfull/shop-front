@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { formatDate } from '@/utils/format';
+import IconPlus from '@/icons/Plus';
+import IconMinus from '@/icons/Minus';
 import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
@@ -87,7 +89,9 @@ const Attributes = function Attributes() {
                       data-key={key}
                       onClick={handleClickToggleButton}
                     >
-                      {isOpened ? '-' : '+'}
+                      {isOpened
+                        ? <IconMinus />
+                        : <IconPlus />}
                     </Button>
                     <span className={styles.attributesTableName}>
                       {lastValue.name}

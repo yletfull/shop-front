@@ -23,6 +23,7 @@
       margin-right: .25rem;
       padding-bottom: .125rem;
       padding-top: .125rem;
+      transform: translateY(.125em);
 
       &:hover:not(:disabled),
       &:focus:not(:disabled) {
