@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 import { useQueryParams, useService } from '@/hooks';
 import Controls, { ControlsLink } from '@/components/Controls';
-import PagePagination from '@/components/PagePagination';
+import Pagination from '@/components/Pagination';
 import WithSpinner from '@/components/WithSpinner';
 import IconPlus from '@/icons/Plus';
 import service from '@/features/Roles/service';
 import TableView from '@/features/Roles/components/TableView';
 import styles from './styles.module.scss';
+
+const countOptions = [10, 20, 30];
 
 const propTypes = {};
 const defaultProps = {};
@@ -33,7 +35,16 @@ const RolesList = function RolesList() {
   }, [fetchRolesList, params]);
 
   const handleChangePage = (value) => {
-    setParams({ ...params, currentPage: value || 1 });
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ ...params, currentPage: value });
+  };
+  const handleCountSelect = (value) => {
+    if (!value || value < 0) {
+      return;
+    }
+    setParams({ ...params, perPage: value });
   };
 
   return (
@@ -57,12 +68,13 @@ const RolesList = function RolesList() {
       <TableView
         data={tableData || []}
       />
-      <PagePagination
-        page={pagination?.currentPage || 1}
-        numberOfPages={pagination?.totalPages || 1}
-        numberOfVisiblePages={5}
-        isDisabled={isFetchingRolesList}
-        onChangePage={handleChangePage}
+      <Pagination
+        currentPage={pagination?.currentPage || 1}
+        pagesTotal={pagination?.totalPages || 1}
+        count={pagination?.perPage || countOptions[0]}
+        countOptions={countOptions}
+        onPageSelect={handleChangePage}
+        onCountSelect={handleCountSelect}
       />
     </div>
   );
