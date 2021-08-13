@@ -91,9 +91,11 @@ const Attributes = function Attributes() {
                     </Button>
                     <span className={styles.attributesTableName}>
                       {lastValue.name}
-                      <span className={styles.attributesTableNameSub}>
-                        {lastValue.datasetTitle}
-                      </span>
+                      {Boolean(lastValue.profileTitle) && (
+                        <span className={styles.attributesTableNameSub}>
+                          {lastValue.profileTitle}
+                        </span>
+                      )}
                     </span>
                   </span>
                 </TableCell>
