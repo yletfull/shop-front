@@ -19,7 +19,7 @@ const RouterView = function RouterView() {
       return true;
     }
     const { section } = rights || {};
-    if (section && permissions[section]) {
+    if (!section || permissions[section]) {
       return true;
     }
     return false;
