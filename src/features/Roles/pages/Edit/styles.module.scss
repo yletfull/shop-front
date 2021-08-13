@@ -1,0 +1,19 @@
+@import '@/theme/include.scss';
+
+.rolesEdit {
+  display: flex;
+  position: relative;
+
+  &Column {
+    flex-basis: 0;
+    flex-grow: 1;
+
+    &:first-child {
+      padding-right: 1rem;
+    }
+
+    &:last-child {
+      padding-left: 1rem;
+    }
+  }
+}

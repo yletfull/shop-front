@@ -1,0 +1,17 @@
+@import '@/theme/include.scss';
+
+.rolePermissions {
+  font-size: .75rem;
+  padding: 1rem 0;
+
+  &Empty {
+    color: $color-gray-darker;
+    padding: 1.5rem 0 0;
+    text-align: center;
+  }
+
+  &Row {
+    display: block;
+    line-height: 2rem;
+  }
+}
