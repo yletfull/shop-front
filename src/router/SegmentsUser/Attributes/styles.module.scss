@@ -11,7 +11,8 @@
     & tr {
       &[data-opened='true'] {
         & > td {
-          background: $color-gray-lighter;
+          // FIXME: move to global colors
+          background: #eeeff2;
         }
       }
     }
@@ -38,6 +39,15 @@
         color: $color-gray-darker;
         font-size: .75rem;
       }
+    }
+
+    &LastValue {
+      font-weight: bold;
+    }
+
+    &HistoryValue {
+      color: $color-gray-darker;
+      font-size: .75rem;
     }
   }
 }

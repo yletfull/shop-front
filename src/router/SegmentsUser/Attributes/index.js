@@ -75,6 +75,7 @@ const Attributes = function Attributes() {
           const { lastValue, values } = attribute || {};
           const key = generateKey('lastValue', lastValue.name, attributeIndex);
           const isOpened = opened.includes(key);
+
           return (
             <Fragment key={key}>
               <TableRow data-opened={String(isOpened)}>
@@ -97,20 +98,28 @@ const Attributes = function Attributes() {
                   </span>
                 </TableCell>
                 <TableCell>
-                  {lastValue.value}
+                  <span className={styles.attributesTableLastValue}>
+                    {lastValue.value}
+                  </span>
                 </TableCell>
-                <TableCell>
-                  {formatDate(lastValue.createdAt)}
+                <TableCell title={lastValue.datasetTitle}>
+                  <span className={styles.attributesTableLastValue}>
+                    {formatDate(lastValue.createdAt)}
+                  </span>
                 </TableCell>
               </TableRow>
               {isOpened && values.map((value, valueIndex) => (
                 <TableRow key={generateKey('value', value.name, valueIndex)}>
                   <TableCell />
                   <TableCell>
-                    {value.value}
+                    <span className={styles.attributesTableHistoryValue}>
+                      {value.value}
+                    </span>
                   </TableCell>
-                  <TableCell>
-                    {formatDate(value.createdAt)}
+                  <TableCell title={lastValue.datasetTitle}>
+                    <span className={styles.attributesTableHistoryValue}>
+                      {formatDate(value.createdAt)}
+                    </span>
                   </TableCell>
                 </TableRow>
               ))}
