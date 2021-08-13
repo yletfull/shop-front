@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { formatDate } from '@/utils/format';
+import IconPlus from '@/icons/Plus';
+import IconMinus from '@/icons/Minus';
 import Button from '@/components/Button';
 import Spinner from '@/components/Spinner';
 import Table, { TableRow, TableCell } from '@/components/Table';
@@ -75,6 +77,7 @@ const Attributes = function Attributes() {
           const { lastValue, values } = attribute || {};
           const key = generateKey('lastValue', lastValue.name, attributeIndex);
           const isOpened = opened.includes(key);
+
           return (
             <Fragment key={key}>
               <TableRow data-opened={String(isOpened)}>
@@ -86,31 +89,46 @@ const Attributes = function Attributes() {
                       data-key={key}
                       onClick={handleClickToggleButton}
                     >
-                      {isOpened ? '-' : '+'}
+                      {isOpened
+                        ? <IconMinus />
+                        : <IconPlus />}
                     </Button>
                     <span className={styles.attributesTableName}>
                       {lastValue.name}
-                      <span className={styles.attributesTableNameSub}>
-                        {lastValue.datasetTitle}
-                      </span>
+                      {Boolean(lastValue.profileTitle) && (
+                        <span className={styles.attributesTableNameSub}>
+                          {lastValue.profileTitle}
+                        </span>
+                      )}
                     </span>
                   </span>
                 </TableCell>
                 <TableCell>
-                  {lastValue.value}
+                  <span className={styles.attributesTableLastValue}>
+                    {lastValue.value}
+                  </span>
                 </TableCell>
-                <TableCell>
-                  {formatDate(lastValue.createdAt)}
+                <TableCell title={lastValue.datasetTitle}>
+                  <span className={styles.attributesTableLastValue}>
+                    {formatDate(lastValue.createdAt)}
+                  </span>
                 </TableCell>
               </TableRow>
               {isOpened && values.map((value, valueIndex) => (
-                <TableRow key={generateKey('value', value.name, valueIndex)}>
+                <TableRow
+                  key={generateKey('value', value.name, valueIndex)}
+                  className={styles.attributesTableDetailsRow}
+                >
                   <TableCell />
                   <TableCell>
-                    {value.value}
+                    <span className={styles.attributesTableHistoryValue}>
+                      {value.value}
+                    </span>
                   </TableCell>
-                  <TableCell>
-                    {formatDate(value.createdAt)}
+                  <TableCell title={lastValue.datasetTitle}>
+                    <span className={styles.attributesTableHistoryValue}>
+                      {formatDate(value.createdAt)}
+                    </span>
                   </TableCell>
                 </TableRow>
               ))}
