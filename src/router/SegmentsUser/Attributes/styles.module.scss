@@ -11,16 +11,36 @@
     & tr {
       &[data-opened='true'] {
         & > td {
-          background: $color-gray-lighter;
+          background-color: $color-gray-lighter;
+          border-bottom: 0;
         }
       }
     }
 
     &Button {
-      margin-right: .5rem;
+      height: auto;
+      margin-left: -.5rem;
+      margin-right: .25rem;
+      padding-bottom: .125rem;
+      padding-top: .125rem;
+      transform: translateY(.125em);
+
+      &:hover:not(:disabled),
+      &:focus:not(:disabled) {
+        background-color: transparent;
+      }
+    }
+
+    &DetailsRow td {
+      border-bottom: 0;
+    }
+
+    &DetailsRow + tr[data-opened='false'] td {
+      border-top: thin dashed $color-gray-lighter;
     }
 
     &Cell {
+      align-items: baseline;
       display: flex;
     }
 
@@ -38,6 +58,15 @@
         color: $color-gray-darker;
         font-size: .75rem;
       }
+    }
+
+    &LastValue {
+      font-weight: bold;
+    }
+
+    &HistoryValue {
+      color: $color-gray-darker;
+      font-size: .75rem;
     }
   }
 }

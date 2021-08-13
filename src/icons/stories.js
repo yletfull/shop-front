@@ -1,4 +1,5 @@
 import React from 'react';
+import Minus from './Minus';
 import Check from './Check';
 import Exclamation from './Exclamation';
 import Equals from './Equals';
@@ -110,6 +111,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Pencil)}
     {renderIcon(PicturesLoad)}
     {renderIcon(Plus)}
+    {renderIcon(Minus)}
     {renderIcon(Search)}
     {renderIcon(Success)}
     {renderIcon(Sync)}
