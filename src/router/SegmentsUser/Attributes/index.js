@@ -111,7 +111,10 @@ const Attributes = function Attributes() {
                 </TableCell>
               </TableRow>
               {isOpened && values.map((value, valueIndex) => (
-                <TableRow key={generateKey('value', value.name, valueIndex)}>
+                <TableRow
+                  key={generateKey('value', value.name, valueIndex)}
+                  className={styles.attributesTableDetailsRow}
+                >
                   <TableCell />
                   <TableCell>
                     <span className={styles.attributesTableHistoryValue}>

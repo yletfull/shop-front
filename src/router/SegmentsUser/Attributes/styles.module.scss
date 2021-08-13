@@ -11,8 +11,8 @@
     & tr {
       &[data-opened='true'] {
         & > td {
-          // FIXME: move to global colors
-          background: #eeeff2;
+          background-color: $color-gray-lighter;
+          border-bottom: 0;
         }
       }
     }
@@ -30,7 +30,16 @@
       }
     }
 
+    &DetailsRow td {
+      border-bottom: 0;
+    }
+
+    &DetailsRow + tr[data-opened='false'] td {
+      border-top: thin dashed $color-gray-lighter;
+    }
+
     &Cell {
+      align-items: baseline;
       display: flex;
     }
 
