@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 const useQueryParams = function useQueryParamsHook() {
@@ -13,7 +13,7 @@ const useQueryParams = function useQueryParamsHook() {
       .reduce((acc, cur) => ({ ...acc, [cur[0]]: cur[1] }), {});
   }, [search]);
 
-  const setQueryParams = (values) => {
+  const setQueryParams = useCallback((values) => {
     if (!values) {
       return;
     }
@@ -25,7 +25,7 @@ const useQueryParams = function useQueryParamsHook() {
     });
 
     history.push({ search: query.toString() });
-  };
+  }, [search, history]);
 
   return [params, setQueryParams];
 };
