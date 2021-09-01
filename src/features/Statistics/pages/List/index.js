@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { useService, useQueryParams } from '@/hooks';
 import WidthSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import List from '@/features/Statistics/components/List';
+import { entities } from '@/features/Statistics/constants';
 import service from '@/features/Statistics/service';
 import styles from './styles.module.scss';
 
+const propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      entity: PropTypes.oneOf(Object.values(entities)).isRequired,
+    }).isRequired,
+  }).isRequired,
+};
+
 const countOptions = [10, 20, 30];
 
-const StatisticsList = function StatisticsListScreen() {
+const StatisticsList = function StatisticsListScreen({
+  match,
+}) {
   const [queryParams, setQueryParams] = useQueryParams();
   const [filter, setFilter] = useState({ search: queryParams.search || '' });
 
@@ -38,6 +50,7 @@ const StatisticsList = function StatisticsListScreen() {
     setFilter(values);
   };
 
+  const { entity } = match?.params || {};
   const {
     dateStart,
     dateEnd,
@@ -48,11 +61,12 @@ const StatisticsList = function StatisticsListScreen() {
     perPage,
   } = queryParams;
   useEffect(() => {
-    if (!dateStart || !dateEnd) {
+    if (!entity || !dateStart || !dateEnd) {
       return;
     }
 
     fetch({
+      entity,
       dateStart,
       dateEnd,
       search,
@@ -60,9 +74,9 @@ const StatisticsList = function StatisticsListScreen() {
       sortField: sortField || 'impressions',
       currentPage: currentPage || 1,
       perPage: perPage || countOptions[0],
-      entity: 'campaigns',
     });
   }, [
+    entity,
     fetch,
     dateStart,
     dateEnd,
@@ -107,5 +121,7 @@ const StatisticsList = function StatisticsListScreen() {
     </div>
   );
 };
+
+StatisticsList.propTypes = propTypes;
 
 export default StatisticsList;

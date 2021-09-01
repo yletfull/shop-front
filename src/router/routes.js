@@ -62,7 +62,7 @@ export const patchs = {
   settings: '/settings',
   statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
-  statistics: '/statistics/lists',
+  statistics: '/statistics/lists/:entity(tasks|campaigns|platforms|spheres|sites)',
 };
 
 export const titles = {
