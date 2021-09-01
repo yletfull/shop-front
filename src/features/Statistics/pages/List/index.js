@@ -184,7 +184,7 @@ const StatisticsList = function StatisticsListScreen({
       <div className={styles.page}>
         {isFetching && (
           <Spinner
-            className={styles.spinnerOverlay}
+            spinnerClassName={styles.spinner}
             layout="overlay"
           />
         )}

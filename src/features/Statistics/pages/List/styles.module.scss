@@ -23,6 +23,8 @@
   margin-bottom: 1rem;
 }
 
-.spinnerOverlay {
-  background-color: rgba($color-gray-lightest, .5);
+.spinner {
+  bottom: 1em;
+  position: sticky;
+  top: 1em;
 }
