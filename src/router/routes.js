@@ -46,10 +46,10 @@ const Upload = lazy(() => import(
   /* webpackMode: 'lazy' */
   './Upload'
 ));
-const Statistics = lazy(() => import(
-  /* webpackChunkName: 'statistics' */
+const StatisticsList = lazy(() => import(
+  /* webpackChunkName: 'statistics-list' */
   /* webpackMode: 'lazy' */
-  './Statistics'
+  '@/features/Statistics/pages/List'
 ));
 
 export const patchs = {
@@ -151,7 +151,7 @@ export default [
     title: titles.statisticsDetails,
   },
   {
-    Component: Statistics,
+    Component: StatisticsList,
     path: patchs.statistics,
     title: titles.statistics,
     rights: {
