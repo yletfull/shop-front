@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useService, useQueryParams } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
+import Pagination from '@/components/Pagination';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import List from '@/features/Statistics/components/List';
@@ -127,16 +128,15 @@ const StatisticsList = function StatisticsListScreen({
     perPage,
   ]);
   useEffect(() => {
-    if (!maxDate) {
+    if (!maxDate || (dateStart && dateEnd)) {
       return;
     }
 
     setQueryParams({
       dateStart: maxDate,
       dateEnd: maxDate,
-      currentPage: 1,
     });
-  }, [maxDate, setQueryParams]);
+  }, [maxDate, dateStart, dateEnd, setQueryParams]);
 
   const { data, meta } = response || {};
 
@@ -201,14 +201,20 @@ const StatisticsList = function StatisticsListScreen({
           dateEnd={dateEnd}
           entity="tasks"
           list={data}
-          pagination={meta?.pagination}
           sort={meta?.sort}
           filter={filter}
           onFilterChange={handleFilterChange}
-          onPageSelect={handlePageSelect}
-          onCountSelect={handleCountSelect}
           onSortChange={handleSortChange}
           onFormSubmit={handleFormSubmit}
+        />
+        <Pagination
+          key="pagination"
+          pagesTotal={meta?.pagination?.totalPages || 1}
+          currentPage={meta?.pagination?.currentPage || 1}
+          count={meta?.pagination?.perPage}
+          countOptions={countOptions}
+          onPageSelect={handlePageSelect}
+          onCountSelect={handleCountSelect}
         />
       </div>
     </AppMain>
