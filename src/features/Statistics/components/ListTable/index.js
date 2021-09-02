@@ -5,27 +5,13 @@ import RowData from './RowData';
 import RowFilter from './RowFilter';
 import RowHeader from './RowHeader';
 
-const metricShape = { diff: PropTypes.number, count: PropTypes.number };
 const propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      index: PropTypes.number.isRequired,
-      indexDiff: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      impressions: PropTypes.shape(metricShape).isRequired,
-      clicks: PropTypes.shape(metricShape).isRequired,
-      ctr: PropTypes.shape(metricShape).isRequired,
-      positiveReactions: PropTypes.shape(metricShape).isRequired,
-      negativeReactions: PropTypes.shape(metricShape).isRequired,
-      repostsReactions: PropTypes.shape(metricShape).isRequired,
-      totalReactions: PropTypes.shape(metricShape).isRequired,
-    }),
-  ).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   sort: PropTypes.objectOf(PropTypes.string),
   filters: PropTypes.shape({
     search: PropTypes.string,
   }),
+  getDetailsLink: PropTypes.func.isRequired,
   onFiltersApply: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
@@ -41,6 +27,7 @@ const ListTable = function StatisticsListTable({
   data,
   sort,
   filters,
+  getDetailsLink,
   onFiltersApply,
   onSortChange,
 }) {
@@ -85,6 +72,7 @@ const ListTable = function StatisticsListTable({
           <RowData
             {...row}
             key={row.id}
+            getDetailsLink={getDetailsLink}
           />
         ))}
       </Table>

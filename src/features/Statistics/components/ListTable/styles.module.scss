@@ -1,7 +1,17 @@
 @import '@/theme/include.scss';
 
+.index {
+  color: $color-gray-darker;
+  padding-right: 0;
+}
+
 .sortButton {
   font-weight: inherit;
+}
+
+.diffIcon {
+  margin-right: .5em;
+  vertical-align: -.125em;
 }
 
 .filter {
@@ -32,6 +42,21 @@
 
     & svg {
       font-size: .75em;
+      margin-right: .75em;
+    }
+  }
+}
+
+.body {
+  &Count {
+    padding-right: 0;
+  }
+
+  &Diff {
+    padding-left: .75em;
+
+    &Value {
+      font-size: .875em;
     }
   }
 }
