@@ -1,58 +1,119 @@
 @import '@/theme/include.scss';
 
-.button {
-  @include button-reset();
+.spacer,
+.icons {
+  display: inline-flex;
+  line-height: 1;
+  min-height: 1em;
+  order: 0;
+  width: 1.25em;
+}
 
-  font: inherit;
-
-  .icon {
-    opacity: 0;
-  }
-
-  &:hover {
-    .icon {
-      opacity: 1;
-    }
-  }
-
-  &_active {
-    .icon {
-      opacity: 1;
-    }
-
-    &:hover {
-      .icon:not(.current) {
-        border-bottom-color: rgba($color-primary, .75);
-        border-top-color: rgba($color-primary, .75);
-      }
-    }
-  }
+.content {
+  height: 100%;
+  order: 1;
 }
 
 .icons {
-  display: inline-flex;
+  align-items: flex-end;
   flex-direction: column;
-  margin-left: .5em;
+  justify-content: center;
+  opacity: 0;
+  order: 2;
+  text-align: right;
+  width: 0;
 }
 
 .icon {
   border: .375em solid transparent;
+  display: inline-block;
   width: 0;
 
-  &_asc {
+  &[data-type='desc'] {
     border-bottom-width: 0;
 
-    &.current {
+    &[data-active='true'] {
       border-top-color: currentColor;
     }
   }
 
-  &_desc {
+  &[data-type='asc'] {
     border-top-width: 0;
-    margin-bottom: .25em;
 
-    &.current {
+    &[data-active='true'] {
       border-bottom-color: currentColor;
     }
+  }
+
+  &[data-type='asc'] + &[data-type='desc'] {
+    margin-top: .125em;
+  }
+}
+
+.button {
+  @include button-reset();
+
+  align-items: stretch;
+  font-family: inherit;
+
+  &[data-align='left'] {
+    & .spacer {
+      order: 2;
+    }
+
+    & .icons {
+      align-items: flex-start;
+      order: 0;
+      text-align: left;
+    }
+  }
+
+  &:hover,
+  &:focus,
+  &[data-active='true'] {
+    & .spacer {
+      opacity: 0;
+      width: 0;
+    }
+
+    & .icons {
+      opacity: 1;
+      width: 1.25em;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    & .icon:not([data-active='true']) {
+      border-bottom-color: $color-primary-lighter;
+      border-top-color: $color-primary-lighter;
+    }
+  }
+
+  &[data-active='true'] {
+    & .icon:not([data-active='true']) {
+      display: none;
+    }
+
+    &:hover,
+    &:focus {
+      & .icon:not([data-active='true']) {
+        border-bottom-color: $color-primary-lighter;
+        border-top-color: $color-primary-lighter;
+        display: inline-block;
+      }
+    }
+  }
+
+  &::before {
+    content: '';
+    height: 1em;
+    width: 0;
+  }
+}
+
+[data-js-focus-visible] .button:focus:not([data-focus-visible-added]) {
+  & .icon:not([data-active='true']) {
+    display: none;
   }
 }
