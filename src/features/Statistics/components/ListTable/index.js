@@ -51,7 +51,7 @@ const ListTable = function StatisticsListTable({
 
   const handleFiltersChange = (fields) => {
     if ('search' in fields) {
-      setSearch(fields[search]);
+      setSearch(fields.search);
     }
   };
   const handleFiltersApply = (e) => {
