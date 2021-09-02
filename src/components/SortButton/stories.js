@@ -6,13 +6,12 @@ export default {
   component: SortButton,
 };
 
-export const Playground = (args) => (
-  <SortButton {...args} />
-);
+const Template = (args) => <SortButton {...args} />;
 
+export const Playground = Template.bind({});
 Playground.args = {
   children: 'Показатель',
-  isActive: false,
   field: 'index',
-  direction: 'asc',
+  sortField: 'index',
+  sortDir: 'asc',
 };

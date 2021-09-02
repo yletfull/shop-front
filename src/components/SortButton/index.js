@@ -3,54 +3,46 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import styles from './styles.module.scss';
 
-const directions = {
-  asc: 'asc',
-  desc: 'desc',
-};
-
-const directionsReverse = {
-  [directions.asc]: directions.desc,
-  [directions.desc]: directions.asc,
-};
-
 const propTypes = {
   children: PropTypes.node,
-  isActive: PropTypes.bool,
-  field: PropTypes.string,
-  direction: PropTypes.oneOf([
-    directions.asc,
-    directions.desc,
-  ]),
+  field: PropTypes.string.isRequired,
   className: PropTypes.string,
-  onClick: PropTypes.func,
+  sortField: PropTypes.string,
+  sortDir: PropTypes.oneOf(['asc', 'desc']),
+  defaultSortDir: PropTypes.oneOf(['asc', 'desc']),
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
   children: '',
-  isActive: false,
-  field: '',
-  direction: null,
+  sortField: '',
+  sortDir: null,
+  defaultSortDir: 'asc',
   className: '',
-  onClick: () => {},
+  onChange: () => {},
 };
 
 const SortButton = function SortButton({
   children,
-  isActive,
   field,
-  direction,
+  sortField,
+  sortDir,
+  defaultSortDir,
   className,
-  onClick,
+  onChange,
   ...props
 }) {
-  const handleImpressionsClick = () => {
-    if (!direction || !field) {
-      return;
+  const isActive = field === sortField;
+  const handleClick = () => {
+    let nextSortDir = defaultSortDir;
+
+    if (isActive && sortDir) {
+      nextSortDir = sortDir === 'asc' ? 'desc' : 'asc';
     }
 
-    onClick({
+    onChange({
       sortField: field,
-      sortDir: isActive ? directionsReverse[direction] : directions[direction],
+      sortDir: nextSortDir,
     });
   };
 
@@ -63,7 +55,7 @@ const SortButton = function SortButton({
         styles.button,
         className,
       ])}
-      onClick={handleImpressionsClick}
+      onClick={handleClick}
     >
       {children}
       <span
@@ -73,14 +65,14 @@ const SortButton = function SortButton({
           className={cx([
             styles.icon,
             styles.icon_desc,
-            { [styles.current]: direction === directions.desc },
+            { [styles.current]: sortDir === 'asc' },
           ])}
         />
         <span
           className={cx([
             styles.icon,
             styles.icon_asc,
-            { [styles.current]: direction === directions.asc },
+            { [styles.current]: sortDir === 'desc' },
           ])}
         />
       </span>
