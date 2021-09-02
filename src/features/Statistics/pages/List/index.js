@@ -182,7 +182,7 @@ const StatisticsList = function StatisticsListScreen({
       </div>
 
       <div className={styles.page}>
-        {isFetching && (
+        {(isFetching || periodsService.isFetching) && (
           <Spinner
             spinnerClassName={styles.spinner}
             layout="overlay"
