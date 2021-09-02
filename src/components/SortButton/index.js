@@ -68,20 +68,20 @@ const SortButton = function SortButton({
       </span>
 
       <span className={styles.icons}>
-        <span
-          className={cx([
-            styles.icon,
-            styles.icon_desc,
-            { [styles.current]: sortDir === 'asc' },
-          ])}
-        />
-        <span
-          className={cx([
-            styles.icon,
-            styles.icon_asc,
-            { [styles.current]: sortDir === 'desc' },
-          ])}
-        />
+        {(isActive || defaultSortDir === 'asc') && (
+          <span
+            data-type="asc"
+            data-active={String(isActive && sortDir === 'asc')}
+            className={styles.icon}
+          />
+        )}
+        {(isActive || defaultSortDir === 'desc') && (
+          <span
+            data-type="desc"
+            data-active={String(isActive && sortDir === 'desc')}
+            className={styles.icon}
+          />
+        )}
       </span>
     </button>
   );

@@ -26,22 +26,27 @@
 
 .icon {
   border: .375em solid transparent;
+  display: inline-block;
   width: 0;
 
-  &_asc {
+  &[data-type='desc'] {
     border-bottom-width: 0;
 
-    &.current {
+    &[data-active='true'] {
       border-top-color: currentColor;
     }
   }
 
-  &_desc {
+  &[data-type='asc'] {
     border-top-width: 0;
 
-    &.current {
+    &[data-active='true'] {
       border-bottom-color: currentColor;
     }
+  }
+
+  &[data-type='asc'] + &[data-type='desc'] {
+    margin-top: .125em;
   }
 }
 
@@ -64,7 +69,8 @@
   }
 
   &:hover,
-  &:focus-within {
+  &:focus,
+  &[data-active='true'] {
     & .spacer {
       opacity: 0;
       width: 0;
@@ -76,9 +82,38 @@
     }
   }
 
+  &:hover,
+  &:focus {
+    & .icon:not([data-active='true']) {
+      border-bottom-color: $color-primary-lighter;
+      border-top-color: $color-primary-lighter;
+    }
+  }
+
+  &[data-active='true'] {
+    & .icon:not([data-active='true']) {
+      display: none;
+    }
+
+    &:hover,
+    &:focus {
+      & .icon:not([data-active='true']) {
+        border-bottom-color: $color-primary-lighter;
+        border-top-color: $color-primary-lighter;
+        display: inline-block;
+      }
+    }
+  }
+
   &::before {
     content: '';
     height: 1em;
     width: 0;
+  }
+}
+
+[data-js-focus-visible] .button:focus:not([data-focus-visible-added]) {
+  & .icon:not([data-active='true']) {
+    display: none;
   }
 }
