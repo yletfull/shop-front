@@ -10,6 +10,8 @@ const propTypes = {
   sortField: PropTypes.string,
   sortDir: PropTypes.oneOf(['asc', 'desc']),
   defaultSortDir: PropTypes.oneOf(['asc', 'desc']),
+  hideSpacer: PropTypes.bool,
+  iconsAlign: PropTypes.oneOf(['left', 'right']),
   onChange: PropTypes.func,
 };
 
@@ -19,6 +21,8 @@ const defaultProps = {
   sortDir: null,
   defaultSortDir: 'asc',
   className: '',
+  hideSpacer: false,
+  iconsAlign: 'right',
   onChange: () => {},
 };
 
@@ -29,6 +33,8 @@ const SortButton = function SortButton({
   sortDir,
   defaultSortDir,
   className,
+  hideSpacer,
+  iconsAlign,
   onChange,
   ...props
 }) {
@@ -50,17 +56,18 @@ const SortButton = function SortButton({
     <button
       {...props}
       type="button"
-      className={cx([
-        { [styles.button_active]: isActive },
-        styles.button,
-        className,
-      ])}
+      data-active={String(isActive)}
+      data-align={String(iconsAlign)}
+      className={cx(styles.button, className)}
       onClick={handleClick}
     >
-      {children}
-      <span
-        className={styles.icons}
-      >
+      {!hideSpacer && <span className={styles.spacer} />}
+
+      <span className={styles.content}>
+        {children}
+      </span>
+
+      <span className={styles.icons}>
         <span
           className={cx([
             styles.icon,

@@ -1,38 +1,27 @@
 @import '@/theme/include.scss';
 
-.button {
-  @include button-reset();
+.spacer,
+.icons {
+  display: inline-flex;
+  line-height: 1;
+  min-height: 1em;
+  order: 0;
+  width: 1.25em;
+}
 
-  font: inherit;
-
-  .icon {
-    opacity: 0;
-  }
-
-  &:hover {
-    .icon {
-      opacity: 1;
-    }
-  }
-
-  &_active {
-    .icon {
-      opacity: 1;
-    }
-
-    &:hover {
-      .icon:not(.current) {
-        border-bottom-color: rgba($color-primary, .75);
-        border-top-color: rgba($color-primary, .75);
-      }
-    }
-  }
+.content {
+  height: 100%;
+  order: 1;
 }
 
 .icons {
-  display: inline-flex;
+  align-items: flex-end;
   flex-direction: column;
-  margin-left: .5em;
+  justify-content: center;
+  opacity: 0;
+  order: 2;
+  text-align: right;
+  width: 0;
 }
 
 .icon {
@@ -49,10 +38,47 @@
 
   &_desc {
     border-top-width: 0;
-    margin-bottom: .25em;
 
     &.current {
       border-bottom-color: currentColor;
     }
+  }
+}
+
+.button {
+  @include button-reset();
+
+  align-items: stretch;
+  font-family: inherit;
+
+  &[data-align='left'] {
+    & .spacer {
+      order: 2;
+    }
+
+    & .icons {
+      align-items: flex-start;
+      order: 0;
+      text-align: left;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    & .spacer {
+      opacity: 0;
+      width: 0;
+    }
+
+    & .icons {
+      opacity: 1;
+      width: 1.25em;
+    }
+  }
+
+  &::before {
+    content: '';
+    height: 1em;
+    width: 0;
   }
 }
