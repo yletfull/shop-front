@@ -1,0 +1,31 @@
+@import '@/theme/include.scss';
+
+.sortButton {
+  font-weight: inherit;
+}
+
+.header {
+  &Count {
+    font-weight: bold;
+    padding-right: 0;
+  }
+
+  &Diff {
+    color: $color-gray-darker;
+    padding-left: .5em;
+
+    & svg {
+      font-size: .75em;
+    }
+  }
+}
+
+.borderedCell {
+  border-right: thin solid $color-white;
+  padding-right: 2em;
+
+  & + td,
+  & + th {
+    padding-left: 2em;
+  }
+}

@@ -22,18 +22,7 @@ const propTypes = {
       totalReactions: PropTypes.shape(metricShape).isRequired,
     }),
   ).isRequired,
-  sort: PropTypes.shape({
-    sortDir: PropTypes.oneOf(['asc', 'desc']),
-    sortField: PropTypes.oneOf([
-      'impressions',
-      'clicks',
-      'ctr',
-      'positiveReactions',
-      'negativeReactions',
-      'repostsReactions',
-      'totalReactions',
-    ]),
-  }),
+  sort: PropTypes.objectOf(PropTypes.string),
   filters: PropTypes.shape({
     search: PropTypes.string,
   }),
@@ -85,7 +74,8 @@ const ListTable = function StatisticsListTable({
               onChange={handleFiltersChange}
             />
             <RowHeader
-              sort={sort}
+              sortField={sort?.sortField}
+              sortDir={sort?.sortDir}
               onSortChange={handleSortChange}
             />
           </Fragment>
