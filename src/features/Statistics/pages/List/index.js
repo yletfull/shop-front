@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
@@ -8,7 +8,7 @@ import Spinner from '@/components/Spinner';
 import Pagination from '@/components/Pagination';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import DateInputs from '@/features/Statistics/components/DateInputs';
-import List from '@/features/Statistics/components/List';
+import ListTable from '@/features/Statistics/components/ListTable';
 import { entities } from '@/features/Statistics/constants';
 import service from '@/features/Statistics/service';
 import styles from './styles.module.scss';
@@ -43,7 +43,6 @@ const StatisticsList = function StatisticsListScreen({
   location,
 }) {
   const [queryParams, setQueryParams] = useQueryParams();
-  const [filter, setFilter] = useState({ search: queryParams.search || '' });
 
   const periodsService = useService({
     initialData: [],
@@ -77,18 +76,14 @@ const StatisticsList = function StatisticsListScreen({
       currentPage: 1,
     });
   };
-  const handleFormSubmit = ({ search }) => {
+  const handleFiltersApply = (values) => {
     setQueryParams({
-      search,
+      search: values.search,
       currentPage: 1,
     });
   };
   const handleSortChange = ({ sortDir, sortField }) => {
     setQueryParams({ sortDir, sortField });
-  };
-
-  const handleFilterChange = (values) => {
-    setFilter(values);
   };
 
   const { entity } = match?.params || {};
@@ -139,6 +134,10 @@ const StatisticsList = function StatisticsListScreen({
   }, [maxDate, dateStart, dateEnd, setQueryParams]);
 
   const { data, meta } = response || {};
+  const filters = { search };
+  const getDetailsLink = (id) => (
+    `/statistics/details/${entity}/${id}${location.search}`
+  );
 
   return (
     <AppMain
@@ -196,16 +195,13 @@ const StatisticsList = function StatisticsListScreen({
           />
         )}
 
-        <List
-          dateStart={dateStart}
-          dateEnd={dateEnd}
-          entity="tasks"
-          list={data}
+        <ListTable
+          data={data}
           sort={meta?.sort}
-          filter={filter}
-          onFilterChange={handleFilterChange}
+          filters={filters}
+          getDetailsLink={getDetailsLink}
+          onFiltersApply={handleFiltersApply}
           onSortChange={handleSortChange}
-          onFormSubmit={handleFormSubmit}
         />
         <Pagination
           key="pagination"
