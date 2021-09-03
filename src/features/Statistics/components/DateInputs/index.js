@@ -171,7 +171,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const { value, name } = e.target;
 
     if (lastDatesInputValues[name] !== value) {
-      handleParamsChange(e, true, true);
+      handleParamsChange(e);
 
       setLastDatesInputValues((prev) => ({
         ...prev,
