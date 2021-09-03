@@ -60,4 +60,14 @@
       font-size: .875em;
     }
   }
+
+  &Nested {
+    &Name {
+      padding-left: 2.75em;
+    }
+
+    &Link {
+      color: $color-gray-darker;
+    }
+  }
 }

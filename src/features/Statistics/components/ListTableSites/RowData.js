@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 const metricShape = { diff: PropTypes.number, count: PropTypes.number };
 const propTypes = {
   id: PropTypes.string.isRequired,
+  parentId: PropTypes.string,
   index: PropTypes.number.isRequired,
   indexDiff: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
@@ -19,12 +20,16 @@ const propTypes = {
   ctr: PropTypes.shape(metricShape).isRequired,
   getDetailsLink: PropTypes.func.isRequired,
 };
+const defaultProps = {
+  parentId: null,
+};
 
 const formatDiff = (value) => formatNumber(Math.abs(value));
 const formatPercentDiff = (value) => formatPercent(Math.abs(value));
 
 const RowData = function ListTableSitesRowData({
   id,
+  parentId,
   index,
   indexDiff,
   name,
@@ -39,6 +44,8 @@ const RowData = function ListTableSitesRowData({
     { key: 'ctr', values: ctr, formatter: formatPercent },
   ];
 
+  const isNested = Boolean(parentId);
+
   return (
     <TableRow>
       <TableCell
@@ -46,10 +53,16 @@ const RowData = function ListTableSitesRowData({
         className={styles.index}
         align="right"
       >
-        {`${index}.`}
+        {!isNested && `${index}.`}
       </TableCell>
-      <TableCell key="_name">
-        <Link to={getDetailsLink(id)}>
+      <TableCell
+        key="_name"
+        className={isNested && styles.bodyNestedName}
+      >
+        <Link
+          to={getDetailsLink(id)}
+          className={isNested && styles.bodyNestedLink}
+        >
           {name}
         </Link>
       </TableCell>
@@ -95,5 +108,6 @@ const RowData = function ListTableSitesRowData({
 };
 
 RowData.propTypes = propTypes;
+RowData.defaultProps = defaultProps;
 
 export default RowData;
