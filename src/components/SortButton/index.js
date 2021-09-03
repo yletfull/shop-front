@@ -3,54 +3,52 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import styles from './styles.module.scss';
 
-const directions = {
-  asc: 'asc',
-  desc: 'desc',
-};
-
-const directionsReverse = {
-  [directions.asc]: directions.desc,
-  [directions.desc]: directions.asc,
-};
-
 const propTypes = {
   children: PropTypes.node,
-  isActive: PropTypes.bool,
-  field: PropTypes.string,
-  direction: PropTypes.oneOf([
-    directions.asc,
-    directions.desc,
-  ]),
+  field: PropTypes.string.isRequired,
   className: PropTypes.string,
-  onClick: PropTypes.func,
+  sortField: PropTypes.string,
+  sortDir: PropTypes.oneOf(['asc', 'desc']),
+  defaultSortDir: PropTypes.oneOf(['asc', 'desc']),
+  hideSpacer: PropTypes.bool,
+  iconsAlign: PropTypes.oneOf(['left', 'right']),
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
   children: '',
-  isActive: false,
-  field: '',
-  direction: null,
+  sortField: '',
+  sortDir: null,
+  defaultSortDir: 'asc',
   className: '',
-  onClick: () => {},
+  hideSpacer: false,
+  iconsAlign: 'right',
+  onChange: () => {},
 };
 
 const SortButton = function SortButton({
   children,
-  isActive,
   field,
-  direction,
+  sortField,
+  sortDir,
+  defaultSortDir,
   className,
-  onClick,
+  hideSpacer,
+  iconsAlign,
+  onChange,
   ...props
 }) {
-  const handleImpressionsClick = () => {
-    if (!direction || !field) {
-      return;
+  const isActive = field === sortField;
+  const handleClick = () => {
+    let nextSortDir = defaultSortDir;
+
+    if (isActive && sortDir) {
+      nextSortDir = sortDir === 'asc' ? 'desc' : 'asc';
     }
 
-    onClick({
+    onChange({
       sortField: field,
-      sortDir: isActive ? directionsReverse[direction] : directions[direction],
+      sortDir: nextSortDir,
     });
   };
 
@@ -58,31 +56,32 @@ const SortButton = function SortButton({
     <button
       {...props}
       type="button"
-      className={cx([
-        { [styles.button_active]: isActive },
-        styles.button,
-        className,
-      ])}
-      onClick={handleImpressionsClick}
+      data-active={String(isActive)}
+      data-align={String(iconsAlign)}
+      className={cx(styles.button, className)}
+      onClick={handleClick}
     >
-      {children}
-      <span
-        className={styles.icons}
-      >
-        <span
-          className={cx([
-            styles.icon,
-            styles.icon_desc,
-            { [styles.current]: direction === directions.desc },
-          ])}
-        />
-        <span
-          className={cx([
-            styles.icon,
-            styles.icon_asc,
-            { [styles.current]: direction === directions.asc },
-          ])}
-        />
+      {!hideSpacer && <span className={styles.spacer} />}
+
+      <span className={styles.content}>
+        {children}
+      </span>
+
+      <span className={styles.icons}>
+        {(isActive || defaultSortDir === 'asc') && (
+          <span
+            data-type="asc"
+            data-active={String(isActive && sortDir === 'asc')}
+            className={styles.icon}
+          />
+        )}
+        {(isActive || defaultSortDir === 'desc') && (
+          <span
+            data-type="desc"
+            data-active={String(isActive && sortDir === 'desc')}
+            className={styles.icon}
+          />
+        )}
       </span>
     </button>
   );
