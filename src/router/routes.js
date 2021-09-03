@@ -46,6 +46,11 @@ const Upload = lazy(() => import(
   /* webpackMode: 'lazy' */
   './Upload'
 ));
+const StatisticsRoot = lazy(() => import(
+  /* webpackChunkName: 'statistics-root' */
+  /* webpackMode: 'lazy' */
+  '@/features/Statistics/pages/Root'
+));
 const StatisticsList = lazy(() => import(
   /* webpackChunkName: 'statistics-list' */
   /* webpackMode: 'lazy' */
@@ -62,7 +67,8 @@ export const patchs = {
   settings: '/settings',
   statisticsDetails: '/statistics/details/:entityType/:id?',
   upload: '/upload',
-  statistics: '/statistics/lists/:entity(tasks|campaigns|platforms|spheres|sites)',
+  statistics: '/statistics',
+  statisticsLists: '/statistics/lists/:entity(tasks|campaigns|platforms|spheres|sites)',
 };
 
 export const titles = {
@@ -76,6 +82,7 @@ export const titles = {
   settings: 'Настройки',
   statisticsDetails: 'Статистика',
   statistics: 'Статистика',
+  statisticsLists: 'Статистика',
 };
 
 export default [
@@ -152,6 +159,15 @@ export default [
   },
   {
     Component: StatisticsList,
+    path: patchs.statisticsLists,
+    title: titles.statisticsLists,
+    rights: {
+      section: sections.stats,
+      actions: [],
+    },
+  },
+  {
+    Component: StatisticsRoot,
     path: patchs.statistics,
     title: titles.statistics,
     rights: {
