@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useOnClickOutside } from '@/hooks';
@@ -54,25 +54,42 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const hideDropdown = () => setShouldShowDropdown(false);
 
+  const dateStartRef = useRef();
+  const dateEndRef = useRef();
+
+  useEffect(() => {
+    dateEndRef.current.value = isValidDate(values.dateEnd)
+      ? formatDate(values.dateEnd, DATE_FORMAT)
+      : formatDate(dayjs(min), DATE_FORMAT);
+    dateStartRef.current.value = isValidDate(values.dateStart)
+      ? formatDate(values.dateStart, DATE_FORMAT)
+      : formatDate(dayjs(min), DATE_FORMAT);
+  }, [min, values]);
+
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
 
   const today = dayjs().format(DATE_FORMAT);
   const max = today;
+
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
 
-
-  const handleParamsChange = (e) => {
+  const handleParamsChange = (
+    e,
+  ) => {
     const { name, value } = e?.target || {};
+
+    const update = () => onChange({
+      ...values,
+      [name]: formatDate(value, DATE_FORMAT),
+    });
+
     if (!name || !value) {
       return;
     }
 
-    onChange({
-      ...values,
-      [name]: formatDate(value, DATE_FORMAT),
-    });
+    update();
   };
 
   const handleShiftToThePast = () => {
@@ -123,8 +140,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setShouldShowDropdown(!shouldShowDropdown);
   };
 
-  const handleDateKeydown = (e) => e.preventDefault();
-
   const handleQuickSelect = (e) => {
     e.preventDefault();
 
@@ -145,6 +160,24 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         .format(DATE_FORMAT),
     });
     hideDropdown();
+  };
+
+  const [lastDatesInputValues, setLastDatesInputValues] = useState({
+    dateStart: '',
+    dateEnd: '',
+  });
+
+  const handleDateInputBlur = (e) => {
+    const { value, name } = e.target;
+
+    if (lastDatesInputValues[name] !== value) {
+      handleParamsChange(e, true, true);
+
+      setLastDatesInputValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   return (
@@ -171,11 +204,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateStart"
           type="date"
-          value={(isValidDate(values.dateStart)
-            ? formatDate(values.dateStart, DATE_FORMAT)
-            : min || formatDate(dayjs(), DATE_FORMAT))}
+          ref={dateStartRef}
+          onBlur={handleDateInputBlur}
           onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
         />
         &nbsp;
         -
@@ -185,11 +216,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateEnd"
           type="date"
-          value={(isValidDate(values.dateEnd)
-            ? formatDate(values.dateEnd, DATE_FORMAT)
-            : max || formatDate(dayjs(), DATE_FORMAT))}
+          ref={dateEndRef}
+          onBlur={handleDateInputBlur}
           onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
         />
       </div>
       <button
