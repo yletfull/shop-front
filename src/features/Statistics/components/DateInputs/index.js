@@ -42,7 +42,7 @@ const defaultProps = {
     dateEnd: '',
   },
   className: '',
-  debounceDelay: 1000,
+  debounceDelay: 900,
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
