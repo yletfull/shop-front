@@ -9,6 +9,7 @@ import Pagination from '@/components/Pagination';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import ListTable from '@/features/Statistics/components/ListTable';
+import ListTableSites from '@/features/Statistics/components/ListTableSites';
 import { entities } from '@/features/Statistics/constants';
 import service from '@/features/Statistics/service';
 import styles from './styles.module.scss';
@@ -37,6 +38,13 @@ const navTabsLinks = Object
       [entities.spheres]: 'Сферы',
     })[entity] || entity,
   }));
+const mapListComponentByEntity = {
+  [entities.tasks]: ListTable,
+  [entities.campaigns]: ListTable,
+  [entities.platforms]: ListTable,
+  [entities.sites]: ListTableSites,
+  [entities.spheres]: ListTable,
+};
 
 const StatisticsList = function StatisticsListScreen({
   match,
@@ -139,6 +147,8 @@ const StatisticsList = function StatisticsListScreen({
     `/statistics/details/${entity}/${id}${location.search}`
   );
 
+  const ListComponent = mapListComponentByEntity[entity] || ListTable;
+
   return (
     <AppMain
       header={(
@@ -195,7 +205,7 @@ const StatisticsList = function StatisticsListScreen({
           />
         )}
 
-        <ListTable
+        <ListComponent
           data={data}
           sort={meta?.sort}
           filters={filters}
