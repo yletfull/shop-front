@@ -36,11 +36,6 @@ const Settings = lazy(() => import(
   /* webpackMode: 'lazy' */
   '@/features/Settings/pages/Main'
 ));
-const StatisticsDetails = lazy(() => import(
-  /* webpackChunkName: 'statistics-details' */
-  /* webpackMode: 'lazy' */
-  './StatisticsDetails'
-));
 const Upload = lazy(() => import(
   /* webpackChunkName: 'upload' */
   /* webpackMode: 'lazy' */
@@ -55,6 +50,11 @@ const StatisticsList = lazy(() => import(
   /* webpackChunkName: 'statistics-list' */
   /* webpackMode: 'lazy' */
   '@/features/Statistics/pages/List'
+));
+const StatisticsDetails = lazy(() => import(
+  /* webpackChunkName: 'statistics-details' */
+  /* webpackMode: 'lazy' */
+  '@/features/Statistics/pages/Details'
 ));
 
 export const patchs = {
