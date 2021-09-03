@@ -4,6 +4,7 @@ import Table from '@/components/Table';
 import RowData from './RowData';
 import RowFilter from './RowFilter';
 import RowHeader from './RowHeader';
+import RowEmpty from './RowEmpty';
 
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -12,6 +13,7 @@ const propTypes = {
     search: PropTypes.string,
   }),
   getDetailsLink: PropTypes.func.isRequired,
+  forceIsEmpty: PropTypes.bool,
   onFiltersApply: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
 };
@@ -21,6 +23,7 @@ const defaultProps = {
     sortField: 'impressions',
   },
   filters: { search: '' },
+  forceIsEmpty: false,
 };
 
 const ListTableSites = function StatisticsListTableSites({
@@ -28,6 +31,7 @@ const ListTableSites = function StatisticsListTableSites({
   sort,
   filters,
   getDetailsLink,
+  forceIsEmpty,
   onFiltersApply,
   onSortChange,
 }) {
@@ -46,6 +50,8 @@ const ListTableSites = function StatisticsListTableSites({
     onFiltersApply({ search });
   };
   const handleSortChange = onSortChange;
+
+  const isEmpty = forceIsEmpty || (Array.isArray(data) && !data.length);
 
   return (
     <form
@@ -68,13 +74,16 @@ const ListTableSites = function StatisticsListTableSites({
           </Fragment>
         )}
       >
-        {Array.isArray(data) && data.map((row) => (
+        {(Array.isArray(data) && !isEmpty) && data.map((row) => (
           <RowData
             {...row}
             key={row.id}
             getDetailsLink={getDetailsLink}
           />
         ))}
+        {isEmpty && (
+          <RowEmpty />
+        )}
       </Table>
     </form>
   );

@@ -210,6 +210,7 @@ const StatisticsList = function StatisticsListScreen({
           sort={meta?.sort}
           filters={filters}
           getDetailsLink={getDetailsLink}
+          forceIsEmpty={Boolean(error)}
           onFiltersApply={handleFiltersApply}
           onSortChange={handleSortChange}
         />
