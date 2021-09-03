@@ -57,11 +57,11 @@ const RowData = function ListTableSitesRowData({
       </TableCell>
       <TableCell
         key="_name"
-        className={isNested && styles.bodyNestedName}
+        className={isNested ? styles.bodyNestedName : ''}
       >
         <Link
           to={getDetailsLink(id)}
-          className={isNested && styles.bodyNestedLink}
+          className={isNested ? styles.bodyNestedLink : ''}
         >
           {name}
         </Link>
