@@ -42,6 +42,7 @@ import Vent from './Vent';
 import Vk from './Vk';
 import Warning from './Warning';
 import ExclamationTriangle from './ExclamationTriangle';
+import Retweet from './Retweet';
 import RetweetAlt from './RetweetAlt';
 import RocketSolid from './RocketSolid';
 import ThumbsDownSolid from './ThumbsDownSolid';
@@ -124,6 +125,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(Vk)}
     {renderIcon(Warning)}
     {renderIcon(ExclamationTriangle)}
+    {renderIcon(Retweet)}
     {renderIcon(RetweetAlt)}
     {renderIcon(RocketSolid)}
     {renderIcon(ThumbsDownSolid)}

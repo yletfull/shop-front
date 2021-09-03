@@ -1,13 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Table from '@/components/Table';
-import Pagination from '@/components/Pagination';
 import EmptyTableRow from '../EmptyTableRow';
 import Header from './components/Header';
 import FilterRow from './components/FilterRow';
 import TableRow from './components/TableRow';
-
-const countOptions = [10, 20, 30];
 
 const shape = {
   diff: PropTypes.number,
@@ -33,11 +30,6 @@ const propTypes = {
       totalReactions: PropTypes.shape(shape).isRequired,
     })
   ),
-  pagination: PropTypes.shape({
-    totalPages: PropTypes.number.isRequired,
-    currentPage: PropTypes.number.isRequired,
-    perPage: PropTypes.number.isRequired,
-  }),
   sort: PropTypes.shape({
     sortDir: PropTypes.string.isRequired,
     sortField: PropTypes.string.isRequired,
@@ -46,8 +38,6 @@ const propTypes = {
     search: PropTypes.string,
   }),
   onFilterChange: PropTypes.func.isRequired,
-  onPageSelect: PropTypes.func.isRequired,
-  onCountSelect: PropTypes.func.isRequired,
   onSortChange: PropTypes.func.isRequired,
   onFormSubmit: PropTypes.func.isRequired,
 };
@@ -57,7 +47,6 @@ const defaultProps = {
     search: '',
   },
   list: null,
-  pagination: null,
   sort: null,
 };
 
@@ -66,23 +55,12 @@ const StatisticsList = function StatisticsList({
   dateEnd,
   entity,
   list,
-  pagination,
   sort,
   filter,
   onFilterChange,
   onFormSubmit,
   onSortChange,
-  onPageSelect,
-  onCountSelect,
 }) {
-  const handlePageSelect = (value) => {
-    onPageSelect(value);
-  };
-
-  const handleCountSelect = (value) => {
-    onCountSelect(value);
-  };
-
   const handleFormSubmit = (e) => {
     e.preventDefault();
     onFormSubmit(filter);
@@ -97,66 +75,53 @@ const StatisticsList = function StatisticsList({
   };
 
   return (
-    <Fragment>
-      <form
-        key="form"
-        onSubmit={handleFormSubmit}
+    <form
+      key="form"
+      onSubmit={handleFormSubmit}
+    >
+      <Table
+        header={(
+          <Fragment>
+            <FilterRow
+              values={filter}
+              onChange={handleFilterChange}
+            />
+            <Header
+              sortDir={sort?.sortDir}
+              sortField={sort?.sortField}
+              onSortChange={handleSortChange}
+            />
+          </Fragment>
+        )}
       >
-        <Table
-          header={(
-            <Fragment>
-              <FilterRow
-                values={filter}
-                onChange={handleFilterChange}
+        {Array.isArray(list) && (
+          <Fragment>
+            {list.map((item) => (
+              <TableRow
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+                key={item.id}
+                entity={entity}
+                id={item.id}
+                index={item.index}
+                indexDiff={item.indexDiff}
+                name={item.name}
+                impressions={item.impressions}
+                clicks={item.clicks}
+                ctr={item.ctr}
+                positiveReactions={item.positiveReactions}
+                negativeReactions={item.negativeReactions}
+                repostsReactions={item.repostsReactions}
+                totalReactions={item.totalReactions}
               />
-              <Header
-                sortDir={sort?.sortDir}
-                sortField={sort?.sortField}
-                onSortChange={handleSortChange}
-              />
-            </Fragment>
-          )}
-        >
-          {Array.isArray(list) && (
-            <Fragment>
-              {list.map((item) => (
-                <TableRow
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                  key={item.id}
-                  entity={entity}
-                  id={item.id}
-                  index={item.index}
-                  indexDiff={item.indexDiff}
-                  name={item.name}
-                  impressions={item.impressions}
-                  clicks={item.clicks}
-                  ctr={item.ctr}
-                  positiveReactions={item.positiveReactions}
-                  negativeReactions={item.negativeReactions}
-                  repostsReactions={item.repostsReactions}
-                  totalReactions={item.totalReactions}
-                />
-              ))}
-              {(list.length === 0) && (
-                <EmptyTableRow colSpan={17} />
-              )}
-            </Fragment>
-          )}
-        </Table>
-      </form>
-      {pagination && (
-        <Pagination
-          key="pagination"
-          pagesTotal={pagination.totalPages}
-          currentPage={pagination.currentPage}
-          count={pagination.perPage}
-          countOptions={countOptions}
-          onPageSelect={handlePageSelect}
-          onCountSelect={handleCountSelect}
-        />
-      )}
-    </Fragment>
+            ))}
+            {(list.length === 0) && (
+              <EmptyTableRow colSpan={17} />
+            )}
+          </Fragment>
+        )}
+      </Table>
+    </form>
   );
 };
 

@@ -1,0 +1,30 @@
+@import '@/theme/include.scss';
+
+.header {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1rem;
+
+  &_title {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+}
+
+.navigation {
+  margin-top: 1rem;
+}
+
+.page {
+  position: relative;
+}
+
+.error {
+  margin-bottom: 1rem;
+}
+
+.spinner {
+  bottom: 1em;
+  position: sticky;
+  top: 1em;
+}
