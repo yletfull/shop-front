@@ -27,7 +27,7 @@ const RowFilter = function ListTableSitesRowFilter({
   return (
     <TableRow>
       <TableCell
-        colSpan="17"
+        colSpan="9"
         className={styles.filter}
       >
         <div className={styles.filterWrapper}>
