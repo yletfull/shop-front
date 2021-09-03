@@ -1,45 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import NavTabsLink from '@/components/NavTabsLink';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.node,
-      path: PropTypes.string,
-      exact: PropTypes.bool,
-    }),
-  ).isRequired,
   className: PropTypes.string,
+  children: PropTypes.node,
 };
 const defaultProps = {
   className: '',
+  children: null,
 };
 
 const NavTabs = function NavTabs(
-  { options, className, ...props }
+  { className, children, ...props }
 ) {
   return (
     <div
       {...props}
       className={cx(styles.wrapper, className)}
     >
-      {options.map(({ path, title, exact, ...attrs }) => (
-        <NavTabsLink
-          key={path}
-          path={path}
-          title={title}
-          exact={exact || false}
-          {...attrs}
-        />
-      ))}
+      {children}
     </div>
   );
 };
 
 NavTabs.propTypes = propTypes;
 NavTabs.defaultProps = defaultProps;
+
+export { default as NavTabLink } from './NavTabLink';
 
 export default NavTabs;
