@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import service from '../service';
+import service from '../../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
 

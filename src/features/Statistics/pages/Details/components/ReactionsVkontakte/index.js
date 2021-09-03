@@ -10,7 +10,7 @@ import IconWarningOctagon from '@/icons/WarningOctagon';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import ReactionType from '../components/ReactionType';
-import service from '../service';
+import service from '../../service';
 import Chart from './Chart';
 import styles from './styles.module.scss';
 
