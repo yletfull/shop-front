@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -30,6 +32,7 @@ const propTypes = {
   onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
+  debounceDelay: PropTypes.number,
 };
 
 const defaultProps = {
@@ -39,6 +42,7 @@ const defaultProps = {
     dateEnd: '',
   },
   className: '',
+  debounceDelay: 1000,
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
@@ -48,6 +52,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   onShift,
   onChange,
   onSelect,
+  debounceDelay,
   ...props
 }) {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
@@ -74,23 +79,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
-
-  const handleParamsChange = (
-    e,
-  ) => {
-    const { name, value } = e?.target || {};
-
-    const update = () => onChange({
-      ...values,
-      [name]: formatDate(value, DATE_FORMAT),
-    });
-
-    if (!name || !value) {
-      return;
-    }
-
-    update();
-  };
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
@@ -167,18 +155,35 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     dateEnd: '',
   });
 
-  const handleDateInputBlur = (e) => {
+  const handleBlur = (e) => {
     const { value, name } = e.target;
 
     if (lastDatesInputValues[name] !== value) {
-      handleParamsChange(e);
-
       setLastDatesInputValues((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
   };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+
+    setLastDatesInputValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(lastDatesInputValues);
+    }, debounceDelay);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [lastDatesInputValues, debounceDelay]);
 
   return (
     <form
@@ -205,8 +210,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           name="dateStart"
           type="date"
           ref={dateStartRef}
-          onBlur={handleDateInputBlur}
-          onChange={handleParamsChange}
+          onBlur={handleBlur}
+          onChange={handleChange}
         />
         &nbsp;
         -
@@ -217,8 +222,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           name="dateEnd"
           type="date"
           ref={dateEndRef}
-          onBlur={handleDateInputBlur}
-          onChange={handleParamsChange}
+          onBlur={handleBlur}
+          onChange={handleChange}
         />
       </div>
       <button
