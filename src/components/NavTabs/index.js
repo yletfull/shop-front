@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Link from './Link';
+import Button from './Button';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -27,7 +29,7 @@ const NavTabs = function NavTabs(
 
 NavTabs.propTypes = propTypes;
 NavTabs.defaultProps = defaultProps;
-
-export { default as NavTabLink } from './NavTabLink';
+NavTabs.Link = Link;
+NavTabs.Button = Button;
 
 export default NavTabs;

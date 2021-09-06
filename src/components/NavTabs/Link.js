@@ -1,34 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { NavLink } from 'react-router-dom';
 import styles from './styles.module.scss';
 
 const propTypes = {
-  title: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
   path: PropTypes.string.isRequired,
   exact: PropTypes.bool,
+  className: PropTypes.string,
 };
 const defaultProps = {
   exact: false,
+  className: '',
 };
 
-const NavTabsLink = function NavTabsLink(
-  { title, path, exact, ...attrs }
-) {
+const Link = function NavTabsLink({
+  children,
+  path,
+  exact,
+  className,
+  ...props
+}) {
   return (
     <NavLink
       to={path}
       exact={exact || false}
-      className={styles.link}
+      className={cx(styles.link, className)}
       activeClassName={styles.active}
-      {...attrs}
+      {...props}
     >
-      {title}
+      {children}
     </NavLink>
   );
 };
 
-NavTabsLink.propTypes = propTypes;
-NavTabsLink.defaultProps = defaultProps;
+Link.propTypes = propTypes;
+Link.defaultProps = defaultProps;
 
-export default NavTabsLink;
+export default Link;
