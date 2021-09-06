@@ -11,17 +11,10 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
-import { timeUnits } from './constants';
+import { TIME_UNITS, DATE_FORMAT, quickFilterOptions } from './constants';
 
-const { day, week, month, year } = timeUnits;
-
-const DATE_FORMAT = 'YYYY-MM-DD';
+const { day, week, month, year } = TIME_UNITS;
 const isValidDate = (date) => dayjs(date).isValid();
-
-const quickFilterOptions = [
-  { text: 'вчера', unit: day, shift: 1 },
-  { text: 'предыдущая неделя', unit: week, shift: 1 },
-];
 
 const propTypes = {
   min: PropTypes.string,
