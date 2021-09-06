@@ -1,42 +1,44 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router';
-import NavTabs, { NavTabLink } from './index';
+import NavTabs from './index';
 
 export default {
   title: 'Components/NavTabs',
   component: NavTabs,
 };
 
-const linksDataExample = [
-  {
-    key: 0,
-    path: '/test1/',
-    title: 'test1',
-    exact: true,
-  },
-  {
-    key: 1,
-    path: '/test2/',
-    title: 'test2',
-    exact: true,
-  },
-];
-
-const Template = (args) => (
+export const Links = () => (
   <MemoryRouter>
-    <NavTabs {...args}>
-      {linksDataExample?.map((props) => (
-        <NavTabLink
-          key={props.key}
-          {...props}
-        />
-      ))}
+    <NavTabs>
+      <NavTabs.Link
+        to="/"
+        exact
+      >
+        Главная
+      </NavTabs.Link>
+      <NavTabs.Link to="/tasks">
+        Задачи
+      </NavTabs.Link>
+      <NavTabs.Link to="/campaigns">
+        ИК
+      </NavTabs.Link>
+      <NavTabs.Link to="/sites">
+        Сайты
+      </NavTabs.Link>
     </NavTabs>
   </MemoryRouter>
 );
 
-export const Playground = Template.bind({});
-Playground.args = {
-  children: null,
-  className: '',
-};
+export const Buttons = () => (
+  <NavTabs>
+    <NavTabs.Button>
+      Задачи
+    </NavTabs.Button>
+    <NavTabs.Button isActive>
+      ИК
+    </NavTabs.Button>
+    <NavTabs.Button>
+      Сайты
+    </NavTabs.Button>
+  </NavTabs>
+);
