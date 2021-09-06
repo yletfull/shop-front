@@ -11,17 +11,10 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
-import { timeUnits } from './constants';
+import { DATE_FORMAT, quickFilterOptions } from './constants';
+import { getFutureShiftInterval, getPastShiftInterval } from './utils';
 
-const { day, week, month, year } = timeUnits;
-
-const DATE_FORMAT = 'YYYY-MM-DD';
 const isValidDate = (date) => dayjs(date).isValid();
-
-const quickFilterOptions = [
-  { text: 'вчера', unit: day, shift: 1 },
-  { text: 'предыдущая неделя', unit: week, shift: 1 },
-];
 
 const propTypes = {
   min: PropTypes.string,
@@ -64,39 +57,25 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     dateEnd: dayjs(),
   });
 
+  const [isFetching, setIsFetching] = useState(true);
+
   useEffect(() => {
     const dateEnd = isValidDate(values.dateEnd)
       ? formatDate(values.dateEnd, DATE_FORMAT)
-      : formatDate(dayjs(max), DATE_FORMAT);
+      : formatDate(dayjs(), DATE_FORMAT);
     const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
-      : formatDate(dayjs(min), DATE_FORMAT);
+      : formatDate(dayjs(), DATE_FORMAT);
 
-    setLocalState({
-      dateStart, dateEnd,
-    });
-  }, [values, min, max]);
+    setLocalState({ dateStart, dateEnd });
+  }, [values]);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
 
-  const today = dayjs().format(DATE_FORMAT);
-
-  const getSelectedUnits = ({ dateStart, dateEnd }) => {
-    if ((dateStart.month() === 0 && dateStart.date() === 1)
-      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
-      return year;
-    } if (
-      (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
-    ) {
-      return month;
-    } if (dateStart.day() === 1 && dateEnd.day() === 0) {
-      return week;
-    }
-    return day;
-  };
-
-  const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
+  const canShiftToThePast = (
+    (dayjs(values.dateStart).diff(dayjs(min)) > 0) && !isFetching
+  );
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
@@ -106,27 +85,14 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
 
-    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
+    const interval = getPastShiftInterval({ dateStart, dateEnd });
 
-    const shift = Math.max(1, dateEnd.diff(dateStart, selectedUnits));
-
-    const newDateStart = dayjs(Math.max(
-      dateStart.subtract(shift, selectedUnits).valueOf(),
-      dayjs(min).valueOf(),
-    )).startOf(selectedUnits).format(DATE_FORMAT);
-
-    const newDateEnd = dayjs(Math.min(
-      dateEnd.subtract(shift, selectedUnits).valueOf(),
-      dayjs(max).valueOf(),
-    )).endOf(selectedUnits).format(DATE_FORMAT);
-
-    onChange({
-      dateStart: newDateStart,
-      dateEnd: newDateEnd,
-    });
+    onChange(interval);
   };
 
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
+  const canShiftToTheFuture = (
+    (dayjs(max).diff(dayjs(values.dateEnd)) > 0) && !isFetching
+  );
 
   const handleShiftToTheFuture = () => {
     if (!canShiftToTheFuture) {
@@ -136,29 +102,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
 
-    const todayDate = dayjs(today);
-    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
+    const interval = getFutureShiftInterval({ dateStart, dateEnd, min, max });
 
-    const shift = Math.max(
-      1,
-      Math.min(
-        dateEnd.diff(dateStart, selectedUnits),
-        todayDate.diff(dateEnd, selectedUnits),
-      ),
-    );
-
-    const newDateStart = dateStart.add(shift, selectedUnits)
-      .startOf(selectedUnits)
-      .format(DATE_FORMAT);
-
-    const newDateEnd = dateEnd.add(shift, selectedUnits)
-      .endOf(selectedUnits)
-      .format(DATE_FORMAT);
-
-    onChange({
-      dateStart: newDateStart,
-      dateEnd: newDateEnd,
-    });
+    onChange(interval);
   };
 
   const handleQuickOptionsClick = () => {
@@ -195,12 +141,14 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         ...prev,
         [name]: value,
       }));
+      setIsFetching(true);
     }
   };
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      onChange(localState);
+    const timeout = setTimeout(async () => {
+      await onChange(localState);
+      setIsFetching(false);
     }, debounceDelay);
 
     return () => {
