@@ -14,9 +14,11 @@ const defaultProps = {
   children: null,
 };
 
-const NavTabs = function NavTabs(
-  { className, children, ...props }
-) {
+const NavTabs = function NavTabs({
+  className,
+  children,
+  ...props
+}) {
   return (
     <div
       {...props}
