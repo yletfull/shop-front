@@ -60,15 +60,13 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   useEffect(() => {
     const dateEnd = isValidDate(values.dateEnd)
       ? formatDate(values.dateEnd, DATE_FORMAT)
-      : formatDate(dayjs(max), DATE_FORMAT);
+      : formatDate(dayjs(), DATE_FORMAT);
     const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
-      : formatDate(dayjs(min), DATE_FORMAT);
+      : formatDate(dayjs(), DATE_FORMAT);
 
-    setLocalState({
-      dateStart, dateEnd,
-    });
-  }, [values, min, max]);
+    setLocalState({ dateStart, dateEnd });
+  }, [values]);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
