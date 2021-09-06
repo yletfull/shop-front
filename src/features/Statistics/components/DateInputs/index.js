@@ -261,6 +261,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <Button
           className={styles.quickOptions_button}
+          data-active={shouldShowDropdown}
           onClick={handleQuickOptionsClick}
         >
           <IconHistory />
