@@ -82,8 +82,21 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const today = dayjs().format(DATE_FORMAT);
 
+  const getSelectedUnits = ({ dateStart, dateEnd }) => {
+    if ((dateStart.month() === 0 && dateStart.date() === 1)
+      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
+      return year;
+    } if (
+      (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
+    ) {
+      return month;
+    } if (dateStart.day() === 1 && dateEnd.day() === 0) {
+      return week;
+    }
+    return day;
+  };
+
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
@@ -93,30 +106,19 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
 
-    let selectedUnits = day;
-
-    if ((dateStart.month() === 0 && dateStart.date() === 1)
-      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
-      selectedUnits = year;
-    } else if ((
-      dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
-    ) {
-      selectedUnits = month;
-    } else if (dateStart.day() === 1 && dateEnd.day() === 0) {
-      selectedUnits = week;
-    }
+    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
 
     const shift = Math.max(1, dateEnd.diff(dateStart, selectedUnits));
 
     const newDateStart = dayjs(Math.max(
       dateStart.subtract(shift, selectedUnits).valueOf(),
       dayjs(min).valueOf(),
-    )).format(DATE_FORMAT);
+    )).startOf(selectedUnits).format(DATE_FORMAT);
 
     const newDateEnd = dayjs(Math.min(
       dateEnd.subtract(shift, selectedUnits).valueOf(),
       dayjs(max).valueOf(),
-    )).format(DATE_FORMAT);
+    )).endOf(selectedUnits).format(DATE_FORMAT);
 
     onChange({
       dateStart: newDateStart,
@@ -124,27 +126,18 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     });
   };
 
+  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
 
   const handleShiftToTheFuture = () => {
     if (!canShiftToTheFuture) {
       return;
     }
+
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
+
     const todayDate = dayjs(today);
-
-    let selectedUnits = day;
-
-    if ((dateStart.month() === 0 && dateStart.date() === 1)
-      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
-      selectedUnits = year;
-    } else if (
-      (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
-    ) {
-      selectedUnits = month;
-    } else if (dateStart.day() === 1 && dateEnd.day() === 0) {
-      selectedUnits = week;
-    }
+    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
 
     const shift = Math.max(
       1,
@@ -154,9 +147,17 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       ),
     );
 
+    const newDateStart = dateStart.add(shift, selectedUnits)
+      .startOf(selectedUnits)
+      .format(DATE_FORMAT);
+
+    const newDateEnd = dateEnd.add(shift, selectedUnits)
+      .endOf(selectedUnits)
+      .format(DATE_FORMAT);
+
     onChange({
-      dateStart: dateStart.add(shift, selectedUnits).format(DATE_FORMAT),
-      dateEnd: dateEnd.add(shift, selectedUnits).format(DATE_FORMAT),
+      dateStart: newDateStart,
+      dateEnd: newDateEnd,
     });
   };
 
