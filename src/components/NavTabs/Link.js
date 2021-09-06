@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  path: PropTypes.string.isRequired,
+  to: PropTypes.string.isRequired,
   exact: PropTypes.bool,
   className: PropTypes.string,
 };
@@ -17,14 +17,14 @@ const defaultProps = {
 
 const Link = function NavTabsLink({
   children,
-  path,
+  to,
   exact,
   className,
   ...props
 }) {
   return (
     <NavLink
-      to={path}
+      to={to}
       exact={exact}
       className={cx(styles.link, className)}
       activeClassName={styles.active}
