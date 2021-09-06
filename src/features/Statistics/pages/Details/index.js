@@ -33,7 +33,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
     service: service.fetchPeriods,
   });
 
-  const { datestart } = data[0] || {};
+  const { datestart, dateend } = data[0] || {};
 
   const dateStart = query.get('dateStart') || today;
   const dateEnd = query.get('dateEnd') || today;
@@ -106,13 +106,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
               <DateInputs
                 className={styles.dateInputs}
                 min={datestart}
+                max={dateend}
                 values={{
                   dateStart,
                   dateEnd,
                 }}
                 onChange={handleDateInputsSubmit}
                 onShift={handleDateInputsSubmit}
-                onSelect={handleDateInputsSubmit}
               />
             </div>
           </div>
