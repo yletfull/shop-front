@@ -25,7 +25,7 @@ const Link = function NavTabsLink({
   return (
     <NavLink
       to={path}
-      exact={exact || false}
+      exact={exact}
       className={cx(styles.link, className)}
       activeClassName={styles.active}
       {...props}
