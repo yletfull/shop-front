@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -59,17 +57,23 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const hideDropdown = () => setShouldShowDropdown(false);
 
-  const dateStartRef = useRef();
-  const dateEndRef = useRef();
+  const [localState, setLocalState] = useState({
+    dateStart: dayjs(),
+    dateEnd: dayjs(),
+  });
 
   useEffect(() => {
-    dateEndRef.current.value = isValidDate(values.dateEnd)
+    const dateEnd = isValidDate(values.dateEnd)
       ? formatDate(values.dateEnd, DATE_FORMAT)
       : formatDate(dayjs(min), DATE_FORMAT);
-    dateStartRef.current.value = isValidDate(values.dateStart)
+    const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
       : formatDate(dayjs(min), DATE_FORMAT);
-  }, [min, values]);
+
+    setLocalState({
+      dateStart, dateEnd,
+    });
+  }, [values, min]);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
@@ -150,40 +154,26 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     hideDropdown();
   };
 
-  const [lastDatesInputValues, setLastDatesInputValues] = useState({
-    dateStart: '',
-    dateEnd: '',
-  });
-
-  const handleBlur = (e) => {
+  const handleChange = (e) => {
     const { value, name } = e.target;
 
-    if (lastDatesInputValues[name] !== value) {
-      setLastDatesInputValues((prev) => ({
+    if (localState[name] !== value) {
+      setLocalState((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
   };
 
-  const handleChange = (e) => {
-    const { value, name } = e.target;
-
-    setLastDatesInputValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onChange(lastDatesInputValues);
+      onChange(localState);
     }, debounceDelay);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [lastDatesInputValues, debounceDelay]);
+  }, [localState, debounceDelay, onChange]);
 
   return (
     <form
@@ -207,10 +197,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={min}
           max={max}
+          value={localState.dateStart}
           name="dateStart"
           type="date"
-          ref={dateStartRef}
-          onBlur={handleBlur}
           onChange={handleChange}
         />
         &nbsp;
@@ -219,10 +208,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={min}
           max={max}
+          value={localState.dateEnd}
           name="dateEnd"
           type="date"
-          ref={dateEndRef}
-          onBlur={handleBlur}
           onChange={handleChange}
         />
       </div>
