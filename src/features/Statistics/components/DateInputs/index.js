@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -13,30 +11,33 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
+import { timeUnits } from './constants';
+
+const { day, week, month, year } = timeUnits;
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const isValidDate = (date) => dayjs(date).isValid();
 
 const quickFilterOptions = [
-  { text: 'вчера', unit: 'day', shift: 1 },
-  { text: 'предыдущая неделя', unit: 'week', shift: 1 },
+  { text: 'вчера', unit: day, shift: 1 },
+  { text: 'предыдущая неделя', unit: week, shift: 1 },
 ];
 
 const propTypes = {
   min: PropTypes.string,
+  max: PropTypes.string,
   values: PropTypes.shape({
     dateStart: PropTypes.string,
     dateEnd: PropTypes.string,
   }),
   className: PropTypes.string,
-  onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
   debounceDelay: PropTypes.number,
 };
 
 const defaultProps = {
   min: '',
+  max: '',
   values: {
     dateStart: '',
     dateEnd: '',
@@ -47,11 +48,10 @@ const defaultProps = {
 
 const StatisticsDateInputs = function StatisticsDateInputs({
   min,
+  max,
   values,
   className,
-  onShift,
   onChange,
-  onSelect,
   debounceDelay,
   ...props
 }) {
@@ -59,68 +59,105 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
   const hideDropdown = () => setShouldShowDropdown(false);
 
-  const dateStartRef = useRef();
-  const dateEndRef = useRef();
+  const [localState, setLocalState] = useState({
+    dateStart: dayjs(),
+    dateEnd: dayjs(),
+  });
 
   useEffect(() => {
-    dateEndRef.current.value = isValidDate(values.dateEnd)
+    const dateEnd = isValidDate(values.dateEnd)
       ? formatDate(values.dateEnd, DATE_FORMAT)
-      : formatDate(dayjs(min), DATE_FORMAT);
-    dateStartRef.current.value = isValidDate(values.dateStart)
+      : formatDate(dayjs(max), DATE_FORMAT);
+    const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
       : formatDate(dayjs(min), DATE_FORMAT);
-  }, [min, values]);
+
+    setLocalState({
+      dateStart, dateEnd,
+    });
+  }, [values, min, max]);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
 
   const today = dayjs().format(DATE_FORMAT);
-  const max = today;
+
+  const getSelectedUnits = ({ dateStart, dateEnd }) => {
+    if ((dateStart.month() === 0 && dateStart.date() === 1)
+      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
+      return year;
+    } if (
+      (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
+    ) {
+      return month;
+    } if (dateStart.day() === 1 && dateEnd.day() === 0) {
+      return week;
+    }
+    return day;
+  };
 
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
       return;
     }
+
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
-    const shift = Math.max(1, dateEnd.diff(dateStart, 'day'));
+
+    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
+
+    const shift = Math.max(1, dateEnd.diff(dateStart, selectedUnits));
 
     const newDateStart = dayjs(Math.max(
-      dateStart.subtract(shift, 'day').valueOf(),
+      dateStart.subtract(shift, selectedUnits).valueOf(),
       dayjs(min).valueOf(),
-    )).format(DATE_FORMAT);
+    )).startOf(selectedUnits).format(DATE_FORMAT);
 
     const newDateEnd = dayjs(Math.min(
-      dateEnd.subtract(shift, 'day').valueOf(),
+      dateEnd.subtract(shift, selectedUnits).valueOf(),
       dayjs(max).valueOf(),
-    )).format(DATE_FORMAT);
+    )).endOf(selectedUnits).format(DATE_FORMAT);
 
-    onShift({
+    onChange({
       dateStart: newDateStart,
       dateEnd: newDateEnd,
     });
   };
 
+  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
+
   const handleShiftToTheFuture = () => {
     if (!canShiftToTheFuture) {
       return;
     }
+
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
+
     const todayDate = dayjs(today);
+    const selectedUnits = getSelectedUnits({ dateStart, dateEnd });
+
     const shift = Math.max(
       1,
       Math.min(
-        dateEnd.diff(dateStart, 'day'),
-        todayDate.diff(dateEnd, 'day'),
+        dateEnd.diff(dateStart, selectedUnits),
+        todayDate.diff(dateEnd, selectedUnits),
       ),
     );
-    onShift({
-      dateStart: dateStart.add(shift, 'day').format(DATE_FORMAT),
-      dateEnd: dateEnd.add(shift, 'day').format(DATE_FORMAT),
+
+    const newDateStart = dateStart.add(shift, selectedUnits)
+      .startOf(selectedUnits)
+      .format(DATE_FORMAT);
+
+    const newDateEnd = dateEnd.add(shift, selectedUnits)
+      .endOf(selectedUnits)
+      .format(DATE_FORMAT);
+
+    onChange({
+      dateStart: newDateStart,
+      dateEnd: newDateEnd,
     });
   };
 
@@ -137,7 +174,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    onSelect({
+    onChange({
       dateStart: dayjs()
         .startOf(unit)
         .subtract(shift, unit)
@@ -150,40 +187,26 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     hideDropdown();
   };
 
-  const [lastDatesInputValues, setLastDatesInputValues] = useState({
-    dateStart: '',
-    dateEnd: '',
-  });
-
-  const handleBlur = (e) => {
+  const handleChange = (e) => {
     const { value, name } = e.target;
 
-    if (lastDatesInputValues[name] !== value) {
-      setLastDatesInputValues((prev) => ({
+    if (localState[name] !== value) {
+      setLocalState((prev) => ({
         ...prev,
         [name]: value,
       }));
     }
   };
 
-  const handleChange = (e) => {
-    const { value, name } = e.target;
-
-    setLastDatesInputValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   useEffect(() => {
     const timeout = setTimeout(() => {
-      onChange(lastDatesInputValues);
+      onChange(localState);
     }, debounceDelay);
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [lastDatesInputValues, debounceDelay]);
+  }, [localState, debounceDelay, onChange]);
 
   return (
     <form
@@ -205,24 +228,22 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         className={styles.inputs}
       >
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
+          value={localState.dateStart}
           name="dateStart"
           type="date"
-          ref={dateStartRef}
-          onBlur={handleBlur}
           onChange={handleChange}
         />
         &nbsp;
         -
         &nbsp;
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
+          value={localState.dateEnd}
           name="dateEnd"
           type="date"
-          ref={dateEndRef}
-          onBlur={handleBlur}
           onChange={handleChange}
         />
       </div>
@@ -240,6 +261,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <Button
           className={styles.quickOptions_button}
+          data-active={shouldShowDropdown}
           onClick={handleQuickOptionsClick}
         >
           <IconHistory />

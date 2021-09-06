@@ -43,10 +43,20 @@
   position: relative;
 
   &_button {
-    background-color: $color-gray-darker;
-    border-color: $color-gray-darker;
+    background-color: $color-gray;
+    border-color: $color-gray;
     margin-left: .5em;
     min-width: unset;
+
+    &:hover {
+      background-color: $color-gray-darker;
+      border-color: $color-gray-darker;
+    }
+
+    &[data-active='true'] {
+      background-color: $color-primary;
+      border-color: $color-primary;
+    }
   }
 
   &_dropdown {
