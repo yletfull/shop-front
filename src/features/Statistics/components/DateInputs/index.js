@@ -1,4 +1,6 @@
-import React, { useState, useRef } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-console */
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useOnClickOutside } from '@/hooks';
@@ -30,6 +32,7 @@ const propTypes = {
   onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSelect: PropTypes.func.isRequired,
+  debounceDelay: PropTypes.number,
 };
 
 const defaultProps = {
@@ -39,6 +42,7 @@ const defaultProps = {
     dateEnd: '',
   },
   className: '',
+  debounceDelay: 900,
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
@@ -48,32 +52,33 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   onShift,
   onChange,
   onSelect,
+  debounceDelay,
   ...props
 }) {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
 
   const hideDropdown = () => setShouldShowDropdown(false);
 
+  const dateStartRef = useRef();
+  const dateEndRef = useRef();
+
+  useEffect(() => {
+    dateEndRef.current.value = isValidDate(values.dateEnd)
+      ? formatDate(values.dateEnd, DATE_FORMAT)
+      : formatDate(dayjs(min), DATE_FORMAT);
+    dateStartRef.current.value = isValidDate(values.dateStart)
+      ? formatDate(values.dateStart, DATE_FORMAT)
+      : formatDate(dayjs(min), DATE_FORMAT);
+  }, [min, values]);
+
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
 
   const today = dayjs().format(DATE_FORMAT);
   const max = today;
+
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
-
-
-  const handleParamsChange = (e) => {
-    const { name, value } = e?.target || {};
-    if (!name || !value) {
-      return;
-    }
-
-    onChange({
-      ...values,
-      [name]: formatDate(value, DATE_FORMAT),
-    });
-  };
 
   const handleShiftToThePast = () => {
     if (!canShiftToThePast) {
@@ -123,8 +128,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setShouldShowDropdown(!shouldShowDropdown);
   };
 
-  const handleDateKeydown = (e) => e.preventDefault();
-
   const handleQuickSelect = (e) => {
     e.preventDefault();
 
@@ -146,6 +149,41 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     });
     hideDropdown();
   };
+
+  const [lastDatesInputValues, setLastDatesInputValues] = useState({
+    dateStart: '',
+    dateEnd: '',
+  });
+
+  const handleBlur = (e) => {
+    const { value, name } = e.target;
+
+    if (lastDatesInputValues[name] !== value) {
+      setLastDatesInputValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+
+    setLastDatesInputValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(lastDatesInputValues);
+    }, debounceDelay);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [lastDatesInputValues, debounceDelay]);
 
   return (
     <form
@@ -171,11 +209,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateStart"
           type="date"
-          value={(isValidDate(values.dateStart)
-            ? formatDate(values.dateStart, DATE_FORMAT)
-            : min || formatDate(dayjs(), DATE_FORMAT))}
-          onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
+          ref={dateStartRef}
+          onBlur={handleBlur}
+          onChange={handleChange}
         />
         &nbsp;
         -
@@ -185,11 +221,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
           max={max}
           name="dateEnd"
           type="date"
-          value={(isValidDate(values.dateEnd)
-            ? formatDate(values.dateEnd, DATE_FORMAT)
-            : max || formatDate(dayjs(), DATE_FORMAT))}
-          onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
+          ref={dateEndRef}
+          onBlur={handleBlur}
+          onChange={handleChange}
         />
       </div>
       <button
