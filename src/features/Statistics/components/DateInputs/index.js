@@ -11,17 +11,21 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
+import { timeUnits } from './constants';
+
+const { day, week, month, year } = timeUnits;
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 const isValidDate = (date) => dayjs(date).isValid();
 
 const quickFilterOptions = [
-  { text: 'вчера', unit: 'day', shift: 1 },
-  { text: 'предыдущая неделя', unit: 'week', shift: 1 },
+  { text: 'вчера', unit: day, shift: 1 },
+  { text: 'предыдущая неделя', unit: week, shift: 1 },
 ];
 
 const propTypes = {
   min: PropTypes.string,
+  max: PropTypes.string,
   values: PropTypes.shape({
     dateStart: PropTypes.string,
     dateEnd: PropTypes.string,
@@ -29,12 +33,12 @@ const propTypes = {
   className: PropTypes.string,
   onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
   debounceDelay: PropTypes.number,
 };
 
 const defaultProps = {
   min: '',
+  max: '',
   values: {
     dateStart: '',
     dateEnd: '',
@@ -45,11 +49,11 @@ const defaultProps = {
 
 const StatisticsDateInputs = function StatisticsDateInputs({
   min,
+  max,
   values,
   className,
   onShift,
   onChange,
-  onSelect,
   debounceDelay,
   ...props
 }) {
@@ -65,7 +69,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   useEffect(() => {
     const dateEnd = isValidDate(values.dateEnd)
       ? formatDate(values.dateEnd, DATE_FORMAT)
-      : formatDate(dayjs(min), DATE_FORMAT);
+      : formatDate(dayjs(max), DATE_FORMAT);
     const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
       : formatDate(dayjs(min), DATE_FORMAT);
@@ -73,13 +77,12 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setLocalState({
       dateStart, dateEnd,
     });
-  }, [values, min]);
+  }, [values, min, max]);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, hideDropdown);
 
   const today = dayjs().format(DATE_FORMAT);
-  const max = today;
 
   const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
   const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
@@ -88,17 +91,32 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     if (!canShiftToThePast) {
       return;
     }
+
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
-    const shift = Math.max(1, dateEnd.diff(dateStart, 'day'));
+
+    let selectedUnits = day;
+
+    if ((dateStart.month() === 0 && dateStart.date() === 1)
+      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
+      selectedUnits = year;
+    } else if ((
+      dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
+    ) {
+      selectedUnits = month;
+    } else if (dateStart.day() === 1 && dateEnd.day() === 0) {
+      selectedUnits = week;
+    }
+
+    const shift = Math.max(1, dateEnd.diff(dateStart, selectedUnits));
 
     const newDateStart = dayjs(Math.max(
-      dateStart.subtract(shift, 'day').valueOf(),
+      dateStart.subtract(shift, selectedUnits).valueOf(),
       dayjs(min).valueOf(),
     )).format(DATE_FORMAT);
 
     const newDateEnd = dayjs(Math.min(
-      dateEnd.subtract(shift, 'day').valueOf(),
+      dateEnd.subtract(shift, selectedUnits).valueOf(),
       dayjs(max).valueOf(),
     )).format(DATE_FORMAT);
 
@@ -108,6 +126,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     });
   };
 
+
   const handleShiftToTheFuture = () => {
     if (!canShiftToTheFuture) {
       return;
@@ -115,16 +134,31 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
     const todayDate = dayjs(today);
+
+    let selectedUnits = day;
+
+    if ((dateStart.month() === 0 && dateStart.date() === 1)
+      && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
+      selectedUnits = year;
+    } else if (
+      (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
+    ) {
+      selectedUnits = month;
+    } else if (dateStart.day() === 1 && dateEnd.day() === 0) {
+      selectedUnits = week;
+    }
+
     const shift = Math.max(
       1,
       Math.min(
-        dateEnd.diff(dateStart, 'day'),
-        todayDate.diff(dateEnd, 'day'),
+        dateEnd.diff(dateStart, selectedUnits),
+        todayDate.diff(dateEnd, selectedUnits),
       ),
     );
+
     onShift({
-      dateStart: dateStart.add(shift, 'day').format(DATE_FORMAT),
-      dateEnd: dateEnd.add(shift, 'day').format(DATE_FORMAT),
+      dateStart: dateStart.add(shift, selectedUnits).format(DATE_FORMAT),
+      dateEnd: dateEnd.add(shift, selectedUnits).format(DATE_FORMAT),
     });
   };
 
@@ -141,7 +175,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    onSelect({
+    onChange({
       dateStart: dayjs()
         .startOf(unit)
         .subtract(shift, unit)
@@ -195,8 +229,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         className={styles.inputs}
       >
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
           value={localState.dateStart}
           name="dateStart"
           type="date"
@@ -206,8 +240,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         -
         &nbsp;
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
           value={localState.dateEnd}
           name="dateEnd"
           type="date"
