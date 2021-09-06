@@ -7,11 +7,13 @@ const getShiftUnits = ({ dateStart, dateEnd }) => {
   if ((dateStart.month() === 0 && dateStart.date() === 1)
     && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
     return year;
-  } if (
+  }
+  if (
     (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
   ) {
     return month;
-  } if (dateStart.day() === 1 && dateEnd.day() === 0) {
+  }
+  if (dateStart.day() === 1 && dateEnd.day() === 0) {
     return week;
   }
   return day;
