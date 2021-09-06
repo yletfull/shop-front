@@ -112,7 +112,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
                   dateEnd,
                 }}
                 onChange={handleDateInputsSubmit}
-                onShift={handleDateInputsSubmit}
               />
             </div>
           </div>

@@ -31,7 +31,6 @@ const propTypes = {
     dateEnd: PropTypes.string,
   }),
   className: PropTypes.string,
-  onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   debounceDelay: PropTypes.number,
 };
@@ -52,7 +51,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   max,
   values,
   className,
-  onShift,
   onChange,
   debounceDelay,
   ...props
@@ -120,7 +118,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       dayjs(max).valueOf(),
     )).format(DATE_FORMAT);
 
-    onShift({
+    onChange({
       dateStart: newDateStart,
       dateEnd: newDateEnd,
     });
@@ -156,7 +154,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       ),
     );
 
-    onShift({
+    onChange({
       dateStart: dateStart.add(shift, selectedUnits).format(DATE_FORMAT),
       dateEnd: dateEnd.add(shift, selectedUnits).format(DATE_FORMAT),
     });
