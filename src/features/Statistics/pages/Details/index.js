@@ -5,6 +5,7 @@ import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
+import Grid, { GridCell } from '@/components/Grid';
 import { segmentsStatisticTitles } from '../../constants';
 import { colors } from './constants';
 import Lists from './components/Lists';
@@ -103,117 +104,155 @@ const StatisticsDetails = function StatisticsDetailsPage() {
           </div>
         )}
       >
-        <div className={styles.statisticsDetails}>
-          {entityType && entityId && (
-            <div className={styles.statisticsDetailsCharts}>
-              <ChartContainer
-                header="Открутки"
-              >
-                <EntityDynamics
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header={(
-                  <span>
-                    Лайки
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.tonality?.positive || 'transparent',
-                      }}
-                    />
-                    &nbsp;
-                    / Дизлайки
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.tonality?.negative || 'transparent',
-                      }}
-                    />
-                  </span>
-                )}
-              >
-                <ReactionsTonality
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
+        <Grid inset>
+          <GridCell
+            columns={12}
+            rows={23}
+            style={{ padding: 0 }}
+          >
+            <ChartContainer
+              header="Открутки"
+            >
+              <EntityDynamics
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
 
-              <ChartContainer
-                header={(
-                  <span>
-                    Репосты
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.commentsAndReposts?.reposts || 'transparent',
-                      }}
-                    />
-                    &nbsp;
-                    / Комментарии
-                    &nbsp;
-                    <span
-                      className={styles.statisticsDetailsChartRectangle}
-                      style={{
-                        background: colors?.commentsAndReposts?.comments || 'transparent',
-                      }}
-                    />
-                  </span>
+          <GridCell
+            columns={4}
+          >
+            <ChartContainer
+              header={(
+                <span>
+                  Лайки
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.tonality?.positive || 'transparent',
+                    }}
+                  />
+                  &nbsp;
+                  / Дизлайки
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.tonality?.negative || 'transparent',
+                    }}
+                  />
+                </span>
                 )}
-              >
-                <ReactionsComments
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                  colors={colors.commentsAndReposts}
-                />
-              </ChartContainer>
+            >
+              <ReactionsTonality
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
 
-              <ChartContainer
-                header="Всего соцреакций"
-              >
-                <ReactionsTotal
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header="Facebook"
-              >
-                <ReactionsFacebook
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header="vk"
-              >
-                <ReactionsVkontakte
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-              <ChartContainer
-                header="Instagram"
-              >
-                <ReactionsInstagram
-                  dateStart={dateStart}
-                  dateEnd={dateEnd}
-                />
-              </ChartContainer>
-            </div>
-          )}
-          {entityType && (
-            <Lists
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-            />
-          )}
-        </div>
+          <GridCell
+            columns={4}
+          >
+            <ChartContainer
+              header={(
+                <span>
+                  Репосты
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.commentsAndReposts?.reposts || 'transparent',
+                    }}
+                  />
+                  &nbsp;
+                  / Комментарии
+                  &nbsp;
+                  <span
+                    className={styles.statisticsDetailsChartRectangle}
+                    style={{
+                      background: colors?.commentsAndReposts?.comments || 'transparent',
+                    }}
+                  />
+                </span>
+                )}
+            >
+              <ReactionsComments
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+                colors={colors.commentsAndReposts}
+              />
+            </ChartContainer>
+          </GridCell>
+
+          <GridCell
+            columns={4}
+          >
+            <ChartContainer
+              header="Всего соцреакций"
+            >
+              <ReactionsTotal
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
+
+          <GridCell
+            columns={4}
+            rows={23}
+          >
+            <ChartContainer
+              header="Facebook"
+            >
+              <ReactionsFacebook
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
+
+          <GridCell
+            columns={4}
+            rows={23}
+          >
+            <ChartContainer
+              header="vk"
+            >
+              <ReactionsVkontakte
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
+
+          <GridCell
+            columns={4}
+            rows={23}
+          >
+            <ChartContainer
+              header="Instagram"
+            >
+              <ReactionsInstagram
+                dateStart={dateStart}
+                dateEnd={dateEnd}
+              />
+            </ChartContainer>
+          </GridCell>
+        </Grid>
+
+        {entityType && entityId && (
+          <div className={styles.statisticsDetailsCharts} />
+        )}
+
+        {entityType && (
+          <Lists
+            dateStart={dateStart}
+            dateEnd={dateEnd}
+          />
+        )}
       </AppMain>
     </WithSpinner>
   );
