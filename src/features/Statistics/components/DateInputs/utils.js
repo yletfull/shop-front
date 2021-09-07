@@ -48,3 +48,10 @@ export const getShiftInterval = ({
     dateEnd: newDateEnd,
   };
 };
+
+export const validationDates = ({ dateStart, dateEnd }) => {
+  if (dayjs(dateStart).diff(dateEnd) > 0) {
+    return { dateStart: dateEnd, dateEnd };
+  }
+  return { dateStart, dateEnd };
+};
