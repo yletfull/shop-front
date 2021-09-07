@@ -5,6 +5,7 @@ import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
+import { segmentsStatisticTitles } from '../../constants';
 import { colors } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
@@ -95,7 +96,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             <div
               className={styles.header_title}
             >
-              Статистика по задаче
+              {segmentsStatisticTitles[entityType]}
             </div>
             <div className={styles.statisticsDetailsHeader}>
               <EntitySelect
