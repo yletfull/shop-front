@@ -6,17 +6,17 @@ const { day, week, month, year } = TIME_UNITS;
 export const getShiftUnits = ({ dateStart, dateEnd }) => {
   if ((dateStart.month() === 0 && dateStart.date() === 1)
     && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
-    return year;
+    return [year, 1];
   }
   if (
     (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
   ) {
-    return month;
+    return [month, 1];
   }
   if (dateStart.day() === 1 && dateEnd.day() === 0) {
-    return week;
+    return [week, 1];
   }
-  return day;
+  return [day, dateEnd.diff(dateStart, day) + 1];
 };
 
 export const getShiftInterval = ({
@@ -24,11 +24,11 @@ export const getShiftInterval = ({
   dateEnd,
   action = shiftTypes.add,
 }) => {
-  const units = getShiftUnits({ dateStart, dateEnd });
+  const [units, diff] = getShiftUnits({ dateStart, dateEnd });
   const today = dayjs();
 
   const shift = Math.max(
-    1,
+    diff,
     Math.min(
       dateEnd.diff(dateStart, units),
       today.diff(dateEnd, units),
