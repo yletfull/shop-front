@@ -12,7 +12,7 @@ import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
 import { DATE_FORMAT, quickFilterOptions, shiftTypes } from './constants';
-import { getShiftInterval } from './utils';
+import { getShiftInterval, validationDates } from './utils';
 
 const isValidDate = (date) => dayjs(date).isValid();
 
@@ -66,8 +66,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const dateStart = isValidDate(values.dateStart)
       ? formatDate(values.dateStart, DATE_FORMAT)
       : formatDate(dayjs(), DATE_FORMAT);
+    const validationValues = validationDates({ dateStart, dateEnd });
 
-    setLocalState({ dateStart, dateEnd });
+    setLocalState(validationValues);
   }, [values]);
 
   const quickOptionsRef = useRef(null);
