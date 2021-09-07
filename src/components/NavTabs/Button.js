@@ -34,6 +34,7 @@ const Button = function NavTabsButton({
   );
 };
 
+Button.displayName = 'NavTabs.Button';
 Button.propTypes = propTypes;
 Button.defaultProps = defaultProps;
 
