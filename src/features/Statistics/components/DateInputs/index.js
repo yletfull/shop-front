@@ -29,8 +29,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: '',
-  max: '',
+  min: Infinity,
+  max: -Infinity,
   values: {
     dateStart: '',
     dateEnd: '',
