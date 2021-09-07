@@ -6,7 +6,14 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+      state: PropTypes.objectOf(PropTypes.any),
+    }),
+  ]).isRequired,
   exact: PropTypes.bool,
   className: PropTypes.string,
 };
