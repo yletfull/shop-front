@@ -11,14 +11,17 @@ const propTypes = {
     PropTypes.shape({
       pathname: PropTypes.string,
       search: PropTypes.string,
+      hash: PropTypes.string,
       state: PropTypes.objectOf(PropTypes.any),
     }),
   ]).isRequired,
   exact: PropTypes.bool,
+  replace: PropTypes.bool,
   className: PropTypes.string,
 };
 const defaultProps = {
   exact: false,
+  replace: false,
   className: '',
 };
 
@@ -26,6 +29,7 @@ const Link = function NavTabsLink({
   children,
   to,
   exact,
+  replace,
   className,
   ...props
 }) {
@@ -33,6 +37,7 @@ const Link = function NavTabsLink({
     <NavLink
       to={to}
       exact={exact}
+      replace={replace}
       className={cx(styles.link, className)}
       activeClassName={styles.active}
       {...props}
@@ -42,6 +47,7 @@ const Link = function NavTabsLink({
   );
 };
 
+Link.displayName = 'NavTabs.Link';
 Link.propTypes = propTypes;
 Link.defaultProps = defaultProps;
 
