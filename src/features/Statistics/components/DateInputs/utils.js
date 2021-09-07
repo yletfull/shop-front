@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import { TIME_UNITS, DATE_FORMAT } from './constants';
+import { TIME_UNITS, DATE_FORMAT, shiftTypes } from './constants';
 
 const { day, week, month, year } = TIME_UNITS;
 
-const getShiftUnits = ({ dateStart, dateEnd }) => {
+export const getShiftUnits = ({ dateStart, dateEnd }) => {
   if ((dateStart.month() === 0 && dateStart.date() === 1)
     && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
     return year;
@@ -19,7 +19,11 @@ const getShiftUnits = ({ dateStart, dateEnd }) => {
   return day;
 };
 
-export const getPastShiftInterval = ({ dateStart, dateEnd, min, max }) => {
+export const getShiftInterval = ({
+  dateStart,
+  dateEnd,
+  action = shiftTypes.add,
+}) => {
   const units = getShiftUnits({ dateStart, dateEnd });
   const today = dayjs();
 
@@ -31,39 +35,11 @@ export const getPastShiftInterval = ({ dateStart, dateEnd, min, max }) => {
     ),
   );
 
-  const newDateStart = dayjs(Math.max(
-    dateStart.subtract(shift, units).valueOf(),
-    dayjs(min).valueOf(),
-  )).startOf(units).format(DATE_FORMAT);
-
-  const newDateEnd = dayjs(Math.min(
-    dateEnd.subtract(shift, units).valueOf(),
-    dayjs(max).valueOf(),
-  )).endOf(units).format(DATE_FORMAT);
-
-  return {
-    dateStart: newDateStart,
-    dateEnd: newDateEnd,
-  };
-};
-
-export const getFutureShiftInterval = ({ dateStart, dateEnd }) => {
-  const units = getShiftUnits({ dateStart, dateEnd });
-  const today = dayjs();
-
-  const shift = Math.max(
-    1,
-    Math.min(
-      dateEnd.diff(dateStart, units),
-      today.diff(dateEnd, units),
-    ),
-  );
-
-  const newDateStart = dateStart.add(shift, units)
+  const newDateStart = dateStart[action](shift, units)
     .startOf(units)
     .format(DATE_FORMAT);
 
-  const newDateEnd = dateEnd.add(shift, units)
+  const newDateEnd = dateEnd[action](shift, units)
     .endOf(units)
     .format(DATE_FORMAT);
 

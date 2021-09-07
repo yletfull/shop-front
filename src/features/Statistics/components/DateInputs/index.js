@@ -11,8 +11,8 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
-import { DATE_FORMAT, quickFilterOptions } from './constants';
-import { getFutureShiftInterval, getPastShiftInterval } from './utils';
+import { DATE_FORMAT, quickFilterOptions, shiftTypes } from './constants';
+import { getShiftInterval } from './utils';
 
 const isValidDate = (date) => dayjs(date).isValid();
 
@@ -77,32 +77,21 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     (dayjs(values.dateStart).diff(dayjs(min)) > 0) && !isFetching
   );
 
-  const handleShiftToThePast = () => {
-    if (!canShiftToThePast) {
-      return;
-    }
-
-    const dateStart = dayjs(values.dateStart);
-    const dateEnd = dayjs(values.dateEnd);
-
-    const interval = getPastShiftInterval({ dateStart, dateEnd });
-
-    onChange(interval);
-  };
-
   const canShiftToTheFuture = (
     (dayjs(max).diff(dayjs(values.dateEnd)) > 0) && !isFetching
   );
 
-  const handleShiftToTheFuture = () => {
-    if (!canShiftToTheFuture) {
+  const handleShift = (e) => {
+    const { action, actionAvailable } = e.target.dataset;
+
+    if (!actionAvailable) {
       return;
     }
 
     const dateStart = dayjs(values.dateStart);
     const dateEnd = dayjs(values.dateEnd);
 
-    const interval = getFutureShiftInterval({ dateStart, dateEnd, min, max });
+    const interval = getShiftInterval({ dateStart, dateEnd, action });
 
     onChange(interval);
   };
@@ -168,7 +157,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         type="button"
         className={styles.arrow}
         disabled={!canShiftToThePast}
-        onClick={handleShiftToThePast}
+        data-action-available={canShiftToThePast}
+        data-action={shiftTypes.subtract}
+        onClick={handleShift}
       >
         <IconChevronLeft />
       </button>
@@ -199,7 +190,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         type="button"
         className={styles.arrow}
         disabled={!canShiftToTheFuture}
-        onClick={handleShiftToTheFuture}
+        data-action-available={canShiftToTheFuture}
+        data-action={shiftTypes.add}
+        onClick={handleShift}
       >
         <IconChevronRight />
       </button>
