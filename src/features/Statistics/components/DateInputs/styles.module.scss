@@ -53,6 +53,11 @@
       border-color: $color-gray-darker;
     }
 
+    &:disabled {
+      background-color: $color-gray;
+      border-color: $color-gray;
+    }
+
     &[data-active='true'] {
       background-color: $color-primary;
       border-color: $color-primary;
