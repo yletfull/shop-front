@@ -7,12 +7,13 @@ export default {
   component: NavTabs,
 };
 
-export const Links = () => (
+const Links = (props) => (
   <MemoryRouter>
     <NavTabs>
       <NavTabs.Link
         to="/"
         exact
+        {...props}
       >
         Главная
       </NavTabs.Link>
@@ -28,6 +29,20 @@ export const Links = () => (
     </NavTabs>
   </MemoryRouter>
 );
+
+export const LinksString = Links.bind({});
+LinksString.args = {
+  to: '/login',
+};
+
+export const LinksObject = Links.bind({});
+LinksObject.args = {
+  to: {
+    pathname: '/login',
+    search: '?utm=your+face',
+    state: { referrer: 'currentLocation' },
+  },
+};
 
 export const Buttons = () => (
   <NavTabs>
