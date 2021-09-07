@@ -10,7 +10,7 @@ import { colors } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
 import EntityDynamics from './components/EntityDynamics';
-import EntitySelect from './components/EntitySelect';
+import EntityValue from './components/EntityValue';
 import ReactionsComments from './components/ReactionsComments';
 import ReactionsTonality from './components/ReactionsTonality';
 import ReactionsTotal from './components/ReactionsTotal';
@@ -49,19 +49,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
     history.push({ search: query.toString() });
   };
 
-  const handleChangeSelectedEntity = (value) => {
-    const { pathname } = location || {};
-    if (!pathname || typeof value === 'undefined' || value === null) {
-      return;
-    }
-    const lastSlashIndex = pathname.lastIndexOf('/');
-    if (lastSlashIndex === (-1)) {
-      return;
-    }
-    const path = pathname.slice(0, lastSlashIndex);
-    history.push(`${path}/${value}`);
-  };
-
   useEffect(() => {
     fetch();
   }, [fetch]);
@@ -93,15 +80,12 @@ const StatisticsDetails = function StatisticsDetailsPage() {
           <div
             className={styles.header}
           >
-            <div
-              className={styles.header_title}
-            >
+            <div className={styles.header_title}>
               {segmentsStatisticTitles[entityType]}
             </div>
             <div className={styles.statisticsDetailsHeader}>
-              <EntitySelect
-                selected={String(entityId)}
-                onChange={handleChangeSelectedEntity}
+              <EntityValue
+                entityId={String(entityId)}
               />
               &nbsp;
               <DateInputs
