@@ -15,6 +15,7 @@ $gap: 1em;
   }
 }
 
+
 .statisticsDetails {
   &Chart {
     &Header {
@@ -46,6 +47,7 @@ $gap: 1em;
   }
 
   &Header {
+    align-items: center;
     display: flex;
   }
 }
