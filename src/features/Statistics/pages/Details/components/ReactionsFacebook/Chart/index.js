@@ -62,18 +62,24 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     .range([chartHeight, 0]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
-  const xTickRenderer = () => (value) => (
-    <text
-      key={value}
-      className={styles.XTickLabel}
-      x={scaleXTicks(value)}
-      y={chartHeight}
-      dy="1em"
-      textAnchor="middle"
-    >
-      {formatDate(value)}
-    </text>
-  );
+  const xTickRenderer = () => (value, i, arr) => {
+    const tickCanRender = (i === 0 || i === arr?.length - 1);
+
+    if (tickCanRender) {
+      return (
+        <text
+          key={value}
+          className={styles.XTickLabel}
+          x={scaleXTicks(value)}
+          y={chartHeight}
+          dy="1em"
+          textAnchor="middle"
+        >
+          {formatDate(value)}
+        </text>
+      );
+    }
+  };
   const yTickRenderer = () => (value) => (
     <text
       key={value}
