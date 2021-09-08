@@ -1,11 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
 import Spinner from '@/components/Spinner';
 import service from './service';
-import styles from './styles.module.scss';
 
 const propTypes = {
   entityId: PropTypes.string,
@@ -47,7 +45,7 @@ const EntitySelect = function EntitySelect({
     isFetching
       ? <Spinner layout="inline" />
       : (
-        <span>
+        <span {...props}>
           {title || '-'}
         </span>
       )
