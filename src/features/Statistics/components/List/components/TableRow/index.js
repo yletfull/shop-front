@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { formatNumber, formatPercent } from '@/utils/format';
+import { formatNumber, formatPercent, formatCTR } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
 import IconCaretUpSolid from '@/icons/CaretUpSolid';
@@ -118,7 +118,7 @@ const StatisticsTableRow = function StatisticsTableRow({
         nowrap
         width="1"
       >
-        {formatNumber(ctr.count)}
+        {formatCTR(ctr.count)}
       </TableCell>
       <TableCell
         nowrap
