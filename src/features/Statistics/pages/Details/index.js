@@ -6,8 +6,8 @@ import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
 import Grid, { GridCell } from '@/components/Grid';
-import { segmentsStatisticTitles } from '../../constants';
-import { colors } from './constants';
+import { entities, segmentsStatisticTitles } from '../../constants';
+import { colors, platformsData } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
 import EntityDynamics from './components/EntityDynamics';
@@ -15,9 +15,6 @@ import EntityValue from './components/EntityValue';
 import ReactionsComments from './components/ReactionsComments';
 import ReactionsTonality from './components/ReactionsTonality';
 import ReactionsTotal from './components/ReactionsTotal';
-import ReactionsFacebook from './components/ReactionsFacebook';
-import ReactionsVkontakte from './components/ReactionsVkontakte';
-import ReactionsInstagram from './components/ReactionsInstagram';
 import service from './service';
 import styles from './styles.module.scss';
 
@@ -71,6 +68,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
     history.push({ search: newQuery.toString() });
   }, [locationSearch, history, dateStart, dateEnd]);
 
+
+  const getPlatformsData = () => {
+    if (entityType === entities.platforms) {
+      return [platformsData[entityId]];
+    }
+    return Object.values(platformsData);
+  };
 
   return (
     <WithSpinner
@@ -200,47 +204,24 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             </ChartContainer>
           </GridCell>
 
-          <GridCell
-            columns={4}
-            rows={23}
-          >
-            <ChartContainer
-              header="Facebook"
+          {getPlatformsData().map((platform) => (
+            <GridCell
+              columns={4}
+              rows={23}
+              key={platform.id}
             >
-              <ReactionsFacebook
-                dateStart={dateStart}
-                dateEnd={dateEnd}
-              />
-            </ChartContainer>
-          </GridCell>
+              <ChartContainer
+                header={platform.header}
+              >
+                <platform.Component
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                />
+              </ChartContainer>
+            </GridCell>
+          ))}
 
-          <GridCell
-            columns={4}
-            rows={23}
-          >
-            <ChartContainer
-              header="vk"
-            >
-              <ReactionsVkontakte
-                dateStart={dateStart}
-                dateEnd={dateEnd}
-              />
-            </ChartContainer>
-          </GridCell>
 
-          <GridCell
-            columns={4}
-            rows={23}
-          >
-            <ChartContainer
-              header="Instagram"
-            >
-              <ReactionsInstagram
-                dateStart={dateStart}
-                dateEnd={dateEnd}
-              />
-            </ChartContainer>
-          </GridCell>
         </Grid>
 
         {entityType && entityId && (
