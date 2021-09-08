@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
-import { formatNumber, formatPercent } from '@/utils/format';
+import { formatNumber, formatPercent, formatCTR } from '@/utils/format';
 import { TableRow, TableCell } from '@/components/Table';
 import NumberGrowth from '@/components/NumberGrowth';
 import IconCaretUpSolid from '@/icons/CaretUpSolid';
@@ -45,7 +45,7 @@ const RowData = function ListTableRowData({
   const metrics = [
     { key: 'impressions', values: impressions },
     { key: 'clicks', values: clicks },
-    { key: 'ctr', values: ctr, formatter: formatPercent, bordered: true },
+    { key: 'ctr', values: ctr, formatter: formatCTR, bordered: true },
     { key: 'positiveReactions', values: positiveReactions },
     { key: 'negativeReactions', values: negativeReactions },
     { key: 'repostsReactions', values: repostsReactions },
