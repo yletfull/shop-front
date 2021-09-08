@@ -74,20 +74,22 @@ const StatisticsList = function StatisticsListScreen({
     setQueryParams({
       dateStart,
       dateEnd,
-      currentPage: 1,
+      ListCurrentPage: 1,
     });
   };
-  const handlePageSelect = (currentPage) => setQueryParams({ currentPage });
-  const handleCountSelect = (perPage) => {
+  const handlePageSelect = (listCurrentPage) => setQueryParams(
+    { listCurrentPage }
+  );
+  const handleCountSelect = (listPerPage) => {
     setQueryParams({
-      perPage,
-      currentPage: 1,
+      listPerPage,
+      listCurrentPage: 1,
     });
   };
   const handleFiltersApply = (values) => {
     setQueryParams({
       search: values.search,
-      currentPage: 1,
+      listCurrentPage: 1,
     });
   };
   const handleSortChange = ({ sortDir, sortField }) => {
@@ -101,8 +103,8 @@ const StatisticsList = function StatisticsListScreen({
     search,
     sortDir,
     sortField,
-    currentPage,
-    perPage,
+    listCurrentPage,
+    listPerPage,
   } = queryParams;
   useEffect(() => {
     if (!entity || !dateStart || !dateEnd) {
@@ -116,8 +118,8 @@ const StatisticsList = function StatisticsListScreen({
       search,
       sortDir: sortDir || 'desc',
       sortField: sortField || 'impressions',
-      currentPage: currentPage || 1,
-      perPage: perPage || countOptions[0],
+      currentPage: listCurrentPage || 1,
+      perPage: listPerPage || countOptions[0],
     });
   }, [
     entity,
@@ -127,8 +129,8 @@ const StatisticsList = function StatisticsListScreen({
     search,
     sortDir,
     sortField,
-    currentPage,
-    perPage,
+    listCurrentPage,
+    listPerPage,
   ]);
   useEffect(() => {
     if (!maxDate || (dateStart && dateEnd)) {
