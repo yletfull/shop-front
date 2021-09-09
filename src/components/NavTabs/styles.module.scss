@@ -1,0 +1,52 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  display: flex;
+  margin-bottom: .5rem;
+  margin-top: 1rem;
+}
+
+.link {
+  color: $color-primary-darkest;
+  font-size: .875rem;
+  transition: color .2s;
+
+  &:hover,
+  &:focus {
+    color: $color-primary;
+  }
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  &.active {
+    border-bottom: .25rem solid $color-pink;
+    color: $color-black;
+    padding-bottom: .75em;
+  }
+}
+
+.button {
+  @include button-reset();
+
+  color: $color-primary-darkest;
+  font-size: .875rem;
+  height: 100%;
+  transition: color .2s;
+
+  &:hover,
+  &:focus {
+    color: $color-primary;
+  }
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+
+  &.active {
+    border-bottom: .25rem solid $color-pink;
+    color: $color-black;
+    padding-bottom: .75em;
+  }
+}
