@@ -65,7 +65,7 @@ export const patchs = {
   segmentsNew: '/segments/new',
   segmentsUser: '/segments/user/',
   settings: '/settings',
-  statisticsDetails: '/statistics/details/:entityType/:id?',
+  statisticsDetails: '/statistics/details/:entityType/:entityId',
   upload: '/upload',
   statistics: '/statistics',
   statisticsLists: '/statistics/lists/:entity(tasks|campaigns|platforms|spheres|sites)',

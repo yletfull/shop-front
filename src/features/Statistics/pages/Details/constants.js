@@ -1,3 +1,5 @@
+import { entities } from '../../constants';
+
 import ReactionsFacebook from './components/ReactionsFacebook';
 import ReactionsVkontakte from './components/ReactionsVkontakte';
 import ReactionsInstagram from './components/ReactionsInstagram';
@@ -34,4 +36,12 @@ export const platformsData = {
     id: 'ig',
     Component: ReactionsInstagram,
   },
+};
+
+export const platformsDetailsTitles = {
+  [entities.tasks]: 'Статистика по задаче',
+  [entities.campaigns]: 'Статистика по кампании',
+  [entities.platforms]: 'Статистика по каналу',
+  [entities.spheres]: 'Статистика по сфере',
+  [entities.sites]: 'Статистика по сайту',
 };

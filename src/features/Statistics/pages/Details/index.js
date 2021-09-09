@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import dayjs from '@/utils/day';
 import AppMain from '@/components/AppMain';
@@ -6,8 +6,8 @@ import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
 import Grid, { GridCell } from '@/components/Grid';
-import { entities, segmentsStatisticTitles } from '../../constants';
-import { colors, platformsData } from './constants';
+import { entities } from '../../constants';
+import { colors, platformsData, platformsDetailsTitles } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
 import EntityDynamics from './components/EntityDynamics';
@@ -21,7 +21,7 @@ import styles from './styles.module.scss';
 const StatisticsDetails = function StatisticsDetailsPage() {
   const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
-  const { entityType, id: entityId } = useParams();
+  const { entityType, entityId } = useParams();
   const location = useLocation();
 
   const locationSearch = location.search;
@@ -69,12 +69,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
   }, [locationSearch, history, dateStart, dateEnd]);
 
 
-  const getPlatformsData = () => {
+  const [platforms, setPlatforms] = useState(Object.values(platformsData));
+  useEffect(() => {
     if (entityType === entities.platforms) {
-      return [platformsData[entityId]];
+      return setPlatforms([platformsData[entityId]]);
     }
-    return Object.values(platformsData);
-  };
+    setPlatforms(Object.values(platformsData));
+  }, [entityId, entityType]);
 
   return (
     <WithSpinner
@@ -86,7 +87,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             className={styles.header}
           >
             <div className={styles.header_title}>
-              {segmentsStatisticTitles[entityType]}
+              {platformsDetailsTitles[entityType]}
             </div>
             <div className={styles.statisticsDetailsHeader}>
               <EntityValue
@@ -110,8 +111,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
         <Grid inset>
           <GridCell
             columns={12}
-            rows={23}
-            style={{ padding: 0 }}
           >
             <ChartContainer
               header="Открутки"
@@ -203,10 +202,9 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             </ChartContainer>
           </GridCell>
 
-          {getPlatformsData().map((platform) => (
+          {platforms.map((platform) => (
             <GridCell
               columns={4}
-              rows={23}
               key={platform.id}
             >
               <ChartContainer
@@ -223,16 +221,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
         </Grid>
 
-        {entityType && entityId && (
-          <div className={styles.statisticsDetailsCharts} />
-        )}
+        <div className={styles.statisticsDetailsCharts} />
 
-        {entityType && (
-          <Lists
-            dateStart={dateStart}
-            dateEnd={dateEnd}
-          />
-        )}
+        <Lists
+          dateStart={dateStart}
+          dateEnd={dateEnd}
+        />
+
       </AppMain>
     </WithSpinner>
   );

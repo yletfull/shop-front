@@ -25,7 +25,7 @@ const ReactionsInstagram = function ReactionsInstagram({
   dateStart,
   dateEnd,
 }) {
-  const { entityType, id: entityId } = useParams();
+  const { entityType, entityId } = useParams();
 
   const { fetch, data, isFetching, error } = useService({
     initialData: {},
