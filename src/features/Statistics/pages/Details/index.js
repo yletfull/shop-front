@@ -111,8 +111,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
         <Grid inset>
           <GridCell
             columns={12}
-            rows={23}
-            style={{ padding: 0 }}
           >
             <ChartContainer
               header="Открутки"
@@ -207,7 +205,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
           {getPlatformsData().map((platform) => (
             <GridCell
               columns={4}
-              rows={23}
               key={platform.id}
             >
               <ChartContainer
