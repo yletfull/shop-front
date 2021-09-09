@@ -21,7 +21,7 @@ import styles from './styles.module.scss';
 const StatisticsDetails = function StatisticsDetailsPage() {
   const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
-  const { entityType, id: entityId } = useParams();
+  const { entityType, entityId } = useParams();
   const location = useLocation();
 
   const locationSearch = location.search;
