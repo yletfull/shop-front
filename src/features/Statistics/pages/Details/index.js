@@ -6,8 +6,8 @@ import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
 import Grid, { GridCell } from '@/components/Grid';
-import { entities, segmentsStatisticTitles } from '../../constants';
-import { colors, platformsData } from './constants';
+import { entities } from '../../constants';
+import { colors, platformsData, platformsDetailsTitles } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
 import EntityDynamics from './components/EntityDynamics';
@@ -87,7 +87,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             className={styles.header}
           >
             <div className={styles.header_title}>
-              {segmentsStatisticTitles[entityType]}
+              {platformsDetailsTitles[entityType]}
             </div>
             <div className={styles.statisticsDetailsHeader}>
               <EntityValue
