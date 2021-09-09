@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import dayjs from '@/utils/day';
 import AppMain from '@/components/AppMain';
@@ -69,12 +69,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
   }, [locationSearch, history, dateStart, dateEnd]);
 
 
-  const getPlatformsData = () => {
+  const [platforms, setPlatforms] = useState(Object.values(platformsData));
+  useEffect(() => {
     if (entityType === entities.platforms) {
-      return [platformsData[entityId]];
+      return setPlatforms([platformsData[entityId]]);
     }
-    return Object.values(platformsData);
-  };
+    setPlatforms(Object.values(platformsData));
+  }, [entityId, entityType]);
 
   return (
     <WithSpinner
@@ -202,7 +203,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             </ChartContainer>
           </GridCell>
 
-          {getPlatformsData().map((platform) => (
+          {platforms.map((platform) => (
             <GridCell
               columns={4}
               key={platform.id}
