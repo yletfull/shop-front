@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import cx from 'classnames';
+import NavTabs from '@/components/NavTabs';
 import { useService, useQueryParams } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
@@ -171,26 +170,19 @@ const StatisticsList = function StatisticsListScreen({
         </div>
       )}
     >
-      <div
-        className={cx([
-          styles.navigation,
-          'nav-links-wrapper',
-        ])}
-      >
+      <NavTabs>
         {navTabsLinks.map((link) => (
-          <NavLink
+          <NavTabs.Link
             key={link.entity}
             to={{
               pathname: `/statistics/lists/${link.entity}`,
               search: location?.search || '',
             }}
-            className="link-class_nav"
-            activeClassName="active-link-class_nav"
           >
             {link.title}
-          </NavLink>
+          </NavTabs.Link>
         ))}
-      </div>
+      </NavTabs>
 
       <div className={styles.page}>
         {(isFetching || periodsService.isFetching) && (
