@@ -222,16 +222,13 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
         </Grid>
 
-        {entityType && entityId && (
-          <div className={styles.statisticsDetailsCharts} />
-        )}
+        <div className={styles.statisticsDetailsCharts} />
 
-        {entityType && (
-          <Lists
-            dateStart={dateStart}
-            dateEnd={dateEnd}
-          />
-        )}
+        <Lists
+          dateStart={dateStart}
+          dateEnd={dateEnd}
+        />
+
       </AppMain>
     </WithSpinner>
   );
