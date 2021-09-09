@@ -31,22 +31,12 @@ const EntitySelect = function EntitySelect({
     fetch(entityType);
   }, [fetch, entityType]);
 
-
-  const getEntity = () => {
-    if (entities instanceof Object && Object.keys(entities).length) {
-      return Object.values(entities).find((ent) => ent.id === entityId);
-    }
-    return {};
-  };
-
-  const { title } = getEntity();
-
   return (
     isFetching
       ? <Spinner layout="inline" />
       : (
         <span {...props}>
-          {title || '-'}
+          {entities[0]?.title || '-'}
         </span>
       )
   );
