@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import cx from 'classnames';
+import NavTabs from '@/components/NavTabs';
 import { useService, useQueryParams } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
@@ -72,9 +71,9 @@ const StatisticsList = function StatisticsListScreen({
 
   const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
     setQueryParams({
-      dateStart,
-      dateEnd,
-      ListCurrentPage: 1,
+      listDateStart: dateStart,
+      listDateEnd: dateEnd,
+      listCurrentPage: 1,
     });
   };
   const handlePageSelect = (listCurrentPage) => setQueryParams(
@@ -98,13 +97,13 @@ const StatisticsList = function StatisticsListScreen({
 
   const { entity } = match?.params || {};
   const {
-    dateStart,
-    dateEnd,
+    listDateStart: dateStart,
+    listDateEnd: dateEnd,
+    listCurrentPage: currentPage,
+    listPerPage: perPage,
     search,
     sortDir,
     sortField,
-    listCurrentPage,
-    listPerPage,
   } = queryParams;
   useEffect(() => {
     if (!entity || !dateStart || !dateEnd) {
@@ -118,8 +117,8 @@ const StatisticsList = function StatisticsListScreen({
       search,
       sortDir: sortDir || 'desc',
       sortField: sortField || 'impressions',
-      currentPage: listCurrentPage || 1,
-      perPage: listPerPage || countOptions[0],
+      currentPage: currentPage || 1,
+      perPage: perPage || countOptions[0],
     });
   }, [
     entity,
@@ -129,8 +128,8 @@ const StatisticsList = function StatisticsListScreen({
     search,
     sortDir,
     sortField,
-    listCurrentPage,
-    listPerPage,
+    currentPage,
+    perPage,
   ]);
   useEffect(() => {
     if (!maxDate || (dateStart && dateEnd)) {
@@ -138,8 +137,8 @@ const StatisticsList = function StatisticsListScreen({
     }
 
     setQueryParams({
-      dateStart: maxDate,
-      dateEnd: maxDate,
+      listDateStart: maxDate,
+      listDateEnd: maxDate,
     });
   }, [maxDate, dateStart, dateEnd, setQueryParams]);
 
@@ -171,26 +170,19 @@ const StatisticsList = function StatisticsListScreen({
         </div>
       )}
     >
-      <div
-        className={cx([
-          styles.navigation,
-          'nav-links-wrapper',
-        ])}
-      >
+      <NavTabs>
         {navTabsLinks.map((link) => (
-          <NavLink
+          <NavTabs.Link
             key={link.entity}
             to={{
               pathname: `/statistics/lists/${link.entity}`,
               search: location?.search || '',
             }}
-            className="link-class_nav"
-            activeClassName="active-link-class_nav"
           >
             {link.title}
-          </NavLink>
+          </NavTabs.Link>
         ))}
-      </div>
+      </NavTabs>
 
       <div className={styles.page}>
         {(isFetching || periodsService.isFetching) && (
