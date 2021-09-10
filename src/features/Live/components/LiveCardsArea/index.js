@@ -45,6 +45,7 @@ const LiveCardsArea = function LiveCardsArea({
 
 LiveCardsArea.propTypes = propTypes;
 LiveCardsArea.defaultProps = defaultProps;
+
 LiveCardsArea.Card = Card;
 
 export default LiveCardsArea;

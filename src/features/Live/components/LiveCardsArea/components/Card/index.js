@@ -8,10 +8,12 @@ const propTypes = {
   date: PropTypes.string.isRequired,
   dateFormat: PropTypes.string,
   image: PropTypes.string,
+  children: PropTypes.node,
 };
 const defaultProps = {
   dateFormat: 'DD.MM.YYYY HH:mm',
   image: null,
+  children: null,
 };
 
 const LiveCard = function LiveCard({
@@ -19,6 +21,7 @@ const LiveCard = function LiveCard({
   date,
   dateFormat,
   image,
+  children,
   ...props
 }) {
   return (
@@ -40,6 +43,8 @@ const LiveCard = function LiveCard({
       <div className={styles.date}>
         {dayjs(date).format(dateFormat)}
       </div>
+
+      {children}
     </button>
   );
 };
