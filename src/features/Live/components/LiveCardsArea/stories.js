@@ -2,7 +2,7 @@ import React from 'react';
 import LiveCardsArea from './index';
 
 export default {
-  title: 'Components/LiveCardsArea',
+  title: 'Live/LiveCardsArea',
   component: LiveCardsArea,
 };
 
