@@ -1,4 +1,4 @@
-export const apiBaseUrl = 'api/v1';
+export const apiBaseUrl = 'api/core/v1';
 
 export default {
   apiBaseUrl,
