@@ -56,6 +56,11 @@ const StatisticsDetails = lazy(() => import(
   /* webpackMode: 'lazy' */
   '@/features/Statistics/pages/Details'
 ));
+const Live = lazy(() => import(
+  /* webpackChunkName: 'segments-new-page' */
+  /* webpackMode: 'lazy' */
+  '@/features/Live/pages/List'
+));
 
 export const patchs = {
   audiencesList: '/audiences',
@@ -69,6 +74,7 @@ export const patchs = {
   upload: '/upload',
   statistics: '/statistics',
   statisticsLists: '/statistics/lists/:entity(tasks|campaigns|platforms|spheres|sites)',
+  live: '/live',
 };
 
 export const titles = {
@@ -83,6 +89,7 @@ export const titles = {
   statisticsDetails: 'Статистика',
   statistics: 'Статистика',
   statisticsLists: 'Статистика',
+  live: 'Эфир',
 };
 
 export default [
@@ -99,6 +106,11 @@ export default [
       section: sections.campaign,
       actions: [],
     },
+  },
+  {
+    Component: Live,
+    path: patchs.live,
+    title: titles.live,
   },
   {
     Component: SegmentsNew,
