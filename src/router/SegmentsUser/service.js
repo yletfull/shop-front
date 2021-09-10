@@ -1,6 +1,6 @@
 import api from '@/api';
 
-const baseUrl = 'api/v1/external/ctor/api/v1/user-entity';
+const baseUrl = 'api/ctor/v1/user-entity';
 
 /**
  * Entity for tests:
