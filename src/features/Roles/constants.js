@@ -1,4 +1,4 @@
-export const apiBaseUrl = 'api/v1/rbac';
+export const apiBaseUrl = 'api/core/v1/rbac';
 
 export const sections = {
   campaign: 'campaign',
