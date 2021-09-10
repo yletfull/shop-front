@@ -205,7 +205,7 @@ const Header = function HeaderScreen() {
         style={{ fontSize: '14px' }}
         className={styles.downloadExcelModel}
         appearance="control"
-        to="/api/v1/import/template"
+        to="/api/core/v1/import/template"
         target="_blank"
         download
       >
