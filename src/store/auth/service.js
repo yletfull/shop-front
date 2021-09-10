@@ -1,22 +1,22 @@
 import api from '@/api';
 
-const baseUrl = 'api/v1';
+const baseUrl = 'api/auth';
 
 const check = function serviceAuthCheck() {
   return api
-    .get(`${baseUrl}/auth`)
+    .get(`${baseUrl}/info`)
     .then((response) => response.data.data);
 };
 
 const login = function serviceAuthLogin(data) {
   return api
-    .post(`${baseUrl}/auth`, data)
+    .post(`${baseUrl}/login`, data)
     .then((response) => response.data.data);
 };
 
 const logout = function serviceAuthLogout() {
   return api
-    .delete(`${baseUrl}/auth`)
+    .post(`${baseUrl}/logout`)
     .then((response) => response.data.data);
 };
 
