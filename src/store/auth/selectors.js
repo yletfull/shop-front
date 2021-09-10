@@ -17,20 +17,16 @@ export const getIsAuthorized = createSelector(
 
 export const getPermissions = createSelector(
   [getUser],
-  (user) => user?.abilities?.data || [],
+  (user) => user?.permissions || [],
 );
 export const getHasUnlimitedAccess = createSelector(
   [getPermissions],
-  (permissions) => permissions.map(({ name }) => name).includes('*'),
+  (permissions) => permissions.includes('*'),
 );
 export const getPermissionsBySection = createSelector(
   [getPermissions],
   (permissions) => permissions
-    .reduce((acc, cur) => {
-      const { id, name } = cur || {};
-      if (!name || !id) {
-        return acc;
-      }
+    .reduce((acc, name) => {
       const [section, action] = name.split('.');
       if (!section) {
         return acc;
@@ -39,7 +35,7 @@ export const getPermissionsBySection = createSelector(
         ...acc,
         [section]: {
           ...acc[section] || {},
-          [action || 'view']: cur,
+          [action || 'view']: name,
         },
       });
     }, {}),
