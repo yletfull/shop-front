@@ -1,35 +1,35 @@
 import api from '@/api';
 
 const fetchAccountsList = () => api
-  .get('api/v1/ad-cabinets')
+  .get('api/core/v1/ad-cabinets')
   .then((data) => data);
 
 const setAccount = ({ cabinetId }) => api
-  .patch(`api/v1/ad-cabinet/${cabinetId}`)
+  .patch(`api/core/v1/ad-cabinet/${cabinetId}`)
   .then((data) => data);
 
 const fetchClientsList = ({ cabinetId }) => api
-  .get(`api/v1/ad-cabinet/${cabinetId}/clients`)
+  .get(`api/core/v1/ad-cabinet/${cabinetId}/clients`)
   .then((data) => data);
 
 const fetchDocuments = (params) => api
-  .get('api/v1/documents', { params })
+  .get('api/core/v1/documents', { params })
   .then((data) => data);
 
 const fetchDocumentDetails = ({ documentId }) => api
-  .get(`api/v1/document/${documentId}`)
+  .get(`api/core/v1/document/${documentId}`)
   .then((data) => data);
 
 const fetchQueueList = ({ cabinetId, ...params }) => api
-  .get(`api/v1/ad-cabinet/${cabinetId}/queue`, { params })
+  .get(`api/core/v1/ad-cabinet/${cabinetId}/queue`, { params })
   .then((data) => data);
 
 const uploadFiles = ({ files }) => api
-  .post('api/v1/documents', files)
+  .post('api/core/v1/documents', files)
   .then((data) => data);
 
 const uploadImages = ({ formData, documentId }) => api
-  .post(`api/v1/document/${documentId}`, formData, {
+  .post(`api/core/v1/document/${documentId}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -37,27 +37,27 @@ const uploadImages = ({ formData, documentId }) => api
   .then((data) => data);
 
 const importDocument = (params) => api
-  .post('api/v1/import', { ...params })
+  .post('api/core/v1/import', { ...params })
   .then((data) => data);
 
 const getRecentFile = ({ cabinetId, ...params }) => api
-  .get(`api/v1/ad-cabinet/${cabinetId}/recent-file`, { params })
+  .get(`api/core/v1/ad-cabinet/${cabinetId}/recent-file`, { params })
   .then((data) => data);
 
 const getImages = ({ documentId, ...params }) => api
-  .get(`api/v1/import/${documentId}/images`, { params })
+  .get(`api/core/v1/import/${documentId}/images`, { params })
   .then((data) => data);
 
 const getTask = ({ taskId }) => api
-  .get(`api/v1/queue/${taskId}`)
+  .get(`api/core/v1/queue/${taskId}`)
   .then((data) => data);
 
 const syncVk = ({ cabinetId, clientId }) => api
-  .post(`api/v1/ad-cabinet/${cabinetId}/sync`, { clientId })
+  .post(`api/core/v1/ad-cabinet/${cabinetId}/sync`, { clientId })
   .then((data) => data);
 
 const getDashboard = ({ cabinetId, ...params }) => api
-  .get(`api/v1/ad-cabinet/${cabinetId}/dashboard`, { params })
+  .get(`api/core/v1/ad-cabinet/${cabinetId}/dashboard`, { params })
   .then((response) => response.data.data);
 
 export default {

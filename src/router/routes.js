@@ -116,6 +116,10 @@ export default [
     Component: SegmentsNew,
     path: patchs.segmentsNew,
     title: titles.segmentsNew,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
   },
   {
     Component: SegmentsDetails,
@@ -149,11 +153,19 @@ export default [
     Component: AudiencesList,
     path: patchs.audiencesList,
     title: titles.audiencesList,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
   },
   {
     Component: AudiencesDetails,
     path: patchs.audiencesDetails,
     title: titles.audiencesDetails,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
   },
   {
     Component: Settings,
@@ -168,6 +180,10 @@ export default [
     Component: StatisticsDetails,
     path: patchs.statisticsDetails,
     title: titles.statisticsDetails,
+    rights: {
+      section: sections.stats,
+      actions: [],
+    },
   },
   {
     Component: StatisticsList,
