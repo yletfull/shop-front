@@ -103,7 +103,7 @@ const LastProcessedTemplate = function LastProcessedTemplateScreen() {
           <ProcessButtonLink
             icon={<IconDownload />}
             text={['Скачать', 'последний файл']}
-            to={`/api/v1/document/${recentFileData.id}/raw`}
+            to={`/api/core/v1/document/${recentFileData.id}/raw`}
             target="_blank"
             download
             disabled={recentFileIsLoading || !fileIsLoaded}

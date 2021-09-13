@@ -50,7 +50,7 @@ const Upload = function UploadScreen() {
           <span>
             Вы можете скачать
             <Link
-              to={`/api/v1/document/${queueList[0].data.documentId}/raw`}
+              to={`/api/core/v1/document/${queueList[0].data.documentId}/raw`}
               target="_blank"
             >
               {' '}

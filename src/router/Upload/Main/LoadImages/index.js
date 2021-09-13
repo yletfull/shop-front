@@ -278,7 +278,7 @@ const LoadImagesTable = function LoadImagesTableScreen() {
                 {image.imageFile
                   && (
                     <img
-                      src={`/api/v1/document/${image.imageFile.id}/raw`}
+                      src={`/api/core/v1/document/${image.imageFile.id}/raw`}
                       className={cx(styles.icon, styles.tableFileIcon)}
                       alt="upload"
                     />
