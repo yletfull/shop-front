@@ -1,6 +1,6 @@
 import api from '@/api';
 
-const baseUrl = 'api/v1/statistics';
+const baseUrl = 'api/core/v1/statistics';
 
 const fetchEntityDynamics = function serviceFetchEntityDynamics({
   entityType,
