@@ -1,7 +1,5 @@
 import { withBase } from '@/api';
 
-const prefix = 'api/v1/external/ctor/';
-
 const getQuerryString = function serviceGetQueryString(params) {
   return new URLSearchParams(params).toString();
 };
@@ -12,7 +10,7 @@ export const getDownloadLink = function serviceGetDownloadLink(params) {
     return;
   }
   const search = getQuerryString(params);
-  return withBase(`${prefix}/api/v1/segments/${encodeURIComponent(id)}/export?${search}`);
+  return withBase(`api/ctor/v1/segments/${encodeURIComponent(id)}/export?${search}`);
 };
 
 export default {

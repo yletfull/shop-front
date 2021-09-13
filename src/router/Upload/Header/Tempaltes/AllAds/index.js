@@ -20,7 +20,7 @@ const AllAdsTemplate = function AllAdsTemplateScreen() {
       <ProcessButtonLink
         icon={<IconDownload />}
         text={['Скачать', 'все объявления']}
-        to={`/api/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
+        to={`/api/core/v1/import?cabinetId=${selectAccount}&clientId=${selectClient}`}
         target="_blank"
         download
         disabled={!selectAccount || !selectClient || uploadButtonDisabled}

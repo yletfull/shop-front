@@ -1,9 +1,9 @@
 import api from '@/api';
 
-const baseUrl = 'api/v1/statistics';
+const baseUrl = 'api/core/v1/statistics';
 
 const fetchPeriods = () => api
-  .get('/api/v1/statistics/periods')
+  .get('/api/core/v1/statistics/periods')
   .then((data) => data?.data?.data);
 
 const fetchReactionsComments = function serviceFetchReactionsComments({

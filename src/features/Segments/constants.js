@@ -1,6 +1,6 @@
 export const namespace = 'segmentsEdit';
 
-export const apiBaseUrl = 'api/v1/external/ctor/api/v1';
+export const apiBaseUrl = 'api/ctor/v1';
 
 export const dndTypes = {
   condition: 'condition',
