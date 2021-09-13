@@ -11,7 +11,7 @@ const propTypes = {
   ]),
 };
 const defaultProps = {
-  steepX: 350,
+  steepX: 75,
   steepYLimits: [0, 200],
 };
 
@@ -21,16 +21,15 @@ const LiveCardsArea = function LiveCardsArea({
   steepYLimits,
 }) {
   const getMovedChild = (child, ind) => {
-    const top = ind === 0 ? 0 : `${Math.random() * (steepYLimits[1] - steepYLimits[0]) + steepYLimits[0]}px`;
-    const left = ind === 0 ? 0 : `${ind * steepX}px`;
+    const marginTop = ind === 0 ? 0 : `${Math.random() * (steepYLimits[1] - steepYLimits[0]) + steepYLimits[0]}px`;
+    const marginLeft = ind === 0 ? 0 : `${steepX}px`;
 
     return React.cloneElement(
       child,
       {
         style: {
-          position: 'absolute',
-          left,
-          top,
+          marginTop,
+          marginLeft,
         },
       }
     );

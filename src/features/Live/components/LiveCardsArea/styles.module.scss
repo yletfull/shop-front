@@ -1,5 +1,7 @@
 @import '@/theme/include.scss';
 
 .wrapper {
-  // write some styles
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
 }
