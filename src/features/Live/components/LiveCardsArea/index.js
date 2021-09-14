@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 import Card from './components/Card';
@@ -14,7 +14,7 @@ const propTypes = {
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
-  moveSpeedX: 0.25,
+  moveSpeedX: 0.15,
 };
 
 const LiveCardsArea = function LiveCardsArea({
@@ -23,6 +23,8 @@ const LiveCardsArea = function LiveCardsArea({
   stepYLimits,
   moveSpeedX,
 }) {
+  const [renderChildrenArr, setRendrerChildrenArr] = useState(children);
+
   const getMovedChild = (child, index, childrenArr) => {
     const top = index === 0
       ? 0
@@ -41,13 +43,16 @@ const LiveCardsArea = function LiveCardsArea({
         top,
         left,
         finalPositionX,
+        index,
+        setRendrerChildrenArr,
       }
     );
   };
 
   return (
     <div className={styles.wrapper}>
-      {children.map((child, ind) => getMovedChild(child, ind, children))}
+      {renderChildrenArr
+        .map((child, ind) => getMovedChild(child, ind, children))}
     </div>
   );
 };

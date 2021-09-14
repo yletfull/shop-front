@@ -13,6 +13,8 @@ const propTypes = {
   left: PropTypes.number,
   moveSpeed: PropTypes.number,
   finalPositionX: PropTypes.number,
+  index: PropTypes.number,
+  setRendrerChildrenArr: PropTypes.func,
 };
 const defaultProps = {
   dateFormat: 'DD.MM.YYYY HH:mm',
@@ -20,8 +22,10 @@ const defaultProps = {
   children: null,
   top: 0,
   left: 0,
-  moveSpeed: 0.5,
+  moveSpeed: 0.25,
   finalPositionX: 0,
+  index: 0,
+  setRendrerChildrenArr: () => {},
 };
 
 const LiveCard = function LiveCard({
@@ -34,9 +38,23 @@ const LiveCard = function LiveCard({
   top,
   left,
   finalPositionX,
+  setRendrerChildrenArr,
+  index,
   ...props
 }) {
   const cardRef = useRef();
+
+  useEffect(() => {
+    const timeout = setTimeout(function run() {
+      const position = cardRef?.current?.getBoundingClientRect();
+      if (position && index === 0 && position.x < -220) {
+        setRendrerChildrenArr((prev) => prev.filter((_, ind) => ind !== index));
+      }
+      setTimeout(run, 100);
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [index, setRendrerChildrenArr]);
 
   const [finalPosition, setFinalPosition] = useState(0);
 
@@ -55,7 +73,7 @@ const LiveCard = function LiveCard({
         left: `${left}px`,
         top: `${top}px`,
         transform: `translateX(${finalPosition}px)`,
-        transition: `transform ${1 / moveSpeed}s linear`,
+        transition: `transform ${1 / (moveSpeed || 1)}s linear`,
       }}
       {...props}
     >
