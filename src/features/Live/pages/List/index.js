@@ -30,6 +30,24 @@ const cards = [
     title: 'Событие 4. Текст',
     image: TestImage,
   },
+  {
+    id: 5,
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 5. Текст',
+    image: TestImage,
+  },
+  {
+    id: 6,
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 6. Текст',
+    image: TestImage,
+  },
+  {
+    id: 7,
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 7. Текст',
+    image: TestImage,
+  },
 ];
 
 const propTypes = {

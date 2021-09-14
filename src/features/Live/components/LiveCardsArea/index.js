@@ -5,39 +5,49 @@ import Card from './components/Card';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
-  steepX: PropTypes.number,
-  steepYLimits: PropTypes.arrayOf([
+  stepX: PropTypes.number,
+  stepYLimits: PropTypes.arrayOf([
     PropTypes.number,
   ]),
+  moveSpeedX: PropTypes.number,
 };
 const defaultProps = {
-  steepX: 75,
-  steepYLimits: [0, 200],
+  stepX: 350,
+  stepYLimits: [0, 200],
+  moveSpeedX: 0.25,
 };
 
 const LiveCardsArea = function LiveCardsArea({
   children,
-  steepX,
-  steepYLimits,
+  stepX,
+  stepYLimits,
+  moveSpeedX,
 }) {
-  const getMovedChild = (child, ind) => {
-    const marginTop = ind === 0 ? 0 : `${Math.random() * (steepYLimits[1] - steepYLimits[0]) + steepYLimits[0]}px`;
-    const marginLeft = ind === 0 ? 0 : `${steepX}px`;
+  const getMovedChild = (child, index, childrenArr) => {
+    const top = index === 0
+      ? 0
+      : Math.random() * (stepYLimits[1] - stepYLimits[0]) + stepYLimits[0];
+
+    const left = index === 0 ? 0 : stepX * index;
+
+    const finalPositionX = -stepX * childrenArr.length;
+
+    const moveSpeed = moveSpeedX / childrenArr.length;
 
     return React.cloneElement(
       child,
       {
-        style: {
-          marginTop,
-          marginLeft,
-        },
+        moveSpeed,
+        top,
+        left,
+        finalPositionX,
       }
     );
   };
 
   return (
     <div className={styles.wrapper}>
-      {children.map((child, ind) => getMovedChild(child, ind))}
+      {children.map((child, ind) => getMovedChild(child, ind, children))}
     </div>
   );
 };
