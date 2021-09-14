@@ -10,13 +10,11 @@ const propTypes = {
     PropTypes.number,
   ]),
   moveSpeedX: PropTypes.number,
-  updateTimeInterval: PropTypes.number,
 };
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
   moveSpeedX: 0.15,
-  updateTimeInterval: 1000,
 };
 
 const LiveCardsArea = function LiveCardsArea({
@@ -24,7 +22,6 @@ const LiveCardsArea = function LiveCardsArea({
   stepX,
   stepYLimits,
   moveSpeedX,
-  updateTimeInterval,
 }) {
   const [renderChildrenArr, setRendrerChildrenArr] = useState(children);
 
@@ -54,12 +51,11 @@ const LiveCardsArea = function LiveCardsArea({
         top,
         left,
         finalPositionX,
-        updateTimeInterval,
         id: key,
         setRendrerChildrenArr,
       }
     );
-  }, [moveSpeedX, stepX, stepYLimits, updateTimeInterval]);
+  }, [moveSpeedX, stepX, stepYLimits]);
 
   useEffect(() => {
     const movedChildren = children

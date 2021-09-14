@@ -16,7 +16,9 @@ const Template = (args) => (
 export const Playground = Template.bind({});
 Playground.args = {
   id: 1,
-  date: dayjs().format(DATE_FORMAT),
   title: 'Событие 1. Текст',
+  date: dayjs().format(DATE_FORMAT),
   image: TestImage,
+  top: 10,
+  left: 10,
 };
