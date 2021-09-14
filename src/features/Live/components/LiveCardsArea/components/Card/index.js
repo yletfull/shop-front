@@ -16,6 +16,7 @@ const propTypes = {
   moveSpeed: PropTypes.number,
   setRendrerChildrenArr: PropTypes.func,
   updateTimeInterval: PropTypes.number,
+  onClick: PropTypes.func,
 };
 const defaultProps = {
   dateFormat: 'DD.MM.YYYY HH:mm',
@@ -25,6 +26,7 @@ const defaultProps = {
   moveSpeed: 0.25,
   updateTimeInterval: 1000,
   setRendrerChildrenArr: () => {},
+  onClick: () => {},
 };
 
 const LiveCard = function LiveCard({
