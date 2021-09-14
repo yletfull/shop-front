@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import styles from './styles.module.scss';
 
 const propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   dateFormat: PropTypes.string,
@@ -13,8 +14,8 @@ const propTypes = {
   left: PropTypes.number,
   moveSpeed: PropTypes.number,
   finalPositionX: PropTypes.number,
-  index: PropTypes.number,
   setRendrerChildrenArr: PropTypes.func,
+  updateTimeInterval: PropTypes.number,
 };
 const defaultProps = {
   dateFormat: 'DD.MM.YYYY HH:mm',
@@ -24,11 +25,12 @@ const defaultProps = {
   left: 0,
   moveSpeed: 0.25,
   finalPositionX: 0,
-  index: 0,
+  updateTimeInterval: 1000,
   setRendrerChildrenArr: () => {},
 };
 
 const LiveCard = function LiveCard({
+  id,
   title,
   date,
   dateFormat,
@@ -39,22 +41,32 @@ const LiveCard = function LiveCard({
   left,
   finalPositionX,
   setRendrerChildrenArr,
-  index,
+  updateTimeInterval,
   ...props
 }) {
   const cardRef = useRef();
 
+  const getResultCardArray = (cards, key) => cards.map((card) => {
+    if (card.key === key) {
+      return '';
+    }
+
+    return card;
+  });
+
   useEffect(() => {
     const timeout = setTimeout(function run() {
-      const position = cardRef?.current?.getBoundingClientRect();
-      if (position && index === 0 && position.x < -220) {
-        setRendrerChildrenArr((prev) => prev.filter((_, ind) => ind !== index));
+      const cardRect = cardRef?.current?.getBoundingClientRect();
+
+      if (cardRect && (cardRect.left < -cardRect.width)) {
+        return setRendrerChildrenArr((prev) => getResultCardArray(prev, id));
       }
-      setTimeout(run, 100);
-    }, 100);
+
+      return setTimeout(run, updateTimeInterval);
+    }, updateTimeInterval);
 
     return () => clearTimeout(timeout);
-  }, [index, setRendrerChildrenArr]);
+  }, [id, setRendrerChildrenArr, updateTimeInterval]);
 
   const [finalPosition, setFinalPosition] = useState(0);
 
