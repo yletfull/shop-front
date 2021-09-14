@@ -1,0 +1,10 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  overflow-x: clip;
+  position: relative;
+}
+
+.spinnerOverlay {
+  background-color: rgba($color-gray-lightest, .5);
+}
