@@ -29,8 +29,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: Infinity,
-  max: -Infinity,
+  min: '1800-01-01',
+  max: '2100-12-31',
   values: {
     dateStart: '',
     dateEnd: '',
@@ -48,16 +48,14 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   debounceDelay,
   ...props
 }) {
+  const [localState, setLocalState] = useState({
+    dateStart: formatDate(dayjs(), DATE_FORMAT),
+    dateEnd: formatDate(dayjs(), DATE_FORMAT),
+  });
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
 
-  const hideDropdown = () => setShouldShowDropdown(false);
-
-  const [localState, setLocalState] = useState({
-    dateStart: dayjs(),
-    dateEnd: dayjs(),
-  });
-
-  const [isFetching, setIsFetching] = useState(true);
+  const quickOptionsRef = useRef(null);
+  useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
 
   useEffect(() => {
     const dateEnd = isValidDate(values.dateEnd)
@@ -71,15 +69,22 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setLocalState(validationValues);
   }, [values]);
 
-  const quickOptionsRef = useRef(null);
-  useOnClickOutside(quickOptionsRef, hideDropdown);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      onChange(localState);
+    }, debounceDelay);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [localState, debounceDelay, onChange]);
 
   const canShiftToThePast = (
-    (dayjs(values.dateStart).diff(dayjs(min)) > 0) && !isFetching
+    dayjs(values.dateStart).diff(dayjs(min)) > 0
   );
 
   const canShiftToTheFuture = (
-    (dayjs(max).diff(dayjs(values.dateEnd)) > 0) && !isFetching
+    dayjs(max).diff(dayjs(values.dateEnd)) > 0
   );
 
   const handleShift = (e) => {
@@ -95,6 +100,21 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     const interval = getShiftInterval({ dateStart, dateEnd, action });
 
     onChange(interval);
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+
+    if (!name || !value) {
+      return;
+    }
+
+    if (localState[name] !== value) {
+      setLocalState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleQuickOptionsClick = () => {
@@ -120,31 +140,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         .subtract(shift, unit)
         .format(DATE_FORMAT),
     });
-    hideDropdown();
+    setShouldShowDropdown(false);
   };
-
-  const handleChange = (e) => {
-    const { value, name } = e.target;
-
-    if (localState[name] !== value) {
-      setLocalState((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-      setIsFetching(true);
-    }
-  };
-
-  useEffect(() => {
-    const timeout = setTimeout(async () => {
-      await onChange(localState);
-      setIsFetching(false);
-    }, debounceDelay);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [localState, debounceDelay, onChange]);
 
   return (
     <form
@@ -204,7 +201,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Button
           className={styles.quickOptions_button}
           data-active={shouldShowDropdown}
-          disabled={isFetching}
           onClick={handleQuickOptionsClick}
         >
           <IconHistory />
