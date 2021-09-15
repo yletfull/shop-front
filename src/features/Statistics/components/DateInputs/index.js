@@ -52,21 +52,19 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     dateStart: formatDate(dayjs(), DATE_FORMAT),
     dateEnd: formatDate(dayjs(), DATE_FORMAT),
   });
+
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
 
   useEffect(() => {
-    const dateEnd = isValidDate(values.dateEnd)
-      ? formatDate(values.dateEnd, DATE_FORMAT)
-      : formatDate(dayjs(), DATE_FORMAT);
-    const dateStart = isValidDate(values.dateStart)
-      ? formatDate(values.dateStart, DATE_FORMAT)
-      : formatDate(dayjs(), DATE_FORMAT);
-    const validationValues = validationDates({ dateStart, dateEnd });
+    if (isValidDate(values.dateStart) && isValidDate(values.dateEnd)) {
+      const dateStart = formatDate(values.dateStart, DATE_FORMAT);
+      const dateEnd = formatDate(values.dateEnd, DATE_FORMAT);
 
-    setLocalState(validationValues);
+      setLocalState(validationDates({ dateStart, dateEnd }));
+    }
   }, [values]);
 
   useEffect(() => {
