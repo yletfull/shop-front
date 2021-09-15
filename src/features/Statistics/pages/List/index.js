@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
@@ -61,8 +61,8 @@ const StatisticsList = function StatisticsListScreen({
     fetchPeriods();
   }, [fetchPeriods]);
   const {
-    datestart: minDate,
-    dateend: maxDate,
+    dateStart: minDate,
+    dateEnd: maxDate,
   } = periodsService.data[0] || {};
 
   const { fetch, data: response, isFetching, error } = useService({
@@ -70,13 +70,13 @@ const StatisticsList = function StatisticsListScreen({
     service: service.fetchList,
   });
 
-  const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
+  const handleDateInputsSubmit = useCallback(({ dateStart, dateEnd }) => {
     setQueryParams({
       dateStart,
       dateEnd,
       currentPage: 1,
     });
-  };
+  }, [setQueryParams]);
   const handlePageSelect = (currentPage) => setQueryParams({ currentPage });
   const handleCountSelect = (perPage) => {
     setQueryParams({

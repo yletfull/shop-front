@@ -12,9 +12,7 @@ import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
 import { DATE_FORMAT, quickFilterOptions, shiftTypes } from './constants';
-import { getShiftInterval, validationDates } from './utils';
-
-const isValidDate = (date) => dayjs(date).isValid();
+import { getShiftInterval } from './utils';
 
 const propTypes = {
   min: PropTypes.string,
@@ -49,23 +47,14 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   ...props
 }) {
   const [localState, setLocalState] = useState({
-    dateStart: formatDate(dayjs(), DATE_FORMAT),
-    dateEnd: formatDate(dayjs(), DATE_FORMAT),
+    dateStart: formatDate(values.dateStart, DATE_FORMAT),
+    dateEnd: formatDate(values.dateEnd, DATE_FORMAT),
   });
 
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
 
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
-
-  useEffect(() => {
-    if (isValidDate(values.dateStart) && isValidDate(values.dateEnd)) {
-      const dateStart = formatDate(values.dateStart, DATE_FORMAT);
-      const dateEnd = formatDate(values.dateEnd, DATE_FORMAT);
-
-      setLocalState(validationDates({ dateStart, dateEnd }));
-    }
-  }, [values]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -78,11 +67,11 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   }, [localState, debounceDelay, onChange]);
 
   const canShiftToThePast = (
-    dayjs(values.dateStart).diff(dayjs(min)) > 0
+    dayjs(localState.dateStart).diff(dayjs(min)) > 0
   );
 
   const canShiftToTheFuture = (
-    dayjs(max).diff(dayjs(values.dateEnd)) > 0
+    dayjs(max).diff(dayjs(localState.dateEnd)) > 0
   );
 
   const handleShift = (e) => {
@@ -92,12 +81,12 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    const dateStart = dayjs(values.dateStart);
-    const dateEnd = dayjs(values.dateEnd);
+    const dateStart = dayjs(localState.dateStart);
+    const dateEnd = dayjs(localState.dateEnd);
 
     const interval = getShiftInterval({ dateStart, dateEnd, action });
 
-    onChange(interval);
+    setLocalState(interval);
   };
 
   const handleChange = (e) => {
@@ -128,7 +117,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    onChange({
+    setLocalState({
       dateStart: dayjs()
         .startOf(unit)
         .subtract(shift, unit)
