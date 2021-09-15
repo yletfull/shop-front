@@ -163,8 +163,6 @@ const StatisticsList = function StatisticsListScreen({
             max={maxDate}
             values={{ dateStart, dateEnd }}
             onChange={handleDateInputsSubmit}
-            onShift={handleDateInputsSubmit}
-            onSelect={handleDateInputsSubmit}
           />
           {periodsService.isFetching && <Spinner layout="inline" />}
         </div>

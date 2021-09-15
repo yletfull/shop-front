@@ -168,6 +168,15 @@ export default [
     },
   },
   {
+    Component: AudiencesDetails,
+    path: patchs.audiencesDetails,
+    title: titles.audiencesDetails,
+    rights: {
+      section: sections.segment,
+      actions: [],
+    },
+  },
+  {
     Component: Settings,
     path: patchs.settings,
     title: titles.settings,
