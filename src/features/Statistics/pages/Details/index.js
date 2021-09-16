@@ -34,8 +34,8 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
   const { datestart, dateend } = data[0] || {};
 
-  const dateStart = query.get('dateStart') || query.get('listDateStart') || today;
-  const dateEnd = query.get('dateEnd') || query.get('listDateEnd') || today;
+  const dateStart = query.get('dateStart') || today;
+  const dateEnd = query.get('dateEnd') || today;
 
   const searchQuery = new URLSearchParams('');
   searchQuery.set('dateEnd', dateEnd);

@@ -74,9 +74,9 @@ const StatisticsList = function StatisticsListScreen({
 
   const handleDateInputsSubmit = useCallback(({ dateStart, dateEnd }) => {
     setQueryParams({
-      listDateStart: dateStart,
-      listDateEnd: dateEnd,
-      listCurrentPage: 1,
+      dateStart,
+      dateEnd,
+      currentPage: 1,
     });
   }, [setQueryParams]);
 
@@ -87,16 +87,16 @@ const StatisticsList = function StatisticsListScreen({
   const handlePageSelect = (listCurrentPage) => setQueryParams(
     { listCurrentPage }
   );
-  const handleCountSelect = (listPerPage) => {
+  const handleCountSelect = (perPage) => {
     setQueryParams({
-      listPerPage,
-      listCurrentPage: 1,
+      perPage,
+      currentPage: 1,
     });
   };
   const handleFiltersApply = (values) => {
     setQueryParams({
       search: values.search,
-      listCurrentPage: 1,
+      currentPage: 1,
     });
   };
   const handleSortChange = ({ sortDir, sortField }) => {
@@ -105,10 +105,10 @@ const StatisticsList = function StatisticsListScreen({
 
   const { entity } = match?.params || {};
   const {
-    listDateStart: dateStart,
-    listDateEnd: dateEnd,
-    listCurrentPage: currentPage,
-    listPerPage: perPage,
+    dateStart,
+    dateEnd,
+    currentPage,
+    perPage,
     search,
     sortDir,
     sortField,
@@ -147,8 +147,8 @@ const StatisticsList = function StatisticsListScreen({
     }
 
     setQueryParams({
-      listDateStart: maxDate,
-      listDateEnd: maxDate,
+      dateStart: maxDate,
+      dateEnd: maxDate,
     });
   }, [maxDate, dateStart, dateEnd, setQueryParams]);
 
