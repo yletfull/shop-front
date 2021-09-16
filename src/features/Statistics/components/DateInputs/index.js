@@ -72,11 +72,11 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   }, [localState, debounceDelay, onChange, onBeforeChange]);
 
   const canShiftToThePast = (
-    dayjs(localState.dateStart).diff(dayjs(min)) > 0
+    dayjs(localState.dateStart) > dayjs(min)
   );
 
   const canShiftToTheFuture = (
-    dayjs(max).diff(dayjs(localState.dateEnd)) > 0
+    dayjs(localState.dateEnd) < dayjs(max)
   );
 
   const handleShift = (e) => {
