@@ -23,6 +23,7 @@ const propTypes = {
   }),
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  onBeforeChange: PropTypes.func.isRequired,
   debounceDelay: PropTypes.number,
 };
 
@@ -43,28 +44,32 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   values,
   className,
   onChange,
+  onBeforeChange,
   debounceDelay,
   ...props
 }) {
+  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
+  const quickOptionsRef = useRef(null);
+  useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
+
   const [localState, setLocalState] = useState({
     dateStart: formatDate(values.dateStart, DATE_FORMAT),
     dateEnd: formatDate(values.dateEnd, DATE_FORMAT),
   });
 
-  const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
-
-  const quickOptionsRef = useRef(null);
-  useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
-
   useEffect(() => {
+    onBeforeChange(true);
+
     const timeout = setTimeout(() => {
       onChange(localState);
+      onBeforeChange(false);
     }, debounceDelay);
 
     return () => {
       clearTimeout(timeout);
+      onBeforeChange(false);
     };
-  }, [localState, debounceDelay, onChange]);
+  }, [localState, debounceDelay, onChange, onBeforeChange]);
 
   const canShiftToThePast = (
     dayjs(localState.dateStart).diff(dayjs(min)) > 0
@@ -86,7 +91,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
 
     const interval = getShiftInterval({ dateStart, dateEnd, action });
 
-    setLocalState(interval);
+    setLocalState({
+      ...interval,
+    });
   };
 
   const handleChange = (e) => {

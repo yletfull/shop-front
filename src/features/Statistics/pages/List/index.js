@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import NavTabs from '@/components/NavTabs';
 import { useService, useQueryParams } from '@/hooks';
@@ -49,16 +49,19 @@ const StatisticsList = function StatisticsListScreen({
   match,
   location,
 }) {
+  const [isBeforeFetching, setIsBeforeFetching] = useState(false);
   const [queryParams, setQueryParams] = useQueryParams();
 
   const periodsService = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
+
   const fetchPeriods = periodsService.fetch;
   useEffect(() => {
     fetchPeriods();
   }, [fetchPeriods]);
+
   const {
     dateStart: minDate,
     dateEnd: maxDate,
@@ -76,6 +79,10 @@ const StatisticsList = function StatisticsListScreen({
       listCurrentPage: 1,
     });
   }, [setQueryParams]);
+
+  const handleBeforeChange = useCallback((stateEvent) => {
+    setIsBeforeFetching(stateEvent);
+  }, [setIsBeforeFetching]);
 
   const handlePageSelect = (listCurrentPage) => setQueryParams(
     { listCurrentPage }
@@ -106,6 +113,7 @@ const StatisticsList = function StatisticsListScreen({
     sortDir,
     sortField,
   } = queryParams;
+
   useEffect(() => {
     if (!entity || !dateStart || !dateEnd) {
       return;
@@ -132,6 +140,7 @@ const StatisticsList = function StatisticsListScreen({
     currentPage,
     perPage,
   ]);
+
   useEffect(() => {
     if (!maxDate || (dateStart && dateEnd)) {
       return;
@@ -163,6 +172,7 @@ const StatisticsList = function StatisticsListScreen({
             min={minDate}
             max={maxDate}
             values={{ dateStart, dateEnd }}
+            onBeforeChange={handleBeforeChange}
             onChange={handleDateInputsSubmit}
           />
           {periodsService.isFetching && <Spinner layout="inline" />}
@@ -184,7 +194,7 @@ const StatisticsList = function StatisticsListScreen({
       </NavTabs>
 
       <div className={styles.page}>
-        {(isFetching || periodsService.isFetching) && (
+        {(isFetching || periodsService.isFetching || isBeforeFetching) && (
           <Spinner
             spinnerClassName={styles.spinner}
             layout="overlay"
