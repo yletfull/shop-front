@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import cx from 'classnames';
@@ -50,16 +50,19 @@ const StatisticsList = function StatisticsListScreen({
   match,
   location,
 }) {
+  const [isBeforeFetching, setIsBeforeFetching] = useState(false);
   const [queryParams, setQueryParams] = useQueryParams();
 
   const periodsService = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
+
   const fetchPeriods = periodsService.fetch;
   useEffect(() => {
     fetchPeriods();
   }, [fetchPeriods]);
+
   const {
     dateStart: minDate,
     dateEnd: maxDate,
@@ -77,6 +80,11 @@ const StatisticsList = function StatisticsListScreen({
       currentPage: 1,
     });
   }, [setQueryParams]);
+
+  const handleBeforeChange = useCallback((stateEvent) => {
+    setIsBeforeFetching(stateEvent);
+  }, [setIsBeforeFetching]);
+
   const handlePageSelect = (currentPage) => setQueryParams({ currentPage });
   const handleCountSelect = (perPage) => {
     setQueryParams({
@@ -104,6 +112,7 @@ const StatisticsList = function StatisticsListScreen({
     currentPage,
     perPage,
   } = queryParams;
+
   useEffect(() => {
     if (!entity || !dateStart || !dateEnd) {
       return;
@@ -130,6 +139,7 @@ const StatisticsList = function StatisticsListScreen({
     currentPage,
     perPage,
   ]);
+
   useEffect(() => {
     if (!maxDate || (dateStart && dateEnd)) {
       return;
@@ -161,6 +171,7 @@ const StatisticsList = function StatisticsListScreen({
             min={minDate}
             max={maxDate}
             values={{ dateStart, dateEnd }}
+            onBeforeChange={handleBeforeChange}
             onChange={handleDateInputsSubmit}
           />
           {periodsService.isFetching && <Spinner layout="inline" />}
@@ -189,7 +200,7 @@ const StatisticsList = function StatisticsListScreen({
       </div>
 
       <div className={styles.page}>
-        {(isFetching || periodsService.isFetching) && (
+        {(isFetching || periodsService.isFetching || isBeforeFetching) && (
           <Spinner
             spinnerClassName={styles.spinner}
             layout="overlay"
