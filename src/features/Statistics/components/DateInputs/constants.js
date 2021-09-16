@@ -9,6 +9,7 @@ export const TIME_UNITS = {
 
 export const quickFilterOptions = [
   { text: 'вчера', unit: TIME_UNITS.day, shift: 1 },
+  { text: 'текущая неделя', unit: TIME_UNITS.week, shift: 0 },
   { text: 'предыдущая неделя', unit: TIME_UNITS.week, shift: 1 },
 ];
 
