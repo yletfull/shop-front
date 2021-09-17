@@ -124,7 +124,7 @@ const ReactionsVkontakteChart = function ReactionsVkontakteChart({
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
             scaleY={scaleY}
-            ticksCount={4}
+            ticksCount={6}
             renderTick={xTickRenderer}
           />
         </g>

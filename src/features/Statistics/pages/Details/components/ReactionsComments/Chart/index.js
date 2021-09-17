@@ -125,7 +125,6 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
             scaleY={scaleY}
-            ticksCount={4}
             renderTick={xTickRenderer}
           />
           <XYTicksY

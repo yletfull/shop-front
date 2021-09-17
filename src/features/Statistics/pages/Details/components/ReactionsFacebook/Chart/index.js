@@ -123,7 +123,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
             scaleY={scaleY}
-            ticksCount={4}
             renderTick={xTickRenderer}
           />
         </g>

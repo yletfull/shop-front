@@ -215,7 +215,6 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           chartHeight={chartHeight}
           scaleX={scaleX}
           scaleY={scaleY}
-          ticksCount={6}
           renderTick={xTickRenderer}
         />
       </svg>

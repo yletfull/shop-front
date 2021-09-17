@@ -123,7 +123,6 @@ const ReactionsTotalChart = function ReactionsTotalChart({
             chartHeight={chartHeight}
             scaleX={scaleXTicks}
             scaleY={scaleY}
-            ticksCount={4}
             renderTick={xTickRenderer}
           />
         </g>
