@@ -53,3 +53,8 @@ export const validationDates = ({ dateStart, dateEnd }) => {
   }
   return { dateStart, dateEnd };
 };
+
+export const dateCheckRange = (date, min, max) => (
+  dayjs(date) < dayjs(min)
+  || dayjs(date) > dayjs(max)
+);

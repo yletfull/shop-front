@@ -12,6 +12,7 @@
 .arrow {
   @include button-reset();
 
+  border: thin solid transparent;
   border-radius: .25em;
   color: $color-primary-darkest;
   padding: .5em;
@@ -29,6 +30,10 @@
 
 .submit {
   margin-left: .5rem;
+}
+
+.error {
+  border: thin solid $color-red-lighter;
 }
 
 .dropdown {
