@@ -1,6 +1,6 @@
 export const DATE_FORMAT = 'YYYY-MM-DD';
 
-export const TIME_UNITS = {
+export const timeUnits = {
   day: 'day',
   week: 'week',
   month: 'month',
@@ -8,9 +8,9 @@ export const TIME_UNITS = {
 };
 
 export const quickFilterOptions = [
-  { text: 'вчера', unit: TIME_UNITS.day, shift: 1 },
-  { text: 'текущая неделя', unit: TIME_UNITS.week, shift: 0 },
-  { text: 'предыдущая неделя', unit: TIME_UNITS.week, shift: 1 },
+  { text: 'вчера', unit: timeUnits.day, shift: 1 },
+  { text: 'текущая неделя', unit: timeUnits.week, shift: 0 },
+  { text: 'предыдущая неделя', unit: timeUnits.week, shift: 1 },
 ];
 
 export const shiftTypes = {

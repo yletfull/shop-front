@@ -12,7 +12,7 @@ import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
 import { DATE_FORMAT, quickFilterOptions, shiftTypes } from './constants';
-import { getShiftInterval } from './utils';
+import { getShiftInterval, dateCheckRange } from './utils';
 
 const propTypes = {
   min: PropTypes.string,
@@ -23,7 +23,7 @@ const propTypes = {
   }),
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  onBeforeChange: PropTypes.func.isRequired,
+  onBeforeChange: PropTypes.func,
   debounceDelay: PropTypes.number,
 };
 
@@ -36,6 +36,7 @@ const defaultProps = {
   },
   className: '',
   debounceDelay: 900,
+  onBeforeChange: () => {},
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
@@ -61,22 +62,22 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     onBeforeChange(true);
 
     const timeout = setTimeout(() => {
-      onChange(localState);
       onBeforeChange(false);
+      onChange(localState);
     }, debounceDelay);
 
     return () => {
-      clearTimeout(timeout);
       onBeforeChange(false);
+      clearTimeout(timeout);
     };
   }, [localState, debounceDelay, onChange, onBeforeChange]);
 
   const canShiftToThePast = (
-    dayjs(localState.dateStart).diff(dayjs(min)) > 0
+    dayjs(localState.dateStart) > dayjs(min)
   );
 
   const canShiftToTheFuture = (
-    dayjs(max).diff(dayjs(localState.dateEnd)) > 0
+    dayjs(localState.dateEnd) < dayjs(max)
   );
 
   const handleShift = (e) => {
@@ -161,6 +162,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={dayjs(min).format(DATE_FORMAT)}
           max={dayjs(max).format(DATE_FORMAT)}
+          className={dateCheckRange(localState.dateStart, min, max) ? styles.error : ''}
           value={localState.dateStart}
           name="dateStart"
           type="date"
@@ -172,6 +174,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={dayjs(min).format(DATE_FORMAT)}
           max={dayjs(max).format(DATE_FORMAT)}
+          className={dateCheckRange(localState.dateEnd, min, max) ? styles.error : ''}
           value={localState.dateEnd}
           name="dateEnd"
           type="date"

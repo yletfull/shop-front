@@ -1,22 +1,20 @@
 import dayjs from 'dayjs';
-import { TIME_UNITS, DATE_FORMAT, shiftTypes } from './constants';
-
-const { day, week, month, year } = TIME_UNITS;
+import { timeUnits, shiftTypes, DATE_FORMAT } from './constants';
 
 export const getShiftUnits = ({ dateStart, dateEnd }) => {
   if ((dateStart.month() === 0 && dateStart.date() === 1)
     && (dateEnd.month() === 11 && dateEnd.date() === 31)) {
-    return [year, 1];
+    return [timeUnits.year, 1];
   }
   if (
     (dateStart.date() === 1) && dateEnd.date() === dateEnd.daysInMonth()
   ) {
-    return [month, 1];
+    return [timeUnits.month, 1];
   }
   if (dateStart.day() === 1 && dateEnd.day() === 0) {
-    return [week, 1];
+    return [timeUnits.week, 1];
   }
-  return [day, dateEnd.diff(dateStart, day) + 1];
+  return [timeUnits.day, dateEnd.diff(dateStart, timeUnits.day) + 1];
 };
 
 export const getShiftInterval = ({
@@ -55,3 +53,8 @@ export const validationDates = ({ dateStart, dateEnd }) => {
   }
   return { dateStart, dateEnd };
 };
+
+export const dateCheckRange = (date, min, max) => (
+  dayjs(date) < dayjs(min)
+  || dayjs(date) > dayjs(max)
+);
