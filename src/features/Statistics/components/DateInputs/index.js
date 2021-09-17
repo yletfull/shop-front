@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useOnClickOutside } from '@/hooks';
@@ -53,24 +53,13 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   const quickOptionsRef = useRef(null);
   useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
 
+  const localDateStart = values.dateStart || dayjs();
+  const localDateEnd = values.dateEnd || dayjs();
+
   const [localState, setLocalState] = useState({
-    dateStart: formatDate(values.dateStart, DATE_FORMAT),
-    dateEnd: formatDate(values.dateEnd, DATE_FORMAT),
+    dateStart: formatDate(localDateStart, DATE_FORMAT),
+    dateEnd: formatDate(localDateEnd, DATE_FORMAT),
   });
-
-  useEffect(() => {
-    onBeforeChange(true);
-
-    const timeout = setTimeout(() => {
-      onBeforeChange(false);
-      onChange(localState);
-    }, debounceDelay);
-
-    return () => {
-      onBeforeChange(false);
-      clearTimeout(timeout);
-    };
-  }, [localState, debounceDelay, onChange, onBeforeChange]);
 
   const canShiftToThePast = (
     dayjs(localState.dateStart) > dayjs(min)
@@ -95,6 +84,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
     setLocalState({
       ...interval,
     });
+    onChange(localState);
   };
 
   const handleChange = (e) => {
@@ -110,6 +100,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         [name]: value,
       }));
     }
+
+    onChange(localState);
   };
 
   const handleQuickOptionsClick = () => {
@@ -136,6 +128,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         .format(DATE_FORMAT),
     });
     setShouldShowDropdown(false);
+    onChange(localState);
   };
 
   return (

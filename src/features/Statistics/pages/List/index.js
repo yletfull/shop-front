@@ -73,13 +73,13 @@ const StatisticsList = function StatisticsListScreen({
     service: service.fetchList,
   });
 
-  const handleDateInputsSubmit = useCallback(({ dateStart, dateEnd }) => {
+  const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
     setQueryParams({
       dateStart,
       dateEnd,
       currentPage: 1,
     });
-  }, [setQueryParams]);
+  };
 
   const handleBeforeChange = useCallback((stateEvent) => {
     setIsBeforeFetching(stateEvent);
@@ -118,16 +118,22 @@ const StatisticsList = function StatisticsListScreen({
       return;
     }
 
-    fetch({
-      entity,
-      dateStart,
-      dateEnd,
-      search,
-      sortDir: sortDir || 'desc',
-      sortField: sortField || 'impressions',
-      currentPage: currentPage || 1,
-      perPage: perPage || countOptions[0],
-    });
+    const timeout = setTimeout(() => {
+      fetch({
+        entity,
+        dateStart,
+        dateEnd,
+        search,
+        sortDir: sortDir || 'desc',
+        sortField: sortField || 'impressions',
+        currentPage: currentPage || 1,
+        perPage: perPage || countOptions[0],
+      });
+    }, 900);
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, [
     entity,
     fetch,
