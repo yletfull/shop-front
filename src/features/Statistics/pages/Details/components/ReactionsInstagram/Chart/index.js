@@ -32,7 +32,6 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
   dateStart,
   dateEnd,
 }) {
-  console.log(dateStart, dateEnd);
   const chartRef = useRef(null);
 
   const [width, height] = useElementSize(chartRef);
