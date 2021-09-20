@@ -27,7 +27,7 @@ const ReactionsInstagram = function ReactionsInstagram({
 }) {
   const { entityType, id: entityId } = useParams();
 
-  const { fetch, data, error } = useService({
+  const { fetch, data, isFetching, error } = useService({
     initialData: {},
     service: service.fetchReactionsByPlatform,
   });
@@ -47,53 +47,20 @@ const ReactionsInstagram = function ReactionsInstagram({
     });
   }, [fetch, dateStart, dateEnd, entityType, entityId]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const mocks = {
-    dynamics: {
-      '2021-07-20': 0,
-      '2021-07-21': 0,
-      '2021-07-22': 0,
-      '2021-07-23': 0,
-      '2021-07-24': 85,
-      '2021-07-25': 93,
-      '2021-07-26': 100,
-      '2021-07-27': 96,
-      '2021-07-28': 114,
-      '2021-07-29': 96,
-      '2021-07-30': 56,
-      '2021-07-31': 48,
-      '2021-08-01': 5,
-      '2021-08-02': 14,
-      '2021-08-11': 153,
-      '2021-08-12': 137,
-      '2021-08-13': 194,
-      '2021-08-14': 135,
-      '2021-08-15': 288,
-      '2021-08-16': 275,
-      '2021-08-17': 425,
-    },
-    total: {
-      count: 2846,
-      diff: -0.03,
-    },
-  };
-
   const chartData = useMemo(() => {
-    const { dynamics } = mocks;
+    const { dynamics } = data;
     if (!dynamics) {
       return ([]);
     }
-
     return Object.keys(dynamics)
       .map((date) => ({ date, value: dynamics[date] }));
-  }, [mocks]);
-
+  }, [data]);
 
   return (
     <div className={styles.wrapper}>
       <WithSpinner
         layout="block"
-        isFetching={false}
+        isFetching={isFetching}
       >
         {error
           ? <ErrorMessageBlock error={error} />
