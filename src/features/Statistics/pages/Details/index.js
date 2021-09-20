@@ -88,6 +88,8 @@ const StatisticsDetails = function StatisticsDetailsPage() {
     dispatch(fetchEntities(entityType));
   }, [dispatch, entityType]);
   const entity = useSelector(getEntities);
+  console.log(entity);
+
   useEffect(() => {
     const newQuery = new URLSearchParams(locationSearch);
     const queryDateStart = newQuery.get('dateStart');
