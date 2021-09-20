@@ -59,7 +59,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([chartHeight, 0]), [chartHeight, maxValue]);
+    .range([chartHeight, 2]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value, i, arr) => {
