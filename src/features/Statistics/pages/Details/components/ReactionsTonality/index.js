@@ -60,7 +60,7 @@ const ReactionsTonality = function ReactionsTonality({
   }, [data]);
 
   return (
-    <div className={styles.reactionsTonality}>
+    <div className={styles.wrapper}>
       <WithSpinner
         layout="block"
         isFetching={isFetching}
