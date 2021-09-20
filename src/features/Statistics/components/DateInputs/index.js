@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useOnClickOutside } from '@/hooks';
 import dayjs from '@/utils/day';
-import { formatDate } from '@/utils/format';
 import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
 import IconHistory from '@/icons/History';
@@ -23,8 +22,6 @@ const propTypes = {
   }),
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  onBeforeChange: PropTypes.func,
-  debounceDelay: PropTypes.number,
 };
 
 const defaultProps = {
@@ -35,8 +32,6 @@ const defaultProps = {
     dateEnd: '',
   },
   className: '',
-  debounceDelay: 900,
-  onBeforeChange: () => {},
 };
 
 const StatisticsDateInputs = function StatisticsDateInputs({
@@ -45,8 +40,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   values,
   className,
   onChange,
-  onBeforeChange,
-  debounceDelay,
   ...props
 }) {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
@@ -56,17 +49,12 @@ const StatisticsDateInputs = function StatisticsDateInputs({
   const localDateStart = values.dateStart || dayjs();
   const localDateEnd = values.dateEnd || dayjs();
 
-  const [localState, setLocalState] = useState({
-    dateStart: formatDate(localDateStart, DATE_FORMAT),
-    dateEnd: formatDate(localDateEnd, DATE_FORMAT),
-  });
-
   const canShiftToThePast = (
-    dayjs(localState.dateStart) > dayjs(min)
+    dayjs(localDateStart) > dayjs(min)
   );
 
   const canShiftToTheFuture = (
-    dayjs(localState.dateEnd) < dayjs(max)
+    dayjs(localDateEnd) < dayjs(max)
   );
 
   const handleShift = (e) => {
@@ -76,15 +64,12 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    const dateStart = dayjs(localState.dateStart);
-    const dateEnd = dayjs(localState.dateEnd);
+    const dateStart = dayjs(localDateStart);
+    const dateEnd = dayjs(localDateEnd);
 
     const interval = getShiftInterval({ dateStart, dateEnd, action });
 
-    setLocalState({
-      ...interval,
-    });
-    onChange(localState);
+    onChange(interval);
   };
 
   const handleChange = (e) => {
@@ -94,14 +79,14 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    if (localState[name] !== value) {
-      setLocalState((prev) => ({
-        ...prev,
+    if (values[name] !== value) {
+      const interval = {
+        ...values,
         [name]: value,
-      }));
-    }
+      };
 
-    onChange(localState);
+      onChange(interval);
+    }
   };
 
   const handleQuickOptionsClick = () => {
@@ -117,7 +102,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    setLocalState({
+    setShouldShowDropdown(false);
+    onChange({
       dateStart: dayjs()
         .startOf(unit)
         .subtract(shift, unit)
@@ -127,8 +113,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         .subtract(shift, unit)
         .format(DATE_FORMAT),
     });
-    setShouldShowDropdown(false);
-    onChange(localState);
   };
 
   return (
@@ -155,8 +139,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={dayjs(min).format(DATE_FORMAT)}
           max={dayjs(max).format(DATE_FORMAT)}
-          className={dateCheckRange(localState.dateStart, min, max) ? styles.error : ''}
-          value={localState.dateStart}
+          className={dateCheckRange(localDateStart, min, max) ? styles.error : ''}
+          value={localDateStart}
           name="dateStart"
           type="date"
           onChange={handleChange}
@@ -167,8 +151,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         <Input
           min={dayjs(min).format(DATE_FORMAT)}
           max={dayjs(max).format(DATE_FORMAT)}
-          className={dateCheckRange(localState.dateEnd, min, max) ? styles.error : ''}
-          value={localState.dateEnd}
+          className={dateCheckRange(localDateEnd, min, max) ? styles.error : ''}
+          value={localDateEnd}
           name="dateEnd"
           type="date"
           onChange={handleChange}
