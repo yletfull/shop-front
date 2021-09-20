@@ -1,9 +1,13 @@
 @import '@/theme/include.scss';
 
 .wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   max-height: 150px;
   min-height: 200px;
   position: relative;
+  text-align: center;
 
   &Spinner {
     background-color: rgba($color-gray-lighter, .5);
