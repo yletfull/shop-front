@@ -51,7 +51,7 @@ const ReactionsComments = function ReactionsComments({
   }, [data]);
 
   return (
-    <div className={styles.reactionsComments}>
+    <div className={styles.wrapper}>
       <WithSpinner
         layout="block"
         isFetching={isFetching}

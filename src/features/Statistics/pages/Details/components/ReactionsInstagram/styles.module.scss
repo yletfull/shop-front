@@ -1,5 +1,11 @@
 @import '@/theme/include.scss';
 
+
+.wrapper {
+  max-height: 450px;
+  min-height: 350px;
+}
+
 .summary {
   display: flex;
   font-size: .75rem;

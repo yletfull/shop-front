@@ -1,6 +1,8 @@
 @import '@/theme/include.scss';
 
-.reactionsTotal {
+.wrapper {
+  max-height: 150px;
+  min-height: 200px;
   position: relative;
 
   &Spinner {

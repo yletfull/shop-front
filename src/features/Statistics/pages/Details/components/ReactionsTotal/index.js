@@ -42,7 +42,7 @@ const ReactionsTotal = function ReactionsTotal({
   }, [data]);
 
   return (
-    <div className={styles.reactionsTotal}>
+    <div className={styles.wrapper}>
       <WithSpinner
         layout="block"
         isFetching={isFetching}
