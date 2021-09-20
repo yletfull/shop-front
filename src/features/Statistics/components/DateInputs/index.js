@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { useOnClickOutside } from '@/hooks';
 import dayjs from '@/utils/day';
-import { formatDate } from '@/utils/format';
 import IconChevronLeft from '@/icons/ChevronLeft';
 import IconChevronRight from '@/icons/ChevronRight';
 import IconHistory from '@/icons/History';
@@ -11,29 +10,23 @@ import Input from '@/components/Input';
 import Button from '@/components/Button';
 import Dropdown from './Dropdown';
 import styles from './styles.module.scss';
-
-const DATE_FORMAT = 'YYYY-MM-DD';
-const isValidDate = (date) => dayjs(date).isValid();
-
-const quickFilterOptions = [
-  { text: 'вчера', unit: 'day', shift: 1 },
-  { text: 'предыдущая неделя', unit: 'week', shift: 1 },
-];
+import { DATE_FORMAT, quickFilterOptions, shiftTypes } from './constants';
+import { getShiftInterval, dateCheckRange } from './utils';
 
 const propTypes = {
   min: PropTypes.string,
+  max: PropTypes.string,
   values: PropTypes.shape({
     dateStart: PropTypes.string,
     dateEnd: PropTypes.string,
   }),
   className: PropTypes.string,
-  onShift: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
 };
 
 const defaultProps = {
-  min: '',
+  min: '1800-01-01',
+  max: '2100-12-31',
   values: {
     dateStart: '',
     dateEnd: '',
@@ -43,87 +36,62 @@ const defaultProps = {
 
 const StatisticsDateInputs = function StatisticsDateInputs({
   min,
+  max,
   values,
   className,
-  onShift,
   onChange,
-  onSelect,
   ...props
 }) {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
-
-  const hideDropdown = () => setShouldShowDropdown(false);
-
   const quickOptionsRef = useRef(null);
-  useOnClickOutside(quickOptionsRef, hideDropdown);
+  useOnClickOutside(quickOptionsRef, () => setShouldShowDropdown(false));
 
-  const today = dayjs().format(DATE_FORMAT);
-  const max = today;
-  const canShiftToThePast = dayjs(values.dateStart).diff(dayjs(min)) > 0;
-  const canShiftToTheFuture = dayjs(max).diff(dayjs(values.dateEnd)) > 0;
+  const localDateStart = values.dateStart || dayjs();
+  const localDateEnd = values.dateEnd || dayjs();
 
+  const canShiftToThePast = (
+    dayjs(localDateStart) > dayjs(min)
+  );
 
-  const handleParamsChange = (e) => {
-    const { name, value } = e?.target || {};
+  const canShiftToTheFuture = (
+    dayjs(localDateEnd) < dayjs(max)
+  );
+
+  const handleShift = (e) => {
+    const { action, actionAvailable } = e.target.dataset;
+
+    if (!actionAvailable) {
+      return;
+    }
+
+    const dateStart = dayjs(localDateStart);
+    const dateEnd = dayjs(localDateEnd);
+
+    const interval = getShiftInterval({ dateStart, dateEnd, action });
+
+    onChange(interval);
+  };
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+
     if (!name || !value) {
       return;
     }
 
-    onChange({
-      ...values,
-      [name]: formatDate(value, DATE_FORMAT),
-    });
-  };
+    if (values[name] !== value) {
+      const interval = {
+        ...values,
+        [name]: value,
+      };
 
-  const handleShiftToThePast = () => {
-    if (!canShiftToThePast) {
-      return;
+      onChange(interval);
     }
-    const dateStart = dayjs(values.dateStart);
-    const dateEnd = dayjs(values.dateEnd);
-    const shift = Math.max(1, dateEnd.diff(dateStart, 'day'));
-
-    const newDateStart = dayjs(Math.max(
-      dateStart.subtract(shift, 'day').valueOf(),
-      dayjs(min).valueOf(),
-    )).format(DATE_FORMAT);
-
-    const newDateEnd = dayjs(Math.min(
-      dateEnd.subtract(shift, 'day').valueOf(),
-      dayjs(max).valueOf(),
-    )).format(DATE_FORMAT);
-
-    onShift({
-      dateStart: newDateStart,
-      dateEnd: newDateEnd,
-    });
-  };
-
-  const handleShiftToTheFuture = () => {
-    if (!canShiftToTheFuture) {
-      return;
-    }
-    const dateStart = dayjs(values.dateStart);
-    const dateEnd = dayjs(values.dateEnd);
-    const todayDate = dayjs(today);
-    const shift = Math.max(
-      1,
-      Math.min(
-        dateEnd.diff(dateStart, 'day'),
-        todayDate.diff(dateEnd, 'day'),
-      ),
-    );
-    onShift({
-      dateStart: dateStart.add(shift, 'day').format(DATE_FORMAT),
-      dateEnd: dateEnd.add(shift, 'day').format(DATE_FORMAT),
-    });
   };
 
   const handleQuickOptionsClick = () => {
     setShouldShowDropdown(!shouldShowDropdown);
   };
-
-  const handleDateKeydown = (e) => e.preventDefault();
 
   const handleQuickSelect = (e) => {
     e.preventDefault();
@@ -134,7 +102,8 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       return;
     }
 
-    onSelect({
+    setShouldShowDropdown(false);
+    onChange({
       dateStart: dayjs()
         .startOf(unit)
         .subtract(shift, unit)
@@ -144,7 +113,6 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         .subtract(shift, unit)
         .format(DATE_FORMAT),
     });
-    hideDropdown();
   };
 
   return (
@@ -159,7 +127,9 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         type="button"
         className={styles.arrow}
         disabled={!canShiftToThePast}
-        onClick={handleShiftToThePast}
+        data-action-available={canShiftToThePast}
+        data-action={shiftTypes.subtract}
+        onClick={handleShift}
       >
         <IconChevronLeft />
       </button>
@@ -167,36 +137,34 @@ const StatisticsDateInputs = function StatisticsDateInputs({
         className={styles.inputs}
       >
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
+          className={dateCheckRange(localDateStart, min, max) ? styles.error : ''}
+          value={localDateStart}
           name="dateStart"
           type="date"
-          value={(isValidDate(values.dateStart)
-            ? formatDate(values.dateStart, DATE_FORMAT)
-            : min || formatDate(dayjs(), DATE_FORMAT))}
-          onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
+          onChange={handleChange}
         />
         &nbsp;
         -
         &nbsp;
         <Input
-          min={min}
-          max={max}
+          min={dayjs(min).format(DATE_FORMAT)}
+          max={dayjs(max).format(DATE_FORMAT)}
+          className={dateCheckRange(localDateEnd, min, max) ? styles.error : ''}
+          value={localDateEnd}
           name="dateEnd"
           type="date"
-          value={(isValidDate(values.dateEnd)
-            ? formatDate(values.dateEnd, DATE_FORMAT)
-            : max || formatDate(dayjs(), DATE_FORMAT))}
-          onChange={handleParamsChange}
-          onKeyDown={handleDateKeydown}
+          onChange={handleChange}
         />
       </div>
       <button
         type="button"
         className={styles.arrow}
         disabled={!canShiftToTheFuture}
-        onClick={handleShiftToTheFuture}
+        data-action-available={canShiftToTheFuture}
+        data-action={shiftTypes.add}
+        onClick={handleShift}
       >
         <IconChevronRight />
       </button>
@@ -206,6 +174,7 @@ const StatisticsDateInputs = function StatisticsDateInputs({
       >
         <Button
           className={styles.quickOptions_button}
+          data-active={shouldShowDropdown}
           onClick={handleQuickOptionsClick}
         >
           <IconHistory />

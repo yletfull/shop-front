@@ -12,6 +12,7 @@
 .arrow {
   @include button-reset();
 
+  border: thin solid transparent;
   border-radius: .25em;
   color: $color-primary-darkest;
   padding: .5em;
@@ -31,6 +32,10 @@
   margin-left: .5rem;
 }
 
+.error {
+  border: thin solid $color-red-lighter;
+}
+
 .dropdown {
   background-color: $color-white;
   border-radius: .25rem;
@@ -43,8 +48,25 @@
   position: relative;
 
   &_button {
+    background-color: $color-gray-darker;
+    border-color: $color-gray-darker;
     margin-left: .5em;
     min-width: unset;
+
+    &:hover {
+      background-color: $color-gray-darker;
+      border-color: $color-gray-darker;
+    }
+
+    &:disabled {
+      background-color: $color-gray;
+      border-color: $color-gray;
+    }
+
+    &[data-active='true'] {
+      background-color: $color-primary;
+      border-color: $color-primary;
+    }
   }
 
   &_dropdown {

@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import dayjs from '@/utils/day';
 import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
-import { useService } from '@/hooks';
+import { useService, useQueryParams } from '@/hooks';
+import Spinner from '@/components/Spinner';
 import { colors } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
@@ -26,26 +27,48 @@ const StatisticsDetails = function StatisticsDetailsPage() {
   const location = useLocation();
 
   const locationSearch = location.search;
-  const query = new URLSearchParams(locationSearch);
+
+  const [hasTimeout, setHasTimeout] = useState(false);
+  const [query, setQueryParams] = useQueryParams();
+  const [localDetailsState, setLocalDetailsState] = useState(query);
+
+  useEffect(() => {
+    if (hasTimeout) {
+      const timeout = setTimeout(() => {
+        setQueryParams(localDetailsState);
+      }, 900);
+
+      return () => {
+        setHasTimeout(false);
+        clearTimeout(timeout);
+      };
+    }
+
+    setQueryParams(localDetailsState);
+  }, [setQueryParams, setHasTimeout, localDetailsState, hasTimeout]);
 
   const { fetch, isFetching, data } = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
 
-  const { datestart } = data[0] || {};
+  const {
+    dateStart: minDate,
+    dateEnd: maxDate,
+  } = data[0] || {};
 
-  const dateStart = query.get('dateStart') || today;
-  const dateEnd = query.get('dateEnd') || today;
+  const dateStart = query.dateStart || today;
+  const dateEnd = query.dateEnd || today;
 
-  const searchQuery = new URLSearchParams('');
-  searchQuery.set('dateEnd', dateEnd);
-  searchQuery.set('dateStart', dateStart);
-
-  const handleDateInputsSubmit = (dates) => {
-    query.set('dateStart', dates.dateStart);
-    query.set('dateEnd', dates.dateEnd);
-    history.push({ search: query.toString() });
+  const handleDateInputsChange = (dates) => {
+    setLocalDetailsState((prevQueryState) => (
+      {
+        ...prevQueryState,
+        dateStart: dates.dateStart,
+        dateEnd: dates.dateEnd,
+      }
+    ));
+    setHasTimeout(true);
   };
 
   const handleChangeSelectedEntity = (value) => {
@@ -105,15 +128,20 @@ const StatisticsDetails = function StatisticsDetailsPage() {
               &nbsp;
               <DateInputs
                 className={styles.dateInputs}
-                min={datestart}
+                min={minDate}
+                max={maxDate}
                 values={{
-                  dateStart,
-                  dateEnd,
+                  dateStart: localDetailsState.dateStart,
+                  dateEnd: localDetailsState.dateEnd,
                 }}
-                onChange={handleDateInputsSubmit}
-                onShift={handleDateInputsSubmit}
-                onSelect={handleDateInputsSubmit}
+                onChange={handleDateInputsChange}
               />
+              {hasTimeout && (
+                <Spinner
+                  className={styles.spinnerDates}
+                  layout="inline"
+                />
+              )}
             </div>
           </div>
         )}
