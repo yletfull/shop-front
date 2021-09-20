@@ -1,3 +1,9 @@
+import { entities } from '../../constants';
+
+import ReactionsFacebook from './components/ReactionsFacebook';
+import ReactionsVkontakte from './components/ReactionsVkontakte';
+import ReactionsInstagram from './components/ReactionsInstagram';
+
 export const queryParams = {
   dateStart: 'dateStart',
   dateEnd: 'dateEnd',
@@ -12,4 +18,30 @@ export const colors = {
     comments: 'hsl(210, 7%, 77%)',
     reposts: 'hsl(218, 100%, 33%)',
   },
+};
+
+export const platformsData = {
+  vk: {
+    header: 'Вконтакте',
+    id: 'vk',
+    Component: ReactionsVkontakte,
+  },
+  fb: {
+    header: 'Facebook',
+    id: 'fb',
+    Component: ReactionsFacebook,
+  },
+  ig: {
+    header: 'Instagram',
+    id: 'ig',
+    Component: ReactionsInstagram,
+  },
+};
+
+export const platformsDetailsTitles = {
+  [entities.tasks]: 'Статистика по задаче',
+  [entities.campaigns]: 'Статистика по кампании',
+  [entities.platforms]: 'Статистика по каналу',
+  [entities.spheres]: 'Статистика по сфере',
+  [entities.sites]: 'Статистика по сайту',
 };
