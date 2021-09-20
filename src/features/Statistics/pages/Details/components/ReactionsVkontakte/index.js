@@ -66,44 +66,55 @@ const ReactionsVkontakte = function ReactionsVkontakte({
           ? <ErrorMessageBlock error={error} />
           : (
             <div>
-              <Chart
-                data={chartData}
-                dateStart={dateStart}
-                dateEnd={dateEnd}
-              />
-              <div className={styles.summary}>
-                <div>
-                  Реакций за период
-                  <span className={styles.summary_indicator} />
-                </div>
-                <div
-                  className={styles.total}
-                >
-                  <span
-                    className={styles.total_count}
-                  >
-                    {formatNumber(total.count)}
+              {Object.keys(chartData).length
+                ? (
+                  <React.Fragment>
+                    <Chart
+                      data={chartData}
+                      dateStart={dateStart}
+                      dateEnd={dateEnd}
+                    />
+                    <div className={styles.summary}>
+                      <div>
+                        Реакций за период
+                        <span className={styles.summary_indicator} />
+                      </div>
+                      <div
+                        className={styles.total}
+                      >
+                        <span
+                          className={styles.total_count}
+                        >
+                          {formatNumber(total.count)}
+                        </span>
+                        <NumberGrowth
+                          renderZero
+                          value={total.diff || 0}
+                          formatter={formatPercent}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={styles.reactionTypes}
+                    >
+                      <ReactionType
+                        icon={<IconHeart />}
+                      />
+                      <ReactionType
+                        icon={<IconShare />}
+                      />
+                      <ReactionType
+                        icon={<IconWarningOctagon />}
+                      />
+                    </div>
+                  </React.Fragment>
+                )
+                : (
+                  <span>
+                    Нет данных за период
                   </span>
-                  <NumberGrowth
-                    renderZero
-                    value={total.diff || 0}
-                    formatter={formatPercent}
-                  />
-                </div>
-              </div>
-              <div
-                className={styles.reactionTypes}
-              >
-                <ReactionType
-                  icon={<IconHeart />}
-                />
-                <ReactionType
-                  icon={<IconShare />}
-                />
-                <ReactionType
-                  icon={<IconWarningOctagon />}
-                />
-              </div>
+                )}
+
             </div>
           )}
       </WithSpinner>

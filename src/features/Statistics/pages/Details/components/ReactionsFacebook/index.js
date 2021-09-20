@@ -70,91 +70,103 @@ const ReactionsFacebook = function ReactionsFacebook({
           ? <ErrorMessageBlock error={error} />
           : (
             <div>
-              <Chart
-                data={chartData}
-                dateStart={dateStart}
-                dateEnd={dateEnd}
-              />
-              <div className={styles.summary}>
-                <div>
-                  Реакций за период
-                  <span className={styles.summary_indicator} />
-                </div>
-                <div
-                  className={styles.total}
-                >
-                  <span
-                    className={styles.total_count}
-                  >
-                    {formatNumber(total.count)}
+              {Object.keys(chartData).length
+                ? (
+                  <React.Fragment>
+                    <Chart
+                      data={chartData}
+                      dateStart={dateStart}
+                      dateEnd={dateEnd}
+                    />
+                    <div className={styles.summary}>
+                      <div>
+                        Реакций за период
+                        <span className={styles.summary_indicator} />
+                      </div>
+                      <div
+                        className={styles.total}
+                      >
+                        <span
+                          className={styles.total_count}
+                        >
+                          {formatNumber(total.count)}
+                        </span>
+                        <NumberGrowth
+                          renderZero
+                          value={total.diff || 0}
+                          formatter={formatPercent}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={styles.reactionTypes}
+                    >
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="like"
+                            src={like}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="love"
+                            src={love}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="care"
+                            src={care}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="haha"
+                            src={haha}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="wow"
+                            src={wow}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="sad"
+                            src={sad}
+                          />
+                        )}
+                      />
+                      <ReactionType
+                        icon={(
+                          <img
+                            alt="angry"
+                            src={angry}
+                          />
+                        )}
+                      />
+                    </div>
+                  </React.Fragment>
+                )
+                : (
+                  <span>
+                    Нет данных за период
                   </span>
-                  <NumberGrowth
-                    renderZero
-                    value={total.diff || 0}
-                    formatter={formatPercent}
-                  />
-                </div>
-              </div>
-              <div
-                className={styles.reactionTypes}
-              >
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="like"
-                      src={like}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="love"
-                      src={love}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="care"
-                      src={care}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="haha"
-                      src={haha}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="wow"
-                      src={wow}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="sad"
-                      src={sad}
-                    />
-                  )}
-                />
-                <ReactionType
-                  icon={(
-                    <img
-                      alt="angry"
-                      src={angry}
-                    />
-                  )}
-                />
-              </div>
+                )}
+
+
             </div>
           )}
       </WithSpinner>
