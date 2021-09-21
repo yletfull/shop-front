@@ -8,7 +8,7 @@
 
 .tooltip {
   background-color: $color-gray-lighter;
-  border: $color-accent dotted;
+  border: $color-gray-darker dotted;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
@@ -21,6 +21,12 @@
 
   &[data-active='true'] {
     opacity: 1;
+  }
+
+  &Pointer {
+    color: $color-gray-darkest;
+    position: absolute;
+    z-index: 1;
   }
 }
 

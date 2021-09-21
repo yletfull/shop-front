@@ -107,10 +107,11 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const [tooltipValues, setTooltipValues] = useState([]);
 
   const handlePointerMove = (e) => {
-    const posY = pointer(e)[1];
     const posX = pointer(e)[0] - padding.left;
     const date = formatDate(scaleXTicks.invert(posX));
     const item = data?.find((i) => formatDate(i.date) === date);
+    const posY = scaleY(item.value);
+    console.log(posY);
 
     setTooltipValues([
       `Дата: ${date}`,
@@ -118,8 +119,8 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     ]);
 
     setTooltipPosition({
-      x: posX,
-      y: posY,
+      x: posX + 35,
+      y: posY + padding.top,
     });
   };
 
@@ -132,6 +133,36 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
       ref={chartRef}
       className={styles.chart}
     >
+      <div
+        className={styles.tooltipPointer}
+        style={{
+          transform: `translate(
+            ${tooltipPosition.x - 5}px,
+            ${tooltipPosition.y - 10}px
+          )`,
+        }}
+      >
+        &#9140;
+      </div>
+      <div
+        className={styles.tooltip}
+        style={{
+          transform: `translate(
+            ${tooltipPosition.x}px,
+            ${tooltipPosition.y}px
+          )`,
+          maxWidth: `${width - tooltipPosition.x}px`,
+        }}
+        data-active={Boolean(Object.keys(tooltipPosition).length)}
+      >
+        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <span key={ind}>
+            {tooltip}
+          </span>
+        ))}
+      </div>
+
       <svg
         height={height}
         width={width}
@@ -185,25 +216,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           fillOpacity={0}
         />
       </svg>
-
-      <div
-        className={styles.tooltip}
-        style={{
-          transform: `translate(
-            ${tooltipPosition.x + 45}px,
-            ${tooltipPosition.y - height}px
-          )`,
-          maxWidth: `${width - tooltipPosition.x}px`,
-        }}
-        data-active={Boolean(Object.keys(tooltipPosition).length)}
-      >
-        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <span key={ind}>
-            {tooltip}
-          </span>
-        ))}
-      </div>
     </div>
   );
 };
