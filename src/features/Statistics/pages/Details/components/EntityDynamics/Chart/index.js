@@ -38,6 +38,7 @@ const EntityDynamicsChart = function EntityDynamicsChart({
   const scaleX = useMemo(() => scaleTime()
     .domain([formatToDate(dateStart), formatToDate(dateEnd)])
     .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
+
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, meta.maxValue])
     .range([chartHeight, 0]), [chartHeight, meta]);
