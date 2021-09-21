@@ -55,7 +55,11 @@ const EntityDynamics = function EntityDynamics({
     return ({
       maxValue: Math.max(...Object.values(data)
         .map((values) => Math.max(...Object.keys(values)
-          .map((key) => (key in lines ? Number(values[key]) : 0))))),
+          .map((key) => (
+            Object.keys(lines).includes(key)
+              ? Number(values[key])
+              : 0
+          ))))),
     });
   }, [data]);
 
