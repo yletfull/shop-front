@@ -49,8 +49,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const scaleX = useMemo(() => scaleBand()
     .domain(dateRangeByDays)
     .range([0, chartWidth])
-    .round(true)
-    .paddingInner(0.3)
+    .paddingInner(0.1)
     .paddingOuter(0), [dateRangeByDays, chartWidth]);
   const bandwidth = scaleX.bandwidth();
 
@@ -109,7 +108,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const handlePointerMove = (e) => {
     const posY = pointer(e)[1];
-    const posX = pointer(e)[0];
+    const posX = pointer(e)[0] - padding.left;
     const date = formatDate(scaleXTicks.invert(posX));
     const item = data?.find((i) => formatDate(i.date) === date);
 
@@ -177,14 +176,13 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         </g>
 
         <rect
-          onPointerMove={handlePointerMove}
-          onPointerLeave={handlePointerLeave}
-          x="0"
-          y="0"
-          width={width}
-          height={height}
+          onPointerMoveCapture={handlePointerMove}
+          onPointerLeaveCapture={handlePointerLeave}
+          x={padding.left}
+          y={padding.top}
+          width={chartWidth}
+          height={chartHeight}
           fillOpacity={0}
-          transform={`translate(${padding.left}, ${padding.top})`}
         />
       </svg>
 
@@ -192,7 +190,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         className={styles.tooltip}
         style={{
           transform: `translate(
-            ${tooltipPosition.x + 100}px,
+            ${tooltipPosition.x + 45}px,
             ${tooltipPosition.y - height}px
           )`,
           maxWidth: `${width - tooltipPosition.x}px`,
