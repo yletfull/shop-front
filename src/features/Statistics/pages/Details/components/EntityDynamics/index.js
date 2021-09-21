@@ -45,6 +45,7 @@ const EntityDynamics = function EntityDynamics({
       date: data[key]?.date || key,
     }));
   }, [data]);
+
   const chartMeta = useMemo(() => {
     if (!data || Object.keys(data).length === 0) {
       return ({
@@ -54,7 +55,11 @@ const EntityDynamics = function EntityDynamics({
     return ({
       maxValue: Math.max(...Object.values(data)
         .map((values) => Math.max(...Object.keys(values)
-          .map((key) => (key === 'date' ? 0 : Number(values[key])))))),
+          .map((key) => (
+            Object.keys(lines).includes(key)
+              ? Number(values[key])
+              : 0
+          ))))),
     });
   }, [data]);
 
