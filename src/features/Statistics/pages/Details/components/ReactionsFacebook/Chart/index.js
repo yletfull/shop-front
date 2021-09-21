@@ -104,6 +104,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   /* eslint-enable react/function-component-definition */
 
   const [tooltipPosition, setTooltipPosition] = useState({});
+  const [pointData, setPointData] = useState({});
   const [tooltipValues, setTooltipValues] = useState([]);
 
   const handlePointerMove = (e) => {
@@ -111,7 +112,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     const date = formatDate(scaleXTicks.invert(posX));
     const item = data?.find((i) => formatDate(i.date) === date);
     const posY = scaleY(item.value);
-    console.log(posY);
 
     setTooltipValues([
       `Дата: ${date}`,
@@ -119,8 +119,14 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     ]);
 
     setTooltipPosition({
-      x: posX + 35,
+      x: posX + padding.top + padding.bottom,
       y: posY + padding.top,
+    });
+
+    setPointData({
+      x: posX + padding.top + padding.bottom,
+      y: posY + padding.top,
+      color: 'red',
     });
   };
 
@@ -205,6 +211,15 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
             renderTick={yTickRenderer}
           />
         </g>
+
+        {Boolean(Object.keys(pointData).length) && (
+          <circle
+            cx={pointData.x}
+            cy={pointData.y}
+            r={bandwidth}
+            style={{ color: pointData.color }}
+          />
+        )}
 
         <rect
           onPointerMoveCapture={handlePointerMove}
