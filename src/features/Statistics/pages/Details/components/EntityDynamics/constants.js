@@ -2,7 +2,7 @@ export const padding = {
   bottom: 32,
   left: 32,
   right: 32,
-  top: 0,
+  top: 8,
 };
 
 export const lines = {
@@ -20,7 +20,7 @@ export const linesLabels = {
 export const linesFactors = {
   [lines.impressions]: 1,
   [lines.clicks]: 1e2,
-  [lines.ctr]: 1e8,
+  [lines.ctr]: 1e7,
 };
 
 export const linesColors = {

@@ -21,6 +21,7 @@ const EntityDynamics = function EntityDynamics({
   dateStart,
   dateEnd,
 }) {
+  const [visibleLines, setVisibleLines] = useState(Object.values(lines));
   const { entityType, entityId } = useParams();
 
   const { fetch, data, isFetching, error } = useService({
@@ -57,13 +58,11 @@ const EntityDynamics = function EntityDynamics({
         .map((values) => Math.max(...Object.keys(values)
           .map((key) => (
             Object.keys(lines).includes(key)
-              ? Number(values[key])
+              ? Number(values[key]) * (linesFactors[key] || 1)
               : 0
           ))))),
     });
   }, [data]);
-
-  const [visibleLines, setVisibleLines] = useState(Object.values(lines));
 
   const handleChangeCheckbox = (e) => {
     const { name } = e?.target || {};
@@ -109,7 +108,7 @@ const EntityDynamics = function EntityDynamics({
                     && visibleLines[0] === key}
                   onChange={handleChangeCheckbox}
                 >
-                  {`${linesLabels[key]} (x${linesFactors[key]})`}
+                  {linesLabels[key]}
                 </InputCheckbox>
               ))}
             </div>

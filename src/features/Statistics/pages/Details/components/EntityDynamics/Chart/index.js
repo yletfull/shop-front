@@ -100,6 +100,7 @@ const EntityDynamicsChart = function EntityDynamicsChart({
               getY={(d) => Number(d[line]) * (linesFactors[line] || 1)}
               scaleX={scaleX}
               scaleY={scaleY}
+              getDefined={(d) => Number(d[line]) || Number(d[line]) === 0}
               stroke={linesColors[line] || '#000000'}
               strokeWidth="2"
             />
