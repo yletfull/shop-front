@@ -40,7 +40,12 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const chartHeight = height - padding.bottom - padding.top;
   const chartWidth = width - padding.left - padding.right;
 
-  const maxValue = useMemo(() => Math.max(...data.map((d) => d.value)), [data]);
+  const isZeroData = Object.values(data).every((el) => el.value === 0);
+
+  const maxValue = useMemo(() => (isZeroData
+    ? 1
+    : Math.max(...data.map((d) => d.value))), [data, isZeroData]);
+
   const dateRangeByDays = useMemo(() => {
     const dateRange = getDatesRange(dateStart, dateEnd);
     return dateRange.map(formatToUnix);
@@ -180,7 +185,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         <g transform={`translate(0, ${padding.top})`}>
           <XYTicksY
             scaleY={scaleY}
-            ticksCount={4}
+            ticksCount={isZeroData ? 1 : 4}
             renderTick={yTickRenderer}
           />
         </g>
@@ -218,8 +223,11 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         data-active={Boolean(Object.keys(tooltipPosition).length)}
       >
         {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
+          <span
           // eslint-disable-next-line react/no-array-index-key
-          <span key={ind}>
+            key={ind}
+            className={styles.tooltipInfo}
+          >
             {tooltip}
           </span>
         ))}
