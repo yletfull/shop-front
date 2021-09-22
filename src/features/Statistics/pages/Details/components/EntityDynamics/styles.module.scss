@@ -3,7 +3,13 @@
 .entityDynamics {
   background: $color-gray-lighter;
   border-radius: .375rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-height: 500px;
+  min-height: 340px;
   padding: 1rem 1.5rem;
+  text-align: center;
   width: 100%;
 
   &Legend {

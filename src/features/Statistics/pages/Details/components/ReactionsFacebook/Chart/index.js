@@ -1,6 +1,7 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
+import { pointer } from 'd3';
 import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
@@ -10,7 +11,7 @@ import styles from './styles.module.scss';
 const padding = {
   bottom: 16,
   left: 32,
-  right: 32,
+  right: 0,
   top: 16,
 };
 
@@ -48,8 +49,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const scaleX = useMemo(() => scaleBand()
     .domain(dateRangeByDays)
     .range([0, chartWidth])
-    .round(true)
-    .paddingInner(0.3)
+    .paddingInner(0.1)
     .paddingOuter(0), [dateRangeByDays, chartWidth]);
   const bandwidth = scaleX.bandwidth();
 
@@ -59,7 +59,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([chartHeight, 0]), [chartHeight, maxValue]);
+    .range([chartHeight, 2]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value, i, arr) => {
@@ -103,11 +103,45 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   );
   /* eslint-enable react/function-component-definition */
 
+  const [tooltipPosition, setTooltipPosition] = useState({});
+  const [pointData, setPointData] = useState({});
+  const [tooltipValues, setTooltipValues] = useState([]);
+
+  const handlePointerMove = (e) => {
+    const pointerPosX = pointer(e)[0] - padding.left;
+
+    const date = formatDate(scaleXTicks.invert(pointerPosX));
+    const item = data?.find((i) => formatDate(i.date) === date);
+    const posY = scaleY(item?.value);
+    const posX = scaleX(formatToUnix(item?.date));
+
+    setTooltipValues([
+      `Дата: ${date}`,
+      `Значение: ${item?.value ?? 'Нет данных'}`,
+    ]);
+
+    setTooltipPosition({
+      x: (posX ?? pointerPosX) + padding.left + 10,
+      y: (posY ?? chartHeight) + padding.top,
+    });
+
+    setPointData({
+      x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
+      y: (posY ?? chartHeight),
+      color: 'red',
+    });
+  };
+
+  const handlePointerLeave = () => {
+    setTooltipPosition({});
+  };
+
   return (
     <div
       ref={chartRef}
       className={styles.chart}
     >
+
       <svg
         height={height}
         width={width}
@@ -150,7 +184,47 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
             renderTick={yTickRenderer}
           />
         </g>
+
+        <g transform={`translate(0, ${padding.top})`}>
+          <rect
+            onPointerMoveCapture={handlePointerMove}
+            onPointerLeaveCapture={handlePointerLeave}
+            x={padding.left}
+            y={padding.top}
+            width={chartWidth}
+            height={chartHeight}
+            fillOpacity={0}
+          />
+
+          {Boolean(Object.keys(pointData).length) && (
+            <circle
+              className={styles.tooltipPoint}
+              fill={pointData.color}
+              cx={pointData.x}
+              cy={pointData.y}
+              r={bandwidth / 2}
+            />
+          )}
+        </g>
       </svg>
+
+      <div
+        className={styles.tooltip}
+        style={{
+          top: `${tooltipPosition.y}px`,
+          left: `${tooltipPosition.x}px`,
+          maxWidth: `${width - tooltipPosition.x}px`,
+        }}
+        data-active={Boolean(Object.keys(tooltipPosition).length)}
+      >
+        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <span key={ind}>
+            {tooltip}
+          </span>
+        ))}
+      </div>
+
     </div>
   );
 };
