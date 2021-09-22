@@ -58,7 +58,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
     .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, meta.maxPositive + meta.maxNegative])
-    .range([chartHeight, 0]), [chartHeight, meta]);
+    .range([chartHeight, 2]), [chartHeight, meta]);
   const scaleYPositive = useMemo(() => scaleLinear()
     .domain([0, meta.maxPositive])
     .range([chartHeight / 2, 0]), [chartHeight, meta]);

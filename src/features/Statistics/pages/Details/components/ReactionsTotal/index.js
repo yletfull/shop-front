@@ -50,7 +50,12 @@ const ReactionsTotal = function ReactionsTotal({
         {error && (
           <ErrorMessageBlock error={error} />
         )}
-        {!error && data && (
+        {Boolean(!chartData?.length) && (
+          <span>
+            Нет данных за период
+          </span>
+        )}
+        {Boolean(chartData?.length) && (!error && data) && (
           <Chart
             data={chartData}
             dateStart={dateStart}

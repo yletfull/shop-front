@@ -59,7 +59,7 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
 
   const scaleY = useMemo(() => scaleLinear()
     .domain([0, maxValue])
-    .range([chartHeight, 0]), [chartHeight, maxValue]);
+    .range([chartHeight, 2]), [chartHeight, maxValue]);
 
   /* eslint-disable react/function-component-definition */
   const xTickRenderer = () => (value, i, arr) => {
@@ -101,7 +101,6 @@ const ReactionsInstagramChart = function ReactionsInstagramChart({
       y2={scaleY(value)}
     />
   );
-  /* eslint-enable react/function-component-definition */
 
   return (
     <div
