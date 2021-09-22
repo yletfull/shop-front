@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useService, useQueryParams } from '@/hooks';
 import dayjs from '@/utils/day';
-import reducer from '@/features/Statistics/store/reducer';
-import { injectReducer } from '@/store';
 import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
 import Spinner from '@/components/Spinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import Grid, { GridCell } from '@/components/Grid';
 import { entities } from '../../constants';
-import { fetchEntities } from '../../store/actions';
 import { colors, platformsData, platformsDetailsTitles } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
@@ -24,11 +20,6 @@ import service from './service';
 import styles from './styles.module.scss';
 
 const StatisticsDetails = function StatisticsDetailsPage() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    injectReducer(reducer.NS, reducer);
-  }, []);
-
   const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
   const { entityType, entityId } = useParams();
@@ -84,10 +75,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
   }, [fetch]);
 
   useEffect(() => {
-    dispatch(fetchEntities(entityType));
-  }, [dispatch, entityType]);
-
-  useEffect(() => {
     const newQuery = new URLSearchParams(locationSearch);
     const queryDateStart = newQuery.get('dateStart');
     const queryDateEnd = newQuery.get('dateEnd');
@@ -106,7 +93,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
 
   const [platforms, setPlatforms] = useState(Object.values(platformsData));
-
   useEffect(() => {
     if (entityType === entities.platforms) {
       return setPlatforms([platformsData[entityId]]);

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import { useService } from '@/hooks';
@@ -17,6 +17,7 @@ const EntitySelect = function EntitySelect({
   entityId,
   ...props
 }) {
+  const [currentEntity, setCurrentEntity] = useState({});
   const { entityType } = useParams();
 
   const { fetch, data: entities = {}, isFetching } = useService({
@@ -31,12 +32,18 @@ const EntitySelect = function EntitySelect({
     fetch(entityType);
   }, [fetch, entityType]);
 
+  useEffect(() => {
+    if (Object.keys(entities).length) {
+      setCurrentEntity(entities?.find((ent) => ent.id === entityId));
+    }
+  }, [entities, entityId]);
+
   return (
     isFetching
       ? <Spinner layout="inline" />
       : (
         <span {...props}>
-          {entities[0]?.title || '-'}
+          {currentEntity?.title || '-'}
         </span>
       )
   );
