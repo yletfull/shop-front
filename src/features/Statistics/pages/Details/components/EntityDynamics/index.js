@@ -57,12 +57,12 @@ const EntityDynamics = function EntityDynamics({
       maxValue: Math.max(...Object.values(data)
         .map((values) => Math.max(...Object.keys(values)
           .map((key) => (
-            Object.keys(lines).includes(key)
+            visibleLines.includes(key)
               ? Number(values[key]) * (linesFactors[key] || 1)
               : 0
           ))))),
     });
-  }, [data]);
+  }, [data, visibleLines]);
 
   const handleChangeCheckbox = (e) => {
     const { name } = e?.target || {};
