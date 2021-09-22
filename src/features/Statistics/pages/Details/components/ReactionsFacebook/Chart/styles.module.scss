@@ -8,7 +8,7 @@
 
 .tooltip {
   background-color: rgba($color-gray, .5);
-  border: rgba($color-black, .5) dotted;
+  border: $color-black dotted;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
