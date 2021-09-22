@@ -3,41 +3,33 @@ import {
   entitiesRequest,
   entitiesData,
   entitiesError,
+  entityTypeData,
 } from './actions';
 import NS from './ns';
 
 const initialState = {
-  entities: {
-    isFetching: false,
-    tree: [],
-    error: null,
-  },
+  entityType: null,
+  entitiesIsFetching: false,
+  entities: [],
+  entitiesError: null,
 };
 
 const reducer = createReducer(initialState, {
-  [entitiesRequest]: (state) => ({
+  [entityTypeData]: (state, action) => ({
     ...state,
-    entities: {
-      isFetching: true,
-      tree: [],
-      error: null,
-    },
+    entityType: action.payload,
+  }),
+  [entitiesRequest]: (state, action) => ({
+    ...state,
+    entitiesIsFetching: action.payload,
   }),
   [entitiesData]: (state, action) => ({
     ...state,
-    entities: {
-      isFetching: false,
-      tree: Array.isArray(action.payload) ? action.payload : [],
-      error: null,
-    },
+    entities: Array.isArray(action.payload) ? action.payload : [],
   }),
   [entitiesError]: (state, action) => ({
     ...state,
-    entities: {
-      isFetching: false,
-      tree: [],
-      error: action.payload,
-    },
+    entitiesError: action.payload,
   }),
 });
 

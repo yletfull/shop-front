@@ -1,9 +1,8 @@
 import NS from './ns';
 
-export const getEntities = (state) => state[NS]?.entities?.data || [];
-export const getIsEntitiesFetching = (state) => (
-  Boolean(state[NS]?.entities?.isFetching)
+export const getEntityType = () => null;
+export const getEntities = (state) => state[NS]?.entities || [];
+export const getEntitiesIsFetching = (state) => (
+  Boolean(state[NS]?.entitiesIsFetching)
 );
-export const getEntitiesError = (state) => (
-  state[NS]?.entities?.error || null
-);
+export const getEntitiesError = (state) => state[NS]?.entitiesError || null;

@@ -1,24 +1,36 @@
 import { createAction } from '@reduxjs/toolkit';
-import api from '@/api';
+// import api from '@/api';
 import NS from './ns';
+import { getEntityType } from './selectors';
 
-const baseUrl = 'api/v1/statistics';
+// const baseUrl = 'api/core/v1/statistics';
+
+export const entityTypeData = createAction(`${NS}/entityType`);
 
 export const entitiesRequest = createAction(`${NS}/entitiesRequest`);
 export const entitiesData = createAction(`${NS}/entities`);
 export const entitiesError = createAction(`${NS}/entitiesError`);
 
+export const setEntityType = (data) => (dispatch) => {
+  dispatch(entityTypeData(data));
+};
 
-export const fetchEntities = (entityType) => async (dispatch) => {
-  dispatch(entitiesRequest(true));
+export const fetchEntities = () => async (dispatch, getState) => {
+  const state = getState();
+  const entityType = getEntityType(state);
 
   if (!entityType) {
     return;
   }
 
   try {
-    const response = await api.get(`${baseUrl}/${encodeURIComponent(entityType)}/dict`);
-    dispatch(entitiesData(response.data.data));
+    dispatch(entitiesError(false));
+    dispatch(entitiesRequest(true));
+
+    // const response = await api
+    // .get(`${baseUrl}/${encodeURIComponent(entityType)}/dict`);
+    // dispatch(entitiesData(response.data.data));
+    dispatch(entitiesData([]));
   } catch (error) {
     console.error(error);
     dispatch(entitiesError(error));
@@ -29,4 +41,5 @@ export const fetchEntities = (entityType) => async (dispatch) => {
 
 export default {
   fetchEntities,
+  setEntityType,
 };

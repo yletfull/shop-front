@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import dayjs from '@/utils/day';
 import AppMain from '@/components/AppMain';
 import WithSpinner from '@/components/WithSpinner';
@@ -8,11 +7,7 @@ import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService, useQueryParams } from '@/hooks';
 import Spinner from '@/components/Spinner';
 import Grid, { GridCell } from '@/components/Grid';
-import { injectReducer } from '@/store';
-import reducer from '@/features/Statistics/store/reducer';
 import { entities } from '../../constants';
-import { fetchEntities } from '../../store/actions';
-import { getEntities } from '../../store/selectors';
 import { colors, platformsData, platformsDetailsTitles } from './constants';
 import Lists from './components/Lists';
 import ChartContainer from './components/ChartContainer';
@@ -25,11 +20,6 @@ import service from './service';
 import styles from './styles.module.scss';
 
 const StatisticsDetails = function StatisticsDetailsPage() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    injectReducer(reducer.NS, reducer);
-  }, []);
-
   const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
   const { entityType, entityId } = useParams();
@@ -85,12 +75,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
   }, [fetch]);
 
   useEffect(() => {
-    dispatch(fetchEntities(entityType));
-  }, [dispatch, entityType]);
-  const entity = useSelector(getEntities);
-  console.log(entity);
-
-  useEffect(() => {
     const newQuery = new URLSearchParams(locationSearch);
     const queryDateStart = newQuery.get('dateStart');
     const queryDateEnd = newQuery.get('dateEnd');
@@ -109,7 +93,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
 
   const [platforms, setPlatforms] = useState(Object.values(platformsData));
-
   useEffect(() => {
     if (entityType === entities.platforms) {
       return setPlatforms([platformsData[entityId]]);
