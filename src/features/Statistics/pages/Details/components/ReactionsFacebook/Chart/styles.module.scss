@@ -7,8 +7,8 @@
 }
 
 .tooltip {
-  background-color: $color-gray-lighter;
-  border: $color-gray-darker dotted;
+  background-color: rgba($color-gray, .5);
+  border: $color-black dotted;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
@@ -16,15 +16,12 @@
   min-width: 5rem;
   opacity: 0;
   padding: .5rem;
+  pointer-events: none;
   position: absolute;
   text-align: left;
 
   &[data-active='true'] {
     opacity: 1;
-  }
-
-  &Text {
-    font-size: .5em;
   }
 }
 
