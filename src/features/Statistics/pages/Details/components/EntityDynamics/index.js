@@ -109,7 +109,7 @@ const EntityDynamics = function EntityDynamics({
                     && visibleLines[0] === key}
                   onChange={handleChangeCheckbox}
                 >
-                  {`${linesLabels[key]} (x${linesFactors[key]})`}
+                  {linesLabels[key]}
                 </InputCheckbox>
               ))}
             </div>
