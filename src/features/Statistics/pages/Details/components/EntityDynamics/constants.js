@@ -20,7 +20,7 @@ export const linesLabels = {
 export const linesFactors = {
   [lines.impressions]: 1,
   [lines.clicks]: 1e2,
-  [lines.ctr]: 1e8,
+  [lines.ctr]: 1e7,
 };
 
 export const linesColors = {

@@ -57,7 +57,7 @@ const EntityDynamics = function EntityDynamics({
         .map((values) => Math.max(...Object.keys(values)
           .map((key) => (
             Object.keys(lines).includes(key)
-              ? Number(values[key])
+              ? Number(values[key]) * (linesFactors[key] || 1)
               : 0
           ))))),
     });
