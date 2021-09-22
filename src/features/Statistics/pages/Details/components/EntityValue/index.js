@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useService } from '@/hooks';
 import Spinner from '@/components/Spinner';
-import {
-  getEntities,
-  getEntitiesIsFetching,
-  getEntityType,
-} from '@/features/Statistics/store/selectors';
-import { fetchEntities, setEntityType } from '@/features/Statistics/store/actions';
-
+import service from './service';
 
 const propTypes = {
   entityId: PropTypes.string,
@@ -23,44 +17,29 @@ const EntitySelect = function EntitySelect({
   entityId,
   ...props
 }) {
-  const dispatch = useDispatch();
-
-  const entities = useSelector(getEntities);
-  const entityType = useSelector(getEntityType);
-  const entitiesIsFetching = useSelector(getEntitiesIsFetching);
-
-  const { entityType: paramsEntityType } = useParams();
-
-  useEffect(() => {
-    if (entityType === paramsEntityType
-      || entities.length
-      || entitiesIsFetching) {
-      return;
-    }
-
-    dispatch(setEntityType(paramsEntityType));
-    dispatch(fetchEntities());
-  },
-  [
-    dispatch,
-    entityType,
-    paramsEntityType,
-    entities.length,
-    entitiesIsFetching,
-  ]);
-
   const [currentEntity, setCurrentEntity] = useState({});
+  const { entityType } = useParams();
+
+  const { fetch, data: entities = {}, isFetching } = useService({
+    initialData: {},
+    service: service.fetchEntities,
+  });
 
   useEffect(() => {
-    if (Array.isArray(entities) && entities.length) {
-      setCurrentEntity(entities?.find((e) => e.id === entityId));
+    if (!entityType) {
       return;
     }
-    setCurrentEntity({});
+    fetch(entityType);
+  }, [fetch, entityType]);
+
+  useEffect(() => {
+    if (Object.keys(entities).length) {
+      setCurrentEntity(entities?.find((ent) => ent.id === entityId));
+    }
   }, [entities, entityId]);
 
   return (
-    entitiesIsFetching
+    isFetching
       ? <Spinner layout="inline" />
       : (
         <span {...props}>

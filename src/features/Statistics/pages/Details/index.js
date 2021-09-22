@@ -6,8 +6,6 @@ import WithSpinner from '@/components/WithSpinner';
 import DateInputs from '@/features/Statistics/components/DateInputs';
 import { useService } from '@/hooks';
 import Grid, { GridCell } from '@/components/Grid';
-import { injectReducer } from '@/store';
-import reducer from '@/features/Statistics/store/reducer';
 import { entities } from '../../constants';
 import { colors, platformsData, platformsDetailsTitles } from './constants';
 import Lists from './components/Lists';
@@ -21,10 +19,6 @@ import service from './service';
 import styles from './styles.module.scss';
 
 const StatisticsDetails = function StatisticsDetailsPage() {
-  useEffect(() => {
-    injectReducer(reducer.NS, reducer);
-  }, []);
-
   const today = dayjs().format('YYYY-MM-DD');
   const history = useHistory();
   const { entityType, entityId } = useParams();
@@ -76,7 +70,6 @@ const StatisticsDetails = function StatisticsDetailsPage() {
 
 
   const [platforms, setPlatforms] = useState(Object.values(platformsData));
-
   useEffect(() => {
     if (entityType === entities.platforms) {
       return setPlatforms([platformsData[entityId]]);
