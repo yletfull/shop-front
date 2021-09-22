@@ -23,9 +23,12 @@
     opacity: 1;
   }
 
-  &Pointer {
-    color: $color-gray-darkest;
+  &Point {
+    background-color: $color-gray-darkest;
+    border-radius: 50%;
+    height: 5px;
     position: absolute;
+    width: 5px;
     z-index: 1;
   }
 }

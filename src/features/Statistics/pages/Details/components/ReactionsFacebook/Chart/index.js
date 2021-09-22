@@ -34,6 +34,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   dateEnd,
 }) {
   const chartRef = useRef(null);
+  const pointRef = useRef(null);
 
   const [width, height] = useElementSize(chartRef);
 
@@ -108,10 +109,12 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const [tooltipValues, setTooltipValues] = useState([]);
 
   const handlePointerMove = (e) => {
-    const posX = pointer(e)[0] - padding.left;
-    const date = formatDate(scaleXTicks.invert(posX));
+    const pointerPosX = pointer(e)[0] - padding.left;
+
+    const date = formatDate(scaleXTicks.invert(pointerPosX));
     const item = data?.find((i) => formatDate(i.date) === date);
-    const posY = scaleY(item.value);
+    const posY = scaleY(item?.value || 0);
+    const posX = scaleX(formatToUnix(item?.date || 0));
 
     setTooltipValues([
       `Дата: ${date}`,
@@ -119,13 +122,13 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     ]);
 
     setTooltipPosition({
-      x: posX + padding.top + padding.bottom,
-      y: posY + padding.top,
+      x: (posX || pointerPosX) + padding.left + 10,
+      y: posY - chartHeight - padding.top - padding.bottom,
     });
 
     setPointData({
-      x: posX + padding.top + padding.bottom,
-      y: posY + padding.top,
+      x: (posX || pointerPosX) + padding.left,
+      y: posY - chartHeight - padding.top - padding.bottom,
       color: 'red',
     });
   };
@@ -139,35 +142,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
       ref={chartRef}
       className={styles.chart}
     >
-      <div
-        className={styles.tooltipPointer}
-        style={{
-          transform: `translate(
-            ${tooltipPosition.x - 5}px,
-            ${tooltipPosition.y - 10}px
-          )`,
-        }}
-      >
-        &#9140;
-      </div>
-      <div
-        className={styles.tooltip}
-        style={{
-          transform: `translate(
-            ${tooltipPosition.x}px,
-            ${tooltipPosition.y}px
-          )`,
-          maxWidth: `${width - tooltipPosition.x}px`,
-        }}
-        data-active={Boolean(Object.keys(tooltipPosition).length)}
-      >
-        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <span key={ind}>
-            {tooltip}
-          </span>
-        ))}
-      </div>
 
       <svg
         height={height}
@@ -212,15 +186,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           />
         </g>
 
-        {Boolean(Object.keys(pointData).length) && (
-          <circle
-            cx={pointData.x}
-            cy={pointData.y}
-            r={bandwidth}
-            style={{ color: pointData.color }}
-          />
-        )}
-
         <rect
           onPointerMoveCapture={handlePointerMove}
           onPointerLeaveCapture={handlePointerLeave}
@@ -231,6 +196,38 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           fillOpacity={0}
         />
       </svg>
+
+      <div
+        className={styles.tooltip}
+        style={{
+          transform: `translate(
+            ${tooltipPosition.x}px,
+            ${tooltipPosition.y}px
+          )`,
+          maxWidth: `${width - tooltipPosition.x}px`,
+        }}
+        data-active={Boolean(Object.keys(tooltipPosition).length)}
+      >
+        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
+          // eslint-disable-next-line react/no-array-index-key
+          <span key={ind}>
+            {tooltip}
+          </span>
+        ))}
+      </div>
+
+      {Boolean(Object.keys(pointData).length) && (
+        <div
+          ref={pointRef}
+          className={styles.tooltipPoint}
+          style={{
+            transform: `translate(
+                ${pointData.x}px,
+                ${pointData.y}px
+              )`,
+          }}
+        />
+      )}
     </div>
   );
 };
