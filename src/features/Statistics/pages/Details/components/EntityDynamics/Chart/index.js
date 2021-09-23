@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { useElementSize } from '@/hooks';
-import { formatDate, formatToDate } from '@/utils/format';
+import { formatDate, formatToDate, formatNumber } from '@/utils/format';
 import { XYLine, XYTicksX, XYTicksY } from '@/components/charts';
 import { padding, linesFactors, linesColors } from '../constants';
 import styles from './styles.module.scss';
@@ -49,13 +49,14 @@ const EntityDynamicsChart = function EntityDynamicsChart({
       key={value}
       x={scaleX(value)}
       y={chartHeight}
-      dy="1em"
+      dy="2em"
       textAnchor="center"
     >
       {formatDate(value)}
     </text>
   );
-  const yTickRenderer = () => (value) => (
+
+  const yTickLineRenderer = () => (value) => (
     <line
       key={value}
       className={styles.entityDynamicsChartTicksLine}
@@ -65,8 +66,21 @@ const EntityDynamicsChart = function EntityDynamicsChart({
       y2={scaleY(value)}
     />
   );
-  /* eslint-enable react/function-component-definition */
 
+  const yTickRenderer = () => (value) => (
+    <text
+      key={value}
+      className={styles.entityDynamicsChartTicks}
+      x={0}
+      y={scaleY(value)}
+      dy=".35em"
+    >
+
+      {formatNumber(value)}
+    </text>
+  );
+
+  /* eslint-enable react/function-component-definition */
   return (
     <div
       ref={chartRef}
@@ -77,6 +91,17 @@ const EntityDynamicsChart = function EntityDynamicsChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
+
+        {lines.length === 1 && (
+          <g transform={`translate(0, ${padding.top})`}>
+            <XYTicksY
+              scaleY={scaleY}
+              ticksCount={4}
+              renderTick={yTickRenderer}
+            />
+          </g>
+        )}
+
         <XYTicksX
           className={styles.entityDynamicsChartTicks}
           transform="translate(0, 8)"
@@ -86,11 +111,12 @@ const EntityDynamicsChart = function EntityDynamicsChart({
           ticksCount={10}
           renderTick={xTickRenderer}
         />
+
         <g transform={`translate(${padding.left}, ${padding.top})`}>
           <XYTicksY
             scaleY={scaleY}
             ticksCount={4}
-            renderTick={yTickRenderer}
+            renderTick={yTickLineRenderer}
           />
           {lines.map((line) => (
             <XYLine

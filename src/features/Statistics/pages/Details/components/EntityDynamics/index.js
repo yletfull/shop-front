@@ -89,13 +89,21 @@ const EntityDynamics = function EntityDynamics({
         )}
         {!error && data && (
           <Fragment>
-            <Chart
-              data={chartData}
-              meta={chartMeta}
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-              lines={visibleLines}
-            />
+            {!visibleLines.length
+              ? (
+                <p className={styles.stub}>
+                  Выберите данные для отображения
+                </p>
+              )
+              : (
+                <Chart
+                  data={chartData}
+                  meta={chartMeta}
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                  lines={visibleLines}
+                />
+              )}
             <div className={styles.entityDynamicsLegend}>
               {Object.values(lines).map((key) => (
                 <InputCheckbox
@@ -104,8 +112,6 @@ const EntityDynamics = function EntityDynamics({
                   data-line={key}
                   className={styles.entityDynamicsLegendCheckbox}
                   checked={visibleLines.includes(key)}
-                  disabled={visibleLines.length === 1
-                    && visibleLines[0] === key}
                   onChange={handleChangeCheckbox}
                 >
                   {linesLabels[key]}
