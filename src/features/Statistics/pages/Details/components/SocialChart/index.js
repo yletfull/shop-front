@@ -6,6 +6,7 @@ import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
 import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
+import Point from '@/components/charts/Tooltip/components/Point';
 import styles from './styles.module.scss';
 
 const padding = {
@@ -137,8 +138,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     });
   };
 
-  console.log(bandwidth);
-
   const handlePointerLeave = () => {
     setTooltipPosition({});
   };
@@ -204,12 +203,12 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           />
 
           {Boolean(Object.keys(pointData).length) && (
-            <circle
+            <Point
               className={styles.tooltipPoint}
               fill={pointData.color}
               cx={pointData.x}
               cy={pointData.y}
-              r={bandwidth / 2}
+              bandwidth={bandwidth}
             />
           )}
         </g>
