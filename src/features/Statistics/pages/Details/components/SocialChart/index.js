@@ -193,8 +193,8 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
         <g transform={`translate(0, ${padding.top})`}>
           <rect
-            onPointerMoveCapture={handlePointerMove}
-            onPointerLeaveCapture={handlePointerLeave}
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
             x={padding.left}
             y={padding.top}
             width={chartWidth}
