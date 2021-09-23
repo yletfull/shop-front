@@ -49,24 +49,51 @@ const EntityDynamicsChart = function EntityDynamicsChart({
       key={value}
       x={scaleX(value)}
       y={chartHeight}
-      dy="1em"
+      dy="1.5em"
       textAnchor="center"
     >
       {formatDate(value)}
     </text>
   );
   const yTickRenderer = () => (value) => (
-    <line
-      key={value}
-      className={styles.entityDynamicsChartTicksLine}
-      x1={0}
-      y1={scaleY(value)}
-      x2={chartWidth}
-      y2={scaleY(value)}
-    />
-  );
-  /* eslint-enable react/function-component-definition */
+    lines.length === 1
+      ? (
+        <g
+          className={styles.entityDynamicsChartTicks}
+        >
+          <text
+            key={value}
+            x={0}
+            y={scaleY(value)}
+            dy="-.325em"
+            textAnchor="left"
+          >
+            {value}
+          </text>
+          <line
+            key={value}
+            className={styles.entityDynamicsChartTicksLine}
+            x1={0}
+            y1={scaleY(value)}
+            x2={chartWidth}
+            y2={scaleY(value)}
+          />
+        </g>
+      )
+      : (
+        <line
+          key={value}
+          className={styles.entityDynamicsChartTicksLine}
+          x1={0}
+          y1={scaleY(value)}
+          x2={chartWidth}
+          y2={scaleY(value)}
+        />
+      )
 
+  );
+
+  /* eslint-enable react/function-component-definition */
   return (
     <div
       ref={chartRef}

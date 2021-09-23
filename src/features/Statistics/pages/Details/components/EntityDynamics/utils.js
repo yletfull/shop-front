@@ -1,6 +1,6 @@
 import { lines } from './constants';
 
-export const helper = (object) => {
+const createArraysObject = (object) => {
   const result = {};
 
   Object.values(object).forEach((value) => {
@@ -9,6 +9,8 @@ export const helper = (object) => {
 
   return result;
 };
+
+const formattedLines = createArraysObject(lines);
 
 export const getFormattedObject = (data) => (
   Object
@@ -22,5 +24,7 @@ export const getFormattedObject = (data) => (
           }
         });
       return acc;
-    }, helper(lines))
+    }, formattedLines)
 );
+
+export const kek = () => true;
