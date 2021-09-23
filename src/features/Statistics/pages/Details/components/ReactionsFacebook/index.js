@@ -13,9 +13,9 @@ import sad from '@/images/facebook/sad.svg';
 import wow from '@/images/facebook/wow.svg';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import ReactionType from '../components/ReactionType';
+import ReactionType from '../ReactionType';
 import service from '../../service';
-import Chart from './Chart';
+import SocialChart from '../SocialChart';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -73,7 +73,7 @@ const ReactionsFacebook = function ReactionsFacebook({
               {Object.keys(chartData).length
                 ? (
                   <React.Fragment>
-                    <Chart
+                    <SocialChart
                       data={chartData}
                       dateStart={dateStart}
                       dateEnd={dateEnd}

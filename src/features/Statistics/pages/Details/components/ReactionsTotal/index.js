@@ -5,7 +5,7 @@ import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import service from '../../service';
-import SocialChart from '../components/SocialChart';
+import SocialChart from '../SocialChart';
 import styles from './styles.module.scss';
 
 const propTypes = {

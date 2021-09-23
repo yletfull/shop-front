@@ -9,9 +9,9 @@ import IconShare from '@/icons/Share';
 import IconWarningOctagon from '@/icons/WarningOctagon';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import ReactionType from '../components/ReactionType';
+import ReactionType from '../ReactionType';
 import service from '../../service';
-import SocialChart from '../components/SocialChart';
+import SocialChart from '../SocialChart';
 import styles from './styles.module.scss';
 
 const propTypes = {
