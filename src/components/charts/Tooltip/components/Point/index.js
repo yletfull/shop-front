@@ -17,7 +17,7 @@ const defaultProps = {
   transitionBandwidth: 5,
 };
 
-const XYArea = function XYArea({
+const Point = function Point({
   cx,
   cy,
   fill,
@@ -42,16 +42,16 @@ const XYArea = function XYArea({
         <rect
           fill={fill}
           x={cx - bandwidth / 2}
-          y={cy - bandwidth / 5}
+          y={cy - bandwidth / 10}
           width={bandwidth}
-          height={bandwidth / 5}
+          height={bandwidth / 10}
           {...props}
         />
       )
   );
 };
 
-XYArea.propTypes = propTypes;
-XYArea.defaultProps = defaultProps;
+Point.propTypes = propTypes;
+Point.defaultProps = defaultProps;
 
-export default XYArea;
+export default Point;

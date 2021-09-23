@@ -6,7 +6,7 @@ import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
 import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
-import Point from '@/components/charts/Tooltip/components/Point';
+import Tooltip from '@/components/charts/Tooltip';
 import styles from './styles.module.scss';
 
 const padding = {
@@ -111,7 +111,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const [tooltipPosition, setTooltipPosition] = useState({});
   const [pointData, setPointData] = useState({});
-  const [tooltipValues, setTooltipValues] = useState([]);
+  const [tooltipValues, setTooltipValues] = useState(['']);
 
   const handlePointerMove = (e) => {
     const pointerPosX = pointer(e)[0] - padding.left;
@@ -134,7 +134,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     setPointData({
       x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
       y: (posY ?? chartHeight),
-      color: 'red',
+      color: 'hsl(35, 100%, 63%)',
     });
   };
 
@@ -203,7 +203,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           />
 
           {Boolean(Object.keys(pointData).length) && (
-            <Point
+            <Tooltip.Point
               className={styles.tooltipPoint}
               fill={pointData.color}
               cx={pointData.x}
@@ -214,25 +214,11 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         </g>
       </svg>
 
-      <div
-        className={styles.tooltip}
-        style={{
-          top: `${tooltipPosition.y}px`,
-          left: `${tooltipPosition.x}px`,
-          maxWidth: `${width - tooltipPosition.x}px`,
-        }}
-        data-active={Boolean(Object.keys(tooltipPosition).length)}
-      >
-        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
-          <span
-          // eslint-disable-next-line react/no-array-index-key
-            key={ind}
-            className={styles.tooltipInfo}
-          >
-            {tooltip}
-          </span>
-        ))}
-      </div>
+      <Tooltip
+        tooltipPosition={tooltipPosition}
+        tooltipValues={tooltipValues}
+        chartWidth={width}
+      />
 
     </div>
   );
