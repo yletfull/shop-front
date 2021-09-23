@@ -5,7 +5,7 @@ import { useService } from '@/hooks';
 import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import service from '../../service';
-import Chart from './Chart';
+import SocialChart from '../components/SocialChart';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -56,7 +56,7 @@ const ReactionsTotal = function ReactionsTotal({
           </span>
         )}
         {Boolean(chartData?.length) && (!error && data) && (
-          <Chart
+          <SocialChart
             data={chartData}
             dateStart={dateStart}
             dateEnd={dateEnd}

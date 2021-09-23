@@ -11,7 +11,7 @@ import WithSpinner from '@/components/WithSpinner';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import ReactionType from '../components/ReactionType';
 import service from '../../service';
-import Chart from './Chart';
+import SocialChart from '../components/SocialChart';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -69,7 +69,7 @@ const ReactionsInstagram = function ReactionsInstagram({
               {Object.keys(chartData).length
                 ? (
                   <React.Fragment>
-                    <Chart
+                    <SocialChart
                       data={chartData}
                       dateStart={dateStart}
                       dateEnd={dateEnd}
