@@ -1,6 +1,6 @@
 export const padding = {
-  bottom: 24,
-  left: 32,
+  bottom: 32,
+  left: 48,
   right: 32,
   top: 8,
 };
