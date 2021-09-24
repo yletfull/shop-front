@@ -6,6 +6,7 @@ import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
 import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
+import { scaleBandInvert } from '@/utils/charts';
 import Tooltip from '@/components/charts/Tooltip';
 import styles from './styles.module.scss';
 
@@ -116,7 +117,8 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const handlePointerMove = (e) => {
     const pointerPosX = pointer(e)[0] - padding.left;
 
-    const date = formatDate(scaleXTicks.invert(pointerPosX));
+    const unixDate = scaleBandInvert(scaleX)(pointerPosX);
+    const date = formatDate(unixDate * 1000);
     const item = data?.find((i) => formatDate(i.date) === date);
     const posY = scaleY(item?.value);
     const posX = scaleX(formatToUnix(item?.date));
