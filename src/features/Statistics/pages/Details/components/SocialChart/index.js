@@ -126,7 +126,12 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
     setTooltipValues([
       `Дата: ${date}`,
-      `Значение: ${item?.value ?? 'Нет данных'}`,
+
+      <Tooltip.Row
+        key={item?.value}
+        value={item?.value}
+        color="rgb(192, 196, 200)"
+      />,
     ]);
 
     setTooltipPosition({
