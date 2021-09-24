@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  cx: PropTypes.number.isRequired,
-  cy: PropTypes.number.isRequired,
-  fill: PropTypes.string.isRequired,
+  x: PropTypes.number.isRequired,
+  y: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
   bandwidth: PropTypes.number.isRequired,
   customType: PropTypes.string,
   r: PropTypes.number,
@@ -18,9 +18,9 @@ const defaultProps = {
 };
 
 const Point = function Point({
-  cx,
-  cy,
-  fill,
+  x,
+  y,
+  color,
   bandwidth,
   customType,
   r,
@@ -28,26 +28,19 @@ const Point = function Point({
   ...props
 }) {
   return (
-    (bandwidth < transitionBandwidth)
-      ? (
-        <circle
-          fill={fill}
-          cx={cx}
-          cy={cy}
-          r={r || bandwidth / 2}
-          {...props}
-        />
-      )
-      : (
-        <rect
-          fill={fill}
-          x={cx - bandwidth / 2}
-          y={cy - bandwidth / 10}
-          width={bandwidth}
-          height={bandwidth / 10}
-          {...props}
-        />
-      )
+    <div
+      style={{
+        backgroundColor: color,
+        left: `${x - bandwidth / 2}px`,
+        top: `${y - bandwidth / 10}px`,
+        width: `${bandwidth}px`,
+        height: `${bandwidth / 10}px`,
+        position: 'absolute',
+        borderRadius: bandwidth < transitionBandwidth ? r : 0,
+      }}
+      {...props}
+    />
+
   );
 };
 

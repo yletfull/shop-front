@@ -135,14 +135,14 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
     setPointData({
       x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
-      y: (posY ?? chartHeight),
+      y: (posY ?? chartHeight) + padding.top,
       color: 'hsl(35, 100%, 63%)',
     });
   };
 
   const handlePointerLeave = () => {
     setTooltipPosition({});
-    setPointData({});
+    // setPointData({});
   };
 
   return (
@@ -203,16 +203,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
             width={chartWidth}
             height={chartHeight}
           />
-
-          {Boolean(Object.keys(pointData).length) && (
-            <Tooltip.Point
-              className={styles.tooltipPoint}
-              fill={pointData.color}
-              cx={pointData.x}
-              cy={pointData.y}
-              bandwidth={bandwidth}
-            />
-          )}
         </g>
       </svg>
 
@@ -221,6 +211,16 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         tooltipValues={tooltipValues}
         chartWidth={width}
       />
+
+      {Boolean(Object.keys(pointData).length) && (
+        <Tooltip.Point
+          className={styles.tooltipPoint}
+          color={pointData.color}
+          x={pointData.x}
+          y={pointData.y}
+          bandwidth={bandwidth}
+        />
+      )}
 
     </div>
   );
