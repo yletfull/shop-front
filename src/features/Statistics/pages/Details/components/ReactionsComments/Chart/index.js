@@ -1,10 +1,12 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { scaleBand, scaleLinear, scaleTime } from 'd3-scale';
+import { pointer } from 'd3';
 import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
-import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
+import { XYBars, XYTicksX, XYTicksY, Tooltip } from '@/components/charts';
+import { scaleBandInvert } from '@/utils/charts';
 import { padding } from './constants';
 import styles from './styles.module.scss';
 
@@ -37,8 +39,13 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   const chartHeight = height - padding.bottom - padding.top;
   const chartWidth = width - padding.left - padding.right;
 
-  const maxValue = useMemo(() => Math.max(...data
-    .map((d) => Math.max(d.comments, d.reposts))), [data]);
+  const isZeroData = Object.values(data).every((el) => el.value === 0);
+
+  const maxValue = useMemo(() => (isZeroData
+    ? 1
+    : Math.max(...data
+      .map((d) => Math.max(d.comments, d.reposts)))), [data, isZeroData]);
+
   const dateRangeByDays = useMemo(() => {
     const dateRange = getDatesRange(dateStart, dateEnd);
     return dateRange.map(formatToUnix);
@@ -110,6 +117,54 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   );
   /* eslint-enable react/function-component-definition */
 
+  const [tooltipPosition, setTooltipPosition] = useState({});
+  const [pointDataArr, setPointDataArr] = useState({});
+  const [tooltipValues, setTooltipValues] = useState(['']);
+
+  const handlePointerMove = (e) => {
+    const pointerPosX = pointer(e)[0] - padding.left;
+
+    const unixDate = scaleBandInvert(scaleXGroup)(pointerPosX);
+    const date = formatDate(unixDate * 1000);
+    const item = data?.find((i) => formatDate(i.date) === date);
+    const keys = Object.keys(item).filter((key) => key !== 'date' && key !== 'dateGroup');
+    const posYArr = keys.map((key) => ({
+      key,
+      posY: scaleY(item[key] || 0),
+    }));
+
+    const posXArr = keys.map((key) => ({
+      key,
+      posX: scaleXGroup(formatToUnix(item?.dateGroup)) + scaleX(key),
+    }));
+
+    const tooltipStringValues = keys.map((key) => `Значение: ${item[key]}`);
+    setTooltipValues([
+      `Дата: ${date}`,
+      ...tooltipStringValues,
+    ]);
+
+    setTooltipPosition({
+      x: (Math.max(...posXArr.map((el) => el.posX))
+        ?? pointerPosX) + padding.left + bandwidth * 1.5,
+      y: (Math.max(...posYArr.map((el) => el.posY))
+        ?? chartHeight) + padding.top,
+    });
+
+    setPointDataArr(posYArr.map(({ key, posY }) => ({
+      x: (posXArr.find((el) => el.key === key).posX
+        ?? pointerPosX) + padding.left + bandwidth / 2,
+      y: (posY ?? chartHeight) + padding.top,
+      color: colors[key],
+      key,
+    })));
+  };
+
+  const handlePointerLeave = () => {
+    setTooltipPosition({});
+    setPointDataArr({});
+  };
+
   return (
     <div
       ref={chartRef}
@@ -164,7 +219,40 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
             renderTick={yTickRenderer}
           />
         </g>
+
+        <g transform={`translate(0, ${padding.top})`}>
+          <Tooltip.EventRect
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
+            x={padding.left}
+            y={padding.top}
+            width={chartWidth}
+            height={chartHeight}
+          />
+        </g>
       </svg>
+
+      <Tooltip
+        tooltipPosition={tooltipPosition}
+        tooltipValues={tooltipValues}
+        chartWidth={width}
+      />
+
+      {Boolean(Object.keys(pointDataArr).length) && (
+        pointDataArr.map((pointData) => (
+          <Tooltip.Point
+            className={styles.tooltipPoint}
+            color={pointData.color}
+            x={pointData.x}
+            y={pointData.y}
+            bandwidth={bandwidth}
+            key={pointData.key}
+            transitionBandwidth={15}
+          />
+        ))
+
+      )}
+
     </div>
   );
 };
