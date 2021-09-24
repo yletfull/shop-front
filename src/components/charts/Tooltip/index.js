@@ -3,13 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 import Point from './components/Point';
+import EventRect from './components/EventRect';
 
 const propTypes = {
   tooltipPosition: PropTypes.shape({
     x: PropTypes.number,
     y: PropTypes.number,
   }).isRequired,
-  tooltipValues: PropTypes.arrayOf([PropTypes.string]).isRequired,
+  tooltipValues: PropTypes.arrayOf(PropTypes.string).isRequired,
   chartWidth: PropTypes.number.isRequired,
 };
 
@@ -49,6 +50,7 @@ const Tooltip = function Tooltip({
 Tooltip.propTypes = propTypes;
 Tooltip.defaultProps = defaultProps;
 
+Tooltip.EventRect = EventRect;
 Tooltip.Point = Point;
 
 export default Tooltip;

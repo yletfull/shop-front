@@ -195,14 +195,13 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         </g>
 
         <g transform={`translate(0, ${padding.top})`}>
-          <rect
+          <Tooltip.EventRect
             onPointerMove={handlePointerMove}
             onPointerLeave={handlePointerLeave}
             x={padding.left}
             y={padding.top}
             width={chartWidth}
             height={chartHeight}
-            fillOpacity={0}
           />
 
           {Boolean(Object.keys(pointData).length) && (
