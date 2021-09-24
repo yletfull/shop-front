@@ -56,6 +56,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const scaleX = useMemo(() => scaleBand()
     .domain(dateRangeByDays)
     .range([0, chartWidth])
+    .round(true)
     .paddingInner(0.1)
     .paddingOuter(0), [dateRangeByDays, chartWidth]);
   const bandwidth = scaleX.bandwidth();
