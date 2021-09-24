@@ -44,18 +44,17 @@ const ReactionsTonality = function ReactionsTonality({
       date: data[key]?.date || key,
     }));
   }, [data]);
+
   const chartMeta = useMemo(() => {
     if (!data || Object.keys(data).length === 0) {
       return ({
-        maxNegative: 0,
-        maxPositive: 0,
+        max: 0,
       });
     }
     return ({
-      maxNegative: Math.max(...Object.values(data)
-        .map((values) => values.negative || 0)),
-      maxPositive: Math.max(...Object.values(data)
-        .map((values) => values.positive || 0)),
+      max: Math.max(...Object.values(data)
+        .map((values) => Math
+          .max(values.positive, values.negative) || 0)),
     });
   }, [data]);
 
