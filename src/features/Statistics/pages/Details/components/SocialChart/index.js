@@ -136,7 +136,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     setPointData({
       x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
       y: (posY ?? chartHeight) + padding.top,
-      color: 'hsl(35, 100%, 63%)',
+      color: '#000000',
     });
   };
 
