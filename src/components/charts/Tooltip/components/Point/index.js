@@ -7,7 +7,7 @@ const propTypes = {
   fill: PropTypes.string.isRequired,
   bandwidth: PropTypes.number.isRequired,
   customType: PropTypes.string,
-  r: PropTypes.string,
+  r: PropTypes.number,
   transitionBandwidth: PropTypes.number,
 };
 

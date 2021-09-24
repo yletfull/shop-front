@@ -2,7 +2,7 @@
 
 .tooltip {
   background-color: rgba($color-gray, .5);
-  border: $color-black dotted;
+  border: 1px $color-black solid;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
