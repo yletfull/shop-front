@@ -129,7 +129,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     ]);
 
     setTooltipPosition({
-      x: (posX ?? pointerPosX) + padding.left + 10,
+      x: (posX ?? pointerPosX) + padding.left + bandwidth * 1.5,
       y: (posY ?? chartHeight) + padding.top,
     });
 
