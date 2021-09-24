@@ -31,7 +31,7 @@ const Row = function Row({
         }}
       />
       &nbsp;
-      {value}
+      {value ?? 'Нет данных'}
     </div>
 
   );
