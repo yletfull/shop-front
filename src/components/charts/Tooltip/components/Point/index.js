@@ -6,15 +6,11 @@ const propTypes = {
   y: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
   bandwidth: PropTypes.number.isRequired,
-  customType: PropTypes.string,
-  r: PropTypes.number,
   transitionBandwidth: PropTypes.number,
 };
 
 const defaultProps = {
-  customType: '',
-  r: 0,
-  transitionBandwidth: 5,
+  transitionBandwidth: 0,
 };
 
 const Point = function Point({
@@ -22,8 +18,6 @@ const Point = function Point({
   y,
   color,
   bandwidth,
-  customType,
-  r,
   transitionBandwidth,
   ...props
 }) {
@@ -32,11 +26,12 @@ const Point = function Point({
       style={{
         backgroundColor: color,
         left: `${x - bandwidth / 2}px`,
-        top: `${y - bandwidth / 10}px`,
+        top: `${bandwidth < transitionBandwidth ? y - bandwidth / 2 : y - bandwidth / 10}px`,
         width: `${bandwidth}px`,
-        height: `${bandwidth / 10}px`,
+        height: `${bandwidth < transitionBandwidth ? bandwidth : bandwidth / 10}px`,
         position: 'absolute',
-        borderRadius: bandwidth < transitionBandwidth ? r : 0,
+        borderRadius: bandwidth < transitionBandwidth ? '50%' : 0,
+        borderColor: '######',
       }}
       {...props}
     />
