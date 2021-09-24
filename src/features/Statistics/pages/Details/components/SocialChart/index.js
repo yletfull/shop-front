@@ -142,6 +142,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const handlePointerLeave = () => {
     setTooltipPosition({});
+    setPointData({});
   };
 
   return (
