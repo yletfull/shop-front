@@ -115,7 +115,6 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
       y2={scaleY(value)}
     />
   );
-  /* eslint-enable react/function-component-definition */
 
   const [tooltipPosition, setTooltipPosition] = useState({});
   const [pointDataArr, setPointDataArr] = useState({});
@@ -127,7 +126,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
     const unixDate = scaleBandInvert(scaleXGroup)(pointerPosX);
     const date = formatDate(unixDate * 1000);
     const item = data?.find((i) => formatDate(i.date) === date);
-    const keys = Object.keys(item).filter((key) => key !== 'date' && key !== 'dateGroup');
+    const keys = Object?.keys(item)?.filter((key) => key !== 'date' && key !== 'dateGroup') || [];
     const posYArr = keys.map((key) => ({
       key,
       posY: scaleY(item[key] || 0),
@@ -138,10 +137,17 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
       posX: scaleXGroup(formatToUnix(item?.dateGroup)) + scaleX(key),
     }));
 
-    const tooltipStringValues = keys.map((key) => `Значение: ${item[key]}`);
+    const tooltipTextContent = keys.map((key) => (
+      <Tooltip.Row
+        key={key}
+        value={item[key]}
+        color={colors[key]}
+      />
+    ));
+
     setTooltipValues([
       `Дата: ${date}`,
-      ...tooltipStringValues,
+      ...tooltipTextContent,
     ]);
 
     setTooltipPosition({
