@@ -159,6 +159,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
             getY={(d) => d.positive || 0}
             scaleX={scaleX}
             scaleY={scaleYPositive}
+            curve="monotoneX"
             fill={colors?.tonality?.positive}
           />
         </g>
@@ -168,9 +169,10 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
             chartHeight={chartHeight / 2}
             getX={(d) => formatToDate(d.date)}
             getY={(d) => d.negative || 0}
-            getBaseY={() => 0}
             scaleX={scaleX}
             scaleY={scaleYNegative}
+            getBaseY={() => 0}
+            curve="monotoneX"
             fill={colors?.tonality?.negative}
           />
         </g>
