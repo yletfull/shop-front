@@ -157,7 +157,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             <ChartContainer
               header={(
                 <span>
-                  Лайки
+                  Позитив
                   &nbsp;
                   <span
                     className={styles.statisticsDetailsChartRectangle}
@@ -166,7 +166,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
                     }}
                   />
                   &nbsp;
-                  / Дизлайки
+                  / Негатив
                   &nbsp;
                   <span
                     className={styles.statisticsDetailsChartRectangle}
