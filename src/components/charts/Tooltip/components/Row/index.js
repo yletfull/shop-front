@@ -4,7 +4,7 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   color: PropTypes.string,
-  value: PropTypes.oneOf([
+  value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.value,
   ]).isRequired,
