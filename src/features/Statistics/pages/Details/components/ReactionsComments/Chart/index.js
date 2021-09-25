@@ -8,6 +8,7 @@ import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/fo
 import { XYBars, XYTicksX, XYTicksY, Tooltip } from '@/components/charts';
 import { scaleBandInvert } from '@/utils/charts';
 import { padding } from './constants';
+import { getRows } from './utils';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -125,36 +126,29 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
 
     const unixDate = scaleBandInvert(scaleXGroup)(pointerPosX);
     const date = formatDate(unixDate * 1000);
-    const item = data?.find((i) => formatDate(i.date) === date);
-    const keys = Object?.keys(item)?.filter((key) => key !== 'date' && key !== 'dateGroup') || [];
-    const posYArr = keys.map((key) => ({
+    const item = data?.find((i) => formatDate(i.date) === date) || {};
+    const keys = Object.keys(item)?.filter((key) => key !== 'date' && key !== 'dateGroup') || [];
+
+    const posYArr = keys?.map((key) => ({
       key,
       posY: scaleY(item[key] || 0),
     }));
 
-    const posXArr = keys.map((key) => ({
+    const posXArr = keys?.map((key) => ({
       key,
       posX: scaleXGroup(formatToUnix(item?.dateGroup)) + scaleX(key),
     }));
 
-    const tooltipTextContent = keys.map((key) => (
-      <Tooltip.Row
-        key={key}
-        value={item[key]}
-        color={colors[key]}
-      />
-    ));
-
     setTooltipValues([
       `Дата: ${date}`,
-      ...tooltipTextContent,
+      ...getRows(item, keys, colors),
     ]);
 
     setTooltipPosition({
       x: (Math.max(...posXArr.map((el) => el.posX))
         ?? pointerPosX) + padding.left + bandwidth * 1.5,
-      y: (Math.max(...posYArr.map((el) => el.posY))
-        ?? chartHeight) + padding.top,
+      y: (Math.min(...posYArr.map((el) => el.posY))
+        ?? 0) + padding.top,
     });
 
     setPointDataArr(posYArr.map(({ key, posY }) => ({
