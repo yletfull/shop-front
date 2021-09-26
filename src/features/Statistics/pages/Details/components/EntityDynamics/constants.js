@@ -1,8 +1,8 @@
 export const padding = {
   bottom: 32,
-  left: 32,
+  left: 48,
   right: 32,
-  top: 0,
+  top: 8,
 };
 
 export const lines = {

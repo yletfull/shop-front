@@ -13,6 +13,7 @@ const propTypes = {
   getY: PropTypes.func,
   scaleX: PropTypes.func,
   scaleY: PropTypes.func,
+  getDefined: PropTypes.func,
 };
 const defaultProps = {
   curve: 'linear',
@@ -21,6 +22,7 @@ const defaultProps = {
   getY: (d) => d.y,
   scaleX: (d) => d,
   scaleY: (d) => d,
+  getDefined: (d) => d,
 };
 
 const XYLine = function XYLine({
@@ -30,12 +32,14 @@ const XYLine = function XYLine({
   getY,
   scaleX,
   scaleY,
+  getDefined,
   ...props
 }) {
   const path = line()
     .curve(mapCurve[curve])
     .x((d, i, arr) => scaleX(getX(d, i, arr)))
-    .y((d, i, arr) => scaleY(getY(d, i, arr)))(data);
+    .y((d, i, arr) => scaleY(getY(d, i, arr)))
+    .defined((d) => getDefined(d))(data);
 
   return (
     <path

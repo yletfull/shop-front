@@ -21,6 +21,7 @@ const EntityDynamics = function EntityDynamics({
   dateStart,
   dateEnd,
 }) {
+  const [visibleLines, setVisibleLines] = useState(Object.values(lines));
   const { entityType, entityId } = useParams();
 
   const { fetch, data, isFetching, error } = useService({
@@ -45,6 +46,7 @@ const EntityDynamics = function EntityDynamics({
       date: data[key]?.date || key,
     }));
   }, [data]);
+
   const chartMeta = useMemo(() => {
     if (!data || Object.keys(data).length === 0) {
       return ({
@@ -54,11 +56,13 @@ const EntityDynamics = function EntityDynamics({
     return ({
       maxValue: Math.max(...Object.values(data)
         .map((values) => Math.max(...Object.keys(values)
-          .map((key) => (key === 'date' ? 0 : Number(values[key])))))),
+          .map((key) => (
+            visibleLines.includes(key)
+              ? Number(values[key]) * (linesFactors[key] || 1)
+              : 0
+          ))))),
     });
-  }, [data]);
-
-  const [visibleLines, setVisibleLines] = useState(Object.values(lines));
+  }, [data, visibleLines]);
 
   const handleChangeCheckbox = (e) => {
     const { name } = e?.target || {};
@@ -85,13 +89,21 @@ const EntityDynamics = function EntityDynamics({
         )}
         {!error && data && (
           <Fragment>
-            <Chart
-              data={chartData}
-              meta={chartMeta}
-              dateStart={dateStart}
-              dateEnd={dateEnd}
-              lines={visibleLines}
-            />
+            {!visibleLines.length
+              ? (
+                <p className={styles.stub}>
+                  Выберите данные для отображения
+                </p>
+              )
+              : (
+                <Chart
+                  data={chartData}
+                  meta={chartMeta}
+                  dateStart={dateStart}
+                  dateEnd={dateEnd}
+                  lines={visibleLines}
+                />
+              )}
             <div className={styles.entityDynamicsLegend}>
               {Object.values(lines).map((key) => (
                 <InputCheckbox
@@ -100,11 +112,9 @@ const EntityDynamics = function EntityDynamics({
                   data-line={key}
                   className={styles.entityDynamicsLegendCheckbox}
                   checked={visibleLines.includes(key)}
-                  disabled={visibleLines.length === 1
-                    && visibleLines[0] === key}
                   onChange={handleChangeCheckbox}
                 >
-                  {`${linesLabels[key]} (x${linesFactors[key]})`}
+                  {linesLabels[key]}
                 </InputCheckbox>
               ))}
             </div>
