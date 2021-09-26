@@ -151,7 +151,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
   /* eslint-enable react/function-component-definition */
 
   const [tooltipPosition, setTooltipPosition] = useState({});
-  const [pointDataArr, setPointDataArr] = useState({});
+  const [pointData, setPointData] = useState({});
   const [tooltipValues, setTooltipValues] = useState(['']);
 
   const handlePointerMove = (e) => {
@@ -164,27 +164,15 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
 
     const scalesY = {
       positive: scaleYPositive,
-      negative: scaleYNegative,
+      negative: scaleYPositive,
     };
+
     const posYArr = keys?.map((key) => ({
       key,
       posY: scalesY[key](item[key] || 0),
     }));
-    // const posYArr = [
-    //   {
-    //     key: keys[0],
-    //     posY: scaleYPositive(item[keys[0]]),
-    //   },
-    //   {
-    //     key: keys[1],
-    //     posY: scaleYNegative(item[keys[1]]),
-    //   },
-    // ];
 
-    const posXArr = keys?.map((key) => ({
-      key,
-      posX: scaleX(formatToDate(item?.dateGroup)),
-    }));
+    const posX = scaleX(formatToDate(item?.dateGroup));
 
     setTooltipValues([
       `Дата: ${date}`,
@@ -192,24 +180,20 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
     ]);
 
     setTooltipPosition({
-      x: (Math.max(...posXArr.map((el) => el.posX))
-        ?? pointerPosX) + padding.left + 5 * 1.5,
+      x: (posX ?? pointerPosX) + padding.left + 5 * 1.5,
       y: (Math.min(...posYArr.map((el) => el.posY))
         ?? 0) + padding.top,
     });
 
-    setPointDataArr(posXArr.map(({ key, posX }) => ({
-      y: (posYArr.find((el) => el.key === key).posY
-        ?? pointerPosX) + padding.top,
-      x: posX ?? chartWidth,
-      color: colors[key],
-      key,
-    })));
+    setPointData({
+      x: (posX ?? pointerPosX) + padding.left,
+      y: padding.top,
+    });
   };
 
   const handlePointerLeave = () => {
     setTooltipPosition({});
-    setPointDataArr({});
+    setPointData({});
   };
 
   return (
@@ -315,19 +299,13 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
         chartWidth={width}
       />
 
-      {Boolean(Object.keys(pointDataArr).length) && (
-        pointDataArr.map((pointData) => (
-          <Tooltip.Point
-            className={styles.tooltipPoint}
-            color={pointData.color}
-            x={pointData.x}
-            y={pointData.y}
-            bandwidth={5}
-            key={pointData.key}
-            // transitionBandwidth={15}
-          />
-        ))
-
+      {Boolean(Object.keys(pointData).length) && (
+        <Tooltip.Perpendicular
+          className={styles.tooltipPoint}
+          x={pointData.x}
+          y={pointData.y}
+          height={chartHeight}
+        />
       )}
     </div>
   );
