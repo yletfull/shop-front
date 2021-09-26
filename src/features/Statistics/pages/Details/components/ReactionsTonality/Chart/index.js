@@ -172,21 +172,19 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
       posY: scalesY[key](item[key] || 0),
     }));
 
-    const posX = scaleX(formatToDate(item?.dateGroup));
-
     setTooltipValues([
       `Дата: ${date}`,
       ...getRows(item, keys, colors.tonality),
     ]);
 
     setTooltipPosition({
-      x: (posX ?? pointerPosX) + padding.left + 5 * 1.5,
+      x: pointerPosX + padding.left + 5 * 1.5,
       y: (Math.min(...posYArr.map((el) => el.posY))
         ?? 0) + padding.top,
     });
 
     setPointData({
-      x: (posX ?? pointerPosX) + padding.left,
+      x: pointerPosX + padding.left,
       y: padding.top,
     });
   };
