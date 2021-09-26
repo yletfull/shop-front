@@ -140,9 +140,8 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     });
 
     setPointData({
-      x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
-      y: (posY ?? chartHeight) + padding.top,
-      color: '#000000',
+      x: (posX ?? pointerPosX) + padding.left,
+      y: padding.top,
     });
   };
 
@@ -219,15 +218,13 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
       />
 
       {Boolean(Object.keys(pointData).length) && (
-        <Tooltip.Point
-          className={styles.tooltipPoint}
-          color={pointData.color}
+        <Tooltip.Perpendicular
           x={pointData.x}
           y={pointData.y}
-          bandwidth={bandwidth}
+          height={chartHeight}
+          width={bandwidth}
         />
       )}
-
     </div>
   );
 };
