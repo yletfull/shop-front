@@ -151,7 +151,6 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
         ?? 0) + padding.top,
     });
 
-    console.log(posXArr[0]);
     setPointData({
       x: (posXArr[0]?.posX ?? pointerPosX) + padding.left,
       y: padding.top,
