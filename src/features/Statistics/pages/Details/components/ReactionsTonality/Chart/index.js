@@ -299,7 +299,6 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
 
       {Boolean(Object.keys(pointData).length) && (
         <Tooltip.Perpendicular
-          className={styles.tooltipPoint}
           x={pointData.x}
           y={pointData.y}
           height={chartHeight}
