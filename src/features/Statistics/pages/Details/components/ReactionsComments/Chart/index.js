@@ -118,7 +118,7 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
   );
 
   const [tooltipPosition, setTooltipPosition] = useState({});
-  const [pointDataArr, setPointDataArr] = useState({});
+  const [pointData, setPointData] = useState({});
   const [tooltipValues, setTooltipValues] = useState(['']);
 
   const handlePointerMove = (e) => {
@@ -151,18 +151,15 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
         ?? 0) + padding.top,
     });
 
-    setPointDataArr(posYArr.map(({ key, posY }) => ({
-      x: (posXArr.find((el) => el.key === key).posX
-        ?? pointerPosX) + padding.left + bandwidth / 2,
-      y: (posY ?? chartHeight) + padding.top,
-      color: colors[key],
-      key,
-    })));
+    setPointData({
+      x: (posXArr[0].posX ?? pointerPosX) + padding.left,
+      y: padding.top,
+    });
   };
 
   const handlePointerLeave = () => {
     setTooltipPosition({});
-    setPointDataArr({});
+    setPointData({});
   };
 
   return (
@@ -238,19 +235,13 @@ const ReactionsCommentsChart = function ReactionsCommentsChart({
         chartWidth={width}
       />
 
-      {Boolean(Object.keys(pointDataArr).length) && (
-        pointDataArr.map((pointData) => (
-          <Tooltip.Point
-            className={styles.tooltipPoint}
-            color={pointData.color}
-            x={pointData.x}
-            y={pointData.y}
-            bandwidth={bandwidth}
-            key={pointData.key}
-            transitionBandwidth={15}
-          />
-        ))
-
+      {Boolean(Object.keys(pointData).length) && (
+        <Tooltip.Perpendicular
+          x={pointData.x}
+          y={pointData.y}
+          height={chartHeight}
+          width={groupBandwidth}
+        />
       )}
 
     </div>
