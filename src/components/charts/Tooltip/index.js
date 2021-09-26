@@ -5,6 +5,7 @@ import styles from './styles.module.scss';
 import Point from './components/Point';
 import EventRect from './components/EventRect';
 import Row from './components/Row';
+import Perpendicular from './components/Perpendicular';
 
 const propTypes = {
   tooltipPosition: PropTypes.shape({
@@ -55,6 +56,7 @@ Tooltip.defaultProps = defaultProps;
 
 Tooltip.EventRect = EventRect;
 Tooltip.Point = Point;
+Tooltip.Perpendicular = Perpendicular;
 Tooltip.Row = Row;
 
 export default Tooltip;
