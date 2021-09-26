@@ -6,6 +6,8 @@ import { useElementSize } from '@/hooks';
 import { getDatesRange } from '@/utils/day';
 import { formatDate, formatNumber, formatToDate, formatToUnix } from '@/utils/format';
 import { XYBars, XYTicksX, XYTicksY } from '@/components/charts';
+import { scaleBandInvert } from '@/utils/charts';
+import Tooltip from '@/components/charts/Tooltip';
 import styles from './styles.module.scss';
 
 const padding = {
@@ -54,6 +56,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
   const scaleX = useMemo(() => scaleBand()
     .domain(dateRangeByDays)
     .range([0, chartWidth])
+    .round(true)
     .paddingInner(0.1)
     .paddingOuter(0), [dateRangeByDays, chartWidth]);
   const bandwidth = scaleX.bandwidth();
@@ -110,35 +113,41 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
 
   const [tooltipPosition, setTooltipPosition] = useState({});
   const [pointData, setPointData] = useState({});
-  const [tooltipValues, setTooltipValues] = useState([]);
+  const [tooltipValues, setTooltipValues] = useState(['']);
 
   const handlePointerMove = (e) => {
     const pointerPosX = pointer(e)[0] - padding.left;
 
-    const date = formatDate(scaleXTicks.invert(pointerPosX));
+    const unixDate = scaleBandInvert(scaleX)(pointerPosX);
+    const date = formatDate(unixDate * 1000);
     const item = data?.find((i) => formatDate(i.date) === date);
     const posY = scaleY(item?.value);
     const posX = scaleX(formatToUnix(item?.date));
 
     setTooltipValues([
       `Дата: ${date}`,
-      `Значение: ${item?.value ?? 'Нет данных'}`,
+
+      <Tooltip.Row
+        key={item?.value}
+        value={item?.value}
+        color="rgb(192, 196, 200)"
+      />,
     ]);
 
     setTooltipPosition({
-      x: (posX ?? pointerPosX) + padding.left + 10,
+      x: (posX ?? pointerPosX) + padding.left + bandwidth * 1.5,
       y: (posY ?? chartHeight) + padding.top,
     });
 
     setPointData({
-      x: (posX ?? pointerPosX) + padding.left + bandwidth / 2,
-      y: (posY ?? chartHeight),
-      color: 'red',
+      x: (posX ?? pointerPosX) + padding.left,
+      y: padding.top,
     });
   };
 
   const handlePointerLeave = () => {
     setTooltipPosition({});
+    setPointData({});
   };
 
   return (
@@ -191,48 +200,31 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
         </g>
 
         <g transform={`translate(0, ${padding.top})`}>
-          <rect
-            onPointerMoveCapture={handlePointerMove}
-            onPointerLeaveCapture={handlePointerLeave}
+          <Tooltip.EventRect
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
             x={padding.left}
             y={padding.top}
             width={chartWidth}
             height={chartHeight}
-            fillOpacity={0}
           />
-
-          {Boolean(Object.keys(pointData).length) && (
-            <circle
-              className={styles.tooltipPoint}
-              fill={pointData.color}
-              cx={pointData.x}
-              cy={pointData.y}
-              r={bandwidth / 2}
-            />
-          )}
         </g>
       </svg>
 
-      <div
-        className={styles.tooltip}
-        style={{
-          top: `${tooltipPosition.y}px`,
-          left: `${tooltipPosition.x}px`,
-          maxWidth: `${width - tooltipPosition.x}px`,
-        }}
-        data-active={Boolean(Object.keys(tooltipPosition).length)}
-      >
-        {Boolean(tooltipValues.length) && tooltipValues.map((tooltip, ind) => (
-          <span
-          // eslint-disable-next-line react/no-array-index-key
-            key={ind}
-            className={styles.tooltipInfo}
-          >
-            {tooltip}
-          </span>
-        ))}
-      </div>
+      <Tooltip
+        tooltipPosition={tooltipPosition}
+        tooltipValues={tooltipValues}
+        chartWidth={width}
+      />
 
+      {Boolean(Object.keys(pointData).length) && (
+        <Tooltip.Perpendicular
+          x={pointData.x}
+          y={pointData.y}
+          height={chartHeight}
+          width={bandwidth}
+        />
+      )}
     </div>
   );
 };

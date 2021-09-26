@@ -1,10 +1,12 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { scaleLinear, scaleTime } from 'd3-scale';
+import { pointer } from 'd3';
 import { useElementSize } from '@/hooks';
 import { formatDate, formatNumber, formatToDate } from '@/utils/format';
-import { XYArea, XYTicksX, XYTicksY } from '@/components/charts';
+import { XYArea, XYTicksX, XYTicksY, Tooltip } from '@/components/charts';
 import styles from './styles.module.scss';
+import { getRows } from './utils';
 
 const propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
@@ -51,6 +53,8 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
 
   const [width, height] = useElementSize(chartRef);
 
+  const isZeroData = Object.values(data).every((el) => el.value === 0);
+
   const chartHeight = height - padding.bottom - padding.top;
   const chartWidth = width - padding.left - padding.right;
 
@@ -61,12 +65,11 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
     .domain([0, meta.max])
     .range([chartHeight, 2]), [chartHeight, meta]);
   const scaleYPositive = useMemo(() => scaleLinear()
-    .domain([0, meta.max])
-    .range([chartHeight / 2, 0]), [chartHeight, meta]);
+    .domain([0, isZeroData ? 1 : meta.max])
+    .range([chartHeight / 2, 0]), [chartHeight, meta, isZeroData]);
   const scaleYNegative = useMemo(() => scaleLinear()
-    .domain([0, meta.max])
-    .range([0, chartHeight / 2]), [chartHeight, meta]);
-
+    .domain([0, isZeroData ? -1 : meta.max])
+    .range([0, chartHeight / 2]), [chartHeight, meta, isZeroData]);
 
   /* eslint-disable react/function-component-definition */
   const yPositiveLineTickRenderer = () => (value) => (
@@ -147,6 +150,50 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
 
   /* eslint-enable react/function-component-definition */
 
+  const [tooltipPosition, setTooltipPosition] = useState({});
+  const [pointData, setPointData] = useState({});
+  const [tooltipValues, setTooltipValues] = useState(['']);
+
+  const handlePointerMove = (e) => {
+    const pointerPosX = pointer(e)[0] - padding.left;
+
+    const unixDate = scaleX.invert(pointerPosX);
+    const date = formatDate(unixDate);
+    const item = data?.find((i) => formatDate(i.date) === date) || {};
+    const keys = Object.keys(item)?.filter((key) => key !== 'date' && key !== 'dateGroup') || [];
+
+    const scalesY = {
+      positive: scaleYPositive,
+      negative: scaleYPositive,
+    };
+
+    const posYArr = keys?.map((key) => ({
+      key,
+      posY: scalesY[key](item[key] || 0),
+    }));
+
+    setTooltipValues([
+      `Дата: ${date}`,
+      ...getRows(item, keys, colors.tonality),
+    ]);
+
+    setTooltipPosition({
+      x: pointerPosX + padding.left + 5 * 1.5,
+      y: (Math.min(...posYArr.map((el) => el.posY))
+        ?? 0) + padding.top,
+    });
+
+    setPointData({
+      x: pointerPosX + padding.left,
+      y: padding.top,
+    });
+  };
+
+  const handlePointerLeave = () => {
+    setTooltipPosition({});
+    setPointData({});
+  };
+
   return (
     <div
       ref={chartRef}
@@ -223,14 +270,40 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           renderTick={xTickLineRenderer}
         />
 
-        <XYTicksX
-          transform={`translate(${padding.left}, ${padding.top})`}
-          chartHeight={chartHeight}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          renderTick={xTickRenderer}
-        />
+        <g transform={`translate(0, ${padding.top})`}>
+          <Tooltip.EventRect
+            onPointerMove={handlePointerMove}
+            onPointerLeave={handlePointerLeave}
+            x={padding.left}
+            y={padding.top}
+            width={chartWidth}
+            height={chartHeight}
+          />
+        </g>
+
       </svg>
+
+      <XYTicksX
+        transform={`translate(${padding.left}, ${padding.top})`}
+        chartHeight={chartHeight}
+        scaleX={scaleX}
+        scaleY={scaleY}
+        renderTick={xTickRenderer}
+      />
+
+      <Tooltip
+        tooltipPosition={tooltipPosition}
+        tooltipValues={tooltipValues}
+        chartWidth={width}
+      />
+
+      {Boolean(Object.keys(pointData).length) && (
+        <Tooltip.Perpendicular
+          x={pointData.x}
+          y={pointData.y}
+          height={chartHeight}
+        />
+      )}
     </div>
   );
 };

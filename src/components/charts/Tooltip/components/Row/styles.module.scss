@@ -1,0 +1,12 @@
+@import '@/theme/include.scss';
+
+.row {
+  display: flex;
+  margin-top: .5em;
+
+  &Rectangle {
+    height: 1em;
+    width: 1em;
+  }
+}
+

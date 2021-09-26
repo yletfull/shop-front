@@ -1,14 +1,8 @@
 @import '@/theme/include.scss';
 
-.chart {
-  height: 200px;
-  position: relative;
-  width: 100%;
-}
-
 .tooltip {
   background-color: rgba($color-gray, .5);
-  border: $color-black dotted;
+  border: 1px $color-gray solid;
   border-radius: .5rem;
   display: flex;
   flex-direction: column;
@@ -22,24 +16,5 @@
 
   &[data-active='true'] {
     opacity: 1;
-  }
-}
-
-.XTick {
-  &Label {
-    fill: $color-gray-darker;
-    font-size: .625rem;
-  }
-}
-
-.YTick {
-  &Label {
-    fill: $color-black;
-    font-size: .625rem;
-  }
-
-  &Line {
-    stroke: $color-gray;
-    stroke: rgba($color-gray, .9);
   }
 }
