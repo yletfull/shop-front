@@ -76,3 +76,9 @@ export const formatTimeDurationOfModelRunning = ({
       formatPlural(values[period], ...timeUnits[period]),
     ].join(' ')), '');
 };
+
+export const formatCTR = (value) => {
+  const result = (value * 100).toFixed(2).toString().replace(/\./g, ',');
+
+  return `${result}%`;
+};

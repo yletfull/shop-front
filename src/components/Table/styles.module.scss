@@ -66,4 +66,8 @@
       }
     }
   }
+
+  &:hover {
+    background-color: $color-gray-lighter;
+  }
 }

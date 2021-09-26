@@ -13,6 +13,7 @@ const propTypes = {
     positive: PropTypes.number,
   })),
   meta: PropTypes.shape({
+    max: PropTypes.number,
     maxNegative: PropTypes.number,
     maxPositive: PropTypes.number,
   }),
@@ -57,45 +58,38 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
     .domain([formatToDate(dateStart), formatToDate(dateEnd)])
     .range([0, chartWidth]), [dateStart, dateEnd, chartWidth]);
   const scaleY = useMemo(() => scaleLinear()
-    .domain([0, meta.maxPositive + meta.maxNegative])
+    .domain([0, meta.max])
     .range([chartHeight, 2]), [chartHeight, meta]);
   const scaleYPositive = useMemo(() => scaleLinear()
-    .domain([0, meta.maxPositive])
+    .domain([0, meta.max])
     .range([chartHeight / 2, 0]), [chartHeight, meta]);
   const scaleYNegative = useMemo(() => scaleLinear()
-    .domain([0, meta.maxNegative])
+    .domain([0, meta.max])
     .range([0, chartHeight / 2]), [chartHeight, meta]);
 
-  /* eslint-disable react/function-component-definition */
-  const xTickRenderer = () => (value, i, arr) => {
-    const tickCanRender = (i === 0 || i === arr?.length - 1);
 
-    if (tickCanRender) {
-      return (
-        <text
-          key={value}
-          className={styles.reactionsTonalityTickXLabel}
-          x={scaleX(value)}
-          y={chartHeight}
-          dy="1em"
-          textAnchor="middle"
-        >
-          {formatDate(value)}
-        </text>
-      );
-    }
-  };
-  const xTickLineRenderer = () => (value) => (
+  /* eslint-disable react/function-component-definition */
+  const yPositiveLineTickRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.reactionsTonalityTickXLine}
-      x1={scaleX(value)}
-      y1="0"
-      x2={scaleX(value)}
-      y2={chartHeight}
-      stroke="hsla(0, 0%, 100%, .25)"
+      className={styles.reactionsTonalityTickYLine}
+      x1={0}
+      y1={scaleYPositive(value)}
+      x2={chartWidth}
+      y2={scaleYPositive(value)}
     />
   );
+  const yNegativeLineTickRenderer = () => (value) => (
+    <line
+      key={value}
+      className={styles.reactionsTonalityTickYLine}
+      x1={0}
+      y1={scaleYNegative(value)}
+      x2={chartWidth}
+      y2={scaleYNegative(value)}
+    />
+  );
+
   const yPositiveTickRenderer = () => (value) => (
     <text
       key={value}
@@ -119,26 +113,38 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
       {formatNumber(value)}
     </text>
   );
-  const yPositiveLineTickRenderer = () => (value) => (
+
+  const xTickLineRenderer = () => (value) => (
     <line
       key={value}
-      className={styles.reactionsTonalityTickYLine}
-      x1={0}
-      y1={scaleYPositive(value)}
-      x2={chartWidth}
-      y2={scaleYPositive(value)}
+      className={styles.reactionsTonalityTickXLine}
+      x1={scaleX(value)}
+      y1="0"
+      x2={scaleX(value)}
+      y2={chartHeight}
+      stroke="hsla(0, 0%, 100%, .25)"
     />
   );
-  const yNegativeLineTickRenderer = () => (value) => (
-    <line
-      key={value}
-      className={styles.reactionsTonalityTickYLine}
-      x1={0}
-      y1={scaleYNegative(value)}
-      x2={chartWidth}
-      y2={scaleYNegative(value)}
-    />
-  );
+
+  const xTickRenderer = () => (value, i, arr) => {
+    const tickCanRender = (i === 0 || i === arr?.length - 1);
+
+    if (tickCanRender) {
+      return (
+        <text
+          key={value}
+          className={styles.reactionsTonalityTickXLabel}
+          x={scaleX(value)}
+          y={chartHeight}
+          dy="1em"
+          textAnchor="middle"
+        >
+          {formatDate(value)}
+        </text>
+      );
+    }
+  };
+
   /* eslint-enable react/function-component-definition */
 
   return (
@@ -151,29 +157,6 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
         width={width}
         viewBox={`0 0 ${width} ${height}`}
       >
-        <g transform={`translate(${padding.left}, ${padding.top})`}>
-          <XYArea
-            data={data}
-            chartHeight={chartHeight / 2}
-            getX={(d) => formatToDate(d.date)}
-            getY={(d) => d.positive || 0}
-            scaleX={scaleX}
-            scaleY={scaleYPositive}
-            fill={colors?.tonality?.positive}
-          />
-        </g>
-        <g transform={`translate(${padding.left}, ${padding.top + (chartHeight / 2)})`}>
-          <XYArea
-            data={data}
-            chartHeight={chartHeight / 2}
-            getX={(d) => formatToDate(d.date)}
-            getY={(d) => d.negative || 0}
-            getBaseY={() => 0}
-            scaleX={scaleX}
-            scaleY={scaleYNegative}
-            fill={colors?.tonality?.negative}
-          />
-        </g>
         <XYTicksY
           transform={`translate(35, ${padding.top})`}
           scaleX={scaleX}
@@ -188,6 +171,33 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           ticksCount={2}
           renderTick={yNegativeLineTickRenderer}
         />
+
+        <g transform={`translate(${padding.left}, ${padding.top})`}>
+          <XYArea
+            data={data}
+            chartHeight={chartHeight / 2}
+            getX={(d) => formatToDate(d.date)}
+            getY={(d) => d.positive || 0}
+            scaleX={scaleX}
+            scaleY={scaleYPositive}
+            curve="monotoneX"
+            fill={colors?.tonality?.positive}
+          />
+        </g>
+        <g transform={`translate(${padding.left}, ${padding.top + (chartHeight / 2)})`}>
+          <XYArea
+            data={data}
+            chartHeight={chartHeight / 2}
+            getX={(d) => formatToDate(d.date)}
+            getY={(d) => d.negative || 0}
+            scaleX={scaleX}
+            scaleY={scaleYNegative}
+            getBaseY={() => 0}
+            curve="monotoneX"
+            fill={colors?.tonality?.negative}
+          />
+        </g>
+
         <XYTicksY
           transform={`translate(0, ${padding.top})`}
           scaleX={scaleX}
@@ -195,6 +205,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           ticksCount={2}
           renderTick={yPositiveTickRenderer}
         />
+
         <XYTicksY
           transform={`translate(0, ${padding.top + (chartHeight / 2)})`}
           scaleX={scaleX}
@@ -202,6 +213,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           ticksCount={2}
           renderTick={yNegativeTickRenderer}
         />
+
         <XYTicksX
           transform={`translate(${padding.left}, ${padding.top})`}
           chartHeight={chartHeight}
@@ -210,6 +222,7 @@ const ReactionsTonalityChart = function ReactionsTonalityChart({
           ticksCount={6}
           renderTick={xTickLineRenderer}
         />
+
         <XYTicksX
           transform={`translate(${padding.left}, ${padding.top})`}
           chartHeight={chartHeight}

@@ -46,6 +46,13 @@ $gap: 1em;
   }
 
   &Header {
+    align-items: center;
     display: flex;
   }
+}
+
+.spinnerDates {
+  align-items: center;
+  display: flex;
+  margin: 0 .5rem;
 }

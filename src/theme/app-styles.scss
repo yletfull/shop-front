@@ -39,7 +39,7 @@ a {
 }
 
 *:focus {
-  outline: .125rem dashed $color-pink;
+  outline: thin solid $color-primary-lightest;
   outline-offset: .125rem;
 }
 
@@ -184,4 +184,3 @@ a {
     color: $color-red-lightest;
   }
 }
-

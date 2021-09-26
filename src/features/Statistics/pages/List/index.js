@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+/* eslint-disable no-shadow */
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
-import cx from 'classnames';
+import NavTabs from '@/components/NavTabs';
 import { useService, useQueryParams } from '@/hooks';
 import AppMain from '@/components/AppMain';
 import Spinner from '@/components/Spinner';
@@ -50,65 +50,60 @@ const StatisticsList = function StatisticsListScreen({
   match,
   location,
 }) {
+  const [hasTimeout, setHasTimeout] = useState(false);
   const [queryParams, setQueryParams] = useQueryParams();
+  const [localListState, setLocalListState] = useState(queryParams);
 
   const periodsService = useService({
     initialData: [],
     service: service.fetchPeriods,
   });
+
   const fetchPeriods = periodsService.fetch;
   useEffect(() => {
     fetchPeriods();
   }, [fetchPeriods]);
+
   const {
-    datestart: minDate,
-    dateend: maxDate,
+    dateStart: minDate,
+    dateEnd: maxDate,
   } = periodsService.data[0] || {};
+
+  useEffect(() => {
+    if (hasTimeout) {
+      const timeout = setTimeout(() => {
+        setQueryParams(localListState);
+      }, 900);
+
+      return () => {
+        setHasTimeout(false);
+        clearTimeout(timeout);
+      };
+    }
+
+    setQueryParams(localListState);
+  }, [setQueryParams, setHasTimeout, localListState, hasTimeout]);
+
+  const { entity } = match?.params || {};
+  const {
+    dateStart,
+    dateEnd,
+    currentPage,
+    perPage,
+    search,
+    sortDir,
+    sortField,
+  } = queryParams;
 
   const { fetch, data: response, isFetching, error } = useService({
     initialData: {},
     service: service.fetchList,
   });
 
-  const handleDateInputsSubmit = ({ dateStart, dateEnd }) => {
-    setQueryParams({
-      dateStart,
-      dateEnd,
-      currentPage: 1,
-    });
-  };
-  const handlePageSelect = (currentPage) => setQueryParams({ currentPage });
-  const handleCountSelect = (perPage) => {
-    setQueryParams({
-      perPage,
-      currentPage: 1,
-    });
-  };
-  const handleFiltersApply = (values) => {
-    setQueryParams({
-      search: values.search,
-      currentPage: 1,
-    });
-  };
-  const handleSortChange = ({ sortDir, sortField }) => {
-    setQueryParams({ sortDir, sortField });
-  };
-
-  const { entity } = match?.params || {};
-  const {
-    dateStart,
-    dateEnd,
-    search,
-    sortDir,
-    sortField,
-    currentPage,
-    perPage,
-  } = queryParams;
   useEffect(() => {
     if (!entity || !dateStart || !dateEnd) {
       return;
     }
-
     fetch({
       entity,
       dateStart,
@@ -130,16 +125,17 @@ const StatisticsList = function StatisticsListScreen({
     currentPage,
     perPage,
   ]);
+
   useEffect(() => {
     if (!maxDate || (dateStart && dateEnd)) {
       return;
     }
 
-    setQueryParams({
+    setLocalListState({
       dateStart: maxDate,
       dateEnd: maxDate,
     });
-  }, [maxDate, dateStart, dateEnd, setQueryParams]);
+  }, [maxDate, dateStart, dateEnd, setLocalListState]);
 
   const { data, meta } = response || {};
   const filters = { search };
@@ -148,6 +144,56 @@ const StatisticsList = function StatisticsListScreen({
   );
 
   const ListComponent = mapListComponentByEntity[entity] || ListTable;
+
+  const handleDateInputsChange = ({ dateStart, dateEnd }) => {
+    setHasTimeout(true);
+    setLocalListState((prevlocalListState) => (
+      {
+        ...prevlocalListState,
+        dateStart,
+        dateEnd,
+      }
+    ));
+  };
+
+  const handlePageSelect = (currentPage) => {
+    setLocalListState((prevlocalListState) => (
+      {
+        ...prevlocalListState,
+        currentPage,
+      }
+    ));
+  };
+
+  const handleCountSelect = (perPage) => {
+    setLocalListState((prevlocalListState) => (
+      {
+        ...prevlocalListState,
+        perPage,
+        currentPage: 1,
+      }
+    ));
+  };
+
+  const handleFiltersApply = (values) => {
+    setLocalListState((prevlocalListState) => (
+      {
+        ...prevlocalListState,
+        search: values.search,
+        currentPage: 1,
+      }
+    ));
+  };
+
+  const handleSortChange = ({ sortDir, sortField }) => {
+    setLocalListState((prevlocalListState) => (
+      {
+        ...prevlocalListState,
+        sortDir,
+        sortField,
+      }
+    ));
+  };
 
   return (
     <AppMain
@@ -160,38 +206,32 @@ const StatisticsList = function StatisticsListScreen({
             className={styles.dateInputs}
             min={minDate}
             max={maxDate}
-            values={{ dateStart, dateEnd }}
-            onChange={handleDateInputsSubmit}
-            onShift={handleDateInputsSubmit}
-            onSelect={handleDateInputsSubmit}
+            values={{
+              dateStart: localListState.dateStart,
+              dateEnd: localListState.dateEnd,
+            }}
+            onChange={handleDateInputsChange}
           />
           {periodsService.isFetching && <Spinner layout="inline" />}
         </div>
       )}
     >
-      <div
-        className={cx([
-          styles.navigation,
-          'nav-links-wrapper',
-        ])}
-      >
+      <NavTabs>
         {navTabsLinks.map((link) => (
-          <NavLink
+          <NavTabs.Link
             key={link.entity}
             to={{
               pathname: `/statistics/lists/${link.entity}`,
               search: location?.search || '',
             }}
-            className="link-class_nav"
-            activeClassName="active-link-class_nav"
           >
             {link.title}
-          </NavLink>
+          </NavTabs.Link>
         ))}
-      </div>
+      </NavTabs>
 
       <div className={styles.page}>
-        {(isFetching || periodsService.isFetching) && (
+        {(isFetching || periodsService.isFetching || hasTimeout) && (
           <Spinner
             spinnerClassName={styles.spinner}
             layout="overlay"
