@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
-import { mocks } from './mocks';
 import { platformsAdsTypes } from './constants';
 
 const propTypes = {
@@ -12,6 +11,8 @@ const propTypes = {
   date: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   finalPositionX: PropTypes.number.isRequired,
+  platform: PropTypes.string.isRequired,
+  placement: PropTypes.string.isRequired,
   dateFormat: PropTypes.string,
   children: PropTypes.node,
   top: PropTypes.number,
@@ -47,11 +48,13 @@ const LiveCard = function LiveCard({
   finalPositionX,
   setRendrerChildrenArr,
   updateTimeInterval,
+  platform,
+  placement,
   ...props
 }) {
   const cardRef = useRef();
   const adsRef = useRef();
-  const AdsContent = platformsAdsTypes[mocks.platform][mocks.placement];
+  const AdsContent = platformsAdsTypes[platform][placement];
 
   const getResultCardArray = (cards, key) => cards.map((card) => {
     if (card.key === key) {
