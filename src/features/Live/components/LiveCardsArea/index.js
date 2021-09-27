@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Card from '../Card';
 import styles from './styles.module.scss';
-import Card from './components/Card';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
