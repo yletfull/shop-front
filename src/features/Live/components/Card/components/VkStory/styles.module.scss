@@ -1,17 +1,22 @@
 @import '@/theme/include.scss';
 
 .wrapper {
-  background-color: $color-white;
-  border: 1px solid $color-gray;
-  font-size: .75em;
-  min-height: 7.75rem;
-  padding: .75rem 1.25rem 0;
-  width: 23.5rem;
+  box-sizing: border-box;
+  color: $color-white;
+  font-size: .75rem;
+  height: 30rem;
+  min-width: 16.875rem;
+  position: relative;
+  width: 16.875rem;
+  z-index: 1;
 }
 
 .header {
   display: flex;
   flex-direction: row;
+  left: 1rem;
+  position: absolute;
+  top: 1rem;
 
   &:hover {
     opacity: 1;
@@ -19,9 +24,9 @@
 
   &Icon {
     border-radius: 50%;
-    height: 3.125rem;
+    height: 2rem;
     margin-right: .75rem;
-    width: 3.125rem;
+    width: 2rem;
   }
 
   &Info {
@@ -29,7 +34,6 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    margin-top: .75rem;
     max-width: 17.25rem;
     min-width: 0;
     text-align: left;
@@ -54,6 +58,10 @@
 }
 
 .content {
-  margin-top: 1rem;
-  text-align: left;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 6px;
+  height: 100%;
+  width: 100%;
 }
