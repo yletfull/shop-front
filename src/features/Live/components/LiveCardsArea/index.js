@@ -9,12 +9,14 @@ const propTypes = {
   stepYLimits: PropTypes.arrayOf([
     PropTypes.number,
   ]),
+  childWidth: PropTypes.number,
   moveSpeedX: PropTypes.number,
 };
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
   moveSpeedX: 0.001,
+  childWidth: 100,
 };
 
 const LiveCardsArea = function LiveCardsArea({
@@ -22,8 +24,8 @@ const LiveCardsArea = function LiveCardsArea({
   stepX,
   stepYLimits,
   moveSpeedX,
+  childWidth,
 }) {
-  const [childWidth, setChildWidth] = useState(100);
   const [renderChildrenArr, setRendrerChildrenArr] = useState(children);
 
   const getMovedChild = useCallback((child, index, childrenArr) => {
@@ -38,7 +40,7 @@ const LiveCardsArea = function LiveCardsArea({
       : Math.random() * (stepYLimits[1] - stepYLimits[0]) + stepYLimits[0];
 
     const left = index === 0
-      ? 0
+      ? childWidth / 2
       : (childWidth + stepX) * index;
 
     const finalPositionX = -stepX * childrenArr.length;
@@ -54,7 +56,6 @@ const LiveCardsArea = function LiveCardsArea({
         finalPositionX,
         id: key,
         setRendrerChildrenArr,
-        setChildWidth,
       }
     );
   }, [moveSpeedX, stepX, stepYLimits, childWidth]);

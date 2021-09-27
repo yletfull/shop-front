@@ -12,7 +12,6 @@ const propTypes = {
   date: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   finalPositionX: PropTypes.number.isRequired,
-  setChildWidth: PropTypes.func.isRequired,
   dateFormat: PropTypes.string,
   children: PropTypes.node,
   top: PropTypes.number,
@@ -47,7 +46,6 @@ const LiveCard = function LiveCard({
   left,
   finalPositionX,
   setRendrerChildrenArr,
-  setChildWidth,
   updateTimeInterval,
   ...props
 }) {
