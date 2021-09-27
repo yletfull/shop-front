@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import dayjs from 'dayjs';
 import styles from './styles.module.scss';
+import { mocks } from './mocks';
+import { platformsAdsTypes } from './constants';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
+  href: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   image: PropTypes.string.isRequired,
   finalPositionX: PropTypes.number.isRequired,
+  setChildWidth: PropTypes.func.isRequired,
   dateFormat: PropTypes.string,
   children: PropTypes.node,
   top: PropTypes.number,
@@ -31,7 +35,9 @@ const defaultProps = {
 
 const LiveCard = function LiveCard({
   id,
+  href,
   title,
+  content,
   date,
   dateFormat,
   image,
@@ -41,10 +47,13 @@ const LiveCard = function LiveCard({
   left,
   finalPositionX,
   setRendrerChildrenArr,
+  setChildWidth,
   updateTimeInterval,
   ...props
 }) {
   const cardRef = useRef();
+  const adsRef = useRef();
+  const AdsContent = platformsAdsTypes[mocks.platform][mocks.placement];
 
   const getResultCardArray = (cards, key) => cards.map((card) => {
     if (card.key === key) {
@@ -77,9 +86,8 @@ const LiveCard = function LiveCard({
   }, [finalPositionX]);
 
   return (
-    <button
+    <div
       className={styles.wrapper}
-      type="button"
       ref={cardRef}
       style={{
         left: `${left}px`,
@@ -89,22 +97,15 @@ const LiveCard = function LiveCard({
       }}
       {...props}
     >
-      <img
-        className={styles.image}
-        src={image}
-        alt={title}
+      <AdsContent
+        title={title}
+        content={content}
+        icon={image}
+        image={image}
+        ref={adsRef}
+        href={href}
       />
-
-      <div className={styles.title}>
-        {title}
-      </div>
-
-      <div className={styles.date}>
-        {dayjs(date).format(dateFormat)}
-      </div>
-
-      {children}
-    </button>
+    </div>
   );
 };
 

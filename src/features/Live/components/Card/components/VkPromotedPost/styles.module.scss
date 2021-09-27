@@ -1,0 +1,55 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background-color: $color-white;
+  border: 1px solid $color-gray;
+  font-size: .75em;
+  min-height: 7.75rem;
+  padding: .75rem 1.25rem 0;
+  width: 22.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+
+  &Icon {
+    border-radius: 50%;
+    height: 3.125rem;
+    margin-right: .75rem;
+    width: 3.125rem;
+  }
+
+  &Info {
+    color: $color-black;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    margin-top: .75rem;
+    max-width: 17.25rem;
+    min-width: 0;
+    text-align: left;
+
+    &Title {
+      color: $color-primary-darkest;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &TypeDescripiton {
+      font-size: .7rem;
+      padding-top: .15rem;
+    }
+  }
+}
+
+.content {
+  margin-top: 1rem;
+  text-align: left;
+}
