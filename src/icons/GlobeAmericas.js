@@ -1,7 +1,7 @@
 import React from 'react';
 import SVGIconContainer from './SVGIconContainer';
 
-const Save = function IconSave(props) {
+const GlobeAmericas = function GlobeAmericas(props) {
   return (
     <SVGIconContainer
       {...props}
@@ -13,4 +13,4 @@ const Save = function IconSave(props) {
   );
 };
 
-export default Save;
+export default GlobeAmericas;
