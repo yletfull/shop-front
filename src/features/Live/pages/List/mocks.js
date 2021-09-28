@@ -8,9 +8,9 @@ export const cards = [
     href: 'https://vk.com/adscreate',
     date: dayjs().format(DATE_FORMAT),
     title: 'Событие 1.',
-    content: 'TestImage',
+    content: 'Контент',
     image: TestImage,
-    platform: 'vk',
+    platform: 'fb',
     placement: 'promotedPost',
   },
   {
