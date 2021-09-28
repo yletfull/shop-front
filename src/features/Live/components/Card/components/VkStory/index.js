@@ -25,10 +25,9 @@ const Story = function Story({
       className={styles.wrapper}
       {...props}
     >
-      <img
+      <div
         className={styles.content}
-        src={content}
-        alt={title}
+        style={{ backgroundImage: `url(${content})` }}
       />
 
       <a
@@ -37,22 +36,26 @@ const Story = function Story({
         target="_blank"
         rel="noreferrer"
       >
-        <img
-          className={styles.headerIcon}
-          src={icon}
-          alt={title}
-        />
+        <span className={styles.headerMarker} />
 
-        <div className={styles.headerInfo}>
-          <div
-            className={styles.headerInfoTitle}
-          >
-            {title}
+        <div className={styles.headerInfoGroup}>
+          <img
+            className={styles.headerIcon}
+            src={icon}
+            alt={title}
+          />
+
+          <div className={styles.headerInfo}>
+            <span
+              className={styles.headerInfoTitle}
+            >
+              {title}
+            </span>
+
+            <span className={styles.headerInfoTypeDescripiton}>
+              Реклама
+            </span>
           </div>
-
-          <span className={styles.headerInfoTypeDescripiton}>
-            Реклама
-          </span>
         </div>
       </a>
     </div>
