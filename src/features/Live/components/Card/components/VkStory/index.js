@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
+import EllipsisHIcon from '@/icons/EllipsisH';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -58,6 +59,19 @@ const Story = function Story({
           </div>
         </div>
       </a>
+
+      <div className={styles.bottom}>
+        <button
+          className={styles.bottomButton}
+          type="button"
+        >
+          Кнопка
+        </button>
+
+        <div className={styles.bottomOptionsButton}>
+          <EllipsisHIcon />
+        </div>
+      </div>
     </div>
   );
 };
