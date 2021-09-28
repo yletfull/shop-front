@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
 import GlobeAmericasIcon from '@/icons/GlobeAmericas';
+import EllipsisHIcon from '@/icons/EllipsisH';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -32,27 +33,30 @@ const PromotedPost = function PromotedPost({
         target="_blank"
         rel="noreferrer"
       >
-        <img
-          className={styles.headerIcon}
-          src={icon}
-          alt={title}
-        />
 
-        <div className={styles.headerInfo}>
-          <div
-            className={styles.headerInfoTitle}
-          >
-            {title}
-          </div>
+        <div className={styles.headerInfoGroup}>
+          <img
+            className={styles.headerIcon}
+            src={icon}
+            alt={title}
+          />
 
-          <span className={styles.headerInfoTypeDescripiton}>
-            <span className={styles.headerInfoTypeText}>
-              Реклама
+          <div className={styles.headerInfo}>
+            <div className={styles.headerInfoTitle}>
+              {title}
+            </div>
+
+            <span className={styles.headerInfoTypeDescripiton}>
+              <span className={styles.headerInfoTypeText}>
+                Реклама
+              </span>
+
+              <GlobeAmericasIcon />
             </span>
-
-            <GlobeAmericasIcon />
-          </span>
+          </div>
         </div>
+
+        <EllipsisHIcon />
       </a>
 
       <div className={styles.content}>

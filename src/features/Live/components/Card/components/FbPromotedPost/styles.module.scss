@@ -5,6 +5,7 @@
   border: 1px solid $color-gray;
   border-radius: .5rem;
   font-size: .75em;
+  justify-content: space-between;
   min-height: 7.75rem;
   overflow: hidden;
   padding: .75rem 1.25rem 0;
@@ -15,7 +16,14 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   padding: 0 .5rem;
+
+  &InfoGroup {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
 
   &:hover {
     opacity: 1;
