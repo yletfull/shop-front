@@ -74,10 +74,10 @@ const PromotedPost = function PromotedPost({
         <div className={styles.sourceBottom}>
           <div className={styles.sourceBottomTextContent}>
             <span className={styles.sourceBottomTitle}>
-              Test
+              Описание сайта
             </span>
             <span className={styles.sourceBottomDescription}>
-              Descr
+              Site.ru
             </span>
           </div>
 

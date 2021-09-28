@@ -1,6 +1,7 @@
 import VkPromotedPost from './components/VkPromotedPost';
 import VkStory from './components/VkStory';
 import FbPromotedPost from './components/FbPromotedPost';
+import FbStory from './components/FbStory';
 
 export const platformsAdsTypes = {
   vk: {
@@ -9,6 +10,7 @@ export const platformsAdsTypes = {
   },
   fb: {
     promotedPost: FbPromotedPost,
+    story: FbStory,
   },
 };
 
