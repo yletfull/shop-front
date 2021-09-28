@@ -49,6 +49,7 @@ import ThumbsDownSolid from './ThumbsDownSolid';
 import ThumbsUpSolid from './ThumbsUpSolid';
 import GlobeAmericas from './GlobeAmericas';
 import EllipsisH from './EllipsisH';
+import ChevronUp from './ChevronUp';
 
 export default {
   title: 'Components/Icons',
@@ -103,6 +104,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
+    {renderIcon(ChevronUp)}
     {renderIcon(ChevronDown)}
     {renderIcon(ChevronLeft)}
     {renderIcon(ChevronRight)}
