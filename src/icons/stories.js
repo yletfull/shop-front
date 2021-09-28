@@ -47,6 +47,7 @@ import RetweetAlt from './RetweetAlt';
 import RocketSolid from './RocketSolid';
 import ThumbsDownSolid from './ThumbsDownSolid';
 import ThumbsUpSolid from './ThumbsUpSolid';
+import GlobeAmericas from './GlobeAmericas';
 
 export default {
   title: 'Components/Icons',
@@ -132,6 +133,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(ThumbsUpSolid)}
     {renderIcon(CaretUpSolid)}
     {renderIcon(CaretDownSolid)}
+    {renderIcon(GlobeAmericas)}
   </div>
 );
 Icons.storyName = 'Icons';
