@@ -64,3 +64,47 @@
   margin-top: 1rem;
   text-align: left;
 }
+
+.source {
+  border: 1px solid $color-gray;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  margin-top: .5rem;
+
+  &Icon {
+    height: 20rem;
+    width: 100%;
+  }
+
+  &Bottom {
+    background-color: $color-white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    text-align: left;
+
+    &TextContent {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &Button {
+      background-color: $color-primary;
+      border: none;
+      border-radius: .25rem;
+      color: $color-white;
+      padding: .5rem 1rem .5rem;
+    }
+
+    &Title {
+      font-size: 1rem;
+      margin-bottom: .35rem;
+    }
+
+    &Description {
+      color: $color-gray-darken;
+    }
+  }
+}

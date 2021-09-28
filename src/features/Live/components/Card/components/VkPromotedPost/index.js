@@ -60,6 +60,34 @@ const PromotedPost = function PromotedPost({
           {content}
         </span>
       </div>
+
+      <div className={styles.source}>
+        <img
+          className={styles.sourceIcon}
+          src={icon}
+          alt={title}
+        />
+        <div className={styles.sourceBottom}>
+          <div className={styles.sourceBottomTextContent}>
+            <span className={styles.sourceBottomTitle}>
+              Описание сайта
+            </span>
+            <a
+              href={href}
+              className={styles.sourceBottomDescription}
+            >
+              Site.ru
+            </a>
+          </div>
+
+          <button
+            type="button"
+            className={styles.sourceBottomButton}
+          >
+            Записаться
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
