@@ -10,8 +10,16 @@
 }
 
 .header {
+  align-items: center;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+
+  &InfoGroup {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
 
   &:hover {
     opacity: 1;
@@ -29,7 +37,6 @@
     display: flex;
     flex: 1 1 auto;
     flex-direction: column;
-    margin-top: .75rem;
     max-width: 17.25rem;
     min-width: 0;
     text-align: left;

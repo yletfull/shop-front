@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
+import EllipsisHIcon from '@/icons/EllipsisH';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -31,23 +32,27 @@ const PromotedPost = function PromotedPost({
         target="_blank"
         rel="noreferrer"
       >
-        <img
-          className={styles.headerIcon}
-          src={icon}
-          alt={title}
-        />
+        <div className={styles.headerInfoGroup}>
+          <img
+            className={styles.headerIcon}
+            src={icon}
+            alt={title}
+          />
 
-        <div className={styles.headerInfo}>
-          <div
-            className={styles.headerInfoTitle}
-          >
-            {title}
+          <div className={styles.headerInfo}>
+            <div
+              className={styles.headerInfoTitle}
+            >
+              {title}
+            </div>
+
+            <span className={styles.headerInfoTypeDescripiton}>
+              Рекламная запись
+            </span>
           </div>
-
-          <span className={styles.headerInfoTypeDescripiton}>
-            Рекламная запись
-          </span>
         </div>
+
+        <EllipsisHIcon />
       </a>
 
       <div className={styles.content}>
