@@ -1,0 +1,159 @@
+@import '@/theme/include.scss';
+
+.wrapper {
+  background-color: $color-white;
+  border: 1px solid $color-gray;
+  font-size: .75em;
+  min-height: 7.75rem;
+  padding: .75rem 1.25rem .75rem;
+
+  &[data-device='mobile'] {
+    width: 23.5rem;
+  }
+
+  &[data-device='desktop'] {
+    width: 34.375rem;
+  }
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &InfoGroup {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &Icon {
+    border-radius: 50%;
+    height: 3.125rem;
+    margin-right: .75rem;
+    width: 3.125rem;
+  }
+
+  &Info {
+    color: $color-black;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    max-width: 17.25rem;
+    min-width: 0;
+    text-align: left;
+
+    &Title {
+      color: $color-primary-darkest;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &TypeDescripiton {
+      font-size: .7rem;
+      padding-top: .15rem;
+    }
+  }
+}
+
+.content {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.source {
+  border: 1px solid $color-gray;
+  display: flex;
+  flex-direction: column;
+  margin-top: .5rem;
+
+  &Icon {
+    height: 20rem;
+    width: 100%;
+  }
+
+  &Bottom {
+    background-color: $color-white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    text-align: left;
+
+    &TextContent {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &Button {
+      background-color: $color-primary;
+      border: none;
+      border-radius: .25rem;
+      color: $color-white;
+      padding: .5rem 1rem .5rem;
+    }
+
+    &Title {
+      font-size: 1rem;
+      margin-bottom: .35rem;
+    }
+
+    &Description {
+      color: $color-gray-darken;
+    }
+  }
+}
+
+.feedback {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: .813rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+
+  &ReactionButton {
+    align-items: center;
+    background-color: $color-gray-lighter;
+    border: none;
+    border-radius: 2rem;
+    display: inline-flex;
+    height: 2rem;
+    padding: .25rem .75rem;
+
+    & > svg {
+      fill: $color-gray-darkest;
+      font-size: 1.25rem;
+    }
+
+    &:not(:last-of-type) {
+      margin-right: .25rem;
+    }
+  }
+
+  &Views {
+    align-items: center;
+    display: flex;
+
+    &Count {
+      color: $color-gray-darkest;
+      margin-right: .25rem;
+    }
+
+    & > * {
+      fill: $color-gray-darken;
+    }
+  }
+}
+

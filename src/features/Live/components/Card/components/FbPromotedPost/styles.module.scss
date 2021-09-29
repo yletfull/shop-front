@@ -1,0 +1,162 @@
+@import '@/theme/include.scss';
+
+$side-offset: 1rem;
+$top-offset: .75rem;
+
+.wrapper {
+  background-color: $color-white;
+  border: 1px solid $color-gray;
+  border-radius: .5rem;
+  font-size: .75em;
+  justify-content: space-between;
+  min-height: 7.75rem;
+  overflow: hidden;
+  padding: $top-offset 0;
+  width: 23.5rem;
+
+  &[data-device='mobile'] {
+    width: 23.5rem;
+  }
+
+  &[data-device='desktop'] {
+    width: 42.5rem;
+  }
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 $side-offset;
+
+  &InfoGroup {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &Icon {
+    border-radius: 50%;
+    height: 2.5rem;
+    margin-right: .5rem;
+    width: 2.5rem;
+  }
+
+  &Info {
+    color: $color-black;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    max-width: 17.25rem;
+    min-width: 0;
+    text-align: left;
+
+    &TypeText {
+      &::after {
+        content: '·';
+        margin-left: .25em;
+        margin-right: .25em;
+      }
+    }
+
+    &Title {
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &TypeDescripiton {
+      font-size: .7rem;
+      padding-top: .15rem;
+    }
+  }
+}
+
+.content {
+  margin-top: $top-offset;
+  padding: 0 $side-offset;
+  text-align: left;
+}
+
+.source {
+  display: flex;
+  flex-direction: column;
+  margin-top: $top-offset;
+
+  &Icon {
+    min-height: 20rem;
+    width: 100%;
+  }
+
+  &Bottom {
+    background-color: $color-gray;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+    text-align: left;
+
+    &TextContent {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &Button {
+      background-color: transparent;
+      border: 1px solid $color-black;
+      border-radius: .25rem;
+      color: $color-black;
+    }
+
+    &Title {
+      font-weight: 600;
+    }
+  }
+}
+
+.feedback {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: $top-offset;
+  padding: 0 $side-offset;
+
+  &Reactions {
+    align-items: center;
+    display: flex;
+
+    &Count {
+      margin-left: .25rem;
+    }
+  }
+
+  &ReactionButton {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+
+  &Actions {
+    display: flex;
+
+    & > *:not(:last-child) {
+      margin-right: .25rem;
+    }
+
+    &Button {
+      background-color: transparent;
+      border: none;
+    }
+  }
+}

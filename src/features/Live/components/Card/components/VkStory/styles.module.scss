@@ -1,0 +1,143 @@
+@import '@/theme/include.scss';
+
+$side-offset: .5rem;
+
+.wrapper {
+  border-radius: .375rem;
+  box-sizing: border-box;
+  color: $color-white;
+  font-size: .75rem;
+  height: 30rem;
+  min-width: 16.875rem;
+  overflow: hidden;
+  position: relative;
+  width: 16.875rem;
+  z-index: 1;
+}
+
+.header {
+  background: linear-gradient(to bottom, $color-black 0, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  height: 8.75rem;
+  left: 0;
+  padding: 0 $side-offset;
+  position: absolute;
+  top: 0;
+  width: 100%;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  &Marker {
+    background-color: $color-white;
+    height: .125rem;
+    margin: $side-offset 0;
+    width: 100%;
+  }
+
+  &Icon {
+    border-radius: 50%;
+    height: 2rem;
+    margin-right: $side-offset;
+    width: 2rem;
+  }
+
+  &InfoGroup {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &Info {
+    color: $color-white;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    max-width: 17.25rem;
+    min-width: 0;
+    text-align: left;
+
+    &Title {
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &TypeDescripiton {
+      font-size: .7rem;
+      padding-top: .15rem;
+    }
+  }
+}
+
+.content {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.feedback {
+  align-items: flex-end;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: $side-offset;
+  position: absolute;
+  width: 100%;
+
+  &Row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: .5rem;
+    width: 100%;
+  }
+
+  &Button {
+    align-items: center;
+    background-color: rgba($color-black, .7);
+    border: 1px solid $color-white;
+    border-radius: .85rem;
+    color: $color-white;
+    display: flex;
+    font-size: 1.25em;
+    height: 1.75em;
+    justify-content: center;
+    line-height: 1.625rem;
+    margin-left: .5rem;
+    padding: .35rem;
+    width: 1.75em;
+
+    & > * {
+      fill: $color-white;
+    }
+
+    & > *:not(:first-of-type) {
+      margin-left: .5rem;
+    }
+  }
+
+  &MainButton {
+    width: 100%;
+  }
+
+  &CircleButton {
+    border-radius: 50%;
+    padding: .35em;
+    width: 1.75em;
+  }
+
+  &SquareButton {
+    border-radius: .75em;
+    padding: .35em;
+    width: 1.75em;
+  }
+}

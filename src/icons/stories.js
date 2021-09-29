@@ -47,6 +47,11 @@ import RetweetAlt from './RetweetAlt';
 import RocketSolid from './RocketSolid';
 import ThumbsDownSolid from './ThumbsDownSolid';
 import ThumbsUpSolid from './ThumbsUpSolid';
+import GlobeAmericas from './GlobeAmericas';
+import EllipsisH from './EllipsisH';
+import ChevronUp from './ChevronUp';
+import Eye from './Eye';
+import CommentAlt from './CommentAlt';
 
 export default {
   title: 'Components/Icons',
@@ -101,6 +106,7 @@ export const Icons = ({ color, size }) => (
     {renderIcon(ChartLine)}
     {renderIcon(TimesLight)}
     {renderIcon(AngleDown)}
+    {renderIcon(ChevronUp)}
     {renderIcon(ChevronDown)}
     {renderIcon(ChevronLeft)}
     {renderIcon(ChevronRight)}
@@ -132,6 +138,10 @@ export const Icons = ({ color, size }) => (
     {renderIcon(ThumbsUpSolid)}
     {renderIcon(CaretUpSolid)}
     {renderIcon(CaretDownSolid)}
+    {renderIcon(GlobeAmericas)}
+    {renderIcon(EllipsisH)}
+    {renderIcon(Eye)}
+    {renderIcon(CommentAlt)}
   </div>
 );
 Icons.storyName = 'Icons';

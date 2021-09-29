@@ -1,54 +1,7 @@
-import dayjs from 'dayjs';
 import React from 'react';
-import TestImage from '@/images/TestImage.jpg';
-import { DATE_FORMAT } from '../../constants';
 import LiveCardsArea from '../../components/LiveCardsArea';
 import styles from './styles.module.scss';
-
-const cards = [
-  {
-    id: 1,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 1. Текст',
-    image: TestImage,
-  },
-  {
-    id: 2,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 2. Текст',
-    image: TestImage,
-  },
-  {
-    id: 3,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 3. Текст',
-    image: TestImage,
-  },
-  {
-    id: 4,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 4. Текст',
-    image: TestImage,
-  },
-  {
-    id: 5,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 5. Текст',
-    image: TestImage,
-  },
-  {
-    id: 6,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 6. Текст',
-    image: TestImage,
-  },
-  {
-    id: 7,
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 7. Текст',
-    image: TestImage,
-  },
-];
+import { cards } from './mocks';
 
 const propTypes = {
 };
@@ -72,7 +25,12 @@ const Live = function Live({
             key={card.id}
             date={card.date}
             title={card.title}
+            href={card.href}
+            content={card.content}
             image={card.image}
+            platform={card.platform}
+            placement={card.placement}
+            device={card.device}
             onClick={handleCardClick}
           />
         ))}

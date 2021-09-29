@@ -1,15 +1,8 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import TestImage from '@/images/TestImage.jpg';
 import { DATE_FORMAT } from '../../constants';
-import LiveCardsArea from './index';
 
-export default {
-  title: 'features/Live/LiveCardsArea',
-  component: LiveCardsArea,
-};
-
-const cards = [
+export const cards = [
   {
     id: 1,
     href: 'https://vk.com/adscreate',
@@ -78,28 +71,6 @@ const cards = [
   },
 ];
 
-const Template = (args) => (
-  <LiveCardsArea {...args}>
-    {cards.map((card) => (
-      <LiveCardsArea.Card
-        key={card.id}
-        date={card.date}
-        title={card.title}
-        href={card.href}
-        content={card.content}
-        image={card.image}
-        platform={card.platform}
-        placement={card.placement}
-        device={card.device}
-        onClick={() => {}}
-      />
-    ))}
-  </LiveCardsArea>
-);
-
-export const Playground = Template.bind({});
-Playground.args = {
-  stepX: 350,
-  stepYLimits: [0, 200],
-  moveSpeedX: 0.15,
+export default {
+  cards,
 };

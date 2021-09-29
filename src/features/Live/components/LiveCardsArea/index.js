@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Card from '../Card';
 import styles from './styles.module.scss';
-import Card from './components/Card';
 
 const propTypes = {
   children: PropTypes.node.isRequired,
@@ -9,12 +9,14 @@ const propTypes = {
   stepYLimits: PropTypes.arrayOf([
     PropTypes.number,
   ]),
+  childWidth: PropTypes.number,
   moveSpeedX: PropTypes.number,
 };
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
-  moveSpeedX: 0.15,
+  moveSpeedX: 0.001,
+  childWidth: 100,
 };
 
 const LiveCardsArea = function LiveCardsArea({
@@ -22,6 +24,7 @@ const LiveCardsArea = function LiveCardsArea({
   stepX,
   stepYLimits,
   moveSpeedX,
+  childWidth,
 }) {
   const [renderChildrenArr, setRendrerChildrenArr] = useState(children);
 
@@ -37,8 +40,8 @@ const LiveCardsArea = function LiveCardsArea({
       : Math.random() * (stepYLimits[1] - stepYLimits[0]) + stepYLimits[0];
 
     const left = index === 0
-      ? 0
-      : stepX * index;
+      ? childWidth / 2
+      : (childWidth + stepX) * index;
 
     const finalPositionX = -stepX * childrenArr.length;
     const moveSpeed = moveSpeedX / childrenArr.length;
@@ -55,7 +58,7 @@ const LiveCardsArea = function LiveCardsArea({
         setRendrerChildrenArr,
       }
     );
-  }, [moveSpeedX, stepX, stepYLimits]);
+  }, [moveSpeedX, stepX, stepYLimits, childWidth]);
 
   useEffect(() => {
     const movedChildren = children
