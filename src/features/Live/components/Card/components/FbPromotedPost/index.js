@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
 import GlobeAmericasIcon from '@/icons/GlobeAmericas';
 import EllipsisHIcon from '@/icons/EllipsisH';
+import angry from '@/images/facebook/angry.svg';
+import haha from '@/images/facebook/haha.svg';
+import like from '@/images/facebook/like.svg';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -87,6 +90,49 @@ const PromotedPost = function PromotedPost({
           >
             Кнопка
           </button>
+        </div>
+      </div>
+
+      <div className={styles.feedback}>
+        <div className={styles.feedbackReactions}>
+          <img
+            src={angry}
+            alt="angry"
+          />
+          <img
+            src={haha}
+            alt="haha"
+          />
+          <img
+            src={like}
+            alt="like"
+          />
+
+          <span className={styles.feedbackReactionsCount}>
+            15
+          </span>
+        </div>
+
+        <div className={styles.feedbackActions}>
+          <div>
+            <span>
+              Комментарии:
+            </span>
+            &nbsp;
+            <span>
+              5
+            </span>
+          </div>
+
+          <div>
+            <span>
+              Поделились:
+            </span>
+            &nbsp;
+            <span>
+              1
+            </span>
+          </div>
         </div>
       </div>
 

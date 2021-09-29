@@ -1,5 +1,8 @@
 @import '@/theme/include.scss';
 
+$side-offset: 1rem;
+$top-offset: .75rem;
+
 .wrapper {
   background-color: $color-white;
   border: 1px solid $color-gray;
@@ -8,7 +11,7 @@
   justify-content: space-between;
   min-height: 7.75rem;
   overflow: hidden;
-  padding: .75rem 1.25rem 0;
+  padding: $top-offset 0;
   width: 23.5rem;
 }
 
@@ -17,7 +20,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 .5rem;
+  padding: 0 $side-offset;
 
   &InfoGroup {
     align-items: center;
@@ -72,16 +75,15 @@
 }
 
 .content {
-  margin-top: 1rem;
-  padding: 0 .5rem;
+  margin-top: $top-offset;
+  padding: 0 $side-offset;
   text-align: left;
 }
 
 .source {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
-  margin-top: .5rem;
+  margin-top: $top-offset;
 
   &Icon {
     height: 20rem;
@@ -110,6 +112,32 @@
 
     &Title {
       font-weight: 600;
+    }
+  }
+}
+
+.feedback {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: $top-offset;
+  padding: 0 $side-offset;
+
+  &Reactions {
+    align-items: center;
+    display: flex;
+
+    &Count {
+      margin-left: .25rem;
+    }
+  }
+
+  &Actions {
+    display: flex;
+
+    & > *:not(:last-child) {
+      margin-right: .25rem;
     }
   }
 }
