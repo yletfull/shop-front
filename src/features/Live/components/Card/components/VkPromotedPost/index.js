@@ -88,7 +88,7 @@ const PromotedPost = function PromotedPost({
             type="button"
             className={styles.sourceBottomButton}
           >
-            Записаться
+            Кнопка
           </button>
         </div>
       </div>
