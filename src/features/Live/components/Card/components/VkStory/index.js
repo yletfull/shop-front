@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import VkIcon from '@/icons/Vk';
 import EllipsisHIcon from '@/icons/EllipsisH';
 import HeartIcon from '@/icons/Heart';
@@ -64,26 +65,35 @@ const Story = function Story({
 
       <div className={styles.feedback}>
         <div className={styles.feedBackRow}>
-          <div className={styles.feedbackCircleButton}>
+          <button
+            type="button"
+            className={cx(styles.feedbackButton, styles.feedbackCircleButton)}
+          >
             <HeartIcon />
-          </div>
+          </button>
         </div>
 
         <div className={styles.feedbackRow}>
           <button
-            className={styles.feedbackMainButton}
+            className={cx(styles.feedbackButton, styles.feedbackMainButton)}
             type="button"
           >
             Кнопка
           </button>
 
-          <div className={styles.feedbackSquareButton}>
+          <button
+            type="button"
+            className={cx(styles.feedbackButton, styles.feedbackSquareButton)}
+          >
             <ShareIcon />
-          </div>
+          </button>
 
-          <div className={styles.feedbackSquareButton}>
+          <button
+            type="button"
+            className={cx(styles.feedbackButton, styles.feedbackSquareButton)}
+          >
             <EllipsisHIcon />
-          </div>
+          </button>
         </div>
       </div>
     </div>
