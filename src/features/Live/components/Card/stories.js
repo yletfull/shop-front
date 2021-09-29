@@ -16,9 +16,12 @@ const Template = (args) => (
 export const Playground = Template.bind({});
 Playground.args = {
   id: 1,
-  title: 'Событие 1. Текст',
+  href: 'https://vk.com/adscreate',
   date: dayjs().format(DATE_FORMAT),
+  title: 'Событие 1.',
+  content: 'Контент',
   image: TestImage,
-  top: 10,
-  left: 10,
+  platform: 'vk',
+  placement: 'promotedPost',
+  device: 'mobile',
 };

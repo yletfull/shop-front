@@ -1,6 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import TestImage from '@/images/TestImage.jpg';
+import { DATE_FORMAT } from '../../constants';
 import LiveCardsArea from './index';
 
 export default {
@@ -11,27 +12,69 @@ export default {
 const cards = [
   {
     id: 1,
-    date: dayjs(),
-    title: 'Событие 1. Текст',
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 1.',
+    content: 'Контент',
     image: TestImage,
+    platform: 'vk',
+    placement: 'promotedPost',
+    device: 'mobile',
   },
   {
     id: 2,
-    date: dayjs(),
-    title: 'Событие 2. Текст',
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 2.',
+    content: TestImage,
     image: TestImage,
+    platform: 'vk',
+    placement: 'story',
+    device: 'mobile',
   },
   {
     id: 3,
-    date: dayjs(),
-    title: 'Событие 3. Текст',
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 3.',
+    content: 'Контент 3.',
     image: TestImage,
+    platform: 'fb',
+    placement: 'promotedPost',
+    device: 'mobile',
   },
   {
     id: 4,
-    date: dayjs(),
-    title: 'Событие 4. Текст',
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 4.',
+    content: TestImage,
     image: TestImage,
+    platform: 'fb',
+    placement: 'story',
+    device: 'mobile',
+  },
+  {
+    id: 5,
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 4.',
+    content: TestImage,
+    image: TestImage,
+    platform: 'vk',
+    placement: 'promotedPost',
+    device: 'desktop',
+  },
+  {
+    id: 6,
+    href: 'https://vk.com/adscreate',
+    date: dayjs().format(DATE_FORMAT),
+    title: 'Событие 4.',
+    content: TestImage,
+    image: TestImage,
+    platform: 'fb',
+    placement: 'promotedPost',
+    device: 'desktop',
   },
 ];
 
@@ -42,7 +85,12 @@ const Template = (args) => (
         key={card.id}
         date={card.date}
         title={card.title}
+        href={card.href}
+        content={card.content}
         image={card.image}
+        platform={card.platform}
+        placement={card.placement}
+        device={card.device}
         onClick={() => {}}
       />
     ))}
