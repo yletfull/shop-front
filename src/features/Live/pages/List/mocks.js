@@ -59,7 +59,7 @@ export const cards = [
     device: 'desktop',
   },
   {
-    id: 5,
+    id: 6,
     href: 'https://vk.com/adscreate',
     date: dayjs().format(DATE_FORMAT),
     title: 'Событие 4.',
