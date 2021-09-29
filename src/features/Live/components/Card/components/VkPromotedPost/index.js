@@ -44,9 +44,7 @@ const PromotedPost = function PromotedPost({
           />
 
           <div className={styles.headerInfo}>
-            <div
-              className={styles.headerInfoTitle}
-            >
+            <div className={styles.headerInfoTitle}>
               {title}
             </div>
 
@@ -60,9 +58,7 @@ const PromotedPost = function PromotedPost({
       </a>
 
       <div className={styles.content}>
-        <span>
-          {content}
-        </span>
+        {content}
       </div>
 
       <div className={styles.source}>
@@ -71,11 +67,13 @@ const PromotedPost = function PromotedPost({
           src={icon}
           alt={title}
         />
+
         <div className={styles.sourceBottom}>
           <div className={styles.sourceBottomTextContent}>
             <span className={styles.sourceBottomTitle}>
               Описание сайта
             </span>
+
             <a
               href={href}
               className={styles.sourceBottomDescription}
