@@ -95,26 +95,43 @@ const PromotedPost = function PromotedPost({
 
       <div className={styles.feedback}>
         <div className={styles.feedbackReactions}>
-          <img
-            src={angry}
-            alt="angry"
-          />
-          <img
-            src={haha}
-            alt="haha"
-          />
-          <img
-            src={like}
-            alt="like"
-          />
-
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <img
+              src={angry}
+              alt="angry"
+            />
+          </button>
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <img
+              src={haha}
+              alt="haha"
+            />
+          </button>
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <img
+              src={like}
+              alt="like"
+            />
+          </button>
           <span className={styles.feedbackReactionsCount}>
             15
           </span>
         </div>
 
         <div className={styles.feedbackActions}>
-          <div>
+          <button
+            type="button"
+            className={styles.feedbackActionsButton}
+          >
             <span>
               Комментарии:
             </span>
@@ -122,9 +139,12 @@ const PromotedPost = function PromotedPost({
             <span>
               5
             </span>
-          </div>
+          </button>
 
-          <div>
+          <button
+            type="button"
+            className={styles.feedbackActionsButton}
+          >
             <span>
               Поделились:
             </span>
@@ -132,7 +152,7 @@ const PromotedPost = function PromotedPost({
             <span>
               1
             </span>
-          </div>
+          </button>
         </div>
       </div>
 

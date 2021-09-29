@@ -133,11 +133,22 @@ $top-offset: .75rem;
     }
   }
 
+  &ReactionButton {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+
   &Actions {
     display: flex;
 
     & > *:not(:last-child) {
       margin-right: .25rem;
+    }
+
+    &Button {
+      background-color: transparent;
+      border: none;
     }
   }
 }
