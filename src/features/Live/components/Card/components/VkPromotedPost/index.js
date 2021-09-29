@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
 import EllipsisHIcon from '@/icons/EllipsisH';
+import IconHeart from '@/icons/Heart';
+import IconShare from '@/icons/Share';
+import CommentAltIcon from '@/icons/CommentAlt';
+import EyeIcon from '@/icons/Eye';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -88,6 +92,46 @@ const PromotedPost = function PromotedPost({
           </button>
         </div>
       </div>
+
+      <div className={styles.feedback}>
+        <div className={styles.feedbackReactions}>
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <IconHeart />
+            &nbsp;
+            12
+          </button>
+
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <CommentAltIcon />
+            &nbsp;
+            3
+          </button>
+
+          <button
+            type="button"
+            className={styles.feedbackReactionButton}
+          >
+            <IconShare />
+            &nbsp;
+            1
+          </button>
+        </div>
+
+        <span className={styles.feedbackViews}>
+          <EyeIcon />
+          &nbsp;
+          <span className={styles.feedbackViewsCount}>
+            126
+          </span>
+        </span>
+      </div>
+
     </div>
   );
 };
