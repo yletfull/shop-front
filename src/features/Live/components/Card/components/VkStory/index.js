@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import VkIcon from '@/icons/Vk';
 import EllipsisHIcon from '@/icons/EllipsisH';
+import HeartIcon from '@/icons/Heart';
+import ShareIcon from '@/icons/Share';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -60,16 +62,28 @@ const Story = function Story({
         </div>
       </a>
 
-      <div className={styles.bottom}>
-        <button
-          className={styles.bottomButton}
-          type="button"
-        >
-          Кнопка
-        </button>
+      <div className={styles.feedback}>
+        <div className={styles.feedBackRow}>
+          <div className={styles.feedbackCircleButton}>
+            <HeartIcon />
+          </div>
+        </div>
 
-        <div className={styles.bottomOptionsButton}>
-          <EllipsisHIcon />
+        <div className={styles.feedbackRow}>
+          <button
+            className={styles.feedbackMainButton}
+            type="button"
+          >
+            Кнопка
+          </button>
+
+          <div className={styles.feedbackSquareButton}>
+            <ShareIcon />
+          </div>
+
+          <div className={styles.feedbackSquareButton}>
+            <EllipsisHIcon />
+          </div>
         </div>
       </div>
     </div>

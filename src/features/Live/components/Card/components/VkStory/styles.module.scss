@@ -84,16 +84,24 @@ $side-offset: .5rem;
   width: 100%;
 }
 
-.bottom {
-  align-items: center;
+.feedback {
+  align-items: flex-end;
   bottom: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   padding: $side-offset;
   position: absolute;
   width: 100%;
 
-  &Button {
+  &Row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: .5rem;
+    width: 100%;
+  }
+
+  &MainButton {
     background-color: rgba($color-black, .7);
     border: 1px dashed $color-white;
     border-radius: .85rem;
@@ -102,15 +110,31 @@ $side-offset: .5rem;
     width: 100%;
   }
 
-  &OptionsButton {
+  &CircleButton {
     align-items: center;
+    background-color: rgba($color-black, .7);
     border: 1px solid $color-white;
     border-radius: 50%;
     display: flex;
+    font-size: 1rem;
     height: 1.75em;
     justify-content: center;
     margin-left: .5rem;
-    padding: .25rem;
+    padding: .35rem;
+    width: 1.75em;
+  }
+
+  &SquareButton {
+    align-items: center;
+    background-color: rgba($color-black, .7);
+    border: 1px solid $color-white;
+    border-radius: .75rem;
+    display: flex;
+    font-size: 1rem;
+    height: 1.75em;
+    justify-content: center;
+    margin-left: .5rem;
+    padding: .35rem;
     width: 1.75em;
 
     & > * {
