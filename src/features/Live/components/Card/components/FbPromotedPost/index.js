@@ -36,7 +36,6 @@ const PromotedPost = function PromotedPost({
         target="_blank"
         rel="noreferrer"
       >
-
         <div className={styles.headerInfoGroup}>
           <img
             className={styles.headerIcon}
@@ -74,6 +73,7 @@ const PromotedPost = function PromotedPost({
           src={icon}
           alt={title}
         />
+
         <div className={styles.sourceBottom}>
           <div className={styles.sourceBottomTextContent}>
             <span className={styles.sourceBottomTitle}>
@@ -104,6 +104,7 @@ const PromotedPost = function PromotedPost({
               alt="angry"
             />
           </button>
+
           <button
             type="button"
             className={styles.feedbackReactionButton}
@@ -113,6 +114,7 @@ const PromotedPost = function PromotedPost({
               alt="haha"
             />
           </button>
+
           <button
             type="button"
             className={styles.feedbackReactionButton}
@@ -122,6 +124,7 @@ const PromotedPost = function PromotedPost({
               alt="like"
             />
           </button>
+
           <span className={styles.feedbackReactionsCount}>
             15
           </span>
