@@ -69,6 +69,7 @@ const Story = function Story({
 
       <div className={styles.bottom}>
         <ChevronUp />
+
         <button
           className={styles.bottomButton}
           type="button"
