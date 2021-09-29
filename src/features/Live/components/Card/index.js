@@ -13,6 +13,7 @@ const propTypes = {
   finalPositionX: PropTypes.number.isRequired,
   platform: PropTypes.string.isRequired,
   placement: PropTypes.string.isRequired,
+  device: PropTypes.string.isRequired,
   dateFormat: PropTypes.string,
   children: PropTypes.node,
   top: PropTypes.number,
@@ -50,6 +51,7 @@ const LiveCard = function LiveCard({
   updateTimeInterval,
   platform,
   placement,
+  device,
   ...props
 }) {
   const cardRef = useRef();
@@ -101,6 +103,7 @@ const LiveCard = function LiveCard({
       <AdsContent
         title={title}
         content={content}
+        device={device}
         icon={image}
         image={image}
         ref={adsRef}

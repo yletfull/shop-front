@@ -12,6 +12,7 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
+  device: PropTypes.string.isRequired,
   icon: PropTypes.string,
 };
 const defaultProps = {
@@ -23,11 +24,13 @@ const PromotedPost = function PromotedPost({
   content,
   href,
   icon,
+  device,
   ...props
 }) {
   return (
     <div
       className={styles.wrapper}
+      data-device={device}
       {...props}
     >
       <a

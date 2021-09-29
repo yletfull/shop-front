@@ -11,6 +11,7 @@ import styles from './styles.module.scss';
 const propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.node.isRequired,
+  device: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
   icon: PropTypes.string,
 };
@@ -23,11 +24,13 @@ const PromotedPost = function PromotedPost({
   content,
   href,
   icon,
+  device,
   ...props
 }) {
   return (
     <div
       className={styles.wrapper}
+      data-device={device}
       {...props}
     >
       <a

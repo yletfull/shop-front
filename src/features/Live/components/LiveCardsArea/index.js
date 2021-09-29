@@ -13,7 +13,7 @@ const propTypes = {
   moveSpeedX: PropTypes.number,
 };
 const defaultProps = {
-  stepX: 150,
+  stepX: 350,
   stepYLimits: [0, 200],
   moveSpeedX: 0.001,
   childWidth: 100,

@@ -30,6 +30,7 @@ const Live = function Live({
             image={card.image}
             platform={card.platform}
             placement={card.placement}
+            device={card.device}
             onClick={handleCardClick}
           />
         ))}

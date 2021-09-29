@@ -13,6 +13,14 @@ $top-offset: .75rem;
   overflow: hidden;
   padding: $top-offset 0;
   width: 23.5rem;
+
+  &[data-device='mobile'] {
+    width: 23.5rem;
+  }
+
+  &[data-device='desktop'] {
+    width: 42.5rem;
+  }
 }
 
 .header {
