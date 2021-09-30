@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import TestImage from '@/images/TestImage.jpg';
 import { DATE_FORMAT } from '../../constants';
 
-export const cards = [
+export const banners = [
   {
     id: 1,
     href: 'https://vk.com/adscreate',
@@ -78,5 +78,5 @@ export const cards = [
 ];
 
 export default {
-  cards,
+  banners,
 };

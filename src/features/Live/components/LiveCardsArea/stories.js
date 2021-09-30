@@ -9,7 +9,7 @@ export default {
   component: LiveCardsArea,
 };
 
-const cards = [
+const banners = [
   {
     id: 1,
     href: 'https://vk.com/adscreate',
@@ -80,17 +80,10 @@ const cards = [
 
 const Template = (args) => (
   <LiveCardsArea {...args}>
-    {cards.map((card) => (
+    {banners.map((banner) => (
       <LiveCardsArea.Card
-        key={card.id}
-        date={card.date}
-        title={card.title}
-        href={card.href}
-        content={card.content}
-        image={card.image}
-        platform={card.platform}
-        placement={card.placement}
-        device={card.device}
+        key={banner.id}
+        bannerData={banner}
         onClick={() => {}}
       />
     ))}
