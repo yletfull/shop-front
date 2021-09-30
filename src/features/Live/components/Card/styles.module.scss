@@ -10,23 +10,3 @@
   position: absolute;
   text-align: center;
 }
-
-.image {
-  border-radius: .5rem;
-  height: 11.75rem;
-}
-
-.title {
-  color: $color-gray-darkest;
-  line-height: 3em;
-  width: 100%;
-}
-
-.date {
-  color: $color-gray-darkest;
-  line-height: 3em;
-  position: absolute;
-  right: -2.25rem;
-  top: 0;
-  writing-mode: vertical-rl;
-}

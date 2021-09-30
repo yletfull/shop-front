@@ -9,7 +9,7 @@ export default {
   component: LiveCardsArea,
 };
 
-const cards = [
+const banners = [
   {
     id: 1,
     href: 'https://vk.com/adscreate',
@@ -17,6 +17,7 @@ const cards = [
     title: 'Событие 1.',
     content: 'Контент',
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'promotedPost',
     device: 'mobile',
@@ -28,6 +29,7 @@ const cards = [
     title: 'Событие 2.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'story',
     device: 'mobile',
@@ -39,6 +41,7 @@ const cards = [
     title: 'Событие 3.',
     content: 'Контент 3.',
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
     device: 'mobile',
@@ -50,6 +53,7 @@ const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'story',
     device: 'mobile',
@@ -61,6 +65,7 @@ const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'promotedPost',
     device: 'desktop',
@@ -72,6 +77,7 @@ const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
     device: 'desktop',
@@ -80,17 +86,10 @@ const cards = [
 
 const Template = (args) => (
   <LiveCardsArea {...args}>
-    {cards.map((card) => (
+    {banners.map((banner) => (
       <LiveCardsArea.Card
-        key={card.id}
-        date={card.date}
-        title={card.title}
-        href={card.href}
-        content={card.content}
-        image={card.image}
-        platform={card.platform}
-        placement={card.placement}
-        device={card.device}
+        key={banner.id}
+        bannerData={banner}
         onClick={() => {}}
       />
     ))}

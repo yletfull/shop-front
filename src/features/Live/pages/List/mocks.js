@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import TestImage from '@/images/TestImage.jpg';
 import { DATE_FORMAT } from '../../constants';
 
-export const cards = [
+export const banners = [
   {
     id: 1,
     href: 'https://vk.com/adscreate',
@@ -10,6 +10,7 @@ export const cards = [
     title: 'Событие 1.',
     content: 'Контент',
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'promotedPost',
     device: 'mobile',
@@ -21,6 +22,7 @@ export const cards = [
     title: 'Событие 2.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'story',
     device: 'mobile',
@@ -32,6 +34,7 @@ export const cards = [
     title: 'Событие 3.',
     content: 'Контент 3.',
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
     device: 'mobile',
@@ -43,6 +46,7 @@ export const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'story',
     device: 'mobile',
@@ -54,6 +58,7 @@ export const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'vk',
     placement: 'promotedPost',
     device: 'desktop',
@@ -65,6 +70,7 @@ export const cards = [
     title: 'Событие 4.',
     content: TestImage,
     image: TestImage,
+    icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
     device: 'desktop',
@@ -72,5 +78,5 @@ export const cards = [
 ];
 
 export default {
-  cards,
+  banners,
 };
