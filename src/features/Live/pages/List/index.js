@@ -8,7 +8,6 @@ const propTypes = {
 const defaultProps = {
 };
 
-
 const Live = function Live({
   ...props
 }) {

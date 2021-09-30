@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
-  moveSpeedX: 0.5,
+  moveSpeedX: 0.25,
   childWidth: 100,
 };
 
@@ -43,7 +43,7 @@ const LiveCardsArea = function LiveCardsArea({
       ? childWidth / 2
       : (childWidth + stepX) * index;
 
-    const finalPositionX = -stepX * childrenArr.length;
+    const finalPositionX = -stepX * childrenArr.length * 1.5;
     const moveSpeed = moveSpeedX / childrenArr.length;
 
     return React.cloneElement(
@@ -51,8 +51,8 @@ const LiveCardsArea = function LiveCardsArea({
       {
         key,
         style: {
-          left: `${left}px`,
-          top: `${top}px`,
+          marginLeft: `${left}px`,
+          marginTop: `${top}px`,
           transform: `translateX(${finalPositionX}px)`,
           transition: `transform ${1 / (moveSpeed || 1)}s linear`,
         },

@@ -36,6 +36,7 @@ const LiveCard = function LiveCard({
   ...props
 }) {
   const cardRef = useReducer();
+
   const [isShown, setIsShown] = useState(true);
 
   useEffect(() => {
