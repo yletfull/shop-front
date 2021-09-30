@@ -15,7 +15,7 @@ const propTypes = {
 const defaultProps = {
   stepX: 350,
   stepYLimits: [0, 200],
-  moveSpeedX: 0.001,
+  moveSpeedX: 0.5,
   childWidth: 100,
 };
 
@@ -50,12 +50,12 @@ const LiveCardsArea = function LiveCardsArea({
       child,
       {
         key,
-        moveSpeed,
-        top,
-        left,
-        finalPositionX,
-        id: key,
-        setRendrerChildrenArr,
+        style: {
+          left: `${left}px`,
+          top: `${top}px`,
+          transform: `translateX(${finalPositionX}px)`,
+          transition: `transform ${1 / (moveSpeed || 1)}s linear`,
+        },
       }
     );
   }, [moveSpeedX, stepX, stepYLimits, childWidth]);
