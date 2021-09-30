@@ -10,7 +10,7 @@ export default {
 };
 
 const Template = (args) => (
-  <LiveCard {...args} />
+  <LiveCard bannerData={args} />
 );
 
 export const Playground = Template.bind({});
@@ -21,6 +21,7 @@ Playground.args = {
   title: 'Событие 1.',
   content: 'Контент',
   image: TestImage,
+  icon: TestImage,
   platform: 'vk',
   placement: 'promotedPost',
   device: 'mobile',
