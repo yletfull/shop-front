@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 import { platformsAdsComponents, platformsAdsSizes } from './constants';
@@ -16,7 +16,7 @@ const defaultProps = {
 
 const getBanner = (card) => {
   const Banner = platformsAdsComponents[card.platform][card.placement];
-  const sizes = platformsAdsSizes[card.platform][card.placement];
+  const sizes = platformsAdsSizes[card.platform][card.placement][card.device];
 
   return (
     <Banner
@@ -35,7 +35,7 @@ const LiveCard = function LiveCard({
   bannerData,
   ...props
 }) {
-  const cardRef = useReducer();
+  const cardRef = useRef();
 
   const [isShown, setIsShown] = useState(true);
 
