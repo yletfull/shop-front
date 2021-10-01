@@ -6,9 +6,7 @@ import styles from './styles.module.scss';
 const propTypes = {
   children: PropTypes.node.isRequired,
   stepX: PropTypes.number,
-  stepYLimits: PropTypes.arrayOf([
-    PropTypes.number,
-  ]),
+  stepYLimits: PropTypes.arrayOf(PropTypes.number),
   childWidth: PropTypes.number,
   moveSpeedX: PropTypes.number,
 };
