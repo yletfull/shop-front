@@ -16,7 +16,7 @@ const defaultProps = {
 
 const getBanner = (card) => {
   const Banner = platformsAdsComponents[card.platform][card.placement];
-  const sizes = platformsAdsSizes[card.platform][card.placement];
+  const sizes = platformsAdsSizes[card.platform][card.placement][card.device];
 
   return (
     <Banner

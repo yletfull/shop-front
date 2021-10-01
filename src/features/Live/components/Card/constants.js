@@ -16,12 +16,40 @@ export const platformsAdsComponents = {
 
 export const platformsAdsSizes = {
   vk: {
-    promotedPost: 10,
-    story: 10,
+    promotedPost: {
+      mobile: {
+        width: '23.5rem',
+      },
+      desktop: {
+        width: '34.375rem',
+      },
+    },
+    story: {
+      mobile: {
+        width: '16.875rem',
+      },
+      desktop: {
+        width: '16.875rem',
+      },
+    },
   },
   fb: {
-    promotedPost: 10,
-    story: 10,
+    promotedPost: {
+      mobile: {
+        width: '23.5rem',
+      },
+      desktop: {
+        width: '42.5rem',
+      },
+    },
+    story: {
+      mobile: {
+        width: '16.875rem',
+      },
+      desktop: {
+        width: '16.875rem',
+      },
+    },
   },
 };
 

@@ -11,6 +11,7 @@ const propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.node.isRequired,
   href: PropTypes.string.isRequired,
+  sizes: PropTypes.objectOf(PropTypes.any).isRequired,
   icon: PropTypes.string,
 };
 const defaultProps = {
@@ -22,11 +23,13 @@ const Story = function Story({
   content,
   href,
   icon,
+  sizes,
   ...props
 }) {
   return (
     <div
       className={styles.wrapper}
+      style={{ ...sizes }}
       {...props}
     >
       <div

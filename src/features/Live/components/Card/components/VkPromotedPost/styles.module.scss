@@ -6,14 +6,6 @@
   font-size: .75em;
   min-height: 7.75rem;
   padding: .75rem 1.25rem .75rem;
-
-  &[data-device='mobile'] {
-    width: 23.5rem;
-  }
-
-  &[data-device='desktop'] {
-    width: 34.375rem;
-  }
 }
 
 .header {
