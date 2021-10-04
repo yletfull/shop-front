@@ -140,7 +140,7 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
     });
 
     setPointData({
-      x: (posX ?? pointerPosX) + padding.left,
+      x: (posX ? posX + bandwidth / 2 : pointerPosX) + padding.left,
       y: padding.top,
     });
   };
@@ -222,7 +222,6 @@ const ReactionsFacebookChart = function ReactionsFacebookChart({
           x={pointData.x}
           y={pointData.y}
           height={chartHeight}
-          width={bandwidth}
         />
       )}
     </div>
