@@ -18,6 +18,7 @@ export const setEntityType = (data) => (dispatch) => {
 export const fetchEntities = () => async (dispatch, getState) => {
   const state = getState();
   const entityType = getEntityType(state);
+  console.log(entityType);
 
   if (!entityType) {
     return;
