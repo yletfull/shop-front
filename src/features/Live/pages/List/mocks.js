@@ -13,7 +13,6 @@ export const banners = [
     icon: TestImage,
     platform: 'vk',
     placement: 'promotedPost',
-    device: 'mobile',
   },
   {
     id: 2,
@@ -25,7 +24,6 @@ export const banners = [
     icon: TestImage,
     platform: 'vk',
     placement: 'story',
-    device: 'mobile',
   },
   {
     id: 3,
@@ -37,7 +35,6 @@ export const banners = [
     icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
-    device: 'mobile',
   },
   {
     id: 4,
@@ -49,19 +46,6 @@ export const banners = [
     icon: TestImage,
     platform: 'fb',
     placement: 'story',
-    device: 'mobile',
-  },
-  {
-    id: 5,
-    href: 'https://vk.com/adscreate',
-    date: dayjs().format(DATE_FORMAT),
-    title: 'Событие 4.',
-    content: TestImage,
-    image: TestImage,
-    icon: TestImage,
-    platform: 'vk',
-    placement: 'promotedPost',
-    device: 'desktop',
   },
   {
     id: 6,
@@ -73,7 +57,6 @@ export const banners = [
     icon: TestImage,
     platform: 'fb',
     placement: 'promotedPost',
-    device: 'desktop',
   },
 ];
 

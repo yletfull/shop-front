@@ -1,7 +1,9 @@
 import React from 'react';
 import LiveCardsArea from '../../components/LiveCardsArea';
+import { devices } from '../../constants';
 import styles from './styles.module.scss';
 import { banners } from './mocks';
+import { getRandomDevice } from './utils';
 
 const propTypes = {
 };
@@ -21,6 +23,7 @@ const Live = function Live({
           <LiveCardsArea.Card
             key={banner.id}
             bannerData={banner}
+            device={getRandomDevice(Object.values(devices))}
           />
         ))}
       </LiveCardsArea>
