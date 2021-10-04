@@ -4,7 +4,11 @@ $header-height: 3.75rem;
 
 .appMain {
   &Header {
+    background-color: $color-gray-lightest;
     height: $header-height;
     margin-top: (-1) * $header-height;
+    position: sticky;
+    top: 0;
+    z-index: 10000;
   }
 }
