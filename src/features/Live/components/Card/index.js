@@ -7,6 +7,7 @@ const propTypes = {
   children: PropTypes.node,
   onClick: PropTypes.func,
   bannerData: PropTypes.objectOf(PropTypes.any).isRequired,
+  device: PropTypes.string.isRequired,
 };
 
 const defaultProps = {
@@ -14,17 +15,17 @@ const defaultProps = {
   onClick: () => {},
 };
 
-const getBanner = (card) => {
+const getBanner = (card, device) => {
   const Banner = platformsAdsComponents[card.platform][card.placement];
-  const sizes = platformsAdsSizes[card.platform][card.placement][card.device];
+  const sizes = platformsAdsSizes[card.platform][card.placement][device];
 
   return (
     <Banner
       title={card.title}
       content={card.content}
-      device={card.device}
       href={card.href}
       icon={card.icon}
+      device={device}
       sizes={sizes}
     />
   );
@@ -33,6 +34,7 @@ const getBanner = (card) => {
 const LiveCard = function LiveCard({
   children,
   bannerData,
+  device,
   ...props
 }) {
   const cardRef = useRef();
@@ -60,7 +62,7 @@ const LiveCard = function LiveCard({
         ref={cardRef}
         {...props}
       >
-        {getBanner(bannerData)}
+        {getBanner(bannerData, device)}
 
         {children}
       </div>
