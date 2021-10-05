@@ -1,13 +1,22 @@
 @import '@/theme/include.scss';
 
+$header-height: 3.75rem;
+
 .appHeader {
   align-items: center;
+  background-color: $color-gray-lightest;
   display: flex;
-  margin: -1rem auto;
+  height: $header-height;
+  margin-top: -4rem;
   max-width: 100%;
   padding: 1rem 0;
   width: 100%;
   z-index: 10;
+
+  &[data-type='sticky'] {
+    position: sticky;
+    top: 0;
+  }
 
   &Link {
     color: $color-primary-darkest;
