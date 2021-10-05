@@ -136,6 +136,7 @@ const StatisticsDetails = function StatisticsDetailsPage() {
             </div>
           </div>
         )}
+        headerType="sticky"
       >
         <Grid inset>
           <GridCell
