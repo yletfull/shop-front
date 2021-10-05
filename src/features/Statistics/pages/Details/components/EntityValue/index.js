@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
-import { useService } from '@/hooks';
+import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '@/components/Spinner';
-import service from './service';
+import {
+  getEntities,
+  getEntitiesIsFetching,
+  getEntityType,
+} from '@/features/Statistics/store/selectors';
+import {
+  fetchEntities,
+  setEntityType,
+} from '@/features/Statistics/store/actions';
+
 
 const propTypes = {
   entityId: PropTypes.string,
@@ -17,29 +26,36 @@ const EntitySelect = function EntitySelect({
   entityId,
   ...props
 }) {
-  const [currentEntity, setCurrentEntity] = useState({});
-  const { entityType } = useParams();
+  const dispatch = useDispatch();
 
-  const { fetch, data: entities = {}, isFetching } = useService({
-    initialData: {},
-    service: service.fetchEntities,
-  });
+  const entities = useSelector(getEntities);
+  const entityType = useSelector(getEntityType);
+  const entitiesIsFetching = useSelector(getEntitiesIsFetching);
 
-  useEffect(() => {
-    if (!entityType) {
+  const { entityType: paramsEntityType } = useParams();
+
+  useEffect(() => async () => {
+    if (entityType === paramsEntityType) {
       return;
     }
-    fetch(entityType);
-  }, [fetch, entityType]);
+
+    dispatch(setEntityType(paramsEntityType));
+    await dispatch(fetchEntities());
+  },
+  [dispatch, entityType, paramsEntityType]);
+
+  const [currentEntity, setCurrentEntity] = useState({});
 
   useEffect(() => {
-    if (Object.keys(entities).length) {
-      setCurrentEntity(entities?.find((ent) => ent.id === entityId));
+    if (Array.isArray(entities) && entities.length) {
+      setCurrentEntity(entities?.find((e) => e.id === entityId));
+      return;
     }
+    setCurrentEntity({});
   }, [entities, entityId]);
 
   return (
-    isFetching
+    entitiesIsFetching
       ? <Spinner layout="inline" />
       : (
         <span {...props}>
