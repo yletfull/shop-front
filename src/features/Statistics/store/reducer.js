@@ -8,17 +8,13 @@ import {
 import NS from './ns';
 
 const initialState = {
-  entityType: null,
+  entityType: '',
   entitiesIsFetching: false,
   entities: [],
   entitiesError: null,
 };
 
 const reducer = createReducer(initialState, {
-  [entityTypeData]: (state, action) => ({
-    ...state,
-    entityType: action.payload,
-  }),
   [entitiesRequest]: (state, action) => ({
     ...state,
     entitiesIsFetching: action.payload,
@@ -30,6 +26,10 @@ const reducer = createReducer(initialState, {
   [entitiesError]: (state, action) => ({
     ...state,
     entitiesError: action.payload,
+  }),
+  [entityTypeData]: (state, action) => ({
+    ...state,
+    entityType: action.payload,
   }),
 });
 
