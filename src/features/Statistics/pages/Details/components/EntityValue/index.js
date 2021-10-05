@@ -8,7 +8,10 @@ import {
   getEntitiesIsFetching,
   getEntityType,
 } from '@/features/Statistics/store/selectors';
-import { fetchEntities, setEntityType } from '@/features/Statistics/store/actions';
+import {
+  fetchEntities,
+  setEntityType,
+} from '@/features/Statistics/store/actions';
 
 
 const propTypes = {
@@ -31,23 +34,15 @@ const EntitySelect = function EntitySelect({
 
   const { entityType: paramsEntityType } = useParams();
 
-  useEffect(() => {
-    if (entityType === paramsEntityType
-      || entities.length
-      || entitiesIsFetching) {
+  useEffect(() => async () => {
+    if (entityType === paramsEntityType) {
       return;
     }
 
     dispatch(setEntityType(paramsEntityType));
-    dispatch(fetchEntities());
+    await dispatch(fetchEntities());
   },
-  [
-    dispatch,
-    entityType,
-    paramsEntityType,
-    entities.length,
-    entitiesIsFetching,
-  ]);
+  [dispatch, entityType, paramsEntityType]);
 
   const [currentEntity, setCurrentEntity] = useState({});
 

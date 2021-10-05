@@ -8,7 +8,7 @@ import {
 import NS from './ns';
 
 const initialState = {
-  entityType: null,
+  entityType: '',
   entitiesIsFetching: false,
   entities: [],
   entitiesError: null,
