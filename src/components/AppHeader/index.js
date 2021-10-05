@@ -17,21 +17,27 @@ const propTypes = {
   ]),
   children: PropTypes.node,
   headerTitle: PropTypes.string,
+  headerType: PropTypes.string,
 };
 
 const defaultProps = {
   backTo: '',
   children: null,
   headerTitle: '',
+  headerType: '',
 };
 
 const AppHeader = function AppHeader({
   backTo,
   children,
   headerTitle,
+  headerType,
 }) {
   return (
-    <div className={styles.appHeader}>
+    <div
+      className={styles.appHeader}
+      data-type={headerType}
+    >
       {backTo && (
         <Link
           to={backTo}

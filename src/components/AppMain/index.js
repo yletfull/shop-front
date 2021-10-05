@@ -31,13 +31,11 @@ const AppMain = function AppMain({
 }) {
   return (
     <div className={styles.appMain}>
-      <div className={styles.appMainHeader}>
-        {header && (
-          <AppHeader backTo={backTo}>
-            {header}
-          </AppHeader>
-        )}
-      </div>
+      {header && (
+        <AppHeader backTo={backTo}>
+          {header}
+        </AppHeader>
+      )}
       <div className={styles.appMainContent}>
         {children}
       </div>
