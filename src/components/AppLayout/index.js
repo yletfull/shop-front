@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppAside from '@/components/AppAside';
 import styles from './styles.module.scss';
 
 const propTypes = {
@@ -16,7 +15,6 @@ const AppLayout = function AppLayout({
 }) {
   return (
     <div className={styles.wrapper}>
-      <AppAside />
       <main className={styles.main}>
         {children}
       </main>

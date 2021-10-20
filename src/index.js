@@ -1,12 +1,11 @@
+// eslint-disable-next-line import/no-unresolved
+import '@/theme/app-styles.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import 'focus-visible';
-import { rootNodes } from './constants/dom';
 import store from './store';
 import App from './App';
-import '@/theme/app-styles.scss';
 
 ReactDOM.render(
   <Router>
@@ -14,5 +13,6 @@ ReactDOM.render(
       <App />
     </Provider>
   </Router>,
-  rootNodes.app,
+  // eslint-disable-next-line no-undef
+  document.getElementById('root')
 );

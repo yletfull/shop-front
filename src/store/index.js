@@ -3,13 +3,9 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import auth from './auth';
-import upload from './upload';
-import ui from './ui';
 
 const createRootReducer = (asyncReducers = {}) => combineReducers({
   [auth.NS]: auth.reducer,
-  [upload.NS]: upload.reducer,
-  [ui.NS]: ui.reducer,
   ...asyncReducers,
 });
 

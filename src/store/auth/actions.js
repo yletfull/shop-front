@@ -25,8 +25,6 @@ export const authCheck = () => async (dispatch) => {
 };
 
 export const authSignIn = ({
-  method,
-  callback,
   ...payload
 } = {}) => async (dispatch) => {
   dispatch(setIsFetching(true));

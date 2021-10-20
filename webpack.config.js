@@ -12,9 +12,6 @@ const publicPath = '/';
 
 module.exports = {
   resolve: {
-    fallback: {
-      path: require.resolve('path-browserify'),
-    },
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },
@@ -113,7 +110,7 @@ module.exports = {
     hot: true,
     proxy: {
       '/api': {
-        target: 'http://advert.sandbox.ubic.tech',
+        target: 'http://localhost',
         changeOrigin: true,
       },
     },

@@ -1,24 +1,12 @@
 module.exports = {
-  extends: ['@ubic/eslint-config/react'],
+  parser: 'babel-eslint',
+  extends: 'airbnb',
   rules: {
     'react/jsx-props-no-spreading': 'off',
-    'jsx-a11y/accessible-emoji': 'off',
     'react/no-danger': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'import/no-unresolved': 'off',
   },
-  overrides: [
-    {
-      files: [
-        '**/*.stories.*',
-        '**/stories.*',
-      ],
-      rules: {
-        'no-console': 'off',
-        'import/no-anonymous-default-export': 'off',
-        'import/exports-last': 'off',
-        'react/function-component-definition': 'off',
-        'react/prop-types': 'off',
-      },
-    },
-  ],
 };
