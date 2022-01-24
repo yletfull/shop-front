@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import Container from 'react-bootstrap/Container';
 import { NavLink, useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
+import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '@/router/constants';
 
 const NavBar = observer(() => {
   const user = UserStore;
