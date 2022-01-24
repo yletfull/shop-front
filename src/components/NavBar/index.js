@@ -10,7 +10,6 @@ import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '../utils/consts';
 
 const NavBar = observer(() => {
   const user = UserStore;
-  console.log(UserStore.user);
   const history = useHistory();
 
   const logOut = () => {
