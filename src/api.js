@@ -1,23 +1,22 @@
 import axios from 'axios';
 
-const baseURL = process.env.BASE_URL || '/';
-
-const api = axios.create({ baseURL });
-
-export const resolve = (...pathSegments) => (
-  [baseURL, ...pathSegments]
-    .filter(Boolean)
-    .join('/')
-    .replace(/\/+/gm, '/')
-);
-
-export const securityPrefix = 'security';
-export const security = axios.create({
-  baseURL: [baseURL, securityPrefix].join('/').replace(/\/+/gm, '/'),
+const $host = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
-export const withBase = function apiWithBaseHelper(input) {
-  return `${baseURL}${input.replace(/^\//, '')}`;
+const $authHost = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
+const authInterceptor = (data) => {
+  const config = data;
+  config.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
+  return config;
 };
 
-export default api;
+$authHost.interceptors.request.use(authInterceptor);
+
+export {
+  $host,
+  $authHost,
+};
