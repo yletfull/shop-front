@@ -20,21 +20,7 @@ const UsersControl = () => {
   const [error, setError] = useState(null);
   const [editItemId, setEditItemId] = useState(null);
 
-  const formik = useFormik({
-    initialValues: { users },
-    onSubmit: (data) => {
-      const currnetUser = data.users.find((user) => user.id === editItemId);
-      service.setUser(currnetUser);
-      service.getUsers();
-      setEditItemId(null);
-    },
-  });
-
-  useEffect(() => {
-    formik.setValues({ users });
-  }, [users]);
-
-  useEffect(() => (async () => {
+  const fetchTableData = async () => {
     setIsFetching(true);
     try {
       setUsers(await service.getUsers());
@@ -43,7 +29,26 @@ const UsersControl = () => {
       setError(err);
     }
     setIsFetching(false);
-  })(), []);
+  };
+
+  const formik = useFormik({
+    initialValues: { users },
+    onSubmit: async (data) => {
+      const currnetUser = data.users.find((user) => user.id === editItemId);
+      await service.setUser(currnetUser);
+
+      setEditItemId(null);
+      fetchTableData();
+    },
+  });
+
+  useEffect(() => {
+    formik.setValues({ users });
+  }, [users]);
+
+  useEffect(() => {
+    fetchTableData();
+  }, []);
 
   const handleEditItem = (e) => {
     const { itemId } = e.currentTarget.dataset;
@@ -155,6 +160,7 @@ const UsersControl = () => {
                       data-item-id={user.id}
                       onClick={isEdit ? handleSaveItem : handleEditItem}
                       variant="outline-primary"
+                      disabled={isFetching}
                     >
                       {isEdit ? 'Сохранить' : 'Редактировать' }
                     </Button>
