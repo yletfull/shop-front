@@ -9,6 +9,7 @@ import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from '@/router/constants'
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import UserStore from '@/store/User';
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { login, registration } from './service';
 
 const Auth = observer(() => {
@@ -25,7 +26,18 @@ const Auth = observer(() => {
     initialValues: {
       email: '',
       password: '',
+      passwordRepeat: '',
     },
+    validationSchema: !isLogin && Yup.object().shape({
+      email: Yup.string().email('Некорректный e-mail').required('Обязательно для заполения'),
+      password: Yup.string()
+        .min(2, 'от 2 до 50 символов')
+        .max(50, 'от 2 до 50 символов')
+        .required('Обязательно для заполения'),
+      passwordRepeat: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
+        .required('Обязательно для заполения'),
+    }),
     onSubmit: async (values) => {
       setIsFetching(true);
       try {
@@ -68,24 +80,55 @@ const Auth = observer(() => {
         <Form
           className="d-flex flex-column"
           onSubmit={formik.handleSubmit}
+          noValidate
         >
-          <Form.Control
-            className="mt-3"
-            placeholder="Email"
-            name="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-            disabled={isFetching}
-          />
-          <Form.Control
-            className="mt-3"
-            placeholder="Пароль"
-            name="password"
-            type="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            disabled={isFetching}
-          />
+          <Form.Group>
+            <Form.Control
+              className="mt-3"
+              placeholder="Email"
+              name="email"
+              onChange={formik.handleChange}
+              value={formik.values.email}
+              disabled={isFetching}
+              isInvalid={formik.errors.email}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.email}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Control
+              className="mt-3"
+              placeholder="Пароль"
+              name="password"
+              type="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              isInvalid={formik.errors.password}
+            />
+            <Form.Control.Feedback type="invalid">
+              {formik.errors.password}
+            </Form.Control.Feedback>
+          </Form.Group>
+
+          {!isLogin && (
+            <Form.Group>
+              <Form.Control
+                className="mt-3"
+                placeholder="Повторите пароль"
+                name="passwordRepeat"
+                type="password"
+                onChange={formik.handleChange}
+                value={formik.values.passwordRepeat}
+                disabled={isFetching}
+                isInvalid={formik.errors.passwordRepeat}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.passwordRepeat}
+              </Form.Control.Feedback>
+            </Form.Group>)}
+
           <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
             {isLogin ?
               <div>
