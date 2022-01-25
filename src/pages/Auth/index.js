@@ -28,15 +28,15 @@ const Auth = observer(() => {
       password: '',
       passwordRepeat: '',
     },
-    validationSchema: !isLogin && Yup.object().shape({
-      email: Yup.string().email('Некорректный e-mail').required('Обязательно для заполения'),
+    validationSchema: Yup.object().shape({
+      email: Yup.string().email('Некорректный e-mail').required('Обязательное поле'),
       password: Yup.string()
         .min(2, 'от 2 до 50 символов')
         .max(50, 'от 2 до 50 символов')
-        .required('Обязательно для заполения'),
+        .required('Обязательное поле'),
       passwordRepeat: Yup.string()
         .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-        .required('Обязательно для заполения'),
+        .required('Повторите пароль'),
     }),
     onSubmit: async (values) => {
       setIsFetching(true);
