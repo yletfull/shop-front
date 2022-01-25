@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -7,55 +8,63 @@ import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
 import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '@/router/constants';
+import { usersRoles } from '@/constants/usersRoles';
+import styles from './styles.module.scss';
 
 const NavBar = observer(() => {
-  const user = UserStore;
   const history = useHistory();
 
-  const goAdmin = () => history.push(ADMIN_ROUTE);
-  const goAuth = () => history.push(LOGIN_ROUTE);
-
   const logOut = () => {
-    user.setUser({});
-    user.setIsAuth(false);
+    UserStore.setUser({});
+    UserStore.setIsAuth(false);
   };
 
   return (
-    <Navbar
-      bg="light"
-    >
-      <Container fluid>
+    <Navbar bg="light">
+      <Container>
         <Navbar.Brand href={SHOP_ROUTE}>Shop</Navbar.Brand>
-
-        {user.isAuth ?
-          <Nav
-            className="ml-auto"
-            style={{ color: 'gray' }}
-          >
+        <Nav className="me-auto">
+          {UserStore.user.role === usersRoles.admin && (
             <Button
-              variant={'outline-dark'}
-              onClick={goAdmin}
+              variant={'control'}
+              className={styles.headerLink}
+              onClick={() => history.push(ADMIN_ROUTE)}
             >
-              Админ-панель
+               Админ-панель
             </Button>
-            <Button
+          )}
+
+          <Button
+            variant={'control'}
+            className={styles.headerLink}
+            onClick={history.push(SHOP_ROUTE)}
+          >
+            Товары
+          </Button>
+
+        </Nav>
+
+        <Nav className={styles.navigation}>
+          <Navbar.Text className={styles.login}>
+            {UserStore.user.login}
+          </Navbar.Text>
+
+          {UserStore.isAuth ?
+            (<Button
               variant={'outline-dark'}
               onClick={() => logOut()}
               className="ml-4"
             >
               Выйти
-            </Button>
-          </Nav>
-          :
-          <Nav className="ml-auto" style={{ color: 'white' }}>
-            <Button
+            </Button>)
+            : (<Button
               variant={'outline-dark'}
-              onClick={goAuth}
+              onClick={() => history.push(LOGIN_ROUTE)}
             >
-                Авторизация
-            </Button>
-          </Nav>
-        }
+              Авторизация
+            </Button>)
+          }
+        </Nav>
       </Container>
     </Navbar>
 

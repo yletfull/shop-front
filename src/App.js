@@ -10,8 +10,8 @@ const App = function App() {
   const [isFetching, setIsFetching] = useState(true);
 
   useEffect(() => {
-    check().then(() => {
-      UserStore.setUser(true);
+    check().then((user) => {
+      UserStore.setUser(user);
       UserStore.setIsAuth(true);
     }).finally(() => setIsFetching(false));
   }, [UserStore]);
