@@ -34,9 +34,13 @@ const Auth = observer(() => {
         .min(2, 'от 2 до 50 символов')
         .max(50, 'от 2 до 50 символов')
         .required('Обязательное поле'),
-      passwordRepeat: Yup.string()
+      passwordRepeat: !isLogin && Yup.string()
         .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
         .required('Повторите пароль'),
+      login: !isLogin && Yup.string()
+        .min(3, 'от 3 до 12 символов')
+        .max(12, 'от 3 до 12 символов')
+        .required('Обязательное поле'),
     }),
     onSubmit: async (values) => {
       setIsFetching(true);
@@ -74,9 +78,11 @@ const Auth = observer(() => {
         <ErrorMessageBlock
           error={error}
         />
+
         <Spinner
           isFetching={isFetching}
         />
+
         <Form
           className="d-flex flex-column"
           onSubmit={formik.handleSubmit}
@@ -97,6 +103,22 @@ const Auth = observer(() => {
             </Form.Control.Feedback>
           </Form.Group>
 
+          {!isLogin && (
+            <Form.Group>
+              <Form.Control
+                className="mt-3"
+                placeholder="Логин"
+                name="login"
+                onChange={formik.handleChange}
+                value={formik.values.login}
+                disabled={isFetching}
+                isInvalid={formik.errors.login}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.login}
+              </Form.Control.Feedback>
+            </Form.Group>)}
+
           <Form.Group>
             <Form.Control
               className="mt-3"
@@ -105,6 +127,7 @@ const Auth = observer(() => {
               type="password"
               onChange={formik.handleChange}
               value={formik.values.password}
+              disabled={isFetching}
               isInvalid={formik.errors.password}
             />
             <Form.Control.Feedback type="invalid">
