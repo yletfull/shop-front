@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Container } from 'react-bootstrap';
+import { Button, Container, Tabs, Tab } from 'react-bootstrap';
 import CreateBrand from '@/components/modals/CreateBrand';
 import CreateDevice from '@/components/modals/CreateDevice';
 import CreateType from '@/components/modals/CreateType';
+import UsersControl from './components/UsersControl';
 
 const Admin = () => {
   const [brandVisible, setBrandVisible] = useState(false);
@@ -10,13 +11,19 @@ const Admin = () => {
   const [deviceVisible, setDeviceVisible] = useState(false);
 
   return (
-    <Container className="d-flex flex-column">
+    <Container className="d-flex flex-column mt-4">
+      <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3">
+        <Tab eventKey="users" title="Управление пользователями">
+          <UsersControl />
+        </Tab>
+      </Tabs>
+
       <Button
         variant={'outline-dark'}
         className="mt-4 p-2"
         onClick={() => setTypeVisible(true)}
       >
-        Добавить тип
+        Управление типом
       </Button>
       <Button
         variant={'outline-dark'}
@@ -32,6 +39,7 @@ const Admin = () => {
       >
         Добавить устройство
       </Button>
+
       <CreateBrand show={brandVisible} onHide={() => setBrandVisible(false)} />
       <CreateDevice show={deviceVisible} onHide={() => setDeviceVisible(false)} />
       <CreateType show={typeVisible} onHide={() => setTypeVisible(false)} />

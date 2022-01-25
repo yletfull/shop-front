@@ -37,7 +37,7 @@ const NavBar = observer(() => {
           <Button
             variant={'control'}
             className={styles.headerLink}
-            onClick={history.push(SHOP_ROUTE)}
+            onClick={() => history.push(SHOP_ROUTE)}
           >
             Товары
           </Button>

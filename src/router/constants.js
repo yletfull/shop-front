@@ -1,4 +1,6 @@
 export const ADMIN_ROUTE = '/admin';
+export const ADMIN_USERS_CONTROL_ROUTE = `${ADMIN_ROUTE}/users`;
+
 export const LOGIN_ROUTE = '/login';
 export const REGISTRATION_ROUTE = '/registration';
 export const SHOP_ROUTE = '/';
