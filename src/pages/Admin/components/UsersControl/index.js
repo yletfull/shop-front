@@ -4,7 +4,6 @@ import CustomMenu from '@/components/CustomMenu';
 import CustomToggle from '@/components/CustomToggle';
 import { useHistory } from 'react-router-dom';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import Spinner from '@/components/Spinner';
 import service from '@/pages/Admin/service';
 import dayjs from 'dayjs';
 import { timeFormat } from '@/constants/formats';
@@ -66,8 +65,6 @@ const UsersControl = () => {
   return (
     <Container className="d-flex flex-column">
       <ErrorMessageBlock error={error} />
-
-      <Spinner isFetching={isFetching} />
 
       <Table striped bordered hover>
         <thead>
@@ -162,7 +159,7 @@ const UsersControl = () => {
                       variant="outline-primary"
                       disabled={isFetching}
                     >
-                      {isEdit ? 'Сохранить' : 'Редактировать' }
+                      {!isFetching && isEdit ? 'Сохранить' : 'Редактировать' }
                     </Button>
                   </td>
                 </tr>
