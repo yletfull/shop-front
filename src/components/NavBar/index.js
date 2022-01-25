@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import { Button } from 'react-bootstrap';
 import { observer } from 'mobx-react-lite';
 import Container from 'react-bootstrap/Container';
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
 import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '@/router/constants';
 
@@ -12,36 +12,45 @@ const NavBar = observer(() => {
   const user = UserStore;
   const history = useHistory();
 
+  const goAdmin = () => history.push(ADMIN_ROUTE);
+  const goAuth = () => history.push(LOGIN_ROUTE);
+
   const logOut = () => {
     user.setUser({});
     user.setIsAuth(false);
   };
 
   return (
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <NavLink style={{ color: 'white' }} to={SHOP_ROUTE}>КупиДевайс</NavLink>
+    <Navbar
+      bg="light"
+    >
+      <Container fluid>
+        <Navbar.Brand href={SHOP_ROUTE}>Shop</Navbar.Brand>
+
         {user.isAuth ?
-          <Nav className="ml-auto" style={{ color: 'white' }}>
+          <Nav
+            className="ml-auto"
+            style={{ color: 'gray' }}
+          >
             <Button
-              variant={'outline-light'}
-              onClick={() => history.push(ADMIN_ROUTE)}
+              variant={'outline-dark'}
+              onClick={goAdmin}
             >
-                            Админ панель
+              Админ-панель
             </Button>
             <Button
-              variant={'outline-light'}
+              variant={'outline-dark'}
               onClick={() => logOut()}
-              className="ml-2"
+              className="ml-4"
             >
-                            Выйти
+              Выйти
             </Button>
           </Nav>
           :
           <Nav className="ml-auto" style={{ color: 'white' }}>
             <Button
-              variant={'outline-light'}
-              onClick={() => history.push(LOGIN_ROUTE)}
+              variant={'outline-dark'}
+              onClick={goAuth}
             >
                 Авторизация
             </Button>

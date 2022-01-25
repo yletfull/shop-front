@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Container, Image, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { fetchOneDevice } from '@/pages/Shop';
+import { fetchOneDevice } from '@/pages/Shop/service';
 import bigStar from '@/assets/bigStar.png';
 
 const DevicePage = () => {

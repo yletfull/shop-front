@@ -54,26 +54,24 @@ const Auth = observer(() => {
       className="d-flex justify-content-center align-items-center"
       style={{ height: window.innerHeight - 54 }}
     >
-      <Card style={{ width: 600 }} className="p-5">
-        <h2 className="m-auto">
+      <Card style={{ width: 400 }} className="p-5">
+        <h2 className="m-left">
           {isLogin ? 'Авторизация' : 'Регистрация'}
         </h2>
 
         <ErrorMessageBlock
           error={error}
         />
-
         <Spinner
           isFetching={isFetching}
         />
-
         <Form
           className="d-flex flex-column"
           onSubmit={formik.handleSubmit}
         >
           <Form.Control
             className="mt-3"
-            placeholder="Введите ваш email..."
+            placeholder="Email"
             name="email"
             onChange={formik.handleChange}
             value={formik.values.email}
@@ -81,7 +79,7 @@ const Auth = observer(() => {
           />
           <Form.Control
             className="mt-3"
-            placeholder="Введите ваш пароль..."
+            placeholder="Пароль"
             name="password"
             type="password"
             onChange={formik.handleChange}
@@ -91,11 +89,11 @@ const Auth = observer(() => {
           <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
             {isLogin ?
               <div>
-                Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
+                Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрироваться</NavLink>
               </div>
               :
               <div>
-                Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
+                Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войти</NavLink>
               </div>
             }
             <Button
