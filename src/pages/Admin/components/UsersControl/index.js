@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Table, Form, Dropdown } from 'react-bootstrap';
-import CustomMenu from '@/components/CustomMenu';
-import CustomToggle from '@/components/CustomToggle';
+import { Button, Container, Table, Form } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import ErrorMessageBlock from '@/components/ErrorMessageBlock';
 import service from '@/pages/Admin/service';
@@ -131,19 +129,16 @@ const UsersControl = () => {
 
                   <td>
                     {isEdit
-                      ? <Dropdown onSelect={(role) => handleRoleSelect(role, index)}>
-                        <Dropdown.Toggle as={CustomToggle}>
-                          {formik.values.users[index]?.roleId}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu as={CustomMenu}>
-                          {Object.values(usersRoles).map((role) => (
-                            <Dropdown.Item eventKey={usersRolesIds[role]}>
-                              {usersRolesTitles[role]}
-                            </Dropdown.Item>
-                          ))}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                      ? (<Form.Select
+                        aria-label="Default select example"
+                        onChange={handleRoleSelect}
+                      >
+                        {Object.values(usersRoles).map((role) => (
+                          <option value={usersRolesIds[role]}>
+                            {usersRolesTitles[role]}
+                          </option>
+                        ))}
+                      </Form.Select>)
                       : user.roleId
                     }
                   </td>
