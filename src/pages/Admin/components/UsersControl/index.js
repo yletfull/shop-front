@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 import { timeFormat } from '@/constants/formats';
 import { SHOP_ROUTE } from '@/router/constants';
 import { useFormik } from 'formik';
-import { usersRoles } from '@/constants/usersRoles';
+import { usersRolesIds, usersRolesTitles, usersRoles } from '@/constants/usersRoles';
 
 const UsersControl = () => {
   const history = useHistory();
@@ -29,6 +29,9 @@ const UsersControl = () => {
     }
     setIsFetching(false);
   };
+  useEffect(() => {
+    fetchTableData();
+  }, []);
 
   const formik = useFormik({
     initialValues: { users },
@@ -45,17 +48,13 @@ const UsersControl = () => {
     formik.setValues({ users });
   }, [users]);
 
-  useEffect(() => {
-    fetchTableData();
-  }, []);
-
   const handleEditItem = (e) => {
     const { itemId } = e.currentTarget.dataset;
     setEditItemId(Number(itemId));
   };
 
   const handleRoleSelect = (role, index) => {
-    formik.setFieldValue(`users[${index}]role`, role);
+    formik.setFieldValue(`users[${index}]roleId`, role);
   };
 
   const handleSaveItem = () => {
@@ -134,18 +133,18 @@ const UsersControl = () => {
                     {isEdit
                       ? <Dropdown onSelect={(role) => handleRoleSelect(role, index)}>
                         <Dropdown.Toggle as={CustomToggle}>
-                          {formik.values.users[index]?.role}
+                          {formik.values.users[index]?.roleId}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu as={CustomMenu}>
                           {Object.values(usersRoles).map((role) => (
-                            <Dropdown.Item eventKey={role}>
-                              {role}
+                            <Dropdown.Item eventKey={usersRolesIds[role]}>
+                              {usersRolesTitles[role]}
                             </Dropdown.Item>
                           ))}
                         </Dropdown.Menu>
                       </Dropdown>
-                      : user.role
+                      : user.roleId
                     }
                   </td>
 

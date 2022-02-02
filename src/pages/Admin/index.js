@@ -4,6 +4,7 @@ import CreateBrand from '@/components/modals/CreateBrand';
 import CreateDevice from '@/components/modals/CreateDevice';
 import CreateType from '@/components/modals/CreateType';
 import UsersControl from './components/UsersControl';
+import RolesControl from './components/RolesControl';
 
 const Admin = () => {
   const [brandVisible, setBrandVisible] = useState(false);
@@ -15,6 +16,9 @@ const Admin = () => {
       <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3">
         <Tab eventKey="users" title="Управление пользователями">
           <UsersControl />
+        </Tab>
+        <Tab eventKey="roles" title="Управление ролями">
+          <RolesControl />
         </Tab>
       </Tabs>
 

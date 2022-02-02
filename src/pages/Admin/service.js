@@ -9,7 +9,11 @@ export const setUser = async (body) => {
     .then((data) => data.data);
 };
 
+export const getRoles = async () => await $authHost.get('api/user/roles').then((data) => data.data);
+
+
 export default {
   getUsers,
   setUser,
+  getRoles,
 };

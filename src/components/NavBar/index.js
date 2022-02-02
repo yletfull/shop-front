@@ -8,7 +8,7 @@ import Container from 'react-bootstrap/Container';
 import { useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
 import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '@/router/constants';
-import { usersRoles } from '@/constants/usersRoles';
+import { usersRolesIds } from '@/constants/usersRoles';
 import styles from './styles.module.scss';
 
 const NavBar = observer(() => {
@@ -24,7 +24,8 @@ const NavBar = observer(() => {
       <Container>
         <Navbar.Brand href={SHOP_ROUTE}>Shop</Navbar.Brand>
         <Nav className="me-auto">
-          {UserStore.user.role === usersRoles.admin && (
+
+          {UserStore.user.roleId === usersRolesIds.admin && (
             <Button
               variant={'control'}
               className={styles.headerLink}
@@ -46,7 +47,7 @@ const NavBar = observer(() => {
 
         <Nav className={styles.navigation}>
           <Navbar.Text className={styles.login}>
-            {UserStore.user.login}
+            {UserStore.user.login || 'Неизвестный пользователь'}
           </Navbar.Text>
 
           {UserStore.isAuth ?
