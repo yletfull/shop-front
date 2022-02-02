@@ -1,7 +1,7 @@
 export const usersRoles = {
-  admin: 'ADMIN',
-  user: 'USER',
-  guest: 'GUEST',
+  admin: 'admin',
+  user: 'user',
+  guest: 'guest',
 };
 
 export const usersRolesIds = {

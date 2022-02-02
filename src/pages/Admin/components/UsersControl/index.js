@@ -69,19 +69,15 @@ const UsersControl = () => {
             <th>
               id
             </th>
-
             <th>
               e-mail
             </th>
-
             <th>
               логин
             </th>
-
             <th>
               дата регистрации
             </th>
-
             <th colSpan={2}>
               роль
             </th>
@@ -98,7 +94,6 @@ const UsersControl = () => {
                   <td>
                     {user.id}
                   </td>
-
                   <td>
                     {isEdit
                       ? <Form.Control
@@ -110,7 +105,6 @@ const UsersControl = () => {
                       : user.email
                     }
                   </td>
-
                   <td>
                     {isEdit
                       ? <Form.Control
@@ -122,11 +116,9 @@ const UsersControl = () => {
                       : user.login
                     }
                   </td>
-
                   <td>
                     {dayjs(user.createdAt).format(timeFormat)}
                   </td>
-
                   <td>
                     {isEdit
                       ? (<Form.Select
@@ -142,7 +134,6 @@ const UsersControl = () => {
                       : user.roleId
                     }
                   </td>
-
                   <td
                     style={{ maxWidth: 120 }}
                     align="center"
