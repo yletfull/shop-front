@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Container } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { observer } from 'mobx-react-lite';
@@ -30,7 +29,7 @@ const Shop = observer(() => {
   }, [device.page, device.selectedType, device.selectedBrand]);
 
   return (
-    <Container>
+    <React.Fragment>
       <Row className="mt-2">
         <Col md={3}>
           <TypeBar />
@@ -41,7 +40,7 @@ const Shop = observer(() => {
           <Pages />
         </Col>
       </Row>
-    </Container>
+    </React.Fragment>
   );
 });
 

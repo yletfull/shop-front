@@ -1,24 +1,32 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Card, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import DeviceStore from '@/store/Devices';
+import styles from './styles.module.scss';
 
 const BrandBar = observer(() => {
   const device = DeviceStore;
 
   return (
     <Row className="d-flex">
-      {device.brands.map(brand =>
-        <Card
-          style={{ cursor: 'pointer' }}
-          key={brand.id}
-          className="p-3"
-          onClick={() => device.setSelectedBrand(brand)}
-          border={brand.id === device.selectedBrand.id ? 'danger' : 'light'}
-        >
-          {brand.name}
-        </Card>
-      )}
+      <ButtonGroup
+        orientation="vertical"
+        aria-label="vertical contained button group"
+        className={styles.typeBarWrapper}
+      >
+        {device.brands.map((brand) =>
+          <Button
+            onClick={() => device.setSelectedBrand(brand)}
+            data-active={brand.id === device.selectedBrand.id}
+            className={styles.typeBarButton}
+            key={brand.id}
+          >
+            {brand.name}
+          </Button>
+        )}
+      </ButtonGroup>
     </Row>
   );
 });

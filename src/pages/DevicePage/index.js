@@ -17,6 +17,7 @@ const DevicePage = () => {
         <Col md={4}>
           <Image width={300} height={300} src={process.env.REACT_APP_API_URL + device.img} />
         </Col>
+
         <Col md={4}>
           <Row className="d-flex flex-column align-items-center">
             <h2>{device.name}</h2>
@@ -32,6 +33,7 @@ const DevicePage = () => {
             </div>
           </Row>
         </Col>
+
         <Col md={4}>
           <Card
             className="d-flex flex-column align-items-center justify-content-around"
@@ -42,6 +44,7 @@ const DevicePage = () => {
           </Card>
         </Col>
       </Row>
+
       <Row className="d-flex flex-column m-3">
         <h1>Характеристики</h1>
         {device.info.map((info, index) =>

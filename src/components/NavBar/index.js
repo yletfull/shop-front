@@ -19,13 +19,15 @@ const NavBar = observer(() => {
     UserStore.setIsAuth(false);
   };
 
+  const isAdmin = UserStore.user.roleId === usersRolesIds.admin;
+
   return (
     <Navbar bg="light">
       <Container>
         <Navbar.Brand href={SHOP_ROUTE}>Shop</Navbar.Brand>
         <Nav className="me-auto">
 
-          {UserStore.user.roleId === usersRolesIds.admin && (
+          {isAdmin && (
             <Button
               variant={'control'}
               className={styles.headerLink}
@@ -47,7 +49,7 @@ const NavBar = observer(() => {
 
         <Nav className={styles.navigation}>
           <Navbar.Text className={styles.login}>
-            {UserStore.user.login || 'Неизвестный пользователь'}
+            {UserStore.user.login || 'Гость'}
           </Navbar.Text>
 
           {UserStore.isAuth ?

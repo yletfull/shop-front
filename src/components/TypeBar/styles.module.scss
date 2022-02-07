@@ -1,0 +1,17 @@
+@import '@/theme/include.scss';
+
+.typeBar {
+  &Wrapper {
+    width: 100%;
+  }
+
+  &Button {
+    justify-content: left !important;
+    min-height: 3.5rem;
+
+    &[data-active='true'] {
+      background-color: $color-primary-lighter !important;
+      color: $color-white;
+    }
+  }
+}
