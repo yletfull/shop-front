@@ -8,10 +8,11 @@
   &Button {
     justify-content: left !important;
     min-height: 3.5rem;
+    color: $color-primary-lighter !important;
 
     &[data-active='true'] {
-      background-color: $color-primary-lighter !important;
-      color: $color-white;
+      background-color: $color-primary !important;
+      color: $color-white !important;
     }
   }
 }

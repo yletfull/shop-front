@@ -1,15 +1,25 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-indent */
-import React from 'react';
-import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import { Button } from 'react-bootstrap';
+import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import Container from 'react-bootstrap/Container';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from '@/router/constants';
+import { ADMIN_ROUTE,
+  LOGIN_ROUTE,
+  SHOP_ROUTE,
+} from '@/router/constants';
 import { usersRolesIds } from '@/constants/usersRoles';
+import cx from 'classnames';
+import Box from '@mui/material/Box';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Tooltip from '@mui/material/Tooltip';
+import Logout from '@mui/icons-material/Logout';
+import Button from '@/components/Button';
 import styles from './styles.module.scss';
+import { paperProps } from './constants';
 
 const NavBar = observer(() => {
   const history = useHistory();
@@ -21,55 +31,100 @@ const NavBar = observer(() => {
 
   const isAdmin = UserStore.user.roleId === usersRolesIds.admin;
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const menuIsOpen = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <Navbar bg="light">
-      <Container>
-        <Navbar.Brand href={SHOP_ROUTE}>Shop</Navbar.Brand>
-        <Nav className="me-auto">
-
-          {isAdmin && (
-            <Button
-              variant={'control'}
-              className={styles.headerLink}
-              onClick={() => history.push(ADMIN_ROUTE)}
-            >
-               Админ-панель
-            </Button>
-          )}
-
-          <Button
-            variant={'control'}
-            className={styles.headerLink}
-            onClick={() => history.push(SHOP_ROUTE)}
+    <React.Fragment>
+      <Box className={styles.navBar}>
+        {isAdmin && (
+          <NavLink
+            to={ADMIN_ROUTE}
+            className={styles.navBarLink}
+            activeClassName={styles.navBarLinkActive}
           >
-            Товары
+            Админ-панель
+          </NavLink>
+        )}
+
+        <NavLink
+          to={SHOP_ROUTE}
+          className={cx(styles.navBarLink)}
+        >
+          Товары
+        </NavLink>
+
+        <NavLink
+          to={SHOP_ROUTE}
+          className={cx(styles.navBarLink)}
+        >
+          Отзывы
+        </NavLink>
+
+        <Tooltip title="Настройки профиля">
+          <Button
+            onClick={handleClick}
+            className={styles.navBarButton}
+          >
+            Профиль
+
+            <Avatar className={styles.navBarAvatar}>
+              {UserStore?.user?.login?.substring(0, 1) || 'u'}
+            </Avatar>
           </Button>
+        </Tooltip>
+      </Box>
 
-        </Nav>
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={menuIsOpen}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={paperProps}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
 
-        <Nav className={styles.navigation}>
-          <Navbar.Text className={styles.login}>
-            {UserStore.user.login || 'Гость'}
-          </Navbar.Text>
+        {!UserStore?.isAuth && (
+          <MenuItem onClick={() => history.push(LOGIN_ROUTE)}>
+            <Avatar />
 
-          {UserStore.isAuth ?
-            (<Button
-              variant={'outline-dark'}
-              onClick={() => logOut()}
-              className="ml-4"
-            >
-              Выйти
-            </Button>)
-            : (<Button
-              variant={'outline-dark'}
-              onClick={() => history.push(LOGIN_ROUTE)}
-            >
-              Авторизация
-            </Button>)
-          }
-        </Nav>
-      </Container>
-    </Navbar>
+            Зарегистрироваться / Войти
+          </MenuItem>
+        )}
+
+        {UserStore?.isAuth && (
+          <MenuItem>
+            <ListItemIcon>
+              <Avatar />
+            </ListItemIcon>
+
+            Мой профиль
+          </MenuItem>
+        )}
+
+        {UserStore?.isAuth && (
+          <MenuItem onClick={logOut}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+
+            Выйти
+          </MenuItem>
+        )}
+
+      </Menu>
+    </React.Fragment>
 
   );
 });

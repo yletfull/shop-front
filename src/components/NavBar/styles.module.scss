@@ -1,15 +1,43 @@
 @import '@/theme/include.scss';
 
-.login {
-  margin-right: 1rem;
-}
+.navBar {
+  display: flex;
+  align-items: baseline;
+  text-align: center;
+  justify-content: center;
 
-.navigation {
-  margin-left: 1rem;
-}
+  &Link {
+    text-decoration: none;
+    padding: 1rem;
+    color: $color-gray-darkest;
+    font-size: 1.25rem;
 
-.headerLink {
-  margin-left: 1rem;
-  color: $color-gray-darkest;
-  font-size: 1.25rem;
+    &Active {
+      color: $color-primary-lighter;
+      border-bottom: 5px solid $color-primary-lighter;
+    }
+  }
+
+  &Avatar {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 1rem;
+    border: thin $color-primary-lighter solid;
+  }
+
+  &Button {
+    background-color: transparent;
+    border: none;
+
+    &:hover .navBarAvatar {
+      border: 3px $color-primary-lighter solid;
+    }
+  }
+
+  &Menu {
+    &Wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }

@@ -1,0 +1,15 @@
+@import '@/theme/include.scss';
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: $color-gray-darkest;
+  font-size: 1.25rem;
+  min-height: 3.5rem;
+
+  &[data-active='true'] {
+    background-color: $color-primary !important;
+    color: $color-white !important;
+  }
+}
