@@ -52,6 +52,7 @@ const NavBar = observer(() => {
             className={styles.navBarLink}
             activeClassName={styles.navBarLinkActive}
           >
+
             Админ-панель
           </NavLink>
         )}
@@ -60,6 +61,7 @@ const NavBar = observer(() => {
           to={SHOP_ROUTE}
           className={cx(styles.navBarLink)}
         >
+
           Товары
         </NavLink>
 
@@ -67,6 +69,7 @@ const NavBar = observer(() => {
           to={SHOP_ROUTE}
           className={cx(styles.navBarLink)}
         >
+
           Отзывы
         </NavLink>
 
