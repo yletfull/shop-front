@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Accordion from '@mui/material/Accordion';
@@ -7,28 +6,35 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Checkbox, FormControlLabel } from '@mui/material';
-import TestCheckbox from '@/components/Checkbox';
 import DeviceStore from '@/store/Devices';
 import Box from '@mui/material/Box';
 import styles from './styles.module.scss';
-import { getCheckboxIsChecked, toggleCheckbox } from './utils';
+import { getCheckboxIsChecked, getToggleCheckboxOptions } from './utils';
 
-const TypeBar = observer(() => {
+const FiltersBar = observer(() => {
   const device = DeviceStore;
-  const [checkboxesOptions, setCheckboxOptions] = React.useState([[{ checked: true }]]);
+  const [checkboxesOptions, setCheckboxOptions] = useState([[{ checked: true }]]);
 
   const handleCheckboxClick = ({ index, level }) => {
-    console.log(toggleCheckbox({ index, level, checkboxesOptions }));
-    setCheckboxOptions(toggleCheckbox({ index, level, checkboxesOptions }));
+    setCheckboxOptions({
+      ...getToggleCheckboxOptions({ index, level, checkboxesOptions }),
+    });
   };
 
   return (
-    <React.Fragment>
+    <Accordion className={styles.menuAccordion}>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+      >
+        <Typography>
+          Фильтры
+        </Typography>
+      </AccordionSummary>
+
       {device.types.map(type =>
-        <Accordion>
+        <Accordion className={styles.menuAccordion}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
-            // aria-controls="panel1a-content"
             id={type.id}
           >
             <Typography>
@@ -49,12 +55,16 @@ const TypeBar = observer(() => {
               }
             />
 
-            <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
+            <Box className={styles.menuCheckboxWrapper}>
               {device.brands.map((brand, index) =>
                 <FormControlLabel
                   label={brand.name}
                   control={
                     <Checkbox
+                      checked={getCheckboxIsChecked(
+                        { level: 0, index: index + 1, checkboxesOptions })
+                      || getCheckboxIsChecked(
+                        { level: 0, index: index + 1, checkboxesOptions })}
                       onChange={() => handleCheckboxClick(
                         { level: 0, index: index + 1 })}
                     />}
@@ -65,8 +75,8 @@ const TypeBar = observer(() => {
           </AccordionDetails>
         </Accordion>
       )}
-    </React.Fragment>
+    </Accordion>
   );
 });
 
-export default TypeBar;
+export default FiltersBar;

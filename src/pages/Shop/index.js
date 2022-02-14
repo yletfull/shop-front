@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { observer } from 'mobx-react-lite';
 import Pages from '@/pages/Pages';
-import TypeBar from '@/components/TypeBar';
-import BrandBar from '@/components/BrandBar';
+import FiltersBar from '@/components/FiltersBar';
 import DeviceList from '@/components/DeviceList';
 import DeviceStore from '@/store/Devices';
+import { Container, Paper } from '@mui/material';
 import { fetchBrands, fetchDevices, fetchTypes } from './service';
 
 const Shop = observer(() => {
@@ -22,25 +20,24 @@ const Shop = observer(() => {
   }, []);
 
   useEffect(() => {
-    fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, 2).then(data => {
-      device.setDevices(data.rows);
-      device.setTotalCount(data.count);
-    });
-  }, [device.page, device.selectedType, device.selectedBrand]);
+    fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit)
+      .then(data => {
+        device.setDevices(data.rows);
+        device.setTotalCount(data.count);
+      });
+  }, [device.page, device.selectedType, device.selectedBrand, device.limit]);
 
   return (
-    <React.Fragment>
-      <Row className="mt-2">
-        <Col md={3}>
-          <TypeBar />
-        </Col>
-        <Col md={9}>
-          <BrandBar />
-          <DeviceList />
-          <Pages />
-        </Col>
-      </Row>
-    </React.Fragment>
+    <Container>
+      <Paper>
+        <FiltersBar />
+      </Paper>
+
+      <Paper sx={{ mt: 2 }}>
+        <DeviceList />
+        <Pages />
+      </Paper>
+    </Container>
   );
 });
 

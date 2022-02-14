@@ -1,29 +1,23 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Pagination } from 'react-bootstrap';
 import DeviceStore from '@/store/Devices';
+import Pagination from '@/components/Pagination';
 
 const Pages = observer(() => {
   const device = DeviceStore;
-  const pageCount = Math.ceil(device.totalCount / device.limit);
-  const pages = [];
+  const pageSize = device.limit;
+  const pagesCount = Math.ceil(device.totalCount / device.limit);
 
-  for (let i = 0; i < pageCount; i++) {
-    pages.push(i + 1);
-  }
+  const handlePageChange = (e, page) => device.setPage(page);
+  const handlePageCountSelect = (value) => device.setLimit(value);
 
   return (
-    <Pagination className="mt-3">
-      {pages.map(page =>
-        <Pagination.Item
-          key={page}
-          active={device.page === page}
-          onClick={() => device.setPage(page)}
-        >
-          {page}
-        </Pagination.Item>
-      )}
-    </Pagination>
+    <Pagination
+      pageSize={pageSize}
+      pagesCount={pagesCount}
+      onPageChange={handlePageChange}
+      onPageSizeChange={handlePageCountSelect}
+    />
   );
 });
 

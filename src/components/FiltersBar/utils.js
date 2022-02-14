@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 export const getCheckboxIsChecked = ({ checkboxesOptions, index, level }) =>
-  checkboxesOptions[level][index]?.checked || false;
+  Boolean(checkboxesOptions[level][index]?.checked) || false;
 
-export const toggleCheckbox = ({ checkboxesOptions, index, level }) => {
+export const getToggleCheckboxOptions = ({ checkboxesOptions, index, level }) => {
   const checked = getCheckboxIsChecked({ checkboxesOptions, index, level });
   const optionsCopy = checkboxesOptions;
   optionsCopy[level][index] = { checked: !checked };
@@ -11,5 +11,5 @@ export const toggleCheckbox = ({ checkboxesOptions, index, level }) => {
 
 export default {
   getCheckboxIsChecked,
-  toggleCheckbox,
+  getToggleCheckboxOptions,
 };

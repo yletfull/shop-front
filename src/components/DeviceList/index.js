@@ -1,18 +1,25 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { Row } from 'react-bootstrap';
 import DeviceItem from '@/components/DeviceItem';
 import DeviceStore from '@/store/Devices';
+import { Grid } from '@mui/material';
+import styles from './styles.module.scss';
 
 const DeviceList = observer(() => {
   const device = DeviceStore;
 
   return (
-    <Row className="d-flex">
+    <Grid container className={styles.devicesContainer}>
       {device.devices.map((d) =>
-        <DeviceItem key={d.id} device={d} />
+        <Grid item>
+          <DeviceItem
+            key={d.id}
+            device={d}
+          />
+        </Grid>
       )}
-    </Row>
+    </Grid>
+
   );
 });
 
