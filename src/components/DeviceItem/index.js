@@ -1,16 +1,21 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { DEVICE_ROUTE } from '@/router/constants';
 
 // eslint-disable-next-line react/prop-types
 const DeviceItem = ({ device }) => {
-  // eslint-disable-next-line no-unused-vars
   const history = useHistory();
+  const handleCardDetailsClick = () => history.push(DEVICE_ROUTE);
+
   return (
-    <Card sx={{ width: 345, margin: 2 }}>
+    <Card
+      sx={{ width: 345, margin: 2 }}
+      variant="outlined"
+    >
       <CardMedia
         component="img"
-        alt="green iguana"
+        alt="device"
         height="300"
         image={process.env.REACT_APP_API_URL + device.img}
       />
@@ -33,8 +38,18 @@ const DeviceItem = ({ device }) => {
       </CardContent>
 
       <CardActions>
-        <Button size="small">Купить</Button>
-        <Button size="small">В корзину</Button>
+        <Button
+          size="small"
+          onClick={handleCardDetailsClick}
+        >
+          Подробнее
+        </Button>
+
+        <Button
+          size="small"
+        >
+          В корзину
+        </Button>
       </CardActions>
     </Card>
   );

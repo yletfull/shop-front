@@ -1,18 +1,22 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
+import Multiselect from '@/components/Multiselect';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Checkbox, FormControlLabel } from '@mui/material';
+import cx from 'classnames';
 import DeviceStore from '@/store/Devices';
 import Box from '@mui/material/Box';
 import styles from './styles.module.scss';
-import { getCheckboxIsChecked, getToggleCheckboxOptions } from './utils';
+import { getCheckboxIsChecked, getToggleCheckboxOptions, getBrandsOptions } from './utils';
 
 const FiltersBar = observer(() => {
   const device = DeviceStore;
+
   const [checkboxesOptions, setCheckboxOptions] = useState([[{ checked: true }]]);
 
   const handleCheckboxClick = ({ index, level }) => {
@@ -22,7 +26,7 @@ const FiltersBar = observer(() => {
   };
 
   return (
-    <Accordion className={styles.menuAccordion}>
+    <Accordion disableGutters className={styles.menuAccordion}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
       >
@@ -32,7 +36,10 @@ const FiltersBar = observer(() => {
       </AccordionSummary>
 
       {device.types.map(type =>
-        <Accordion className={styles.menuAccordion}>
+        <Accordion
+          disableGutters
+          className={cx(styles.menuAccordionColored)}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             id={type.id}
@@ -43,6 +50,8 @@ const FiltersBar = observer(() => {
           </AccordionSummary>
 
           <AccordionDetails>
+            <Multiselect options={getBrandsOptions(device.brands)} />
+
             <FormControlLabel
               label="Выбрать все"
               control={

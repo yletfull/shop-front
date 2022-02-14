@@ -35,11 +35,14 @@ const Shop = observer(() => {
 
   return (
     <Container>
-      <Paper>
+      <Paper variant="outlined">
         <FiltersBar />
       </Paper>
 
-      <Paper sx={{ mt: 2 }}>
+      <Paper
+        variant="outlined"
+        sx={{ mt: 2 }}
+      >
         <Spinner
           isFetching={isFetching}
           overlay
