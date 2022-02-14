@@ -6,6 +6,7 @@ import styles from './styles.module.scss';
 
 const propTypes = {
   size: PropTypes.string,
+  page: PropTypes.number,
   pagesCount: PropTypes.number,
   pageSize: PropTypes.number,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
@@ -15,6 +16,7 @@ const propTypes = {
 
 const defaultProps = {
   size: 'large',
+  page: 1,
   pagesCount: 1,
   pageSize: 6,
   pageSizeOptions: [
@@ -38,20 +40,29 @@ const defaultProps = {
 
 const PaginationComponent = ({
   pagesCount,
+  page,
   size,
   pageSize,
   pageSizeOptions,
   onPageSizeChange,
   onPageChange,
 }) => {
-  const handlePageSizeChange = (data) => onPageSizeChange(data);
+  const handlePageChange = (e, data) => {
+    onPageChange(data);
+  };
+
+  const handlePageSizeChange = (data) => {
+    onPageChange(1);
+    onPageSizeChange(data);
+  };
 
   return (
     <div className={styles.pagination}>
       <Pagination
         size={size}
+        page={page}
         count={pagesCount}
-        onChange={onPageChange}
+        onChange={handlePageChange}
       />
 
       <div className={styles.paginationCountWrapper}>
