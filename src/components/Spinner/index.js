@@ -1,27 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Spinner } from 'react-bootstrap';
+import { CircularProgress } from '@mui/material';
+import styles from './styles.module.scss';
 
 const propTypes = {
+  overlay: PropTypes.bool,
   isFetching: PropTypes.bool,
 };
 
 const defaultProps = {
+  overlay: false,
   isFetching: false,
 };
 
 const ErrorMessageBlock = function ErrorMessageBlock({
+  overlay,
   isFetching,
   ...props
 }) {
   return (
     isFetching && (
-      <Spinner
-        animation="border"
-        role="status"
-        className=""
-        {...props}
-      />
+      <div
+        data-overlay={overlay}
+        className={styles.spinnerWrapper}
+      >
+        <CircularProgress {...props} />
+      </div>
+
     )
   );
 };

@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '@/components/NavBar';
-import { Spinner } from 'react-bootstrap';
 import { check } from '@/pages/Auth/service';
 import WithAppLayout from '@/components/AppLayout';
 import RouterView from '@/router/RouterView';
 import UserStore from '@/store/User';
+import Spinner from '@/components/Spinner';
 
 const App = function App() {
   const [isFetching, setIsFetching] = useState(true);
 
-  useEffect(() => {
-    check().then((user) => {
+  useEffect(async () => {
+    setIsFetching(true);
+    try {
+      const user = await check();
       UserStore.setUser(user);
       UserStore.setIsAuth(true);
-    }).finally(() => setIsFetching(false));
+    } catch (err) {
+      // throw error
+    }
+    setIsFetching(false);
   }, [UserStore]);
 
   if (isFetching) {
     return (
       <Spinner
-        animation="border"
+        isFetching
+        overlay
       />
     );
   }
