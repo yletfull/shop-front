@@ -60,17 +60,23 @@ const Multiselect = function MultipleSelectCheckmarks({
     const {
       target: { value: targetValue },
     } = event;
-    const mapValues = [...new Set(targetValue
+
+    const uniqueValues = [...new Set(targetValue
       .map((value) => value
         .split(', '))
       .flat())];
+
+    const resultValue = uniqueValues.includes('unselectAll') ? [] : uniqueValues;
+
     setResult(
-      typeof mapValues === 'string' ? mapValues.split(', ') : mapValues,
+      typeof mapValues === 'string' ? resultValue.split(', ') : resultValue,
     );
     onChange(result);
   };
 
-  const allCheckedValue = options.map((option) => option.value);
+  const allCheckedOptions = options.map((option) => option.value);
+  const isAllChecked = allCheckedOptions.every((value) => result.includes(value));
+  const allCheckedValue = isAllChecked ? 'unselectAll' : allCheckedOptions.join(', ');
 
   return (
     <div>
@@ -91,11 +97,9 @@ const Multiselect = function MultipleSelectCheckmarks({
         >
           <MenuItem
             key={'all'}
-            value={allCheckedValue.join(', ')}
+            value={allCheckedValue}
           >
-            <Checkbox
-              checked={allCheckedValue.every((value) => result.includes(value))}
-            />
+            <Checkbox checked={isAllChecked} />
             <ListItemText primary="Выбрать все" />
           </MenuItem>
 
