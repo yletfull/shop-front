@@ -4,10 +4,16 @@
   &Accordion {
     box-shadow: 0px 1px 1px 0px $color-gray-lighter !important;
 
-    &Colored {
-      background-color: $color-gray-lightest !important;
-      border-top: 1px solid $color-gray !important;
-      border-bottom: 0 !important;
+    &Select {
+      &Wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    &AcceptButton {
+      margin-top: .5rem !important;
     }
   }
 }
