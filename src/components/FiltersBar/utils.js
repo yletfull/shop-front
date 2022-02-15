@@ -9,11 +9,11 @@ export const getToggleCheckboxOptions = ({ checkboxesOptions, index, level }) =>
   return optionsCopy;
 };
 
-export const getBrandsOptions = (brands) => brands
+export const getOptions = (brands) => brands
   .map((brand) => ({ text: brand.name, value: brand.name }));
 
 export default {
   getCheckboxIsChecked,
   getToggleCheckboxOptions,
-  getBrandsOptions,
+  getOptions,
 };
