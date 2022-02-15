@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import Pages from '@/pages/Pages';
-import FiltersBar from '@/components/FiltersBar';
-import DeviceList from '@/components/DeviceList';
 import DeviceStore from '@/store/Devices';
 import { Container, Paper } from '@mui/material';
 import Spinner from '@/components/Spinner';
+import DeviceList from './components/DeviceList';
+import Pagination from './components/Pagination';
+import Filters from './components/Filters';
 import { fetchBrands, fetchDevices, fetchTypes } from './service';
 
 const Shop = observer(() => {
@@ -36,7 +36,7 @@ const Shop = observer(() => {
   return (
     <Container>
       <Paper variant="outlined">
-        <FiltersBar />
+        <Filters />
       </Paper>
 
       <Paper
@@ -49,7 +49,7 @@ const Shop = observer(() => {
         />
 
         <DeviceList />
-        <Pages />
+        <Pagination />
       </Paper>
     </Container>
   );
