@@ -6,7 +6,7 @@ import Spinner from '@/components/Spinner';
 import DeviceList from './components/DeviceList';
 import Pagination from './components/Pagination';
 import Filters from './components/Filters';
-import { fetchBrands, fetchDevices, fetchTypes } from './service';
+import { fetchBrands, fetchDevices, fetchTypes, fetchRatings } from './service';
 
 const Shop = observer(() => {
   const device = DeviceStore;
@@ -14,9 +14,13 @@ const Shop = observer(() => {
 
   useEffect(async () => {
     setIsFetching(true);
-    await fetchTypes().then(data => device.setTypes(data));
-    await fetchBrands().then(data => device.setBrands(data));
-    await fetchDevices(null, null, device.page, device.limit).then(data => {
+    await fetchTypes().then((data) => device.setTypes(data));
+    await fetchBrands().then((data) => device.setBrands(data));
+    await fetchRatings().then((data) => device.setRatings(data));
+    await fetchDevices({
+      page: device.page,
+      limit: device.limit,
+    }).then((data) => {
       device.setDevices(data.rows);
       device.setTotalCount(data.count);
     });
@@ -25,13 +29,25 @@ const Shop = observer(() => {
 
   useEffect(async () => {
     setIsFetching(true);
-    await fetchDevices(device.selectedType.id, device.selectedBrand.id, device.page, device.limit)
-      .then(data => {
+    await fetchDevices({
+      type: device.selectedType,
+      brands: device.selectedBrands,
+      rating: device.selectedRating,
+      page: device.page,
+      limit: device.limit,
+    })
+      .then((data) => {
         device.setDevices(data.rows);
         device.setTotalCount(data.count);
       });
     setIsFetching(false);
-  }, [device.page, device.selectedType, device.selectedBrand, device.limit]);
+  }, [
+    device.page,
+    device.selectedTypes,
+    device.selectedBrands,
+    device.selectedRating,
+    device.limit,
+  ]);
 
   return (
     <Container>

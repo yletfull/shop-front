@@ -36,6 +36,7 @@
     "mobx": "^6.0.5",
     "mobx-react-lite": "^3.2.3",
     "prop-types": "^15.7.2",
+    "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.1",
     "react-dnd": "^14.0.2",

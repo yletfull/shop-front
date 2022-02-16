@@ -1,4 +1,5 @@
 import { $authHost, $host } from '@/api';
+import QueryString from 'qs';
 
 export const createType = async (type) => {
   const { data } = await $authHost.post('api/type', type);
@@ -20,15 +21,19 @@ export const fetchBrands = async () => {
   return data;
 };
 
+export const fetchRatings = async () => {
+  const { data } = await $host.get('api/device/ratings');
+  return data;
+};
+
 export const createDevice = async (device) => {
   const { data } = await $authHost.post('api/device', device);
   return data;
 };
 
-export const fetchDevices = async (typeId, brandId, page, limit) => {
-  const { data } = await $host.get('api/device', { params: {
-    typeId, brandId, page, limit,
-  } });
+export const fetchDevices = async (params) => {
+  const { data } = await $host.get('api/device', { params,
+    paramsSerializer: (d) => QueryString.stringify(d) });
   return data;
 };
 

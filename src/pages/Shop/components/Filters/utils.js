@@ -9,8 +9,10 @@ export const getToggleCheckboxOptions = ({ checkboxesOptions, index, level }) =>
   return optionsCopy;
 };
 
-export const getOptions = (brands) => brands
-  .map((brand) => ({ text: brand.name, value: brand.name }));
+export const getOptions = (options) => options
+  .map((option) => ({
+    text: option?.name || option.text,
+    value: String(option?.id || option.value) }));
 
 export default {
   getCheckboxIsChecked,

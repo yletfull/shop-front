@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -71,16 +71,23 @@ const Multiselect = function MultipleSelectCheckmarks({
     setResult(
       typeof mapValues === 'string' ? resultValue.split(', ') : resultValue,
     );
-    onChange(result);
   };
 
-  const allCheckedOptions = options.map((option) => option.value);
-  const isAllChecked = allCheckedOptions.every((value) => result.includes(value));
+  useEffect(() => {
+    const formatedResult = result
+      .map((text) => options
+        .filter((option) => option.text === text)[0].value);
+    onChange(formatedResult);
+  }, [result]);
+
+
+  const allCheckedOptions = options.map((option) => option.text);
+  const isAllChecked = allCheckedOptions.every((text) => result.includes(text));
   const allCheckedValue = isAllChecked ? 'unselectAll' : allCheckedOptions.join(', ');
 
   return (
     <div>
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{ m: 1, minWidth: 300 }}>
         <InputLabel id={`${id}_label`}>
           {label}
         </InputLabel>
@@ -105,11 +112,11 @@ const Multiselect = function MultipleSelectCheckmarks({
 
           {options.map((option) => (
             <MenuItem
-              key={option.value}
-              value={option.value}
+              key={option.text}
+              value={option.text}
             >
-              <Checkbox checked={result.indexOf((option.value)) > -1} />
-              <ListItemText primary={option.value} />
+              <Checkbox checked={result.indexOf((option.text)) > -1} />
+              <ListItemText primary={option.text} />
             </MenuItem>
           ))}
         </Select>

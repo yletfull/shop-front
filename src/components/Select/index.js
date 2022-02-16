@@ -55,7 +55,7 @@ const SelectComponent = ({
   const handleChange = (e, data) => onChange(data.props.value);
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }}>
+    <FormControl sx={{ m: 1, minWidth: 300 }}>
       <InputLabel id={`${id}_label`}>
         {label}
       </InputLabel>

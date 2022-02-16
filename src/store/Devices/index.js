@@ -1,12 +1,14 @@
-import { makeAutoObservable } from 'mobx';
+import { toJS, makeAutoObservable } from 'mobx';
 
 class DeviceStore {
   constructor() {
     this._types = [];
     this._brands = [];
+    this._ratings = [];
     this._devices = [];
-    this._selectedType = {};
-    this._selectedBrand = {};
+    this._selectedType = '';
+    this._selectedBrands = [];
+    this._selectedRating = '';
     this._page = 1;
     this._totalCount = 0;
     this._limit = 6;
@@ -19,6 +21,9 @@ class DeviceStore {
   setBrands(brands) {
     this._brands = brands;
   }
+  setRatings(ratings) {
+    this._ratings = ratings;
+  }
   setDevices(devices) {
     this._devices = devices;
   }
@@ -27,9 +32,13 @@ class DeviceStore {
     this.setPage(1);
     this._selectedType = type;
   }
-  setSelectedBrand(brand) {
+  setSelectedBrands(brands) {
     this.setPage(1);
-    this._selectedBrand = brand;
+    this._selectedBrands = brands;
+  }
+  setSelectedRating(rating) {
+    this.setPage(1);
+    this._selectedRating = rating;
   }
   setPage(page) {
     this._page = page;
@@ -47,14 +56,20 @@ class DeviceStore {
   get brands() {
     return this._brands;
   }
+  get ratings() {
+    return toJS(this._ratings);
+  }
   get devices() {
     return this._devices;
   }
   get selectedType() {
-    return this._selectedType;
+    return toJS(this._selectedType);
   }
-  get selectedBrand() {
-    return this._selectedBrand;
+  get selectedBrands() {
+    return toJS(this._selectedBrands);
+  }
+  get selectedRating() {
+    return toJS(this._selectedRating);
   }
   get totalCount() {
     return this._totalCount;
