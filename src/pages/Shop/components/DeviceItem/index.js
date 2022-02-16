@@ -1,7 +1,17 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+  Rating,
+} from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { DEVICE_ROUTE } from '@/router/constants';
+
 
 // eslint-disable-next-line react/prop-types
 const DeviceItem = ({ device }) => {
@@ -17,7 +27,9 @@ const DeviceItem = ({ device }) => {
         component="img"
         alt="device"
         height="300"
+        sx={{ cursor: 'pointer' }}
         image={process.env.REACT_APP_API_URL + device.img}
+        onClick={handleCardDetailsClick}
       />
 
       <CardContent>
@@ -26,28 +38,39 @@ const DeviceItem = ({ device }) => {
           variant="h5"
           component="div"
         >
-          {device.name || 'Без имени'}
+          {`${device.price} ₽` || 'Нет в наличии'}
         </Typography>
 
         <Typography
           variant="body2"
           color="text.secondary"
         >
-          Описание в разработке
+          {device.name || 'Какой-то товар'}
         </Typography>
+
+        <Rating
+          name="read-only"
+          value={device.rating}
+          sx={{ mt: 1 }}
+          readOnly
+        />
       </CardContent>
 
-      <CardActions>
+      <CardActions sx={{ ml: 1, mb: 2 }}>
         <Button
-          size="small"
-          onClick={handleCardDetailsClick}
+          size="medium"
+          variant="outlined"
         >
-          Подробнее
+          Страница товара
         </Button>
 
         <Button
-          size="small"
+          size="medium"
+          variant="outlined"
+          color="success"
         >
+          <CreditCardIcon sx={{ mr: 0.5 }} />
+
           В корзину
         </Button>
       </CardActions>
