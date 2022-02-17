@@ -20,10 +20,7 @@ const FiltersBar = observer(() => {
   const [selectedType, setSelectedType] = useState();
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedRating, setSelectedRating] = useState();
-  const [selectedPrice, setSelectedPrice] = useState({
-    from: 0,
-    to: 100000,
-  });
+  const [selectedPrice, setSelectedPrice] = useState({});
 
   const handleTypesChange = (e) => setSelectedType(e);
   const handleBrandsChange = (e) => setSelectedBrands(e);
@@ -37,6 +34,7 @@ const FiltersBar = observer(() => {
     device.setSelectedType(selectedType);
     device.setSelectedBrands(selectedBrands);
     device.setSelectedRating(selectedRating);
+    device.setSelectedPrice(selectedPrice);
   };
 
   return (
@@ -79,12 +77,13 @@ const FiltersBar = observer(() => {
           <Input
             units="₽"
             id="price-from"
+            type="number"
             label="от"
+            value={selectedPrice.from}
             onChange={(event) => handlePriceChange({
               event,
               option: 'from',
             })}
-            value={selectedPrice.from}
           />
 
           -
@@ -92,12 +91,13 @@ const FiltersBar = observer(() => {
           <Input
             units="₽"
             id="price-to"
+            type="number"
             label="до"
+            value={selectedPrice.to}
             onChange={(event) => handlePriceChange({
               event,
               option: 'to',
             })}
-            value={selectedPrice.to}
           />
         </div>
 

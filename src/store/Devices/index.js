@@ -9,6 +9,7 @@ class DeviceStore {
     this._selectedType = '';
     this._selectedBrands = [];
     this._selectedRating = '';
+    this._selectedPrice = {};
     this._page = 1;
     this._totalCount = 0;
     this._limit = 6;
@@ -40,6 +41,10 @@ class DeviceStore {
     this.setPage(1);
     this._selectedRating = rating;
   }
+  setSelectedPrice(price) {
+    this.setPage(1);
+    this._selectedPrice = price;
+  }
   setPage(page) {
     this._page = page;
   }
@@ -70,6 +75,9 @@ class DeviceStore {
   }
   get selectedRating() {
     return toJS(this._selectedRating);
+  }
+  get selectedPrice() {
+    return toJS(this._selectedPrice);
   }
   get totalCount() {
     return this._totalCount;
