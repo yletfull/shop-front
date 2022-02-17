@@ -70,18 +70,20 @@ const Shop = observer(() => {
         <Filters />
       </Paper>
 
-      <Paper
-        variant="outlined"
-        sx={{ mt: 2 }}
-      >
-        <Spinner
-          isFetching={isFetching}
-          overlay
-        />
+      {!error && (
+        <Paper
+          variant="outlined"
+          sx={{ mt: 2 }}
+        >
+          <Spinner
+            isFetching={isFetching}
+            overlay
+          />
 
-        <DeviceList />
-        <Pagination />
-      </Paper>
+          <DeviceList />
+          <Pagination />
+        </Paper>
+      )}
     </Container>
   );
 });

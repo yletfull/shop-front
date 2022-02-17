@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Alert } from 'react-bootstrap';
+import { Alert } from '@mui/material';
 
 const propTypes = {
   error: PropTypes.objectOf(PropTypes.any),
@@ -16,6 +16,8 @@ const ErrorMessageBlock = function ErrorMessageBlock({
 }) {
   const [isShown, setIsShown] = useState(false);
 
+  const handleClose = () => setIsShown(false);
+
   useEffect(() => {
     setIsShown(true);
   }, [error]);
@@ -23,10 +25,9 @@ const ErrorMessageBlock = function ErrorMessageBlock({
   return (
     (error && isShown) && (
       <Alert
-        className="mt-3"
-        variant="danger"
-        onClose={() => setIsShown(false)}
-        dismissible
+        severity="error"
+        onClose={handleClose}
+        sx={{ mb: 1 }}
         {...props}
       >
         {error.response?.data?.message || 'Произошла ошибка'}
