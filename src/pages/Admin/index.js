@@ -6,7 +6,7 @@ import ShopControl from './components/ShopControl';
 
 const Admin = () => (
   <Container className="d-flex flex-column mt-4">
-    <Tabs defaultActiveKey="users" id="uncontrolled-tab-example" className="mb-3">
+    <Tabs defaultActiveKey="roles" id="uncontrolled-tab-example" className="mb-3">
       <Tab eventKey="users" title="Пользователи">
         <UsersControl />
       </Tab>

@@ -1,18 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import DeviceStore from '@/store/Devices';
-import { Container, Paper } from '@mui/material';
-import ErrorMessageBlock from '@/components/ErrorMessageBlock';
-import Spinner from '@/components/Spinner';
-import DeviceList from './components/DeviceList';
-import Pagination from './components/Pagination';
-import Filters from './components/Filters';
 import { fetchBrands, fetchDevices, fetchTypes, fetchRatings } from './service';
+import View from './View';
 
 const Shop = observer(() => {
   const device = DeviceStore;
+
   const [isFetching, setIsFetching] = useState(false);
   const [error, setError] = useState(null);
+
+  const [selectedType, setSelectedType] = useState();
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedRating, setSelectedRating] = useState();
+  const [selectedPrice, setSelectedPrice] = useState({});
+
+  const handleTypesChange = (e) => setSelectedType(e);
+  const handleBrandsChange = (e) => setSelectedBrands(e);
+  const handleRatingChange = (e) => setSelectedRating(e);
+  const handlePriceChange = ({ event, option }) => {
+    const { value } = event.currentTarget;
+    setSelectedPrice((prev) => ({ ...prev, [option]: value }));
+  };
+
+  const handleFiltersAccept = () => {
+    device.setSelectedType(selectedType);
+    device.setSelectedBrands(selectedBrands);
+    device.setSelectedRating(selectedRating);
+    device.setSelectedPrice(selectedPrice);
+  };
 
   useEffect(async () => {
     setIsFetching(true);
@@ -61,30 +77,23 @@ const Shop = observer(() => {
   ]);
 
   return (
-    <Container>
-      {error && (
-        <ErrorMessageBlock error={error} />
-      )}
-
-      <Paper variant="outlined">
-        <Filters />
-      </Paper>
-
-      {!error && (
-        <Paper
-          variant="outlined"
-          sx={{ mt: 2 }}
-        >
-          <Spinner
-            isFetching={isFetching}
-            overlay
-          />
-
-          <DeviceList />
-          <Pagination />
-        </Paper>
-      )}
-    </Container>
+    <View
+      devices={device.devices}
+      error={error}
+      isFetching={isFetching}
+      types={device.types}
+      brands={device.brands}
+      ratings={device.ratings}
+      selectedType={selectedType}
+      selectedPrice={selectedPrice}
+      selectedRating={selectedRating}
+      selectedBrands={selectedBrands}
+      handleTypesChange={handleTypesChange}
+      handleBrandsChange={handleBrandsChange}
+      handleRatingChange={handleRatingChange}
+      handleFiltersAccept={handleFiltersAccept}
+      handlePriceChange={handlePriceChange}
+    />
   );
 });
 

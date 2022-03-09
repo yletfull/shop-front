@@ -7,9 +7,11 @@ import DeviceStore from '@/store/Devices';
 
 const CreateDevice = observer(({ show, onHide }) => {
   const device = DeviceStore;
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedType, setSelectedType] = useState(null);
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
-  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [info, setInfo] = useState([]);
 
   useEffect(() => {
@@ -28,16 +30,16 @@ const CreateDevice = observer(({ show, onHide }) => {
   };
 
   const selectFile = e => {
-    setFile(e.target.files[0]);
+    setPreview(e.target.files[0]);
   };
 
   const addDevice = () => {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', `${price}`);
-    formData.append('img', file);
-    formData.append('brandId', device.selectedBrand.id);
-    formData.append('typeId', device.selectedType.id);
+    formData.append('preview', preview);
+    formData.append('brandId', selectedBrand.id);
+    formData.append('typeId', selectedType.id);
     formData.append('info', JSON.stringify(info));
     createDevice(formData).then(() => onHide());
   };
@@ -50,17 +52,17 @@ const CreateDevice = observer(({ show, onHide }) => {
     >
       <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-                    Добавить устройство
+          Добавить устройство
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Dropdown className="mt-2 mb-2">
-            <Dropdown.Toggle>{device.selectedType.name || 'Выберите тип'}</Dropdown.Toggle>
+            <Dropdown.Toggle>{selectedType?.name || 'Выберите тип'}</Dropdown.Toggle>
             <Dropdown.Menu>
               {device.types.map(type =>
                 <Dropdown.Item
-                  onClick={() => device.setSelectedType(type)}
+                  onClick={() => setSelectedType(type)}
                   key={type.id}
                 >
                   {type.name}
@@ -69,11 +71,11 @@ const CreateDevice = observer(({ show, onHide }) => {
             </Dropdown.Menu>
           </Dropdown>
           <Dropdown className="mt-2 mb-2">
-            <Dropdown.Toggle>{device.selectedBrand.name || 'Выберите тип'}</Dropdown.Toggle>
+            <Dropdown.Toggle>{selectedBrand?.name || 'Выберите тип'}</Dropdown.Toggle>
             <Dropdown.Menu>
               {device.brands.map(brand =>
                 <Dropdown.Item
-                  onClick={() => device.setSelectedBrand(brand)}
+                  onClick={() => setSelectedBrand(brand)}
                   key={brand.id}
                 >
                   {brand.name}
@@ -104,7 +106,7 @@ const CreateDevice = observer(({ show, onHide }) => {
             variant={'outline-dark'}
             onClick={addInfo}
           >
-                        Добавить новое свойство
+            Добавить новое свойство
           </Button>
           {info.map(i =>
             <Row className="mt-4" key={i.number}>
@@ -127,7 +129,7 @@ const CreateDevice = observer(({ show, onHide }) => {
                   onClick={() => removeInfo(i.number)}
                   variant={'outline-danger'}
                 >
-                                    Удалить
+                  Удалить
                 </Button>
               </Col>
             </Row>

@@ -1,0 +1,13 @@
+@import '@/theme/include.scss';
+
+.device {
+  &Wrapper {
+    margin-top: 1rem !important;
+  }
+
+  &Paper {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+  }
+}

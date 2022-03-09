@@ -6,17 +6,25 @@ import {
   CardMedia,
   Typography,
   Rating,
+  Box,
 } from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { precision } from '@/constants/rating';
+import { getAverageRatingValue } from '@/utils/rating';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { DEVICE_ROUTE } from '@/router/constants';
+import PropTypes from 'prop-types';
 
+const propTypes = {
+  device: PropTypes.objectOf(PropTypes.any).isRequired,
+};
 
-// eslint-disable-next-line react/prop-types
-const DeviceItem = ({ device }) => {
+const DeviceItem = ({
+  device,
+}) => {
   const history = useHistory();
-  const handleCardDetailsClick = () => history.push(DEVICE_ROUTE);
+  const handleCardDetailsClick = () => history.push(`${DEVICE_ROUTE}/${device.id}`);
 
   return (
     <Card
@@ -28,7 +36,7 @@ const DeviceItem = ({ device }) => {
         alt="device"
         height="300"
         sx={{ cursor: 'pointer' }}
-        image={process.env.REACT_APP_API_URL + device.img}
+        image={process.env.REACT_APP_API_URL + device.preview}
         onClick={handleCardDetailsClick}
       />
 
@@ -45,15 +53,29 @@ const DeviceItem = ({ device }) => {
           variant="body2"
           color="text.secondary"
         >
-          {device.name || 'Какой-то товар'}
+          {device.name || 'Без названия'}
         </Typography>
 
-        <Rating
-          name="read-only"
-          value={device.rating}
-          sx={{ mt: 1 }}
-          readOnly
-        />
+        <Box
+          sx={{
+            width: 200,
+            display: 'flex',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Rating
+            name="read-only"
+            value={getAverageRatingValue(device.ratings)}
+            precision={precision}
+            sx={{ mt: 1 }}
+            readOnly
+          />
+
+          <Box sx={{ ml: 2 }}>
+            ({device?.ratings?.length || 0})
+          </Box>
+        </Box>
+
       </CardContent>
 
       <CardActions sx={{ ml: 1, mb: 2 }}>
@@ -77,5 +99,7 @@ const DeviceItem = ({ device }) => {
     </Card>
   );
 };
+
+DeviceItem.propTypes = propTypes;
 
 export default DeviceItem;

@@ -1,26 +1,41 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
-import { observer } from 'mobx-react-lite';
-import DeviceStore from '@/store/Devices';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 import DeviceItem from '../DeviceItem';
 import styles from './styles.module.scss';
 
-const DeviceList = observer(() => {
-  const device = DeviceStore;
+const propTypes = {
+  devices: PropTypes.arrayOf(PropTypes.any),
+};
 
-  return (
-    <Grid container className={styles.devicesContainer}>
-      {device.devices.map((d) =>
+const defaultProps = {
+  devices: [],
+};
+
+const DeviceList = ({
+  devices,
+}) => (
+  <Grid container className={styles.devicesContainer}>
+    {devices.length
+      ? devices.map((d) => (
         <Grid item>
           <DeviceItem
             key={d.id}
             device={d}
           />
         </Grid>
+      )
+      ) : (
+        <Typography sx={{ m: 1.5 }}>
+          Нет товаров
+        </Typography>
       )}
-    </Grid>
+  </Grid>
 
-  );
-});
+);
+
+DeviceList.propTypes = propTypes;
+DeviceList.defaultProps = defaultProps;
 
 export default DeviceList;

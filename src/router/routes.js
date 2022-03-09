@@ -6,7 +6,7 @@ import DevicePage from '@/pages/DevicePage';
 import {
   ADMIN_ROUTE,
   BASKET_ROUTE,
-  DEVICE_ROUTE,
+  DEIVCE_ROUTE_HAS_PARAMS,
   LOGIN_ROUTE,
   REGISTRATION_ROUTE,
   SHOP_ROUTE,
@@ -37,7 +37,7 @@ export const publicRoutes = [
     Component: Auth,
   },
   {
-    path: DEVICE_ROUTE,
+    path: DEIVCE_ROUTE_HAS_PARAMS,
     Component: DevicePage,
   },
 ];
