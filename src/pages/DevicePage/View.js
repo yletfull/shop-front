@@ -7,7 +7,7 @@ import {
 import Carousel from '@/components/Carousel';
 import PropTypes from 'prop-types';
 import RightSide from './components/RigthSide';
-import Info from './components/Info';
+import BottomTabs from './components/BottomTabs';
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any),
@@ -28,12 +28,15 @@ const DevicePage = ({
       sx={{
         display: 'flex',
         flexDirection: 'row',
-        padding: 2 }}
+        padding: 2,
+      }}
     >
       <Grid
         container
         spacing={2}
-        sx={{ mt: 1 }}
+        sx={{
+          mt: 1,
+        }}
       >
         <Grid
           item
@@ -47,7 +50,7 @@ const DevicePage = ({
           item
           xs={6}
         >
-          <Info
+          <RightSide
             device={device}
           />
         </Grid>
@@ -55,7 +58,7 @@ const DevicePage = ({
           item
           xs={12}
         >
-          <RightSide
+          <BottomTabs
             device={device}
           />
         </Grid>

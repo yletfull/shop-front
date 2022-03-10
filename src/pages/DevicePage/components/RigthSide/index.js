@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Tabs,
-  Tab,
-} from '@mui/material';
-import TabPanel from '@/components/TabPanel';
+import React from 'react';
 import PropTypes from 'prop-types';
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+import { Box,
+  Typography,
+  Rating,
+  Button,
+} from '@mui/material';
+import {
+  precision,
+  defaultRating,
+} from '@/constants/rating';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any),
@@ -23,55 +20,82 @@ const defaultProps = {
 };
 
 const RigthSide = ({
-  // eslint-disable-next-line no-unused-vars
   device,
-}) => {
-  const [value, setValue] = useState(0);
+}) => (
+  <Box sx={{ ml: 3 }}>
+    <Typography
+      variant="h3"
+      sx={{ fontWeight: 'bold' }}
+    >
+      {device.name}
+    </Typography>
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    <Box sx={{ display: 'flex' }}>
+      <Typography>
+        Категория:
+      </Typography>
 
+      &nbsp;
 
-  return (<Box sx={{ width: '100%' }}>
+      <Typography sx={{ fontWeight: 600 }}>
+        {device?.type?.name}
+      </Typography>
+    </Box>
+
     <Box
       sx={{
-        borderBottom: 1,
-        borderColor: 'divider',
+        width: 200,
+        display: 'flex',
+        alignItems: 'flex-end',
       }}
     >
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        sx={{ mt: 5 }}
-        textColor="inherit"
-        aria-label="full width tabs example"
-      >
-        <Tab
-          label="Характеристики"
-          {...a11yProps(0)}
-        />
-        <Tab
-          label="Вопросы"
-          {...a11yProps(1)}
-        />
-        <Tab
-          label="Отзывы"
-          {...a11yProps(2)}
-        />
-      </Tabs>
+      <Rating
+        name="read-only"
+        size="large"
+        value={device?.avgRate || defaultRating}
+        precision={precision}
+        sx={{ mt: 1 }}
+        readOnly
+      />
+
+      <Box sx={{ ml: 2 }}>
+        ({device?.votes || 0})
+      </Box>
     </Box>
-    <TabPanel value={value} index={0}>
-      Item One
-    </TabPanel>
-    <TabPanel value={value} index={1}>
-      Item Two
-    </TabPanel>
-    <TabPanel value={value} index={2}>
-      Item Three
-    </TabPanel>
-  </Box>);
-};
+
+    <Typography
+      variant="h5"
+      sx={{
+        fontWeight: 600,
+        mt: 3,
+      }}
+    >
+      {`${device?.price?.toFixed(2)} ₽` || '-'}
+    </Typography>
+
+    <Box sx={{ display: 'flex', alignItems: 'center', mt: 5 }}>
+      <Button
+        size="medium"
+        variant="contained"
+        disabled={!device?.count}
+      >
+        <CreditCardIcon sx={{ mr: 0.5 }} />
+
+        В корзину
+      </Button>
+
+      <Typography sx={{ ml: 1 }}>
+        В наличии:
+      </Typography>
+
+      &nbsp;
+
+      <Typography sx={{ fontWeight: 600 }}>
+        {device?.count || 'нет'}
+      </Typography>
+    </Box>
+  </Box>
+);
 
 RigthSide.propTypes = propTypes;
 RigthSide.defaultProps = defaultProps;
