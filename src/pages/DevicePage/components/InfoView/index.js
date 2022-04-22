@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-indent */
 import React from 'react';
 import {
-  Box, Typography,
+  Paper, TableBody, TableRow, TableCell, TableContainer,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { Table } from 'react-bootstrap';
 
 const propTypes = {
   info: PropTypes.arrayOf(
@@ -21,24 +22,35 @@ const defaultProps = {
 const InfoView = ({
   info,
 }) => (
-  <Box>
-    {info.length
-      ? info.map((item) => (
-        <Typography
-          sx={{ '&:not(:first-of-type)': {
-            mt: 2,
-          } }}
-        >
-          {item.title}
-          :
-          {item.value}
-        </Typography>
-      )) : (
-        <Typography>
-          Нет информации
-        </Typography>
-      )}
-  </Box>
+  <TableContainer
+    component={Paper}
+    sx={{ boxShadow: 0 }}
+  >
+    <Table
+      sx={{
+        minWidth: 650,
+        boxShadow: 0,
+      }}
+      size="large"
+    >
+      <TableBody>
+        {info.length && info.map((row) => (
+          <TableRow
+            key={row.title}
+            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              {row.title}
+            </TableCell>
+
+            <TableCell component="th" scope="row">
+              {row.value}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </TableContainer>
 );
 
 InfoView.propTypes = propTypes;

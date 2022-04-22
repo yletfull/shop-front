@@ -18,15 +18,17 @@ function a11yProps(index) {
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any),
+  onAddFeedbackModalSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   device: {},
+  onAddFeedbackModalSubmit: () => {},
 };
 
 const BottomTabs = ({
-  // eslint-disable-next-line no-unused-vars
   device,
+  onAddFeedbackModalSubmit,
 }) => {
   const [value, setValue] = useState(0);
 
@@ -46,7 +48,6 @@ const BottomTabs = ({
         onChange={handleChange}
         sx={{ mt: 5 }}
         textColor="inherit"
-        aria-label="full width tabs example"
       >
         <Tab
           label="Характеристики"
@@ -82,6 +83,7 @@ const BottomTabs = ({
     >
       <FeedbackView
         feedback={device.feedback}
+        onAddFeedbackModalSubmit={onAddFeedbackModalSubmit}
       />
     </TabPanel>
   </Box>);

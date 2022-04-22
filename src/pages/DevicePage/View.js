@@ -12,16 +12,19 @@ import BottomTabs from './components/BottomTabs';
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any),
   images: PropTypes.arrayOf(PropTypes.any),
+  onAddFeedbackModalSubmit: PropTypes.func,
 };
 
 const defaultProps = {
   device: {},
   images: [],
+  onAddFeedbackModalSubmit: () => {},
 };
 
 const DevicePage = ({
   device,
   images,
+  onAddFeedbackModalSubmit,
 }) => (
   <Container>
     <Paper
@@ -60,6 +63,7 @@ const DevicePage = ({
         >
           <BottomTabs
             device={device}
+            onAddFeedbackModalSubmit={onAddFeedbackModalSubmit}
           />
         </Grid>
       </Grid>
