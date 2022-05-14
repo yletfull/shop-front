@@ -5,6 +5,7 @@ import WithAppLayout from '@/components/AppLayout';
 import RouterView from '@/router/RouterView';
 import UserStore from '@/store/User';
 import Spinner from '@/components/Spinner';
+import { fetchUserCard } from './pages/Shop/service';
 
 const App = function App() {
   const [isFetching, setIsFetching] = useState(true);
@@ -12,7 +13,9 @@ const App = function App() {
   useEffect(async () => {
     setIsFetching(true);
     try {
+      const card = await fetchUserCard();
       const user = await check();
+      console.log(user, card);
       UserStore.setUser(user);
       UserStore.setIsAuth(true);
     } catch (err) {

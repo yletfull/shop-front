@@ -34,20 +34,23 @@ const InfoView = ({
       size="large"
     >
       <TableBody>
-        {info.length && info.map((row) => (
-          <TableRow
-            key={row.title}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          >
-            <TableCell component="th" scope="row">
-              {row.title}
-            </TableCell>
+        {info.length > 0
+          ? info.map((row) => (
+            <TableRow
+              key={row.title}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.title}
+              </TableCell>
 
-            <TableCell component="th" scope="row">
-              {row.value}
-            </TableCell>
-          </TableRow>
-        ))}
+              <TableCell component="th" scope="row">
+                {row.value}
+              </TableCell>
+            </TableRow>
+          )) : <TableRow>
+            Нет данных
+          </TableRow>}
       </TableBody>
     </Table>
   </TableContainer>

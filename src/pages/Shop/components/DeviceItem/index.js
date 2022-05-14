@@ -82,6 +82,7 @@ const DeviceItem = ({
         <Button
           size="medium"
           variant="outlined"
+          onClick={handleCardDetailsClick}
         >
           Страница товара
         </Button>
