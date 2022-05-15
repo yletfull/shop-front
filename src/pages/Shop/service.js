@@ -43,6 +43,6 @@ export const fetchOneDevice = async (id) => {
 };
 
 export const fetchUserCard = async () => {
-  const { data } = await $host.get('api/card/');
+  const { data } = await $host.get('api/card');
   return data;
 };
