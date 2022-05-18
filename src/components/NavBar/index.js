@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
 import Button from '@/components/Button';
+import { logout } from '@/pages/Auth/service';
 import styles from './styles.module.scss';
 import { paperProps } from './constants';
 
@@ -27,12 +28,11 @@ const NavBar = observer(() => {
   const logOut = () => {
     UserStore.setUser({});
     UserStore.setIsAuth(false);
+    logout();
   };
 
   const isAdmin = UserStore.user.roleId === usersRolesIds.admin;
-
   const [anchorEl, setAnchorEl] = useState(null);
-
   const menuIsOpen = Boolean(anchorEl);
 
   const handleClick = (event) => {

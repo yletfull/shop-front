@@ -28,7 +28,7 @@ const DeviceItem = ({
 
   return (
     <Card
-      sx={{ width: 345, margin: 2 }}
+      sx={{ margin: 2 }}
       variant="outlined"
     >
       <CardMedia

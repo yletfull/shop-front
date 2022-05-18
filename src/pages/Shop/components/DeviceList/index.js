@@ -3,7 +3,6 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import DeviceItem from '../DeviceItem';
-import styles from './styles.module.scss';
 
 const propTypes = {
   devices: PropTypes.arrayOf(PropTypes.any),
@@ -16,10 +15,14 @@ const defaultProps = {
 const DeviceList = ({
   devices,
 }) => (
-  <Grid container className={styles.devicesContainer}>
+  <Grid
+    container
+    spacing={{ xs: 1, md: 1 }}
+    columns={{ xs: 4, sm: 8, md: 12 }}
+  >
     {devices.length
       ? devices.map((d) => (
-        <Grid item>
+        <Grid item xs={4} sm={4} md={4}>
           <DeviceItem
             key={d.id}
             device={d}
