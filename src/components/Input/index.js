@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { InputAdornment, TextField } from '@mui/material';
-
 
 const propTypes = {
   error: PropTypes.any,

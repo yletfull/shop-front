@@ -41,16 +41,3 @@ export const fetchOneDevice = async (id) => {
   const { data } = await $host.get(`api/device/${id}`);
   return data;
 };
-
-export const fetchUserCard = async () => {
-  const { data } = await $host.get('api/card');
-  return data;
-};
-
-export const addCardItems = async (items) => {
-  const { data } = await $host.post('api/card', {
-    items,
-  });
-  return data;
-};
-

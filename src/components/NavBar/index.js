@@ -1,12 +1,13 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/jsx-indent */
 import React, { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { NavLink, useHistory } from 'react-router-dom';
 import UserStore from '@/store/User';
-import { ADMIN_ROUTE,
+import CardStore from '@/store/Card';
+import {
+  ADMIN_ROUTE,
   LOGIN_ROUTE,
   SHOP_ROUTE,
+  BASKET_ROUTE,
 } from '@/router/constants';
 import { usersRolesIds } from '@/constants/usersRoles';
 import cx from 'classnames';
@@ -82,7 +83,7 @@ const NavBar = observer(() => {
         </Tooltip>
 
         <NavLink
-          to={SHOP_ROUTE}
+          to={BASKET_ROUTE}
           className={cx(styles.navBarLink)}
         >
           <CreditCardIcon />
@@ -90,7 +91,7 @@ const NavBar = observer(() => {
           Корзина
           &nbsp;
           <Chip
-            label={UserStore?.card?.basket_devices?.length || 0}
+            label={CardStore?.card?.length || 0}
             color="primary"
           />
         </NavLink>

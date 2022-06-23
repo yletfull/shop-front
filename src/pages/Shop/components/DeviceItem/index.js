@@ -15,8 +15,8 @@ import { getAverageRatingValue } from '@/utils/rating';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { DEVICE_ROUTE } from '@/router/constants';
 import PropTypes from 'prop-types';
-import UserStore from '@/store/User';
-import { addCardItems, fetchUserCard } from '../../service';
+import CardStore from '@/store/Card';
+import { addCardItems, fetchUserCard } from '@/pages/Card/service';
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -29,7 +29,7 @@ const DeviceItem = ({
   const handleCardDetailsClick = () => history.push(`${DEVICE_ROUTE}/${device.id}`);
   const handleCardAddItem = async () => {
     await addCardItems([device.id]);
-    UserStore.setCard(await fetchUserCard());
+    CardStore.setCard(await fetchUserCard());
   };
 
   return (

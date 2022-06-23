@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-indent */
 import React from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Alert, Grid } from '@mui/material';
 import PropTypes from 'prop-types';
 import DeviceItem from '../DeviceItem';
 
@@ -30,9 +30,9 @@ const DeviceList = ({
         </Grid>
       )
       ) : (
-        <Typography sx={{ m: 1.5 }}>
-          Нет товаров
-        </Typography>
+        <Grid item xs={4} sm={8} md={12}>
+          <Alert severity="info">Нет товаров</Alert>
+        </Grid>
       )}
   </Grid>
 
