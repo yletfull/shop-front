@@ -20,6 +20,7 @@ import { addCardItems, fetchUserCard } from '@/pages/Card/service';
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any).isRequired,
+  count: PropTypes.number,
 };
 
 const DeviceItem = ({
@@ -34,13 +35,14 @@ const DeviceItem = ({
 
   return (
     <Card
-      sx={{ margin: 2 }}
+      sx={{ margin: 2, display: 'flex', flexDirection: 'row', height: '10rem' }}
       variant="outlined"
     >
       <CardMedia
         component="img"
         alt="device"
-        height="300"
+        height="150"
+        width="150"
         sx={{ cursor: 'pointer' }}
         image={process.env.REACT_APP_API_URL + device.preview}
         onClick={handleCardDetailsClick}
@@ -90,6 +92,8 @@ const DeviceItem = ({
           variant="outlined"
           onClick={handleCardDetailsClick}
         >
+          <CreditCardIcon sx={{ mr: 0.5 }} />
+
           Страница товара
         </Button>
 
@@ -101,7 +105,7 @@ const DeviceItem = ({
         >
           <CreditCardIcon sx={{ mr: 0.5 }} />
 
-          В корзину
+          Удалить
         </Button>
       </CardActions>
     </Card>

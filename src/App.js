@@ -4,8 +4,9 @@ import { check } from '@/pages/Auth/service';
 import WithAppLayout from '@/components/AppLayout';
 import RouterView from '@/router/RouterView';
 import UserStore from '@/store/User';
+import CardStore from '@/store/Card';
 import Spinner from '@/components/Spinner';
-import { fetchUserCard } from './pages/Shop/service';
+import { fetchUserCard } from './pages/Card/service';
 
 const App = function App() {
   const [isFetching, setIsFetching] = useState(true);
@@ -14,7 +15,7 @@ const App = function App() {
     setIsFetching(true);
     try {
       const card = await fetchUserCard();
-      UserStore.setCard(card);
+      CardStore.setCard(card);
       const user = await check();
       UserStore.setUser(user);
       UserStore.setIsAuth(true);

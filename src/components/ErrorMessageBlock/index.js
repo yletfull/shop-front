@@ -4,14 +4,17 @@ import { Alert } from '@mui/material';
 
 const propTypes = {
   error: PropTypes.objectOf(PropTypes.any),
+  isClosable: PropTypes.bool,
 };
 
 const defaultProps = {
   error: null,
+  isClosable: true,
 };
 
 const ErrorMessageBlock = function ErrorMessageBlock({
   error,
+  isClosable,
   ...props
 }) {
   const [isShown, setIsShown] = useState(false);
@@ -26,7 +29,7 @@ const ErrorMessageBlock = function ErrorMessageBlock({
     (error && isShown) && (
       <Alert
         severity="error"
-        onClose={handleClose}
+        onClose={isClosable ? handleClose : null}
         sx={{ mb: 1 }}
         {...props}
       >

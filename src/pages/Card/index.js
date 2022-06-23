@@ -12,7 +12,7 @@ const BasketPage = observer(() => {
   useEffect(async () => {
     setIsFetching(true);
     try {
-      CardStore.setCardItems(await fetchUserCard());
+      CardStore.setCard(await fetchUserCard());
       setError(null);
     } catch (err) {
       setError(err);
@@ -20,10 +20,13 @@ const BasketPage = observer(() => {
     setIsFetching(false);
   }, []);
 
+  const devices = CardStore.card;
+
   return (
     <View
       isFetching={isFetching}
       error={error}
+      devices={devices}
     />
   );
 });

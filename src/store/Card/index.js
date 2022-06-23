@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, toJS } from 'mobx';
 
 class CardStore {
   constructor() {
@@ -11,7 +11,7 @@ class CardStore {
   }
 
   get card() {
-    return this._card;
+    return toJS(this._card);
   }
 }
 
