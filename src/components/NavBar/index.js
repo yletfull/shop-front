@@ -15,8 +15,10 @@ import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Tooltip from '@mui/material/Tooltip';
 import Logout from '@mui/icons-material/Logout';
+import Chip from '@mui/material/Chip';
 import Button from '@/components/Button';
 import { logout } from '@/pages/Auth/service';
 import styles from './styles.module.scss';
@@ -52,7 +54,6 @@ const NavBar = observer(() => {
             className={styles.navBarLink}
             activeClassName={styles.navBarLinkActive}
           >
-
             Админ-панель
           </NavLink>
         )}
@@ -61,30 +62,38 @@ const NavBar = observer(() => {
           to={SHOP_ROUTE}
           className={cx(styles.navBarLink)}
         >
-
-          Товары
+          Контакты
         </NavLink>
 
         <NavLink
           to={SHOP_ROUTE}
           className={cx(styles.navBarLink)}
         >
-
-          Отзывы
+          Товары
         </NavLink>
 
-        <Tooltip title="Настройки профиля">
+        <Tooltip aling="right" title="Настройки профиля">
           <Button
             onClick={handleClick}
             className={styles.navBarButton}
           >
-            Профиль
-
-            <Avatar className={styles.navBarAvatar}>
-              {UserStore?.user?.login?.substring(0, 1) || 'u'}
-            </Avatar>
+            {UserStore?.isAuth ? 'Профиль' : 'Авторизация'}
           </Button>
         </Tooltip>
+
+        <NavLink
+          to={SHOP_ROUTE}
+          className={cx(styles.navBarLink)}
+        >
+          <CreditCardIcon />
+          &nbsp;
+          Корзина
+          &nbsp;
+          <Chip
+            label={UserStore?.card?.basket_devices?.length || 0}
+            color="primary"
+          />
+        </NavLink>
       </Box>
 
       <Menu

@@ -4,6 +4,7 @@ class UserStore {
   constructor() {
     this._isAuth = false;
     this._user = {};
+    this._card = [];
     makeAutoObservable(this);
   }
 
@@ -13,12 +14,18 @@ class UserStore {
   setUser(user) {
     this._user = user;
   }
+  setCard(card) {
+    this._card = card;
+  }
 
   get isAuth() {
     return this._isAuth;
   }
   get user() {
     return this._user;
+  }
+  get card() {
+    return this._card;
   }
 }
 

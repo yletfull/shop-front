@@ -14,8 +14,8 @@ const App = function App() {
     setIsFetching(true);
     try {
       const card = await fetchUserCard();
+      UserStore.setCard(card);
       const user = await check();
-      console.log(user, card);
       UserStore.setUser(user);
       UserStore.setIsAuth(true);
     } catch (err) {
