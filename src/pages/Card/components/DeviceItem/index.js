@@ -1,22 +1,32 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
   CardMedia,
+  Paper,
   Typography,
-  Rating,
-  Box,
 } from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { precision } from '@/constants/rating';
-import { getAverageRatingValue } from '@/utils/rating';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import ClearIcon from '@mui/icons-material/Clear';
 import { DEVICE_ROUTE } from '@/router/constants';
 import PropTypes from 'prop-types';
 import CardStore from '@/store/Card';
 import { addCardItems, fetchUserCard } from '@/pages/Card/service';
+import { styled } from '@mui/material/styles';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  boxShadow: 'unset',
+  border: 'thin solid #e0e0e0',
+}));
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -25,6 +35,7 @@ const propTypes = {
 
 const DeviceItem = ({
   device,
+  count,
 }) => {
   const history = useHistory();
   const handleCardDetailsClick = () => history.push(`${DEVICE_ROUTE}/${device.id}`);
@@ -34,81 +45,77 @@ const DeviceItem = ({
   };
 
   return (
-    <Card
-      sx={{ margin: 2, display: 'flex', flexDirection: 'row', height: '10rem' }}
-      variant="outlined"
-    >
-      <CardMedia
-        component="img"
-        alt="device"
-        height="150"
-        width="150"
-        sx={{ cursor: 'pointer' }}
-        image={process.env.REACT_APP_API_URL + device.preview}
-        onClick={handleCardDetailsClick}
-      />
-
-      <CardContent>
-        <Typography
-          gutterBottom
-          variant="h5"
-          component="div"
-        >
-          {`${device.price} ₽` || 'Нет в наличии'}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-        >
-          {device.name || 'Без названия'}
-        </Typography>
-
-        <Box
-          sx={{
-            width: 200,
-            display: 'flex',
-            alignItems: 'flex-end',
-          }}
-        >
-          <Rating
-            name="read-only"
-            value={getAverageRatingValue(device.ratings)}
-            precision={precision}
-            sx={{ mt: 1 }}
-            readOnly
-          />
-
-          <Box sx={{ ml: 2 }}>
-            ({device?.ratings?.length || 0})
-          </Box>
+    <Item>
+      <Card
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          height: '10rem',
+          width: '100%',
+          justifyContent: 'space-between',
+          minWidth: '10rem',
+        }}
+        elevation="0"
+      >
+        <Box sx={{ display: 'flex' }}>
+          <Paper sx={{ p: 2, m: 1, display: 'flex' }} elevation="0" variant="outlined">
+            <CardMedia
+              component="img"
+              alt="Нет изображения"
+              sx={{ cursor: 'pointer', width: '7rem' }}
+              image={process.env.REACT_APP_API_URL + device.preview}
+              onClick={handleCardDetailsClick}
+            />
+          </Paper>
+          <Paper
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'start',
+              alignItems: 'start',
+            }}
+            elevation="0"
+          >
+            <CardContent>
+              <Typography
+                variant="h4"
+                color="text.secondary"
+              >
+                {device.name || 'Без названия'}
+              </Typography>
+            </CardContent>
+            <Button
+              size="medium"
+              variant="text"
+              onClick={handleCardDetailsClick}
+              sx={{ color: '#bdbdbd' }}
+            >
+              <VisibilityIcon sx={{ mr: 0.5 }} />
+              Страница товара
+            </Button>
+            <Box>
+              <Typography
+                color="text.secondary"
+                variant="h6"
+              >
+                { count } шт.
+              </Typography>
+            </Box>
+          </Paper>
         </Box>
-
-      </CardContent>
-
-      <CardActions sx={{ ml: 1, mb: 2 }}>
-        <Button
-          size="medium"
-          variant="outlined"
-          onClick={handleCardDetailsClick}
-        >
-          <CreditCardIcon sx={{ mr: 0.5 }} />
-
-          Страница товара
-        </Button>
-
-        <Button
-          size="medium"
-          variant="outlined"
-          color="success"
-          onClick={handleCardAddItem}
-        >
-          <CreditCardIcon sx={{ mr: 0.5 }} />
-
-          Удалить
-        </Button>
-      </CardActions>
-    </Card>
+        <CardActions sx={{ ml: 1, mb: 2 }}>
+          <Button
+            size="medium"
+            variant="outlined"
+            color="error"
+            onClick={handleCardAddItem}
+          >
+            <ClearIcon sx={{ mr: 0.5 }} />
+            Удалить товар
+          </Button>
+        </CardActions>
+      </Card>
+    </Item>
   );
 };
 

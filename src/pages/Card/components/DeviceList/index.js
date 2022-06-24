@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable react/jsx-indent */
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Grid, Typography } from '@mui/material';
+import { Alert, Grid, Paper, Stack, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import DeviceItem from '../DeviceItem';
 
@@ -35,34 +35,34 @@ const DeviceList = ({
     }, []);
     setDevicesList(currentDevicesList);
   }, []);
-  console.log(devicesList);
   return (
     <Grid
       container
-      spacing={{ xs: 1, md: 1 }}
+      sx={{ p: 2 }}
       columns={{ xs: 12, sm: 12, md: 12 }}
     >
-      {devicesList.length
-        ? devicesList.map(({ device, count }) => (
-          <Grid item xs={10} sm={10} md={10}>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Grid item xs={12} sm={12} md={12}>
+        <Paper sx={{ height: '2rem' }} elevation={0}>
+          <Typography align="center" alignItems="center">
+            Корзина
+          </Typography>
+        </Paper>
+      </Grid>
+      <Grid item xs={10} sm={10} md={10}>
+        <Stack spacing={1}>
+          {devicesList.length
+            ? devicesList.map(({ device, count }) => (
               <DeviceItem
                 key={device.id}
                 device={device}
+                count={count}
               />
-              <Typography
-                color="text.secondary"
-              >
-                { count } шт.
-              </Typography>
-            </Box>
-          </Grid>
-        )
-        ) : (
-          <Grid item xs={12} sm={12} md={12}>
-            <Alert severity="info">Нет товаров</Alert>
-          </Grid>
-        )}
+            )
+            ) : (
+              <Alert severity="info">Нет товаров</Alert>
+            )}
+        </Stack>
+      </Grid>
     </Grid>);
 };
 
