@@ -7,14 +7,20 @@ import DeviceItem from '../DeviceItem';
 
 const propTypes = {
   devices: PropTypes.arrayOf(PropTypes.any),
+  onCardAddItem: PropTypes.func,
+  onCardRemoveItem: PropTypes.func,
 };
 
 const defaultProps = {
   devices: [],
+  onCardAddItem: () => {},
+  onCardRemoveItem: () => {},
 };
 
 const DeviceList = ({
   devices,
+  onCardAddItem,
+  onCardRemoveItem,
 }) => {
   const [devicesList, setDevicesList] = useState([]);
   useEffect(() => {
@@ -56,6 +62,8 @@ const DeviceList = ({
                 key={device.id}
                 device={device}
                 count={count}
+                onCardAddItem={onCardAddItem}
+                onCardRemoveItem={onCardRemoveItem}
               />
             )
             ) : (

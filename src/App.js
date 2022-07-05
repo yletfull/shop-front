@@ -20,7 +20,7 @@ const App = function App() {
       UserStore.setUser(user);
       UserStore.setIsAuth(true);
     } catch (err) {
-      // throw error
+      console.error(err);
     }
     setIsFetching(false);
   }, [UserStore]);

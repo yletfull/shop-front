@@ -5,17 +5,15 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  IconButton,
   Paper,
   Typography,
 } from '@mui/material';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import ClearIcon from '@mui/icons-material/Clear';
 import { DEVICE_ROUTE } from '@/router/constants';
 import PropTypes from 'prop-types';
-import CardStore from '@/store/Card';
-import { addCardItems, fetchUserCard } from '@/pages/Card/service';
 import { styled } from '@mui/material/styles';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -30,19 +28,24 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const propTypes = {
   device: PropTypes.objectOf(PropTypes.any).isRequired,
-  count: PropTypes.number,
+  count: PropTypes.number.isRequired,
+  onCardAddItem: PropTypes.func,
+  onCardRemoveItem: PropTypes.func,
+};
+
+const defaultProps = {
+  onCardAddItem: () => {},
+  onCardRemoveItem: () => {},
 };
 
 const DeviceItem = ({
   device,
   count,
+  onCardAddItem,
+  onCardRemoveItem,
 }) => {
   const history = useHistory();
   const handleCardDetailsClick = () => history.push(`${DEVICE_ROUTE}/${device.id}`);
-  const handleCardAddItem = async () => {
-    await addCardItems([device.id]);
-    CardStore.setCard(await fetchUserCard());
-  };
 
   return (
     <Item>
@@ -93,24 +96,44 @@ const DeviceItem = ({
               <VisibilityIcon sx={{ mr: 0.5 }} />
               Страница товара
             </Button>
-            <Box>
-              <Typography
-                color="text.secondary"
-                variant="h6"
-              >
-                { count } шт.
-              </Typography>
-            </Box>
           </Paper>
         </Box>
         <CardActions sx={{ ml: 1, mb: 2 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <IconButton
+              aria-label="substact"
+              color="primary"
+              disabled={count < 2}
+              onClick={onCardRemoveItem}
+            >
+              -
+            </IconButton>
+            <Typography
+              color="text.secondary"
+              variant="h6"
+            >
+              { count } шт.
+            </Typography>
+            <IconButton
+              aria-label="add"
+              color="primary"
+              onClick={() => onCardAddItem(device.id)}
+            >
+              +
+            </IconButton>
+          </Box>
           <Button
             size="medium"
             variant="outlined"
             color="error"
-            onClick={handleCardAddItem}
+            onClick={() => onCardRemoveItem(device.id)}
           >
-            <ClearIcon sx={{ mr: 0.5 }} />
             Удалить товар
           </Button>
         </CardActions>
@@ -120,5 +143,6 @@ const DeviceItem = ({
 };
 
 DeviceItem.propTypes = propTypes;
+DeviceItem.defaultProps = defaultProps;
 
 export default DeviceItem;

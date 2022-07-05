@@ -9,18 +9,24 @@ const propTypes = {
   devices: PropTypes.arrayOf(PropTypes.any),
   error: PropTypes.objectOf(PropTypes.any),
   isFetching: PropTypes.bool,
+  onCardAddItem: PropTypes.func,
+  onCardRemoveItem: PropTypes.func,
 };
 
 const defaultProps = {
   devices: [],
   error: null,
   isFetching: false,
+  onCardAddItem: () => {},
+  onCardRemoveItem: () => {},
 };
 
 const View = ({
   devices,
   error,
   isFetching,
+  onCardAddItem,
+  onCardRemoveItem,
 }) => (
   <Container>
     {error && (
@@ -39,6 +45,8 @@ const View = ({
         {!isFetching && (
           <DeviceList
             devices={devices}
+            onCardAddItem={onCardAddItem}
+            onCardRemoveItem={onCardRemoveItem}
           />
         )}
       </Paper>

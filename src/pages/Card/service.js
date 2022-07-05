@@ -12,3 +12,17 @@ export const addCardItems = async (items) => {
   return data;
 };
 
+export const removeCardItems = async (items) => {
+  const { data } = await $host.delete('api/card', {
+    data: {
+      items,
+    },
+  });
+  return data;
+};
+
+export default {
+  fetchUserCard,
+  addCardItems,
+  removeCardItems,
+};
